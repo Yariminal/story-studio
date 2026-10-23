@@ -6,6 +6,7 @@ import { releaseTauriListener } from '../utils/tauriListener';
 import { isTauriRuntime } from '../utils/tauriRuntime';
 import { importFilesToMediaLibrary } from './mediaLibraryImport';
 
+import { t } from '../i18n/index.js';
 export function useOsFileDrop({
   dispatchFiles,
   maybeCopyToProject,
@@ -55,7 +56,7 @@ export function useOsFileDrop({
       if (zone === 'treepanel') {
         const relevant = [...audio, ...archives];
         if (relevant.length === 0) return;
-        setImporting({ name: getImportDisplayName(relevant[0]), index: 0, total: relevant.length, phase: "Préparation de l'import..." });
+        setImporting({ name: getImportDisplayName(relevant[0]), index: 0, total: relevant.length, phase: t("Préparation de l'import...") });
         try {
           await dispatchFiles(null, relevant);
         } finally {
@@ -65,7 +66,7 @@ export function useOsFileDrop({
         const relevant = [...audio, ...images, ...archives];
         if (relevant.length === 0) return;
         const total = relevant.length;
-        setImporting({ name: getImportDisplayName(relevant[0]), index: 0, total, phase: "Préparation de l'import..." });
+        setImporting({ name: getImportDisplayName(relevant[0]), index: 0, total, phase: t("Préparation de l'import...") });
         try {
           const nextPaths = await importFilesToMediaLibrary({
             files: relevant,

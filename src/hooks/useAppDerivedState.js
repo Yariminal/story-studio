@@ -16,6 +16,7 @@ import { getShortcutLabelMap } from '../store/keyboardShortcuts';
 import { getProjectFilePrefix } from '../utils/projectPrefix';
 import { END_NODE_ID } from '../components/diagram/flowDiagramLayout';
 
+import { t } from '../i18n/index.js';
 // Modèle de lecture du shell : sélection courante, validation, libellé de
 // statut, dirty state, capacités toolbar, labels de
 // raccourcis et dossier d'export modal. Déplacement pur du bloc qui vivait dans
@@ -101,21 +102,21 @@ export function useAppDerivedState({
     if (store.selectedId === END_NODE_ID) return store.project.endNodeName || 'Message de fin';
     if (store.selectedId === 'root') {
       return projectType === 'simple'
-        ? (store.project.projectName || 'Mon histoire')
-        : (store.project.rootName || store.project.projectName || 'Menu racine');
+        ? (store.project.projectName || t('Mon histoire'))
+        : (store.project.rootName || store.project.projectName || t('Menu racine'));
     }
     const entry = projectIndex.entryById.get(store.selectedId);
     return entry?.name || '(sans nom)';
   }, [hasTree, projectIndex, projectType, store.project, store.selectedId]);
   const activePanelsLabel = [
     workspaceViewState.showTree && 'arbre',
-    workspaceViewState.showSettings && 'réglages',
+    workspaceViewState.showSettings && t('réglages'),
     workspaceViewState.showDiagram && 'diagramme',
   ].filter(Boolean).join(' + ');
   const statusText = isAdvanced
-    ? 'Éditeur graphe — navigation du pack éditée directement'
+    ? t('Éditeur graphe — navigation du pack éditée directement')
     : !hasTree
-      ? 'Choisis un type de projet'
+      ? t('Choisis un type de projet')
       : `Sélection : ${selectedStatusName} — panneaux : ${activePanelsLabel}`;
   const projectDirty = hasUnsavedWork({
     project: store.project,

@@ -2,6 +2,7 @@ import { HelpHint } from '../common/HelpHint';
 import { Dices } from '../icons/LucideLocal.jsx';
 import { positionText } from './connectionRows.jsx';
 
+import { t } from '../../i18n/index.js';
 // Une transition vers une Liste de choix ne réordonne jamais la liste : elle
 // dit seulement sur quel choix on y **commence** — une occurrence précise, ou
 // un tirage neuf à chaque déclenchement. La liste fixe l'ordre, l'Écran de
@@ -10,7 +11,7 @@ import { positionText } from './connectionRows.jsx';
 // Pourquoi on choisit un point de départ alors que la liste a déjà son ordre :
 // la question que se pose l'auteur, au même mot près partout où ce choix se
 // fait.
-export const LANDING_HELP = 'La liste garde l’ordre que vous lui avez donné. Ce réglage dit seulement sur quel choix on tombe en arrivant par ce chemin ; en tournant la molette, on retrouve ensuite l’ordre de la liste.';
+export const LANDING_HELP = t('La liste garde l’ordre que vous lui avez donné. Ce réglage dit seulement sur quel choix on tombe en arrivant par ce chemin ; en tournant la molette, on retrouve ensuite l’ordre de la liste.');
 
 export function ActionSelectionFields({
   id, options, index, selection, onChange, disabled,
@@ -47,7 +48,7 @@ export function ActionSelectionFields({
               <option key={option.optionId} value={String(rank)}>
                 {positionText(rank, options.length)} · {option.target.stagePath
                   ? index.byPath.get(option.target.stagePath)?.label.label ?? option.target.stageUuid
-                  : 'Écran à choisir'}
+                  : t('Écran à choisir')}
               </option>
             ))}
           </select>

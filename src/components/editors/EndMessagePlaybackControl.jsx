@@ -1,8 +1,9 @@
 import { Toggle } from '../common/Toggle';
 
+import { t } from '../../i18n/index.js';
 function playbackSummaryText(summary) {
   if (summary.total === 0) {
-    return 'Le réglage s’appliquera aux histoires du pack.';
+    return t('Le réglage s’appliquera aux histoires du pack.');
   }
   if (summary.mode === 'mixed') {
     const stays = summary.stays ? ` · ${summary.stays} restent sur le message` : '';
@@ -16,12 +17,12 @@ function playbackSummaryText(summary) {
 
 function playbackExplanationText(mode) {
   if (mode === 'mixed') {
-    return 'Certaines histoires continuent automatiquement, d’autres attendent un appui sur OK.';
+    return t('Certaines histoires continuent automatiquement, d’autres attendent un appui sur OK.');
   }
   if (mode === 'wait') {
-    return 'L’enfant reste sur le message de fin tant qu’il n’a pas appuyé sur OK.';
+    return t('L’enfant reste sur le message de fin tant qu’il n’a pas appuyé sur OK.');
   }
-  return 'La destination suivante s’ouvre dès la fin du message.';
+  return t('La destination suivante s’ouvre dès la fin du message.');
 }
 
 export function EndMessagePlaybackControl({ summary, onChange }) {
@@ -43,8 +44,8 @@ export function EndMessagePlaybackControl({ summary, onChange }) {
           mixed={mixed}
           onChange={(nextWaitForOk) => onChange?.(!nextWaitForOk)}
           ariaLabel={mixed
-            ? 'Réglage mixte importé ; cliquer pour faire attendre un appui sur OK à toutes les histoires'
-            : 'Attendre un appui sur OK après le message de fin'}
+            ? t('Réglage mixte importé ; cliquer pour faire attendre un appui sur OK à toutes les histoires')
+            : t('Attendre un appui sur OK après le message de fin')}
         />
         <button
           type="button"

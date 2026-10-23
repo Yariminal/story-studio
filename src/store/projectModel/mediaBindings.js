@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // Liaison entre une référence d'asset du dialecte avancé et un fichier disque.
 //
 // `assetRef` (« a1b2c3.mp3 ») appartient au payload d'auteur, que JavaScript
@@ -26,7 +27,7 @@ export function readMediaBindings(project) {
 }
 
 export function mediaBindingLabel(binding) {
-  const reference = hasPath(binding?.assetRef) ? binding.assetRef : 'référence inconnue';
+  const reference = hasPath(binding?.assetRef) ? binding.assetRef : t('référence inconnue');
   return `Média avancé: ${reference}`;
 }
 
@@ -101,21 +102,21 @@ export function mediaBindingViolations(bindings) {
       if (!BINDING_KEYS.has(key)) push('INVALID_MEDIA_BINDING', at(index, key), 'champ inconnu', 'assetRef, path ou status');
     }
     if (!hasPath(binding.assetRef)) {
-      push('INVALID_MEDIA_BINDING', at(index, 'assetRef'), String(binding.assetRef), 'référence de dialecte non vide');
+      push('INVALID_MEDIA_BINDING', at(index, 'assetRef'), String(binding.assetRef), t('référence de dialecte non vide'));
     } else if (seenAssetRefs.has(binding.assetRef)) {
-      push('DUPLICATE_MEDIA_BINDING', at(index, 'assetRef'), `déjà lié en ${at(seenAssetRefs.get(binding.assetRef))}`, 'une liaison par référence');
+      push('DUPLICATE_MEDIA_BINDING', at(index, 'assetRef'), `déjà lié en ${at(seenAssetRefs.get(binding.assetRef))}`, t('une liaison par référence'));
     } else {
       seenAssetRefs.set(binding.assetRef, index);
     }
     if (!Object.hasOwn(binding, 'path')) {
       push('INVALID_MEDIA_BINDING', at(index, 'path'), 'absent', 'chemin disque ou null explicite');
     } else if (binding.path !== null && !hasPath(binding.path)) {
-      push('INVALID_MEDIA_BINDING', at(index, 'path'), typeof binding.path, 'chemin non vide ou null');
+      push('INVALID_MEDIA_BINDING', at(index, 'path'), typeof binding.path, t('chemin non vide ou null'));
     }
     if (!BINDING_STATUSES.has(binding.status)) {
       push('INVALID_MEDIA_BINDING', at(index, 'status'), String(binding.status), 'resolved ou missing');
     } else if (binding.status === MEDIA_BINDING_RESOLVED && !hasPath(binding.path)) {
-      push('INVALID_MEDIA_BINDING', at(index, 'status'), 'resolved sans chemin', 'missing tant que le fichier est inconnu');
+      push('INVALID_MEDIA_BINDING', at(index, 'status'), 'resolved sans chemin', t('missing tant que le fichier est inconnu'));
     }
   });
 

@@ -9,6 +9,7 @@ import {
   validateMenuDepthPlacement,
 } from '../../../store/projectModel/menuDepth.js';
 
+import { t } from '../../../i18n/index.js';
 function setNodeColor({ nodeId, nodeType, color, onUpdateMedia, onUpdateMenu, onUpdateItem }) {
   const fields = { treeColor: color };
   if (nodeType === 'root') {
@@ -54,7 +55,7 @@ export function buildDiagramContextActions({
   shortcutLabels = {},
 }) {
   if (nodeId === END_NODE_ID) {
-    return [{ icon: <Trash2 />, label: 'Supprimer le message de fin', fn: () => onRemoveEndNode?.(), danger: true }];
+    return [{ icon: <Trash2 />, label: t('Supprimer le message de fin'), fn: () => onRemoveEndNode?.(), danger: true }];
   }
 
   const entry = findEntryById(project, nodeId, projectIndex);
@@ -71,32 +72,32 @@ export function buildDiagramContextActions({
   );
   actions.push({
     icon: <FolderPlus />,
-    label: 'Ajouter un dossier',
+    label: t('Ajouter un dossier'),
     fn: () => onAddMenu?.(menuId),
     disabledReason: addFolderDepth.allowed ? null : MENU_DEPTH_LIMIT_REACHED_MESSAGE,
   });
-  actions.push({ icon: <Music />, label: 'Importer audio ou archive', fn: () => onAddStory?.(menuId) });
+  actions.push({ icon: <Music />, label: t('Importer audio ou archive'), fn: () => onAddStory?.(menuId) });
 
   const hasEndNode = !!(project.nightModeAudio || project.globalOptions?.nightMode || project.globalOptions?.endNode);
   if (nodeType === 'root' && !hasEndNode) {
     actions.push('sep');
-    actions.push({ icon: <Moon />, label: 'Ajouter un message de fin', fn: () => onAddEndNode?.() });
+    actions.push({ icon: <Moon />, label: t('Ajouter un message de fin'), fn: () => onAddEndNode?.() });
   }
 
   if (nodeType === 'menu' && onSetMenuAsRoot && project.rootEntries?.[0]?.id === nodeId) {
     actions.push('sep');
-    actions.push({ icon: <House />, label: 'Définir comme racine', fn: () => onSetMenuAsRoot(nodeId) });
+    actions.push({ icon: <House />, label: t('Définir comme racine'), fn: () => onSetMenuAsRoot(nodeId) });
   }
 
   if (nodeType === 'zip' && entry?.zipPath) {
     actions.push('sep');
-    actions.push({ icon: <Play />, label: 'Simuler ce pack…', fn: () => onSimulateZip?.(entry.zipPath) });
-    actions.push({ icon: <FilePen />, label: "Extraire l'histoire", fn: () => onUnpackZip?.(nodeId) });
+    actions.push({ icon: <Play />, label: t('Simuler ce pack…'), fn: () => onSimulateZip?.(entry.zipPath) });
+    actions.push({ icon: <FilePen />, label: t("Extraire l'histoire"), fn: () => onUnpackZip?.(nodeId) });
   }
 
   if ((nodeType === 'zip' || nodeType === 'story' || nodeType === 'menu') && menuId != null) {
     actions.push('sep');
-    actions.push({ icon: '↖', label: 'Sortir du dossier', fn: () => onMoveToMenu?.(nodeId, menuId, null) });
+    actions.push({ icon: '↖', label: t('Sortir du dossier'), fn: () => onMoveToMenu?.(nodeId, menuId, null) });
   }
 
   if (nodeType === 'menu' || nodeType === 'story' || nodeType === 'zip') {
@@ -119,11 +120,11 @@ export function buildDiagramContextActions({
       && targetPath.some((pathEntry) => clipboardRef.current.sourceIds?.includes(pathEntry.id));
     actions.push({
       icon: <ClipboardPaste />,
-      label: 'Coller ici',
+      label: t('Coller ici'),
       shortcut: shortcutLabels.selectionPaste ?? null,
       fn: () => handlePaste(nodeId),
       disabledReason: pasteCreatesCycle
-        ? 'Un Dossier ne peut pas être déplacé dans son propre sous-arbre.'
+        ? t('Un Dossier ne peut pas être déplacé dans son propre sous-arbre.')
         : pasteDepth.allowed ? null : MENU_DEPTH_LIMIT_REACHED_MESSAGE,
     });
   }
@@ -135,8 +136,8 @@ export function buildDiagramContextActions({
     actions.push({
       icon: <Music />,
       label: audioClip?.mode === 'cut'
-        ? (audioCount > 1 ? `Déplacer ${audioCount} sons ici` : "Déplacer l'audio ici")
-        : (audioCount > 1 ? `Coller ${audioCount} sons ici` : "Coller l'audio ici"),
+        ? (audioCount > 1 ? `Déplacer ${audioCount} sons ici` : t("Déplacer l'audio ici"))
+        : (audioCount > 1 ? `Coller ${audioCount} sons ici` : t("Coller l'audio ici")),
       fn: () => handlePasteMedia(nodeId, nodeType, 'audio'),
     });
   }
@@ -145,7 +146,7 @@ export function buildDiagramContextActions({
     if (!actions.some((action) => action === 'sep')) actions.push('sep');
     actions.push({
       icon: <ImageIcon />,
-      label: imageClipboard.getEntry()?.mode === 'cut' ? "Déplacer l'image ici" : "Coller l'image ici",
+      label: imageClipboard.getEntry()?.mode === 'cut' ? t("Déplacer l'image ici") : t("Coller l'image ici"),
       fn: () => handlePasteMedia(nodeId, nodeType, 'image'),
     });
   }
@@ -159,7 +160,7 @@ export function buildDiagramContextActions({
     if (audioContext.stories.length === 1) {
       actions.push({
         icon: <Scissors />,
-        label: 'Découper l’audio dans Médias…',
+        label: t('Découper l’audio dans Médias…'),
         fn: () => {
           closeContextMenu();
           onOpenMediaAudioTool({
@@ -174,7 +175,7 @@ export function buildDiagramContextActions({
       actions.push({
         icon: <Music />,
         label: replacementEligibility.valid
-          ? 'Assembler et remplacer les histoires…'
+          ? t('Assembler et remplacer les histoires…')
           : `Assembler ${audioContext.stories.length} audios…`,
         fn: () => {
           closeContextMenu();
@@ -201,7 +202,7 @@ export function buildDiagramContextActions({
         : () => onDeleteItem?.(nodeId);
     actions.push({
       icon: <Trash2 />,
-      label: selectedForDelete.length > 1 ? `Supprimer ${selectedForDelete.length} éléments` : 'Supprimer',
+      label: selectedForDelete.length > 1 ? `Supprimer ${selectedForDelete.length} éléments` : t('Supprimer'),
       shortcut: shortcutLabels.selectionDelete ?? null,
       fn: deleteFn,
       danger: true,
@@ -265,7 +266,7 @@ export function buildDiagramContextActions({
             <button
               type="button"
               className={`ctx-color-clear${currentColor === null ? ' is-active' : ''}`}
-              title={currentColor === '__mixed__' ? 'Couleurs différentes — cliquer pour effacer' : 'Aucune couleur'}
+              title={currentColor === '__mixed__' ? t('Couleurs différentes — cliquer pour effacer') : t('Aucune couleur')}
               onClick={() => {
                 applyColor(null);
                 closeContextMenu();

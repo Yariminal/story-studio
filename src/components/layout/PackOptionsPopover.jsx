@@ -9,6 +9,7 @@ import {
 } from '../../config/audioProcessing';
 import './PackOptionsPopover.css';
 
+import { t } from '../../i18n/index.js';
 // Le tiroir des options **du pack** : traitement audio et lecture, suivi de la
 // passerelle vers les préférences de l'application. Le tiroir est partagé par
 // les deux éditeurs ; les préférences gardent aussi leur raccourci clavier.
@@ -26,9 +27,9 @@ function silenceModePresentation(leadingSeconds, trailingSeconds) {
   return {
     durationSummary,
     options: [
-      ['normalize', 'Ajuster', 'Mesurer et ajuster les silences de début et de fin', `Recommandé : mesure les silences et les ramène à exactement ${leadingLabel} au début et ${trailingLabel} à la fin (coupe si trop long, complète si trop court).`],
-      ['add', 'Ajouter', `Ajouter ${leadingLabel} au début et ${trailingLabel} à la fin`, `Ajoute ${leadingLabel} au début et ${trailingLabel} à la fin sans mesurer l'existant — le silence déjà présent s'additionne.`],
-      ['off', 'Ne rien faire', 'Ne pas modifier les silences de début et de fin', 'Ne touche pas aux silences de début et de fin.'],
+      ['normalize', 'Ajuster', t('Mesurer et ajuster les silences de début et de fin'), `Recommandé : mesure les silences et les ramène à exactement ${leadingLabel} au début et ${trailingLabel} à la fin (coupe si trop long, complète si trop court).`],
+      ['add', t('Ajouter'), `Ajouter ${leadingLabel} au début et ${trailingLabel} à la fin`, `Ajoute ${leadingLabel} au début et ${trailingLabel} à la fin sans mesurer l'existant — le silence déjà présent s'additionne.`],
+      ['off', 'Ne rien faire', t('Ne pas modifier les silences de début et de fin'), t('Ne touche pas aux silences de début et de fin.')],
     ],
   };
 }
@@ -112,7 +113,7 @@ export function PackOptionsPopover({
       {open ? (
         <>
           <div className="pack-options-hover-bridge" aria-hidden="true" />
-          <div className="pack-options-popover" role="dialog" aria-label="Options du pack">
+          <div className="pack-options-popover" role="dialog" aria-label={t("Options du pack")}>
             <div className="pack-options-well">
               <div className="pack-options-well-title">Traitement audio du pack</div>
               <Tooltip text={HARMONIZE_LOUDNESS_HELP} wrap className="pack-options-row-tip">
@@ -124,7 +125,7 @@ export function PackOptionsPopover({
                     <Toggle
                       on={harmonizeLoudness}
                       onChange={(value) => updateOption('harmonizeLoudness', value)}
-                      ariaLabel="Harmoniser le volume des audios vers -14 LUFS à la génération."
+                      ariaLabel={t("Harmoniser le volume des audios vers -14 LUFS à la génération.")}
                     />
                   </span>
                 </div>
@@ -134,7 +135,7 @@ export function PackOptionsPopover({
                   <span className="pack-options-control-title">Silence début / fin</span>
                   <span className="pack-options-silence-duration">{silenceDurationSummary}</span>
                 </span>
-                <div className="pack-options-segmented" role="group" aria-label="Mode de silence début et fin">
+                <div className="pack-options-segmented" role="group" aria-label={t("Mode de silence début et fin")}>
                   {silenceOptions.map(([mode, label, ariaLabel, help]) => (
                     <Tooltip key={mode} text={help} wrap>
                       <button
@@ -158,7 +159,7 @@ export function PackOptionsPopover({
 
                   <div className="pack-options-well-title">Lecture <span>· global</span></div>
                   <Tooltip
-                    text={"Enchaîne automatiquement les histoires et ignore les messages, scénarios et retours de fin tant que l'option est active."}
+                    text={t("Enchaîne automatiquement les histoires et ignore les messages, scénarios et retours de fin tant que l'option est active.")}
                     wrap
                     className="pack-options-row-tip"
                   >
@@ -173,7 +174,7 @@ export function PackOptionsPopover({
                         <Toggle
                           on={!!globalOptions.autoNext}
                           onChange={(value) => updateOption('autoNext', value)}
-                          ariaLabel="Auto-next. Enchaîne automatiquement les histoires et ignore les fins configurées."
+                          ariaLabel={t("Auto-next. Enchaîne automatiquement les histoires et ignore les fins configurées.")}
                         />
                       </span>
                     </div>

@@ -8,6 +8,7 @@ import {
 import { canMoveEntryToContainer } from '../tree/treeOperations.js';
 import { compactNavigationPresentation } from './diagram/navigationPresentation.js';
 
+import { t } from '../../i18n/index.js';
 export const TYPE_LABELS = { root: 'Racine', menu: 'Dossier', story: 'Histoire', zip: 'ZIP', ref: 'Lien', 'end-node': 'Message de fin' };
 // Re-exporte depuis la source unique (useZipCover importe MIME d'ici).
 export { MIME } from '../../utils/mimeTypes.js';
@@ -98,7 +99,7 @@ function collectNavigationTransitions(entries, parentMenu = null, transitions = 
             to: effectiveReturnTarget,
             kind: 'after-end',
             source: 'sequence',
-            label: mode === 'story_home_step' ? 'Fin -> retour' : mode === 'story_play' ? 'Fin -> lecture' : mode === 'story' ? 'Fin -> titre' : 'Fin',
+            label: mode === 'story_home_step' ? t('Fin -> retour') : mode === 'story_play' ? t('Fin -> lecture') : mode === 'story' ? t('Fin -> titre') : 'Fin',
             localEnd: {
               kind: 'sequence',
               stepCount: sequence.length,
@@ -140,7 +141,7 @@ function collectNavigationTransitions(entries, parentMenu = null, transitions = 
             localEnd: {
               kind: 'prompt',
               stepCount: 1,
-              label: 'Message de fin personnalisé',
+              label: t('Message de fin personnalisé'),
             },
           });
         }

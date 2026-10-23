@@ -3,6 +3,7 @@ import { Button } from '../../components/common/Button';
 import { Toggle } from '../../components/common/Toggle';
 import { formatFrenchCount } from '../../utils/frenchText.js';
 
+import { t } from '../../i18n/index.js';
 export function ProjectsMediaSection({
   className,
   sectionRef,
@@ -48,7 +49,7 @@ export function ProjectsMediaSection({
             Emplacement de référence pour les projets enregistrés et les médias gérés.
           </div>
           <div className="opts-path-value" title={displayedWorkspaceDir || ''}>
-            {displayedWorkspaceDir || 'Workspace en cours de résolution...'}
+            {displayedWorkspaceDir || t('Workspace en cours de résolution...')}
           </div>
         </div>
         <Button onClick={onPickWorkspaceDir}>
@@ -79,14 +80,14 @@ export function ProjectsMediaSection({
         <div className={`info-box info-box--spaced ${consolidationResult.errors?.length ? 'warn' : ''}`}>
           Projet consolidé : {formatFrenchCount(
             consolidationResult.copiedCount,
-            'média copié',
-            'médias copiés',
+            t('média copié'),
+            t('médias copiés'),
           )}
           {consolidationResult.errors?.length
             ? `, ${formatFrenchCount(
               consolidationResult.errors.length,
-              'fichier manquant',
-              'fichiers manquants',
+              t('fichier manquant'),
+              t('fichiers manquants'),
             )}.`
             : '.'}
         </div>

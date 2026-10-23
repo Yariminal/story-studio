@@ -1,3 +1,4 @@
+import { t } from '../i18n/index.js';
 // Copie graphe d'un projet par menus : ce que l'interface décide seule.
 //
 // Le moteur fabrique le payload et ses liaisons (`copy_project_to_graph`) et
@@ -23,7 +24,7 @@ async function invokeTauri(command, args) {
   return invoke(command, args);
 }
 
-const GRAPH_COPY_SUFFIX = ' - graphe';
+const GRAPH_COPY_SUFFIX = t(' - graphe');
 const MAX_GRAPH_COPIES = 999;
 
 function splitProjectPath(savePath) {
@@ -50,7 +51,7 @@ export async function nextGraphCopyPath(savePath, fileExists) {
     const candidate = `${dir}${graphCopyFileName(savePath, rank)}`;
     if (!(await fileExists(candidate))) return candidate;
   }
-  throw new Error('Trop de copies graphe portent déjà ce nom à côté de ton projet.');
+  throw new Error(t('Trop de copies graphe portent déjà ce nom à côté de ton projet.'));
 }
 
 /**

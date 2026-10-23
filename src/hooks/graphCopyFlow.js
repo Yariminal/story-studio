@@ -1,3 +1,4 @@
+import { t } from '../i18n/index.js';
 // Déroulé de la copie graphe d'un projet par menus, sans React ni disque :
 // chaque accès (dialogue, fichier, moteur) est fourni par l'appelant. C'est ce
 // qui permet d'éprouver l'ordre des questions et l'absence d'écriture sur
@@ -6,7 +7,7 @@
 import { isAdvancedProject } from '../store/projectWorkState.js';
 import { nextGraphCopyPath } from '../store/graphCopy.js';
 
-export const GRAPH_COPY_TITLE = 'Continuer dans l’éditeur graphe';
+export const GRAPH_COPY_TITLE = t('Continuer dans l’éditeur graphe');
 
 function fileLabel(path) {
   return String(path ?? '').split(/[\\/]/).pop();
@@ -14,12 +15,12 @@ function fileLabel(path) {
 
 function graphCopyWarning(copyPath) {
   return `Story Studio va créer une copie de ton projet pour l’éditeur graphe : « ${fileLabel(copyPath)} », `
-    + 'à côté de l’original. Ton projet reste tel quel. '
-    + 'La copie graphe ne pourra pas forcément revenir dans l’éditeur d’origine.';
+    + t('à côté de l’original. Ton projet reste tel quel. ')
+    + t('La copie graphe ne pourra pas forcément revenir dans l’éditeur d’origine.');
 }
 
 export const SAVE_ORIGINAL_FIRST =
-  'Enregistre d’abord ton projet : la copie graphe sera créée à côté de lui.';
+  t('Enregistre d’abord ton projet : la copie graphe sera créée à côté de lui.');
 
 /**
  * @param {Object} deps
@@ -43,8 +44,8 @@ export function createGraphCopyFlow(deps) {
       variant: 'info',
       cancelValue: null,
       actions: [
-        { value: null, label: 'Annuler', kind: 'ghost' },
-        { value: 'copy', label: 'Créer la copie', kind: 'primary', autoFocus: true },
+        { value: null, label: t('Annuler'), kind: 'ghost' },
+        { value: 'copy', label: t('Créer la copie'), kind: 'primary', autoFocus: true },
       ],
     });
     return choice === 'copy';
@@ -62,8 +63,8 @@ export function createGraphCopyFlow(deps) {
       variant: 'info',
       cancelValue: null,
       actions: [
-        { value: null, label: 'Annuler', kind: 'ghost' },
-        { value: 'save', label: 'Enregistrer le projet', kind: 'primary', autoFocus: true },
+        { value: null, label: t('Annuler'), kind: 'ghost' },
+        { value: 'save', label: t('Enregistrer le projet'), kind: 'primary', autoFocus: true },
       ],
     });
     if (choice !== 'save') return null;

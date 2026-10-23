@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // Retirer un nœud en conservant les raccords que le geste ne vise pas.
 // Une Action qui menait à un Écran supprimé garde sa place de destination,
 // signalée comme à compléter. Annuler ne touche pas au projet.
@@ -17,7 +18,7 @@ function DeleteStageBody({ index, stagePath, busy, onCancel, onConfirm }) {
   const entry = index.byPath.get(stagePath);
   const incoming = stageRemovalImpact(index, stagePath).occurrences;
   const destinationNotice = incoming.length === 1
-    ? ' Un choix devra être remplacé dans la liste de choix concernée.'
+    ? t(' Un choix devra être remplacé dans la liste de choix concernée.')
     : ` ${incoming.length} choix devront être remplacés dans les listes de choix concernées.`;
 
   const confirm = () => {
@@ -42,7 +43,7 @@ function DeleteStageBody({ index, stagePath, busy, onCancel, onConfirm }) {
         : ''}`}
       onCancel={onCancel}
       onConfirm={confirm}
-      confirmLabel="Retirer"
+      confirmLabel={t("Retirer")}
       confirmKind="danger"
       busy={busy}
     >
@@ -87,12 +88,12 @@ function DeleteActionBody({ index, actionPath, busy, onCancel, onConfirm }) {
       title={`Retirer la liste de choix « ${entry.label.label} »`}
       description={
         impact.transitions.length === 0
-          ? "Cette liste de choix sera retirée."
+          ? t("Cette liste de choix sera retirée.")
           : `Cette liste de choix sera retirée. ${impact.transitions.length} raccord(s) vers elle seront coupés et signalés dans « À corriger ».`
       }
       onCancel={onCancel}
       onConfirm={confirm}
-      confirmLabel="Retirer"
+      confirmLabel={t("Retirer")}
       confirmKind="danger"
       busy={busy}
     >
@@ -101,7 +102,7 @@ function DeleteActionBody({ index, actionPath, busy, onCancel, onConfirm }) {
           {impact.transitions.map((row) => (
             <li key={`${row.stagePath}#${row.slot}`} className="advanced-decision-list__row">
               <span className="advanced-decision-list__what">
-                <strong>{row.stageLabel}</strong> — {row.slot === 'ok' ? 'OK' : 'Accueil'}
+                <strong>{row.stageLabel}</strong> — {row.slot === 'ok' ? t('OK') : 'Accueil'}
               </span>
             </li>
           ))}

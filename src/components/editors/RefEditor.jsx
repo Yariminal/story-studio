@@ -4,6 +4,7 @@ import { NavigationTargetSelect } from './story/storyUtils';
 import { refTargetEntryId } from '../../store/navigationTargets';
 import './EditorPanel.css';
 
+import { t } from '../../i18n/index.js';
 // Éditeur d'un nœud `ref` (« → nœud existant ») : change la cible, la présentation
 // (↪ continuer / ↩ revenir) ou supprime le lien. La cible n'est jamais affectée.
 export const RefEditor = memo(function RefEditor({ node, allMenus = [], allStories = [], onUpdate, onDelete }) {
@@ -11,7 +12,7 @@ export const RefEditor = memo(function RefEditor({ node, allMenus = [], allStori
   const targetEntry = allStories.find((s) => s.id === targetId)
     ?? allMenus.find((m) => m.id === targetId)
     ?? null;
-  const targetName = targetEntry?.name || (node.target ? '(cible introuvable)' : 'aucune cible');
+  const targetName = targetEntry?.name || (node.target ? t('(cible introuvable)') : t('aucune cible'));
 
   return (
     <>
@@ -33,7 +34,7 @@ export const RefEditor = memo(function RefEditor({ node, allMenus = [], allStori
             allStories={allStories}
             currentStoryId={null}
             includeNextStory={false}
-            emptyLabel="Choisir un nœud…"
+            emptyLabel={t("Choisir un nœud…")}
             style={{ minWidth: 240, maxWidth: 360 }}
           />
         </div>
@@ -58,7 +59,7 @@ export const RefEditor = memo(function RefEditor({ node, allMenus = [], allStori
             className="card-danger-trash"
             type="button"
             onClick={onDelete}
-            aria-label="Supprimer ce lien"
+            aria-label={t("Supprimer ce lien")}
           >
             <Trash2 className="card-danger-icon" />
           </button>

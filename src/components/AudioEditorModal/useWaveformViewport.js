@@ -5,6 +5,7 @@ import {
   WHEEL_ZOOM_SENSITIVITY,
 } from './audioEditorConstants';
 
+import { t } from '../../i18n/index.js';
 // Zoom et viewport de la waveform : molette ancrée au pointeur, zoom clavier
 // ancré au curseur de lecture, et mémoire du viewport à travers les
 // rechargements audio (chaque preview ffmpeg recrée l'instance WaveSurfer).
@@ -58,7 +59,7 @@ export function useWaveformViewport({
       instance.zoom(nextZoom);
       return true;
     } catch (err) {
-      if (!String(err).includes('No audio loaded')) {
+      if (!String(err).includes(t('No audio loaded'))) {
         onError(String(err));
       }
       return false;

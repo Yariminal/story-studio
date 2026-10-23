@@ -8,6 +8,7 @@ import { useLocalFile } from '../../hooks/useLocalFile';
 import { previewProjectFromPath } from '../../store/projectIO';
 import { isTauriRuntime } from '../../utils/tauriRuntime';
 
+import { t } from '../../i18n/index.js';
 const DOCUMENTATION_URL = 'https://hugs11.github.io/story-studio/docs/';
 
 function formatRecentDate(updatedAt) {
@@ -17,24 +18,24 @@ function formatRecentDate(updatedAt) {
   const today = new Date();
   const yesterday = new Date();
   yesterday.setDate(today.getDate() - 1);
-  if (date.toDateString() === today.toDateString()) return 'Aujourd’hui';
-  if (date.toDateString() === yesterday.toDateString()) return 'Hier';
+  if (date.toDateString() === today.toDateString()) return t('Aujourd’hui');
+  if (date.toDateString() === yesterday.toDateString()) return t('Hier');
   return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
 }
 
 // Le nom exact de l'éditeur qui rouvrira le projet, comme sur ses cartes.
 // Un type inconnu ne se devine pas : aucun libellé plutôt qu'un faux.
 function projectTypeLabel(type) {
-  if (type === 'advanced') return 'Éditeur graphe';
-  if (type === 'simple') return 'Éditeur simplifié';
-  if (type === 'pack') return 'Éditeur par menus';
+  if (type === 'advanced') return t('Éditeur graphe');
+  if (type === 'simple') return t('Éditeur simplifié');
+  if (type === 'pack') return t('Éditeur par menus');
   return null;
 }
 
 function recoverySubtitle(recovery) {
   return [
     projectTypeLabel(recovery.projectType),
-    'Non enregistré',
+    t('Non enregistré'),
     formatRecentDate(recovery.modifiedAtMs),
   ].filter(Boolean).join(' · ');
 }
@@ -89,7 +90,7 @@ export function ModeSelector({
       await openUrl(DOCUMENTATION_URL);
     } catch (error) {
       showErrorDialog({
-        title: 'Documentation inaccessible',
+        title: t('Documentation inaccessible'),
         message: `Impossible d’ouvrir la documentation dans le navigateur : ${error}`,
       });
     }
@@ -99,9 +100,9 @@ export function ModeSelector({
     {
       key: 'pack',
       Icon: SwatchBook,
-      name: 'Éditeur par menus',
-      desc: 'Menus et dossiers imbriqués, agrégation de ZIP',
-      note: 'Anciennement Éditeur libre',
+      name: t('Éditeur par menus'),
+      desc: t('Menus et dossiers imbriqués, agrégation de ZIP'),
+      note: t('Anciennement Éditeur libre'),
       onClick: () => onSelect('pack'),
     },
     {
@@ -109,15 +110,15 @@ export function ModeSelector({
       // L'Action est la notion propre à cet éditeur ; `Network` désigne déjà
       // les vues de diagramme et la structure d'un pack.
       Icon: Waypoints,
-      name: 'Éditeur graphe',
-      desc: 'Navigation libre : Écrans, listes de choix et raccords avancés',
+      name: t('Éditeur graphe'),
+      desc: t('Navigation libre : Écrans, listes de choix et raccords avancés'),
       onClick: onSelectGraph,
     },
     {
       key: 'simple',
       Icon: FilePen,
-      name: 'Éditeur simplifié',
-      desc: 'Un menu, une histoire',
+      name: t('Éditeur simplifié'),
+      desc: t('Un menu, une histoire'),
       onClick: () => onSelect('simple'),
     },
   ];
@@ -126,43 +127,43 @@ export function ModeSelector({
     onEditPack && {
       key: 'edit',
       Icon: Package,
-      name: 'Modifier un pack existant',
-      desc: 'Modifie un .zip / .7z ou un dossier d’histoire',
+      name: t('Modifier un pack existant'),
+      desc: t('Modifie un .zip / .7z ou un dossier d’histoire'),
       onClick: onEditPack,
     },
     onPodcastFunnel && {
       key: 'podcast',
       Icon: Rss,
-      name: 'Créer un pack depuis un podcast',
-      desc: 'Importe les épisodes d’un flux RSS',
+      name: t('Créer un pack depuis un podcast'),
+      desc: t('Importe les épisodes d’un flux RSS'),
       onClick: onPodcastFunnel,
     },
     onYoutubeFunnel && {
       key: 'youtube',
       Icon: Youtube,
-      name: 'Créer un pack depuis YouTube',
-      desc: 'Importe l’audio d’une URL, playlist ou chaîne',
+      name: t('Créer un pack depuis YouTube'),
+      desc: t('Importe l’audio d’une URL, playlist ou chaîne'),
       onClick: onYoutubeFunnel,
     },
     onAggregatePacks && {
       key: 'aggregate',
       Icon: Layers,
-      name: 'Agréger des packs',
+      name: t('Agréger des packs'),
       desc: 'Fusionne plusieurs .zip ou .7z',
       onClick: onAggregatePacks,
     },
     onCheckPack && {
       key: 'check',
       Icon: ShieldCheck,
-      name: 'Vérifier un pack',
-      desc: 'Repère et corrige les erreurs d’un pack existant.',
+      name: t('Vérifier un pack'),
+      desc: t('Repère et corrige les erreurs d’un pack existant.'),
       onClick: onCheckPack,
     },
     {
       key: 'open',
       Icon: FolderOpen,
-      name: 'Ouvrir un projet',
-      desc: 'Reprends un projet enregistré',
+      name: t('Ouvrir un projet'),
+      desc: t('Reprends un projet enregistré'),
       onClick: onOpen,
     },
   ].filter(Boolean);
@@ -197,7 +198,7 @@ export function ModeSelector({
     <div className="mode-selector">
       <div className="mode-home">
         <header className="mode-home-header">
-          <Tooltip text="Créé pour Armand, pour que les histoires prennent vie." placement="below">
+          <Tooltip text={t("Créé pour Armand, pour que les histoires prennent vie.")} placement="below">
             <span className="mode-home-mark" role="img" aria-label="Story Studio" />
           </Tooltip>
           <div className="mode-home-brand">
@@ -280,19 +281,19 @@ export function ModeSelector({
                         index={index}
                       />
                       <span className="mode-proj-copy">
-                        <span className="mode-proj-name">{recovery.projectName || 'Projet récupérable'}</span>
+                        <span className="mode-proj-name">{recovery.projectName || t('Projet récupérable')}</span>
                         <span className="mode-proj-sub">{recoverySubtitle(recovery)}</span>
                       </span>
                     </button>
                     <Tooltip
-                      text="Ignorer cette reprise"
+                      text={t("Ignorer cette reprise")}
                       placement="above"
                       className="mode-proj-dismiss-tooltip"
                     >
                       <button
                         type="button"
                         className="mode-proj-dismiss"
-                        aria-label="Ignorer cette reprise"
+                        aria-label={t("Ignorer cette reprise")}
                         onClick={() => onIgnoreSessionRecovery?.(recovery)}
                       >
                         <X className="mode-proj-dismiss-icon" strokeWidth={2} />

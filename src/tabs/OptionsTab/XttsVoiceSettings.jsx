@@ -2,13 +2,14 @@ import { Button } from '../../components/common/Button';
 import { Toggle } from '../../components/common/Toggle';
 import { formatFrenchCount } from '../../utils/frenchText.js';
 
+import { t } from '../../i18n/index.js';
 const LANGUAGE_OPTIONS = [
-  { value: 'fr', label: 'Français' },
-  { value: 'en', label: 'English' },
+  { value: 'fr', label: t('Français') },
+  { value: 'en', label: t('English') },
   { value: 'es', label: 'Español' },
   { value: 'de', label: 'Deutsch' },
   { value: 'it', label: 'Italiano' },
-  { value: 'pt', label: 'Português' },
+  { value: 'pt', label: t('Português') },
 ];
 
 export function XttsVoiceSettings({
@@ -46,7 +47,7 @@ export function XttsVoiceSettings({
             className="xtts-input"
             value={xttsSettings.xttsDir}
             onChange={(e) => updateXttsDir(e.target.value)}
-            placeholder="Dossier contenant server.py, venv, models et voices"
+            placeholder={t("Dossier contenant server.py, venv, models et voices")}
           />
         </label>
 
@@ -86,16 +87,16 @@ export function XttsVoiceSettings({
 
       <div className="xtts-actions">
         <Button onClick={testXtts} disabled={xttsProbe.state === 'loading'}>
-          {xttsProbe.state === 'loading' ? 'Test en cours…' : 'Tester et actualiser les voix'}
+          {xttsProbe.state === 'loading' ? t('Test en cours…') : t('Tester et actualiser les voix')}
         </Button>
         <span className="opts-row-sub">
           {favoriteVoices.length > 0
             ? `${formatFrenchCount(
               favoriteVoices.length,
-              'voix favorite affichée dans la modale',
-              'voix favorites affichées dans la modale',
+              t('voix favorite affichée dans la modale'),
+              t('voix favorites affichées dans la modale'),
             )}.`
-            : 'Aucune voix favorite : toutes les voix XTTS détectées seront proposées.'}
+            : t('Aucune voix favorite : toutes les voix XTTS détectées seront proposées.')}
         </span>
       </div>
 

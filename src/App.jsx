@@ -87,6 +87,7 @@ import './styles/layout.css';
 import './components/layout/AppChrome.css';
 import './components/RenderQueuePanel/RenderQueuePanel.css';
 
+import { t } from './i18n/index.js';
 function AppContent() {
   const store = useProjectStore();
   const advancedAuthoring = useAdvancedAuthoring({ store });
@@ -376,12 +377,12 @@ function AppContent() {
   const confirmBackgroundWorkBeforeClose = useCallback(async () => {
     if (!backgroundWorkActiveRef.current) return true;
     const choice = await showChoiceDialog({
-      title: 'Travail en cours',
-      message: "Un travail est encore en cours. Quitter maintenant l'interrompra.",
+      title: t('Travail en cours'),
+      message: t("Un travail est encore en cours. Quitter maintenant l'interrompra."),
       cancelValue: 'stay',
       actions: [
         { value: 'stay', label: 'Rester', kind: 'primary', autoFocus: true },
-        { value: 'quit', label: 'Quitter quand même', kind: 'danger-outline' },
+        { value: 'quit', label: t('Quitter quand même'), kind: 'danger-outline' },
       ],
     });
     return choice === 'quit';
@@ -728,7 +729,7 @@ function AppContent() {
       await startAdvancedProject();
     } catch (error) {
       showErrorDialog({
-        title: 'Éditeur graphe',
+        title: t('Éditeur graphe'),
         message: `Impossible de créer le projet : ${error?.message ?? error}`,
       });
     }

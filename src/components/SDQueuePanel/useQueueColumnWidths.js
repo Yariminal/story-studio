@@ -1,11 +1,12 @@
 import { useRef, useState } from 'react';
 import { KEYS, read, write } from '../../store/persistentSettings';
 
+import { t } from '../../i18n/index.js';
 export const QUEUE_COLUMNS = [
   { id: 'type', label: 'Type', defaultWidth: 76, minWidth: 62, grow: 0.2 },
   { id: 'name', label: 'Nom', defaultWidth: 220, minWidth: 130, grow: 1.3 },
   { id: 'target', label: 'Destination', defaultWidth: 190, minWidth: 92, grow: 1 },
-  { id: 'result', label: 'Résultat', defaultWidth: 300, minWidth: 130, grow: 1.6 },
+  { id: 'result', label: t('Résultat'), defaultWidth: 300, minWidth: 130, grow: 1.6 },
   { id: 'status', label: 'Statut', defaultWidth: 96, minWidth: 82, grow: 0.25 },
   { id: 'usage', label: 'Usage', defaultWidth: 100, minWidth: 76, grow: 0.25 },
   { id: 'date', label: 'Date', defaultWidth: 92, minWidth: 72, grow: 0.2 },

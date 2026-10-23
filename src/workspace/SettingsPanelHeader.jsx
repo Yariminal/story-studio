@@ -4,6 +4,7 @@ import { hierarchicalNatureOf } from '../store/nodeIconVocabulary.js';
 import { WORKSPACE_MODE_HIERARCHICAL } from '../store/projectWorkState.js';
 import { END_NODE_ID, TYPE_LABELS } from '../components/diagram/flowDiagramLayout';
 
+import { t } from '../i18n/index.js';
 function NodeTypeIcon({ type, icon }) {
   // L'en-tete nomme toujours l'entree a cote de son dessin. Le repli est
   // l'accueil.
@@ -20,7 +21,7 @@ function getHeaderData({ node, selectedId, selectedIds, project }) {
     return {
       type: 'multi',
       title: `${selectedIds.size} éléments sélectionnés`,
-      badge: 'Modification groupée',
+      badge: t('Modification groupée'),
       icon: null,
     };
   }
@@ -35,23 +36,23 @@ function getHeaderData({ node, selectedId, selectedIds, project }) {
   if (!node) {
     return {
       type: 'root',
-      title: 'Réglages',
-      badge: 'Sélection',
+      title: t('Réglages'),
+      badge: t('Sélection'),
       icon: null,
     };
   }
   const type = node.type === 'root' ? 'root' : node.type;
   const rootTitle = project?.projectType === 'simple'
-    ? (project?.projectName || 'Mon histoire')
-    : (project?.rootName || project?.projectName || 'Menu racine');
+    ? (project?.projectName || t('Mon histoire'))
+    : (project?.rootName || project?.projectName || t('Menu racine'));
   // Badge du root : dépend du type de projet — « Histoire simple » en `simple`
   // (le header est visible dans l'éditeur simple même sans diagramme),
   // « Pack » sinon. « Histoire » seul serait ambigu avec TYPE_LABELS.story.
-  const rootBadge = project?.projectType === 'simple' ? 'Histoire simple' : 'Pack';
+  const rootBadge = project?.projectType === 'simple' ? t('Histoire simple') : 'Pack';
   return {
     type,
-    title: type === 'root' ? rootTitle : (node.name || TYPE_LABELS[type] || 'Réglages'),
-    badge: type === 'root' ? rootBadge : (TYPE_LABELS[type] || 'Réglages'),
+    title: type === 'root' ? rootTitle : (node.name || TYPE_LABELS[type] || t('Réglages')),
+    badge: type === 'root' ? rootBadge : (TYPE_LABELS[type] || t('Réglages')),
     icon: node.icon ?? null,
   };
 }
@@ -79,7 +80,7 @@ export function SettingsPanelHeader({
         <button
           type="button"
           className="settings-panel-header-close"
-          aria-label="Fermer les réglages"
+          aria-label={t("Fermer les réglages")}
           onClick={onClose}
         >
           <X aria-hidden="true" />

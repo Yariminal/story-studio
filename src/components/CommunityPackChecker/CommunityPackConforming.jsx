@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // Section « Ce qui est conforme » : miroir vert des cartes de problemes.
 // Toute la donnee vient deja du rapport (report.audioItems / imageItems avec
 // leur `status`, et les resumes pack-level) : aucun appel backend.
@@ -44,8 +45,8 @@ function buildConformingGroups(report) {
   if (audioFiles.length) {
     groups.push({
       id: 'audio',
-      title: 'Audio conforme',
-      subtitle: 'Silence, volume, format et crête dans les clous.',
+      title: t('Audio conforme'),
+      subtitle: t('Silence, volume, format et crête dans les clous.'),
       Icon: Music,
       mode: 'files',
       kind: 'audio',
@@ -59,7 +60,7 @@ function buildConformingGroups(report) {
   if (imageFiles.length) {
     groups.push({
       id: 'image',
-      title: 'Images conformes',
+      title: t('Images conformes'),
       subtitle: 'Dimensions et format conformes.',
       Icon: Image,
       mode: 'files',
@@ -73,7 +74,7 @@ function buildConformingGroups(report) {
   if (titleConforming(report)) {
     groups.push({
       id: 'title',
-      title: 'Nom du pack',
+      title: t('Nom du pack'),
       subtitle: 'Nom et convention valides.',
       Icon: FilePen,
       mode: 'facts',
@@ -92,19 +93,19 @@ function buildConformingGroups(report) {
     groups.push({
       id: 'structure',
       title: 'Structure',
-      subtitle: 'Navigation et références cohérentes.',
+      subtitle: t('Navigation et références cohérentes.'),
       Icon: Network,
       mode: 'facts',
       metricStrong: 'Correcte',
       metricSmall: `${structure.stageCount ?? 0} étapes`,
       facts: [
-        { key: 'lunii', label: 'Compatible Lunii', value: structure.luniiCompatible ? 'Oui' : 'Non' },
-        { key: 'editable', label: 'Éditable Story Studio', value: structure.storyStudioEditable ? 'Oui' : 'Non' },
+        { key: 'lunii', label: 'Compatible Lunii', value: structure.luniiCompatible ? t('Oui') : t('Non') },
+        { key: 'editable', label: t('Éditable Story Studio'), value: structure.storyStudioEditable ? t('Oui') : t('Non') },
         { key: 'stories', label: 'Histoires', value: String(structure.storyCount ?? 0) },
-        { key: 'stages', label: 'Étapes', value: String(structure.stageCount ?? 0) },
-        { key: 'actions', label: 'Listes de choix', value: String(structure.actionCount ?? 0) },
-        { key: 'refAudio', label: 'Audios référencés', value: String(structure.referencedAudioCount ?? 0) },
-        { key: 'refImage', label: 'Images référencées', value: String(structure.referencedImageCount ?? 0) },
+        { key: 'stages', label: t('Étapes'), value: String(structure.stageCount ?? 0) },
+        { key: 'actions', label: t('Listes de choix'), value: String(structure.actionCount ?? 0) },
+        { key: 'refAudio', label: t('Audios référencés'), value: String(structure.referencedAudioCount ?? 0) },
+        { key: 'refImage', label: t('Images référencées'), value: String(structure.referencedImageCount ?? 0) },
       ],
     });
   }
@@ -113,14 +114,14 @@ function buildConformingGroups(report) {
   groups.push({
     id: 'night',
     title: 'Mode nuit',
-    subtitle: nightDetected ? 'Piste nuit détectée dans le pack.' : 'Aucune piste nuit (non requis).',
+    subtitle: nightDetected ? t('Piste nuit détectée dans le pack.') : t('Aucune piste nuit (non requis).'),
     Icon: Moon,
     mode: 'facts',
     metricStrong: nightDetected ? 'Disponible' : 'Absent',
-    metricSmall: 'Non bloquant',
+    metricSmall: t('Non bloquant'),
     facts: [
       { key: 'detected', label: 'Mode nuit', value: nightDetected ? 'Disponible' : 'Absent' },
-      { key: 'blocking', label: 'Bloquant', value: 'Non' },
+      { key: 'blocking', label: 'Bloquant', value: t('Non') },
     ],
   });
 
@@ -197,7 +198,7 @@ function ConformingGroupCard({ group, expanded, onToggle }) {
               })}
             </div>
           ) : (
-            <ConformingMeasures rows={group.facts} title="Détails" />
+            <ConformingMeasures rows={group.facts} title={t("Détails")} />
           )}
         </div>
       ) : null}

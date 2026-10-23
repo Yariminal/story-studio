@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // L'Inspecteur d'une sélection de plusieurs nœuds du graphe : ce qui se fait
 // d'un coup sur tous, comme la sélection multiple du Libre (`MultiEditor`).
 //
@@ -80,8 +81,8 @@ export function GraphSelectionEditor({
   const withoutControlsCount = stages.length - withControls.length;
 
   const parts = [];
-  if (stages.length > 0) parts.push(plural(stages.length, 'Écran', 'Écrans'));
-  if (actionCount > 0) parts.push(plural(actionCount, 'liste de choix', 'listes de choix'));
+  if (stages.length > 0) parts.push(plural(stages.length, t('Écran'), t('Écrans')));
+  if (actionCount > 0) parts.push(plural(actionCount, t('liste de choix'), t('listes de choix')));
 
   const colors = [...new Set(entries.map((entry) => entry.node?.personalColor ?? null))];
   const currentColor = colors.length === 1 ? colors[0] : '__mixed__';
@@ -114,9 +115,9 @@ export function GraphSelectionEditor({
     setBatchError('');
     const voice = batchTitleVoice(xttsSettings);
     if (!voice) {
-      const message = 'Choisis une voix XTTS une première fois (depuis le bouton TTS d’un audio) avant de lancer la génération groupée.';
+      const message = t('Choisis une voix XTTS une première fois (depuis le bouton TTS d’un audio) avant de lancer la génération groupée.');
       setBatchError(message);
-      showErrorDialog({ title: 'Génération audio', message, variant: 'warning' });
+      showErrorDialog({ title: t('Génération audio'), message, variant: 'warning' });
       return;
     }
     setAudiosBusy(true);
@@ -171,10 +172,10 @@ export function GraphSelectionEditor({
               <div className="editor-setting-title">Générer à partir des noms</div>
               <div className="editor-setting-desc">
                 {titled.length > 0
-                  ? `Crée d'un coup une image-titre ou un audio (le nom prononcé) pour ${plural(titled.length, 'Écran nommé', 'Écrans nommés')}. Chacun remplace le média de son Écran.`
-                  : 'Aucun Écran sélectionné ne porte de nom : il n’y a pas de titre à générer.'}
+                  ? `Crée d'un coup une image-titre ou un audio (le nom prononcé) pour ${plural(titled.length, t('Écran nommé'), t('Écrans nommés'))}. Chacun remplace le média de son Écran.`
+                  : t('Aucun Écran sélectionné ne porte de nom : il n’y a pas de titre à générer.')}
                 {untitledCount > 0 && titled.length > 0
-                  && ` ${plural(untitledCount, 'Écran sans nom est ignoré', 'Écrans sans nom sont ignorés')}.`}
+                  && ` ${plural(untitledCount, t('Écran sans nom est ignoré'), t('Écrans sans nom sont ignorés'))}.`}
               </div>
             </div>
             <div className="editor-setting-actions">
@@ -185,7 +186,7 @@ export function GraphSelectionEditor({
                 disabled={disabled || batchBusy || titled.length === 0}
               >
                 <Sparkles className="batch-generate-btn-icon" strokeWidth={2} absoluteStrokeWidth />
-                {imagesBusy ? 'Images…' : 'Images-titres'}
+                {imagesBusy ? t('Images…') : 'Images-titres'}
               </button>
               {canGenerateAudio && (
                 <button
@@ -195,7 +196,7 @@ export function GraphSelectionEditor({
                   disabled={disabled || batchBusy || titled.length === 0}
                 >
                   <Speech className="batch-generate-btn-icon" strokeWidth={2} absoluteStrokeWidth />
-                  {audiosBusy ? 'Audios…' : 'Audios titres'}
+                  {audiosBusy ? t('Audios…') : t('Audios titres')}
                 </button>
               )}
             </div>
@@ -212,14 +213,14 @@ export function GraphSelectionEditor({
             <div className="card-title">Boutons des Écrans</div>
             <div className="card-copy card-copy--inline">
               {withControls.length > 0
-                ? `Réglés d’un coup sur ${plural(withControls.length, 'Écran', 'Écrans')}. Les destinations se règlent Écran par Écran.`
-                : 'Aucun Écran sélectionné n’a de boutons définis.'}
+                ? `Réglés d’un coup sur ${plural(withControls.length, t('Écran'), t('Écrans'))}. Les destinations se règlent Écran par Écran.`
+                : t('Aucun Écran sélectionné n’a de boutons définis.')}
             </div>
           </div>
           {withoutControlsCount > 0 && (
             <p className="advanced-field__note">
-              {plural(withoutControlsCount, 'Écran n’a', 'Écrans n’ont')} pas encore de boutons
-              définis : {withoutControlsCount > 1 ? 'ils sont laissés' : 'il est laissé'} de côté.
+              {plural(withoutControlsCount, t('Écran n’a'), t('Écrans n’ont'))} pas encore de boutons
+              définis : {withoutControlsCount > 1 ? t('ils sont laissés') : t('il est laissé')} de côté.
               Définissez-les Écran par Écran, depuis son propre panneau.
             </p>
           )}
@@ -271,7 +272,7 @@ export function GraphSelectionEditor({
             type="button"
             onClick={() => onDelete(paths)}
             disabled={disabled}
-            aria-label="Retirer la sélection"
+            aria-label={t("Retirer la sélection")}
           >
             <Trash2 className="card-danger-icon" />
           </button>

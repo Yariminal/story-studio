@@ -11,22 +11,23 @@ import {
   TITLE_CONTROL_DEFAULTS,
 } from '../../../store/storyTitleStage';
 
+import { t } from '../../../i18n/index.js';
 const PLAY_CONTROLS = [
   {
     key: 'pause',
-    label: 'Bouton Pause',
-    onText: "L'enfant peut utiliser le bouton pause pendant l'histoire.",
-    offText: "L'enfant ne peut pas utiliser le bouton pause pendant l'histoire.",
+    label: t('Bouton Pause'),
+    onText: t("L'enfant peut utiliser le bouton pause pendant l'histoire."),
+    offText: t("L'enfant ne peut pas utiliser le bouton pause pendant l'histoire."),
     def: false,
   },
 ];
 
 const TITLE_CONTROLS = [
-  { key: 'autoplay', label: "Lancer l'histoire automatiquement", tip: "L'histoire se lance toute seule à la fin de l'audio de sélection, sans attendre que l'enfant appuie sur OK.", def: false },
-  { key: 'ok',       label: 'Bouton OK',            tip: "L'enfant peut appuyer sur OK pour lancer l'histoire.",                   def: true },
-  { key: 'home',     label: 'Bouton Accueil',        tip: "L'enfant peut revenir au menu parent en appuyant sur le bouton Accueil.", def: true },
-  { key: 'pause',    label: 'Bouton pause',          tip: "L'enfant peut mettre en pause l'audio de sélection.",                    def: false },
-  { key: 'wheel',    label: 'Molette',              tip: "L'enfant peut tourner la molette pour parcourir les autres histoires.",   def: true },
+  { key: 'autoplay', label: t("Lancer l'histoire automatiquement"), tip: t("Lt('histoire se lance toute seule à la fin de l')audio de sélection, sans attendre que l'enfant appuie sur OK."), def: false },
+  { key: 'ok',       label: 'Bouton OK',            tip: t("L'enfant peut appuyer sur OK pour lancer l'histoire."),                   def: true },
+  { key: 'home',     label: t('Bouton Accueil'),        tip: t("L'enfant peut revenir au menu parent en appuyant sur le bouton Accueil."), def: true },
+  { key: 'pause',    label: t('Bouton pause'),          tip: t("L'enfant peut mettre en pause l'audio de sélection."),                    def: false },
+  { key: 'wheel',    label: 'Molette',              tip: t("L'enfant peut tourner la molette pour parcourir les autres histoires."),   def: true },
 ];
 
 // Valeur du sélecteur pour « Accueil sans destination » (`returnOnHomeNone`).
@@ -88,12 +89,12 @@ export function DuringPlaySection({ node, project = null, allMenus = [], allStor
                 controlSettings: { ...controls, home: v },
                 ...(v ? {} : { returnOnHome: null, returnOnHomeNone: true }),
               })}
-              ariaLabel="Bouton Accueil"
+              ariaLabel={t("Bouton Accueil")}
             />
             <Tooltip
               text={homeEnabled
-                ? "L'enfant peut appuyer sur le bouton Accueil pendant l'histoire."
-                : "L'enfant ne peut pas appuyer sur le bouton Accueil pendant l'histoire."}
+                ? t("L'enfant peut appuyer sur le bouton Accueil pendant l'histoire.")
+                : t("L'enfant ne peut pas appuyer sur le bouton Accueil pendant l'histoire.")}
               placement="above"
               style={{ minWidth: 0 }}
             >
@@ -116,7 +117,7 @@ export function DuringPlaySection({ node, project = null, allMenus = [], allStor
                       allMenus={allMenus}
                       allStories={allStories}
                       currentStoryId={node.id}
-                      emptyLabel="Retour au menu d'accueil"
+                      emptyLabel={t("Retour au menu d'accueil")}
                       includeDefault={includeHomeDefaultOption}
                       includeNone
                       includeStoryPlay={false}
@@ -163,7 +164,7 @@ export function DuringPlaySection({ node, project = null, allMenus = [], allStor
             ))}
             <label className="sequence-control">
               <Tooltip
-                text="Ne joue aucun audio de sélection avant le lancement de l'histoire."
+                text={t("Ne joue aucun audio de sélection avant le lancement de l'histoire.")}
                 placement="above"
               >
                 <span style={{ flex: 1 }}>Écran de sélection silencieux</span>
@@ -173,7 +174,7 @@ export function DuringPlaySection({ node, project = null, allMenus = [], allStor
                 onChange={(enabled) => onUpdate(enabled
                   ? createSilentStoryTitleUpdate(node.titleControlSettings)
                   : { silentTitleStage: false })}
-                ariaLabel="Écran de sélection silencieux"
+                ariaLabel={t("Écran de sélection silencieux")}
               />
             </label>
           </div>

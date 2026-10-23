@@ -7,6 +7,7 @@ import { sanitizeProjectPrefix } from '../../utils/projectPrefix';
 import { createAudioPlayer, disposeAudioPlayerRef } from '../../utils/audioPlayer';
 import './RecordModal.css';
 
+import { t } from '../../i18n/index.js';
 const COUNTDOWN_SECONDS = 3;
 
 export function RecordModal({ workspaceDir, projectName = '', onSaved, onClose }) {
@@ -88,7 +89,7 @@ export function RecordModal({ workspaceDir, projectName = '', onSaved, onClose }
         stream.getTracks().forEach(track => track.stop());
         return;
       }
-      const mr = new MediaRecorder(stream, { mimeType: 'audio/webm;codecs=opus' });
+      const mr = new MediaRecorder(stream, { mimeType: t('audio/webm;codecs=opus') });
       chunksRef.current = [];
       mr.ondataavailable = e => { if (e.data.size > 0) chunksRef.current.push(e.data); };
       mr.onstop = () => {
@@ -223,10 +224,10 @@ export function RecordModal({ workspaceDir, projectName = '', onSaved, onClose }
               <div className="record-hint">Durée : {formatDuration(duration)}</div>
               {previewStatus !== 'idle' && previewStatus !== 'error' && (
                 <div className="record-hint" role="status">
-                  {previewStatus === 'loading' && 'Chargement de l’aperçu…'}
+                  {previewStatus === 'loading' && t('Chargement de l’aperçu…')}
                   {previewStatus === 'playing' && `Lecture : ${formatDuration(Math.floor(previewPosition))} / ${formatDuration(duration)}`}
                   {previewStatus === 'paused' && `En pause à ${formatDuration(Math.floor(previewPosition))}`}
-                  {previewStatus === 'ended' && 'Lecture terminée'}
+                  {previewStatus === 'ended' && t('Lecture terminée')}
                 </div>
               )}
               {previewError && <div className="record-hint" role="alert" style={{ color: '#E24B4A' }}>{previewError}</div>}
@@ -235,14 +236,14 @@ export function RecordModal({ workspaceDir, projectName = '', onSaved, onClose }
                   className="record-name-input"
                   value={recordingName}
                   onChange={(e) => setRecordingName(e.target.value)}
-                  placeholder="Nom du fichier"
+                  placeholder={t("Nom du fichier")}
                   spellCheck={false}
                 />
                 <span className="record-name-ext">.webm</span>
               </div>
               <div className="record-actions">
                 <Button onClick={playPreview} disabled={previewStatus === 'loading' || previewStatus === 'playing'}>
-                  {previewStatus === 'paused' ? '▶ Reprendre' : '▶ Écouter'}
+                  {previewStatus === 'paused' ? t('▶ Reprendre') : t('▶ Écouter')}
                 </Button>
                 <Button onClick={pausePreview} disabled={previewStatus !== 'playing'}>⏸ Pause</Button>
                 <Button onClick={retry}>↺ Recommencer</Button>

@@ -1,6 +1,7 @@
 import { open } from '@tauri-apps/plugin-dialog';
 import { KEYS, read, write } from '../store/persistentSettings';
 
+import { t } from '../i18n/index.js';
 const LEGACY_IMPORT_KEY = KEYS.LAST_IMPORT_DIR;
 const EXPORT_KEYS = [KEYS.LAST_PACK_OUTPUT_DIR, KEYS.LAST_EXPORT_DIR];
 const DIR_KEYS = {
@@ -55,7 +56,7 @@ export async function pickImage() {
 export async function pickSdReferenceImage() {
   return openRememberedFile({
     multiple: false,
-    filters: [{ name: 'Image de reference', extensions: ['png', 'jpg', 'jpeg', 'webp', 'bmp', 'gif'] }],
+    filters: [{ name: t('Image de reference'), extensions: ['png', 'jpg', 'jpeg', 'webp', 'bmp', 'gif'] }],
   }, [DIR_KEYS.sdReferenceImage, DIR_KEYS.image, LEGACY_IMPORT_KEY], DIR_KEYS.sdReferenceImage);
 }
 
@@ -69,14 +70,14 @@ export async function pickAudio() {
 export async function pickZip() {
   return openRememberedFile({
     multiple: false,
-    filters: [{ name: 'Archive Lunii', extensions: ['zip', '7z'] }],
+    filters: [{ name: t('Archive Lunii'), extensions: ['zip', '7z'] }],
   }, [DIR_KEYS.zip, LEGACY_IMPORT_KEY], DIR_KEYS.zip);
 }
 
 export async function pickMultipleZip() {
   const result = await open({
     multiple: true,
-    filters: [{ name: 'Archives Lunii', extensions: ['zip', '7z'] }],
+    filters: [{ name: t('Archives Lunii'), extensions: ['zip', '7z'] }],
     defaultPath: getLastDir([DIR_KEYS.multiZip, DIR_KEYS.zip, LEGACY_IMPORT_KEY]),
   });
   const files = Array.isArray(result) ? result : (result ? [result] : []);
@@ -87,7 +88,7 @@ export async function pickMultipleZip() {
 export async function pickMultipleAudioOrZip() {
   const result = await open({
     multiple: true,
-    filters: [{ name: 'Audio (mp3, wav, ogg, flac) ou archive Lunii (.zip, .7z)', extensions: ['mp3', 'ogg', 'wav', 'm4a', 'webm', 'flac', 'zip', '7z'] }],
+    filters: [{ name: t('Audio (mp3, wav, ogg, flac) ou archive Lunii (.zip, .7z)'), extensions: ['mp3', 'ogg', 'wav', 'm4a', 'webm', 'flac', 'zip', '7z'] }],
     defaultPath: getLastDir([DIR_KEYS.multiAudioZip, DIR_KEYS.audioZip, DIR_KEYS.audio, DIR_KEYS.zip, LEGACY_IMPORT_KEY]),
   });
   const files = Array.isArray(result) ? result : (result ? [result] : []);
@@ -99,7 +100,7 @@ export async function pickMultipleMediaFiles() {
   const result = await open({
     multiple: true,
     filters: [{
-      name: 'Médias Story Studio',
+      name: t('Médias Story Studio'),
       extensions: ['mp3', 'ogg', 'wav', 'm4a', 'webm', 'flac', 'png', 'jpg', 'jpeg', 'webp', 'bmp', 'gif', 'zip', '7z'],
     }],
     defaultPath: getLastDir([DIR_KEYS.mediaLibrary, DIR_KEYS.multiAudioZip, DIR_KEYS.image, DIR_KEYS.audio, LEGACY_IMPORT_KEY]),

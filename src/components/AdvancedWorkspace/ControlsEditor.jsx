@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // Les cinq contrôles d'un Écran, chacun **indépendamment**.
 //
 // Le panneau ne les range plus dans un encadré à part : chaque contrôle vit
@@ -30,9 +31,9 @@ import { ADVANCED_CONTROL_KEYS, advancedGestures, presence } from '../../store/p
 const CONTROL_LABELS = {
   wheel: 'Molette',
   ok: 'Bouton OK',
-  home: 'Bouton Accueil',
-  pause: 'Bouton Pause',
-  autoplay: 'Lecture automatique',
+  home: t('Bouton Accueil'),
+  pause: t('Bouton Pause'),
+  autoplay: t('Lecture automatique'),
 };
 
 // Chaque bouton formulé par ce qu'il fait, le même texte partout : panneau
@@ -41,11 +42,11 @@ export const CONTROL_PHRASES = {
   ok: 'Quand on appuie sur OK',
   // « Automatiquement » est implicite sous « Se déclenche », et ce mot seul
   // déborde d'une colonne de 200 px.
-  autoplay: 'À la fin du son',
+  autoplay: t('À la fin du son'),
   // Accueil et Pause sont des boutons qu'on active ou non : leur nom reste
   // fixe, et l'état se lit à côté (`STATE_WORDED`).
-  home: 'Bouton Accueil',
-  pause: 'Bouton Pause',
+  home: t('Bouton Accueil'),
+  pause: t('Bouton Pause'),
   wheel: 'Molette',
 };
 
@@ -59,9 +60,9 @@ const STATE_WORDED = new Set(['home', 'pause', 'wheel']);
 // la molette, qui fait passer aux autres choix de la liste, puis la pause.
 const CONTROL_GROUPS = [
   { id: 'ok', title: 'Suite du parcours', term: 'okTransition', controls: ['ok', 'autoplay'] },
-  { id: 'home', title: 'Bouton Accueil', term: 'homeTransition', controls: ['home'] },
-  { id: 'wheel', title: 'Passer aux autres choix de la liste', term: null, controls: ['wheel'] },
-  { id: 'pause', title: 'Pendant la lecture', term: null, controls: ['pause'] },
+  { id: 'home', title: t('Bouton Accueil'), term: 'homeTransition', controls: ['home'] },
+  { id: 'wheel', title: t('Passer aux autres choix de la liste'), term: null, controls: ['wheel'] },
+  { id: 'pause', title: t('Pendant la lecture'), term: null, controls: ['pause'] },
 ];
 
 // Les cinq boutons regroupés, là où on les règle ensemble sans leurs
@@ -82,16 +83,16 @@ export function GroupedControls({ renderControl }) {
 }
 
 const PRESENCE_CHOICES = [
-  ['true', 'Activé'],
-  ['false', 'Désactivé'],
-  ['null', 'Non défini (null)'],
-  ['absent', 'Non défini (absent)'],
+  ['true', t('Activé')],
+  ['false', t('Désactivé')],
+  ['null', t('Non défini (null)')],
+  ['absent', t('Non défini (absent)')],
 ];
 
 // « Molette · Bouton OK · Bouton Accueil » : les boutons allumés, dans l’ordre.
 export function describeControls(controls) {
   const on = ADVANCED_CONTROL_KEYS.filter((key) => controls?.[key] === true).map((key) => CONTROL_LABELS[key]);
-  return on.length > 0 ? on.join(' · ') : 'aucun bouton';
+  return on.length > 0 ? on.join(' · ') : t('aucun bouton');
 }
 
 // `true`, `false`, ou `null` quand le document ne dit rien : un contrôle non
@@ -126,7 +127,7 @@ export function ControlRow({ stage, control, label, disabled, onGesture }) {
         <span>
           {label}
           {STATE_WORDED.has(control) && (
-            <span className="advanced-controls__state">{field.value === true ? 'activé' : 'désactivé'}</span>
+            <span className="advanced-controls__state">{field.value === true ? t('activé') : t('désactivé')}</span>
           )}
         </span>
         <Toggle
@@ -183,8 +184,8 @@ export function ControlsCompletion({ stage, disabled, onGesture, highlight = fal
       </div>
       <p className="advanced-field__note">
         {controls.presence !== 'value'
-          ? 'Les boutons de cet Écran n’ont pas encore été définis dans le document.'
-          : 'Certains boutons de cet Écran ne sont pas définis.'}
+          ? t('Les boutons de cet Écran n’ont pas encore été définis dans le document.')
+          : t('Certains boutons de cet Écran ne sont pas définis.')}
         {' '}Choisissez le comportement de chacun pour pouvoir générer le pack.
       </p>
 

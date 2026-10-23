@@ -50,6 +50,7 @@ import { StructureDiagramLayer } from './diagram/StructureDiagramLayer';
 import { NodeIcon } from '../icons/NodeIcon.jsx';
 import { WORKSPACE_MODE_HIERARCHICAL } from '../../store/projectWorkState.js';
 
+import { t } from '../../i18n/index.js';
 const NODE_REVEAL_MINIMUM_ZOOM = 0.5;
 
 export function CompleteDiagramTree({
@@ -367,7 +368,7 @@ export function CompleteDiagramTree({
       const localNodeId = pathEdges.find((pathEdge) => pathEdge.localEndLeg === 'start')?.to
         ?? exitEdge?.from;
       const source = nodeLabelById.get(edge.localEndStoryId) ?? edge.localEndStoryId;
-      const localStep = nodeLabelById.get(localNodeId) ?? 'message ou scénario de fin';
+      const localStep = nodeLabelById.get(localNodeId) ?? t('message ou scénario de fin');
       const targetId = exitEdge?.displayTo ?? exitEdge?.to;
       const target = nodeLabelById.get(targetId) ?? targetId;
       return `À la fin de « ${source} » → « ${localStep} » → « ${target} »`;
@@ -389,9 +390,9 @@ export function CompleteDiagramTree({
         : `À la fin de « ${from} » → message de fin`;
     }
     const kindLabel = edge.kind === 'home'
-      ? 'Retour Home'
+      ? t('Retour Home')
       : edge.kind === 'after-end' || edge.kind === 'sequence'
-        ? 'Séquence de fin'
+        ? t('Séquence de fin')
         : edge.kind === 'reference'
           ? 'Lien'
           : 'Retour';
@@ -399,7 +400,7 @@ export function CompleteDiagramTree({
     if (edge.kind === 'after-end' || edge.kind === 'sequence') {
       const prefix = edge.source === 'prompt-chain'
         ? `Parcours de ${edge.chainStoryIds?.length ?? 0} histoires, après le message de fin`
-        : edge.to === END_NODE_ID ? 'Après la lecture → message de fin' : 'Après la séquence ou le message de fin';
+        : edge.to === END_NODE_ID ? t('Après la lecture → message de fin') : t('Après la séquence ou le message de fin');
       return `${prefix} : « ${from} » → « ${to} »`;
     }
     if (edge.kind === 'reference') return `Lien vers un nœud existant : « ${from} » → « ${to} »`;
@@ -410,7 +411,7 @@ export function CompleteDiagramTree({
     if (!node) return;
     const rect = node.getBoundingClientRect();
     setNavigationTooltip({
-      text: `${describeNavigationEdge(edge)}. Clique pour ${pinnedNavigationEdgeId === edgeKey(edge) ? 'désépingler' : 'épingler'} ce trajet.`,
+      text: `${describeNavigationEdge(edge)}. Clique pour ${pinnedNavigationEdgeId === edgeKey(edge) ? t('désépingler') : t('épingler')} ce trajet.`,
       left: event.clientX - rect.left + 12,
       top: event.clientY - rect.top + 12,
     });
@@ -652,7 +653,7 @@ export function CompleteDiagramTree({
             availableInlineSize={containerWidth ? containerWidth - 24 : null}
             trailing={onSearch && (
               <StructureSearchButton
-                label="Rechercher dans le diagramme"
+                label={t("Rechercher dans le diagramme")}
                 onClick={onSearch}
               />
             )}

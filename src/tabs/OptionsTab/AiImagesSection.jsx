@@ -5,6 +5,7 @@ import { Toggle } from '../../components/common/Toggle';
 import { pickComfyWorkflowApiJson, pickComfyWorkflowConfigJson } from '../../hooks/useFileDialog';
 import { isTauriRuntime } from '../../utils/tauriRuntime';
 
+import { t } from '../../i18n/index.js';
 export function AiImagesSection({ className, sectionRef, sdSettings, onUpdateSdSettings }) {
   const [sdProbe, setSdProbe] = useState({ state: 'idle', message: '' });
   const [sdWorkflows, setSdWorkflows] = useState([]);
@@ -24,11 +25,11 @@ export function AiImagesSection({ className, sectionRef, sdSettings, onUpdateSdS
     const launching = sdSettings?.autoStart && sdSettings?.launcherPath;
     setSdProbe({
       state: 'loading',
-      message: launching ? 'Démarrage de ComfyUI en cours… (peut prendre jusqu\'à 3 minutes)' : 'Connexion à ComfyUI en cours…',
+      message: launching ? 'Démarrage de ComfyUI en cours… (peut prendre jusqu\'à 3 minutes)' : t('Connexion à ComfyUI en cours…'),
     });
     try {
       await invoke('comfyui_check', { settings: sdSettings });
-      setSdProbe({ state: 'ok', message: 'ComfyUI accessible et prêt.' });
+      setSdProbe({ state: 'ok', message: t('ComfyUI accessible et prêt.') });
     } catch (e) {
       setSdProbe({ state: 'error', message: String(e) });
     }
@@ -120,7 +121,7 @@ export function AiImagesSection({ className, sectionRef, sdSettings, onUpdateSdS
           <div className="xtts-actions">
             <Button onClick={handleTestSd} disabled={sdProbe.state === 'loading'}>
               {sdProbe.state === 'loading'
-                ? (sdSettings?.autoStart && sdSettings?.launcherPath ? 'Démarrage…' : 'Test en cours…')
+                ? (sdSettings?.autoStart && sdSettings?.launcherPath ? t('Démarrage…') : t('Test en cours…'))
                 : 'Tester ComfyUI'}
             </Button>
           </div>
@@ -161,10 +162,10 @@ export function AiImagesSection({ className, sectionRef, sdSettings, onUpdateSdS
               <div className="opts-row-label" style={{ marginBottom: 6 }}>Importer un workflow custom</div>
               <div className="sd-import-row">
                 <Button size="sm" onClick={handlePickApiJson}>
-                  {importApiPath ? '✓ API JSON' : 'Choisir *-api.json…'}
+                  {importApiPath ? '✓ API JSON' : t('Choisir *-api.json…')}
                 </Button>
                 <Button size="sm" onClick={handlePickConfigJson}>
-                  {importConfigPath ? '✓ Config JSON' : 'Choisir *.config.json…'}
+                  {importConfigPath ? '✓ Config JSON' : t('Choisir *.config.json…')}
                 </Button>
                 <Button
                   size="sm"
@@ -172,7 +173,7 @@ export function AiImagesSection({ className, sectionRef, sdSettings, onUpdateSdS
                   onClick={handleImportWorkflow}
                   disabled={!importApiPath || !importConfigPath || importing}
                 >
-                  {importing ? 'Import…' : 'Importer'}
+                  {importing ? 'Import…' : t('Importer')}
                 </Button>
               </div>
             </div>

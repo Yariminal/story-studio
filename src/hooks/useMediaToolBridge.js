@@ -5,6 +5,7 @@ import {
   validateMediaAudioToolRequest,
 } from '../store/mediaToolContext.js';
 
+import { t } from '../i18n/index.js';
 let requestSequence = 0;
 
 function nextRequestId() {
@@ -49,7 +50,7 @@ export function useMediaToolBridge({
     });
     if (!built.valid) {
       showErrorDialog?.({
-        title: 'Outil audio indisponible',
+        title: t('Outil audio indisponible'),
         message: built.reason,
         variant: 'warning',
       });
@@ -85,10 +86,10 @@ export function useMediaToolBridge({
 
   const validateRequest = useCallback((request) => {
     if (!request || activeRequestRef.current?.requestId !== request.requestId) {
-      return { valid: false, code: 'inactive-request', reason: 'Cette opération contextuelle n’est plus active.' };
+      return { valid: false, code: 'inactive-request', reason: t('Cette opération contextuelle n’est plus active.') };
     }
     if (request.projectRevision !== projectRevisionRef.current) {
-      return { valid: false, code: 'project-changed', reason: 'Le projet a changé pendant le traitement.' };
+      return { valid: false, code: 'project-changed', reason: t('Le projet a changé pendant le traitement.') };
     }
     return validateMediaAudioToolRequest(projectRef.current, request, statusByPathRef.current);
   }, []);
@@ -103,7 +104,7 @@ export function useMediaToolBridge({
         request.tool !== 'assemble'
         || !haveSameMediaPathMultiset(result?.inputPaths, request.sourcePaths)
       ) {
-        return invalidResult('action-not-allowed', 'Les fichiers assemblés ne correspondent plus aux histoires sélectionnées.');
+        return invalidResult('action-not-allowed', t('Les fichiers assemblés ne correspondent plus aux histoires sélectionnées.'));
       }
       outcome = mutations.handleReplaceStoriesWithAssembledStory({
         request,
@@ -111,10 +112,10 @@ export function useMediaToolBridge({
         logicalName: result?.logicalName,
       });
     } else {
-      return invalidResult('unknown-action', 'Cette action projet n’est pas reconnue.');
+      return invalidResult('unknown-action', t('Cette action projet n’est pas reconnue.'));
     }
 
-    if (!outcome?.ok) return invalidResult(outcome?.code ?? 'mutation-refused', outcome?.reason ?? 'La modification du projet a été refusée.');
+    if (!outcome?.ok) return invalidResult(outcome?.code ?? 'mutation-refused', outcome?.reason ?? t('La modification du projet a été refusée.'));
     invalidateRequest(request.requestId);
     return outcome;
   }, [invalidateRequest, mutations, validateRequest]);

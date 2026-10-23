@@ -29,6 +29,7 @@ import { AudioEditorTransportBar } from './AudioEditorTransportBar';
 import { AudioEditorFadeOverlays } from './AudioEditorFadeOverlays';
 import './AudioEditorModal.css';
 
+import { t } from '../../i18n/index.js';
 export function AudioEditorModal({ filePath, savePath, workspaceDir, onConfirm, onCancel }) {
   const containerRef = useRef(null);
   const wsRef = useRef(null);
@@ -299,7 +300,7 @@ export function AudioEditorModal({ filePath, savePath, workspaceDir, onConfirm, 
       if (!mounted) return;
       if (wsRef.current === ws) wsRef.current = null;
       setIsLoading(false);
-      setError('Impossible de charger le fichier audio.');
+      setError(t('Impossible de charger le fichier audio.'));
     });
 
     ws.on('play', () => { if (mounted) setIsPlaying(true); });
@@ -509,7 +510,7 @@ export function AudioEditorModal({ filePath, savePath, workspaceDir, onConfirm, 
           >
             {isLoading && (
               <div className="audio-editor-loading">
-                {audioUrl ? "Analyse de la forme d'onde…" : 'Chargement du fichier…'}
+                {audioUrl ? "Analyse de la forme d'onde…" : t('Chargement du fichier…')}
               </div>
             )}
             <div ref={containerRef} className="audio-editor-waveform" />
@@ -571,7 +572,7 @@ export function AudioEditorModal({ filePath, savePath, workspaceDir, onConfirm, 
 
           {editInfo?.original_available && (
             <div className="audio-editor-restore-row">
-              <Tooltip text="Restaurer le fichier avant édition">
+              <Tooltip text={t("Restaurer le fichier avant édition")}>
                 <Button size="sm" className="audio-editor-restore-btn" onClick={handleRestoreOriginal} disabled={isBlockingAction}>
                   <RotateCcw />
                   Restaurer l'original
@@ -590,20 +591,20 @@ export function AudioEditorModal({ filePath, savePath, workspaceDir, onConfirm, 
           <Button onClick={onCancel} disabled={isBlockingAction}>Annuler</Button>
           <Tooltip
             text={isPreviewPending
-              ? "L'aperçu du dernier réglage est en cours"
+              ? t("L'aperçu du dernier réglage est en cours")
               : canValidate
-                ? 'Valider les modifications'
-                : 'Aucune modification à valider'}
+                ? t('Valider les modifications')
+                : t('Aucune modification à valider')}
             placement="above"
           >
             <Button variant="primary" onClick={handleApply} disabled={!canValidate}>
               {isPreviewPending
-                ? "Génération de l'aperçu…"
+                ? t("Génération de l'aperçu…")
                 : applyMode === 'trim' || applyMode === 'cut'
                 ? 'Application…'
                 : canValidate
-                  ? 'Valider les modifications'
-                  : 'Aucune modification'}
+                  ? t('Valider les modifications')
+                  : t('Aucune modification')}
             </Button>
           </Tooltip>
         </div>

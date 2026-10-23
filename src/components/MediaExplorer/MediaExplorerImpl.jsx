@@ -31,6 +31,7 @@ import { COLUMNS, colsToGrid, useColumnWidths } from './useColumnWidths';
 import { useMediaImageEdit } from './useMediaImageEdit';
 import './MediaExplorer.css';
 
+import { t } from '../../i18n/index.js';
 const AudioSplitterModal = lazy(() => import('../AudioSplitterModal/AudioSplitterModal')
   .then((m) => ({ default: m.AudioSplitterModal })));
 const ImageEditorModal = lazy(() => import('../ImageEditorModal/ImageEditorModal')
@@ -42,9 +43,9 @@ const FILTERS = [
   { id: 'audio', label: 'Audio' },
   { id: 'zip', label: 'ZIP' },
   { id: 'ai', label: 'IA' },
-  { id: 'imported', label: 'Importés' },
+  { id: 'imported', label: t('Importés') },
   { id: 'recorded', label: 'Enreg.' },
-  { id: 'unused', label: 'Non utilisés' },
+  { id: 'unused', label: t('Non utilisés') },
 ];
 
 
@@ -332,7 +333,7 @@ export function MediaExplorer({
       await graphMediaTarget.assign({ kind: selectedGraphMedia.kind, path: selectedGraphMedia.path });
     } catch (error) {
       showErrorDialog({
-        title: 'Affectation du média impossible',
+        title: t('Affectation du média impossible'),
         message: String(error?.message ?? error),
       });
     }
@@ -480,7 +481,7 @@ export function MediaExplorer({
       }
       if (diskErrors.length > 0) {
         const header = diskErrors.length === 1
-          ? 'Suppression disque refusée pour ce fichier :'
+          ? t('Suppression disque refusée pour ce fichier :')
           : `Suppression disque refusée pour ${diskErrors.length} fichiers :`;
         sections.push(`${header}\n${diskErrors.join('\n\n')}`);
       }
@@ -624,7 +625,7 @@ export function MediaExplorer({
           ...result,
           request: null,
           projectApplied: true,
-          message: 'Les histoires ont été remplacées par le fichier audio assemblé.',
+          message: t('Les histoires ont été remplacées par le fichier audio assemblé.'),
         });
         return;
       }
@@ -632,7 +633,7 @@ export function MediaExplorer({
       setToolResult({
         ...result,
         request: null,
-        unavailableReason: outcome?.reason || 'Le remplacement du projet a été refusé.',
+        unavailableReason: outcome?.reason || t('Le remplacement du projet a été refusé.'),
       });
       return;
     }
@@ -662,7 +663,7 @@ export function MediaExplorer({
     const request = splitterRequest;
     const sourcePath = splitterItem?.path;
     const sourceTags = tagsOf(sourcePath);
-    const tagsToCopy = new Set([...sourceTags, 'découpe']);
+    const tagsToCopy = new Set([...sourceTags, t('découpe')]);
     for (const path of createdPaths) {
       onMediaCreated?.(path);
       if (onAddMediaTag) {
@@ -685,18 +686,18 @@ export function MediaExplorer({
 
     if (failures.length > 0) {
       const details = failures
-        .map((failure) => `• ${failure.outputFileName || 'Extrait'}\n  ${failure.error || 'Erreur inconnue'}`)
+        .map((failure) => `• ${failure.outputFileName || 'Extrait'}\n  ${failure.error || t('Erreur inconnue')}`)
         .join('\n\n');
       showErrorDialog({
-        title: 'Certaines découpes ont échoué',
-        message: `${createdPaths.length} extrait${createdPaths.length > 1 ? 's ont été créés' : ' a été créé'}, mais ${failures.length} découpe${failures.length > 1 ? 's ont échoué' : ' a échoué'} :\n\n${details}`,
+        title: t('Certaines découpes ont échoué'),
+        message: `${createdPaths.length} extrait${createdPaths.length > 1 ? t('s ont été créés') : t(' a été créé')}, mais ${failures.length} découpe${failures.length > 1 ? t('s ont échoué') : t(' a échoué')} :\n\n${details}`,
         variant: 'warning',
       });
     }
   }
 
   const assemblyContextValidation = assemblyRequest
-    ? onValidateMediaToolRequest?.(assemblyRequest) ?? { valid: false, reason: 'Le contexte projet n’est plus disponible.' }
+    ? onValidateMediaToolRequest?.(assemblyRequest) ?? { valid: false, reason: t('Le contexte projet n’est plus disponible.') }
     : { valid: false, reason: '' };
   const liveAssemblyEligibility = assemblyRequest
     ? getAssemblyReplacementEligibility(project, assemblyRequest.entryIds)
@@ -707,7 +708,7 @@ export function MediaExplorer({
     replacementEligibility: liveAssemblyEligibility,
   });
   const automaticAssemblyUnavailableReason = assemblyRequest && !automaticAssemblyProjectAction
-    ? (assemblyContextValidation.reason || liveAssemblyEligibility?.reason || 'Le remplacement du projet n’est pas sûr.')
+    ? (assemblyContextValidation.reason || liveAssemblyEligibility?.reason || t('Le remplacement du projet n’est pas sûr.'))
     : '';
 
   function finishMediaToolResult() {
@@ -786,13 +787,13 @@ export function MediaExplorer({
 
   const actionButtons = (
     <>
-      <Tooltip text="Importer audio, images, ZIP ou 7z">
+      <Tooltip text={t("Importer audio, images, ZIP ou 7z")}>
         <Button className="media-import-btn" onClick={onImportMedia || onImportStories}>
           <FilePlus className="media-btn-icon" strokeWidth={2} absoluteStrokeWidth />
         </Button>
       </Tooltip>
       {onImportMediaFolder && (
-        <Tooltip text="Importer un dossier (récursif)">
+        <Tooltip text={t("Importer un dossier (récursif)")}>
           <Button className="media-import-btn" onClick={onImportMediaFolder}>
             <FolderPlus className="media-btn-icon" strokeWidth={2} absoluteStrokeWidth />
           </Button>
@@ -814,10 +815,10 @@ export function MediaExplorer({
             className="media-search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Rechercher…"
+            placeholder={t("Rechercher…")}
           />
           {query ? (
-            <button className="media-search-clear" type="button" onClick={() => setQuery('')} aria-label="Effacer la recherche">×</button>
+            <button className="media-search-clear" type="button" onClick={() => setQuery('')} aria-label={t("Effacer la recherche")}>×</button>
           ) : null}
         </div>
         <div className="me-toolbar-right">{viewSwitch}{actionButtons}</div>
@@ -949,8 +950,8 @@ export function MediaExplorer({
             outputNameSourcePath={imageEdit.editSession.item.path}
             initialTransform={imageEdit.editSession.initialTransform}
             initialFilters={imageEdit.editSession.initialFilters}
-            title="Modifier une image"
-            confirmLabel="Enregistrer comme nouveau média"
+            title={t("Modifier une image")}
+            confirmLabel={t("Enregistrer comme nouveau média")}
             workspaceDir={imageEdit.editSession.workspaceDir}
             requireManagedOutput
             forceExport
@@ -970,8 +971,8 @@ export function MediaExplorer({
           y={bgCtxMenu.y}
           onClose={() => setBgCtxMenu(null)}
           actions={[
-            { icon: <Download />, label: 'Importer des médias', fn: () => { setBgCtxMenu(null); (onImportMedia || onImportStories)?.(); } },
-            ...(onImportMediaFolder ? [{ icon: <FolderInput />, label: 'Importer un dossier', fn: () => { setBgCtxMenu(null); onImportMediaFolder(); } }] : []),
+            { icon: <Download />, label: t('Importer des médias'), fn: () => { setBgCtxMenu(null); (onImportMedia || onImportStories)?.(); } },
+            ...(onImportMediaFolder ? [{ icon: <FolderInput />, label: t('Importer un dossier'), fn: () => { setBgCtxMenu(null); onImportMediaFolder(); } }] : []),
             ...(selectedCount > 0 ? [
               'sep',
               ...(selectedAudioItems.length > 0 ? [

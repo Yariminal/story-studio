@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // Le parcours de fabrication du pack, côté éditeur graphe.
 //
 // Les deux éditeurs traversent désormais les mêmes quatre étapes, dans le même
@@ -75,8 +76,8 @@ export function documentBlockage(summary) {
   return refusal({
     kind: EXPORT_REFUSAL.PREPARATION,
     preparationKind: PREPARATION_REFUSAL.READINESS_BLOCKED,
-    title: "Fabrication impossible — qualification d'export bloquée",
-    message: "Rien n'a été fabriqué et aucun dossier n'a été demandé : le document porte "
+    title: t("Fabrication impossible — qualification d'export bloquée"),
+    message: t("Rien n'a été fabriqué et aucun dossier n'a été demandé : le document porte ")
       + `${blocking.length} point(s) à corriger avant de produire le pack.`,
     // Le rapport rend ces lignes telles quelles : chacune porte son niveau, son
     // code, son message et l'emplacement concerné — « ce qui bloque, et où ».
@@ -99,9 +100,9 @@ export function emptyPackBlockage(referencedAssetRefs) {
   if (!Array.isArray(referencedAssetRefs) || referencedAssetRefs.length > 0) return null;
   return refusal({
     kind: EXPORT_REFUSAL.REQUEST,
-    title: 'Fabrication impossible — pack sans média',
-    message: 'Le pack ne contient aucun son ni aucune image : ajoute au moins un média '
-      + 'à un Écran avant de générer.',
+    title: t('Fabrication impossible — pack sans média'),
+    message: t('Le pack ne contient aucun son ni aucune image : ajoute au moins un média ')
+      + t('à un Écran avant de générer.'),
   });
 }
 
@@ -116,7 +117,7 @@ export function emptyPackBlockage(referencedAssetRefs) {
  */
 export function mediaBlockage(project, referencedAssetRefs) {
   if (!Array.isArray(referencedAssetRefs)) {
-    throw new TypeError('Les références médias du document doivent être connues avant la production.');
+    throw new TypeError(t('Les références médias du document doivent être connues avant la production.'));
   }
   const entries = [];
   const referenced = new Set(referencedAssetRefs);
@@ -141,9 +142,9 @@ export function mediaBlockage(project, referencedAssetRefs) {
   if (entries.length === 0) return null;
   return refusal({
     kind: EXPORT_REFUSAL.MEDIA_UNAVAILABLE,
-    title: 'Fabrication impossible — médias indisponibles',
-    message: "Rien n'a été fabriqué et aucun dossier n'a été demandé : les médias utilisés "
-      + 'par le pack ci-dessous sont indisponibles.',
+    title: t('Fabrication impossible — médias indisponibles'),
+    message: t("Rien n'a été fabriqué et aucun dossier n'a été demandé : les médias utilisés ")
+      + t('par le pack ci-dessous sont indisponibles.'),
     entries,
   });
 }
@@ -193,8 +194,8 @@ export async function runAdvancedProduction({
     // une porte qui n'a pas pu regarder ne dit pas « rien ne bloque ».
     const stopped = refusal({
       kind: EXPORT_REFUSAL.REQUEST,
-      title: 'Fabrication impossible',
-      message: "La qualification du document n'a pas pu être calculée, et rien n'a été fabriqué : "
+      title: t('Fabrication impossible'),
+      message: t("La qualification du document nt('a pas pu être calculée, et rien n')a été fabriqué : ")
         + String(error?.message ?? error),
       code: error?.code ?? null,
     });
@@ -211,8 +212,8 @@ export async function runAdvancedProduction({
     } catch (error) {
       blockage = refusal({
         kind: EXPORT_REFUSAL.REQUEST,
-        title: 'Fabrication impossible',
-        message: "Les médias du document n'ont pas pu être vérifiés, et rien n'a été fabriqué : "
+        title: t('Fabrication impossible'),
+        message: t("Les médias du document n'ont pas pu être vérifiés, et rien n'a été fabriqué : ")
           + String(error?.message ?? error),
         code: error?.code ?? null,
       });

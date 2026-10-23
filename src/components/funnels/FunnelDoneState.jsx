@@ -1,5 +1,6 @@
 import { Check } from '../icons/LucideLocal';
 
+import { t } from '../../i18n/index.js';
 /**
  * Écran « Terminé » du châssis pour les funnels génératifs/outils.
  * Pastille succès + titre + nom de fichier (optionnel) + méta + zone d'actions.
@@ -12,13 +13,13 @@ import { Check } from '../icons/LucideLocal';
  * @param {Object}   props
  * @param {React.ReactNode} [props.icon]   Défaut : coche succès.
  * @param {'success'|'error'} [props.tone='success']  Couleur de la pastille.
- * @param {string}   [props.title='Terminé']
+ * @param {string}   [props.title={t('Terminé')}]
  * @param {string}   [props.fileName]
  * @param {string}   [props.meta]
  * @param {React.ReactNode} [props.notice]  Avertissement non bloquant éventuel.
  * @param {React.ReactNode} props.children  Boutons d'action.
  */
-export function FunnelDoneState({ icon, tone = 'success', title = 'Terminé', fileName, meta, notice, children }) {
+export function FunnelDoneState({ icon, tone = 'success', title = t('Terminé'), fileName, meta, notice, children }) {
   return (
     <div className="funnel-done">
       <div className={`funnel-done-badge${tone === 'error' ? ' funnel-done-badge--error' : ''}`} aria-hidden="true">

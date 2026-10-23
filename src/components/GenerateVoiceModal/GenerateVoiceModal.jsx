@@ -14,13 +14,14 @@ import { Button } from '../common/Button';
 import { releaseTauriListener } from '../../utils/tauriListener';
 import './GenerateVoiceModal.css';
 
+import { t } from '../../i18n/index.js';
 const LANGUAGE_OPTIONS = [
-  { value: 'fr', label: 'Français' },
-  { value: 'en', label: 'English' },
+  { value: 'fr', label: t('Français') },
+  { value: 'en', label: t('English') },
   { value: 'es', label: 'Español' },
   { value: 'de', label: 'Deutsch' },
   { value: 'it', label: 'Italiano' },
-  { value: 'pt', label: 'Português' },
+  { value: 'pt', label: t('Português') },
 ];
 
 const PIPER_MAX_TEXT_CHARS = 5000;
@@ -71,15 +72,15 @@ function VoiceModalShell({
               className="tts-textarea"
               value={text}
               onChange={(e) => setText(e.target.value)}
-              placeholder="Tape ici le texte à transformer en voix…"
+              placeholder={t("Tape ici le texte à transformer en voix…")}
               disabled={submitting}
             />
             <div className="tts-field-row">
               <span className="tts-helper">
-                {initialText ? 'Le texte est prérempli d’après le champ audio actuel.' : 'Saisis le texte exact à lire par la voix.'}
+                {initialText ? t('Le texte est prérempli d’après le champ audio actuel.') : t('Saisis le texte exact à lire par la voix.')}
               </span>
               <span className="tts-count">
-                {formatFrenchCount(textLength, 'caractère', 'caractères')}
+                {formatFrenchCount(textLength, t('caractère'), t('caractères'))}
               </span>
             </div>
           </label>
@@ -127,7 +128,7 @@ function PiperVoiceModal({
   });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
-  const [statusMessage, setStatusMessage] = useState('Voix prête à l’emploi, sans configuration.');
+  const [statusMessage, setStatusMessage] = useState(t('Voix prête à l’emploi, sans configuration.'));
 
   const selectedVoiceInfo = useMemo(
     () => voices.find((voice) => voice.id === selectedVoice) || null,
@@ -182,12 +183,12 @@ function PiperVoiceModal({
   useEscapeKey(true, () => { if (!submitting) onClose?.(); });
 
   async function handleGenerate() {
-    if (!text.trim()) { setError('Le texte à générer est vide.'); return; }
+    if (!text.trim()) { setError(t('Le texte à générer est vide.')); return; }
     if (text.trim().length > PIPER_MAX_TEXT_CHARS) {
       setError(`Le texte est trop long pour Piper (${text.trim().length} caractères, maximum ${PIPER_MAX_TEXT_CHARS}).`);
       return;
     }
-    if (!selectedVoice) { setError('Choisis une voix.'); return; }
+    if (!selectedVoice) { setError(t('Choisis une voix.')); return; }
 
     setSubmitting(true);
     setError('');
@@ -196,7 +197,7 @@ function PiperVoiceModal({
       // feedback discret « Préparation de la voix… » au 1er usage. Idempotent :
       // sans effet si déjà installé.
       if (needsProvision) {
-        setStatusMessage('Préparation de la voix… (téléchargement unique)');
+        setStatusMessage(t('Préparation de la voix… (téléchargement unique)'));
         await invoke('piper_ensure_voice', { voice: selectedVoice });
         setBinaryInstalled(true);
         setVoices((prev) => prev.map((voice) => (
@@ -240,7 +241,7 @@ function PiperVoiceModal({
       onClose={onClose}
       footerActions={(
         <Button variant="primary-violet" onClick={handleGenerate} disabled={submitting || voices.length === 0}>
-          {submitting ? (needsProvision ? 'Préparation…' : 'Ajout…') : 'Générer'}
+          {submitting ? (needsProvision ? t('Préparation…') : 'Ajout…') : t('Générer')}
         </Button>
       )}
     >
@@ -332,7 +333,7 @@ function XttsVoiceModal({
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [device, setDevice] = useState(null);
-  const [statusMessage, setStatusMessage] = useState('Connexion à XTTS…');
+  const [statusMessage, setStatusMessage] = useState(t('Connexion à XTTS…'));
   const [error, setError] = useState('');
   const favoriteVoices = Array.isArray(xttsSettings.favoriteVoices) ? xttsSettings.favoriteVoices : [];
   const visibleVoices = useMemo(() => {
@@ -344,12 +345,12 @@ function XttsVoiceModal({
   const favoritesUnavailable = favoriteVoices.length > 0
     && availableVoices.length > 0
     && favoriteVoices.every((voice) => !availableVoices.includes(voice));
-  const selectedVoiceLabel = selectedVoice || 'Aucune voix disponible';
+  const selectedVoiceLabel = selectedVoice || t('Aucune voix disponible');
 
   async function loadStatus() {
     setLoading(true);
     setError('');
-    setStatusMessage('Connexion à XTTS…');
+    setStatusMessage(t('Connexion à XTTS…'));
     try {
       const status = await invoke('xtts_get_status', { settings: xttsSettings });
       const voices = status.voices || [];
@@ -365,7 +366,7 @@ function XttsVoiceModal({
         if (fallbackVoices.includes(lastVoice)) return lastVoice;
         return fallbackVoices[0] || '';
       });
-      setStatusMessage(voices.length > 0 ? 'XTTS est prêt.' : 'XTTS est prêt, mais aucune voix n’a été retournée.');
+      setStatusMessage(voices.length > 0 ? t('XTTS est prêt.') : t('XTTS est prêt, mais aucune voix n’a été retournée.'));
     } catch (e) {
       setError(String(e));
       setStatusMessage('');
@@ -383,8 +384,8 @@ function XttsVoiceModal({
   useEscapeKey(true, () => { if (!submitting) onClose?.(); });
 
   async function handleGenerate() {
-    if (!text.trim()) { setError('Le texte à générer est vide.'); return; }
-    if (!selectedVoice) { setError('Choisis une voix XTTS.'); return; }
+    if (!text.trim()) { setError(t('Le texte à générer est vide.')); return; }
+    if (!selectedVoice) { setError(t('Choisis une voix XTTS.')); return; }
 
     setSubmitting(true);
     setError('');
@@ -437,7 +438,7 @@ function XttsVoiceModal({
           onClick={handleGenerate}
           disabled={loading || submitting || visibleVoices.length === 0}
         >
-          {submitting ? 'Ajout…' : 'Générer'}
+          {submitting ? 'Ajout…' : t('Générer')}
         </Button>
       )}
     >
@@ -481,10 +482,10 @@ function XttsVoiceModal({
         </select>
         <span className="tts-helper">
           {favoriteVoices.length > 0 && !favoritesUnavailable
-            ? 'Liste limitée aux voix favorites configurées dans les préférences.'
+            ? t('Liste limitée aux voix favorites configurées dans les préférences.')
             : favoritesUnavailable
-              ? 'Les voix favorites sont indisponibles ; toutes les voix XTTS détectées sont affichées.'
-              : 'Toutes les voix retournées par XTTS sont disponibles. Ajoute des favorites dans les préférences pour réduire cette liste.'}
+              ? t('Les voix favorites sont indisponibles ; toutes les voix XTTS détectées sont affichées.')
+              : t('Toutes les voix retournées par XTTS sont disponibles. Ajoute des favorites dans les préférences pour réduire cette liste.')}
         </span>
       </label>
     </VoiceModalShell>

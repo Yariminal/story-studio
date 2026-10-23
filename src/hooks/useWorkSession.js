@@ -21,6 +21,7 @@ import {
 } from '../store/ephemeralSnapshotSeed';
 import { logger } from '../utils/logger';
 
+import { t } from '../i18n/index.js';
 const SESSION_RECOVERY_FILE = '.session-recovery.mbah';
 
 function joinLocalPath(dir, fileName) {
@@ -120,14 +121,14 @@ export function useWorkSession({
             const preview = await previewProjectFromPath(recovery.snapshotPath);
             return {
               ...recovery,
-              projectName: preview.projectName || 'Projet récupérable',
+              projectName: preview.projectName || t('Projet récupérable'),
               projectType: preview.projectType || 'pack',
               thumbnailImage: preview.thumbnailImage,
             };
           } catch {
             return {
               ...recovery,
-              projectName: 'Projet récupérable',
+              projectName: t('Projet récupérable'),
               // Snapshot illisible : son éditeur est inconnu, l'accueil n'en affiche aucun.
               projectType: null,
               thumbnailImage: null,
@@ -416,7 +417,7 @@ export function useWorkSession({
     } catch (error) {
       logger.error('session:recover-error', error);
       showErrorDialog({
-        title: 'Reprise impossible',
+        title: t('Reprise impossible'),
         message: `Impossible de reprendre cette session : ${error}`,
       });
     }
@@ -427,13 +428,13 @@ export function useWorkSession({
     // Ignorer supprime définitivement l'instantané et les médias de session :
     // l'auteur le confirme d'abord.
     const choice = await showChoiceDialog({
-      title: 'Ignorer cette reprise',
-      message: 'Supprimer définitivement ce travail non enregistré ?',
+      title: t('Ignorer cette reprise'),
+      message: t('Supprimer définitivement ce travail non enregistré ?'),
       variant: 'warning',
       cancelValue: 'cancel',
       actions: [
-        { value: 'cancel', label: 'Annuler', autoFocus: true },
-        { value: 'delete', label: 'Supprimer', kind: 'danger-outline' },
+        { value: 'cancel', label: t('Annuler'), autoFocus: true },
+        { value: 'delete', label: t('Supprimer'), kind: 'danger-outline' },
       ],
     });
     if (choice !== 'delete') return;

@@ -4,6 +4,7 @@ import { Tooltip } from '../common/Tooltip';
 import { CompleteDiagramTree } from './FullDiagramTree';
 import './FlowDiagram.css';
 
+import { t } from '../../i18n/index.js';
 function IconButton({ label, onClick, active = false, children }) {
   return (
     <Tooltip text={label}>
@@ -31,15 +32,15 @@ function DiagramPanelHeader({
 
   return (
     <div className="fd-panel-header" {...dragHandleProps}>
-      <div className="fd-panel-title" title={isFull ? 'Diagramme complet du pack' : 'Diagramme'}>
-        {isFull ? 'Diagramme complet du pack' : 'Diagramme'}
+      <div className="fd-panel-title" title={isFull ? t('Diagramme complet du pack') : 'Diagramme'}>
+        {isFull ? t('Diagramme complet du pack') : 'Diagramme'}
       </div>
       <div className="fd-panel-view-controls" ref={controlsHostRef} />
       <div className="fd-panel-window-controls">
-        <IconButton label="Rechercher dans le diagramme (Ctrl+F)" onClick={onSearch}>
+        <IconButton label={t("Rechercher dans le diagramme (Ctrl+F)")} onClick={onSearch}>
           <Search aria-hidden="true" />
         </IconButton>
-        <IconButton label="Fermer le diagramme" onClick={onClose}>
+        <IconButton label={t("Fermer le diagramme")} onClick={onClose}>
           <X aria-hidden="true" />
         </IconButton>
       </div>

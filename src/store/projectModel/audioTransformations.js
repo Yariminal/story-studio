@@ -1,6 +1,7 @@
 import { normalizeStoryEntry } from './schema.js';
 import { getAssemblyReplacementEligibility, validateMediaAudioToolRequest } from '../mediaToolContext.js';
 
+import { t } from '../../i18n/index.js';
 const TERMINAL_FIELDS = [
   'controlSettings',
   'returnAfterPlay',
@@ -53,7 +54,7 @@ export function replaceStoriesWithAssembledStory(project, {
     const validation = validateMediaAudioToolRequest(project, request);
     if (!validation.valid) return failure(project, validation.code, validation.reason);
   }
-  if (!outputPath) return failure(project, 'missing-output', 'Le fichier assemblé est introuvable.');
+  if (!outputPath) return failure(project, 'missing-output', t('Le fichier assemblé est introuvable.'));
   const eligibility = getAssemblyReplacementEligibility(project, ids);
   if (!eligibility.valid) return failure(project, eligibility.code, eligibility.reason, eligibility);
 

@@ -11,6 +11,7 @@ import {
 import { isTauriRuntime } from '../../utils/tauriRuntime';
 import { releaseTauriListener } from '../../utils/tauriListener';
 
+import { t } from '../../i18n/index.js';
 export function usePiperVoiceOptions({ xttsSettings, onUpdateXttsSettings }) {
   const [piperVoices, setPiperVoices] = useState([]);
   const [piperProvision, setPiperProvision] = useState({ state: 'idle', message: '' });
@@ -80,13 +81,13 @@ export function usePiperVoiceOptions({ xttsSettings, onUpdateXttsSettings }) {
   }
 
   async function preparePiperVoice() {
-    setPiperProvision({ state: 'loading', message: 'Préparation de la voix…' });
+    setPiperProvision({ state: 'loading', message: t('Préparation de la voix…') });
     try {
       await invoke('piper_ensure_voice', { voice: piperVoice });
       setPiperVoices((prev) => prev.map((voice) => (
         voice.id === piperVoice ? { ...voice, installed: true } : voice
       )));
-      setPiperProvision({ state: 'ok', message: 'Voix prête.' });
+      setPiperProvision({ state: 'ok', message: t('Voix prête.') });
     } catch (e) {
       setPiperProvision({ state: 'error', message: `${e}` });
     }

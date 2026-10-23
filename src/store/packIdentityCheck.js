@@ -1,3 +1,4 @@
+import { t } from '../i18n/index.js';
 // Le seul contrôle posé sur l'UUID choisi dans la fiche du pack : les passerelles
 // savent-elles le lire ? La règle est tenue par Rust (`check_pack_identity`),
 // celle-là même que l'export applique : une saisie acceptée ici n'est jamais
@@ -12,7 +13,7 @@ export async function packIdentityRefusal(value, invoke) {
     return null;
   } catch (error) {
     const reason = String(error?.message ?? error ?? '').trim()
-      || "L'UUID du pack n'a pas pu être vérifié.";
+      || t("L'UUID du pack n'a pas pu être vérifié.");
     return `${reason} En saisir un autre, ou en générer un nouveau.`;
   }
 }

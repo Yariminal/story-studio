@@ -5,7 +5,8 @@ import { isOriginalBackup } from '../utils/mediaConventions.js';
 import { basename, pathKey, stripWindowsLongPathPrefix } from '../utils/fileUtils.js';
 import { mediaTagsFor } from './mediaTags.js';
 
-const EDITED_IMAGE_TAG = 'modifiée';
+import { t } from '../i18n/index.js';
+const EDITED_IMAGE_TAG = t('modifiée');
 
 
 export function getEditedImageTags(mediaTags, sourcePath) {
@@ -138,8 +139,8 @@ export function reconcileMediaLibraryPaths(project, mediaLibraryPaths = []) {
 // occupe. « Écran » sans nom retombe sur son chemin d'auteur, que l'index rend
 // déjà tel quel — on ne fabrique pas un nom qui n'existe pas.
 function advancedUsageLabel(usage) {
-  const field = usage?.field === 'audio' ? 'audio' : usage?.field === 'image' ? 'image' : 'média';
-  return `${usage?.label || usage?.nodePath || 'Écran'} · ${field}`;
+  const field = usage?.field === 'audio' ? 'audio' : usage?.field === 'image' ? 'image' : t('média');
+  return `${usage?.label || usage?.nodePath || t('Écran')} · ${field}`;
 }
 
 // Une référence que le document cite mais qu'aucun fichier ne résout. Elle n'a
@@ -154,7 +155,7 @@ function addUnboundAdvancedRef(map, entry) {
   if (map.has(key)) return;
   const usages = (entry.usages ?? []).map((usage) => ({
     label: advancedUsageLabel(usage),
-    source: 'Document avancé',
+    source: t('Document avancé'),
     field: usage?.field ?? 'mediaBinding',
     ...(usage?.nodePath ? { nodePath: usage.nodePath } : {}),
   }));
@@ -164,7 +165,7 @@ function addUnboundAdvancedRef(map, entry) {
     name: assetRef,
     kind: mediaKind(assetRef),
     ext: extname(assetRef),
-    source: 'Document avancé',
+    source: t('Document avancé'),
     field: 'mediaBinding',
     origin: 'project',
     usages,
@@ -216,7 +217,7 @@ function addAdvancedMedia(map, project, statusByPath, advancedUsages) {
     if (assetRef !== null) boundWithPath.add(assetRef);
     const label = mediaBindingLabel(binding);
     if (!known) {
-      addMedia(map, binding.path, label, 'Document avancé', 'mediaBinding', statusByPath, true, null, {
+      addMedia(map, binding.path, label, t('Document avancé'), 'mediaBinding', statusByPath, true, null, {
         declaredOnly: true,
         usageKnown: false,
       });
@@ -224,14 +225,14 @@ function addAdvancedMedia(map, project, statusByPath, advancedUsages) {
     }
     const usages = usagesByAssetRef.get(assetRef) ?? [];
     if (usages.length === 0) {
-      addMedia(map, binding.path, label, 'Document avancé', 'mediaBinding', statusByPath, true, null, {
+      addMedia(map, binding.path, label, t('Document avancé'), 'mediaBinding', statusByPath, true, null, {
         declaredOnly: true,
       });
       continue;
     }
     for (const usage of usages) {
       addMedia(
-        map, binding.path, advancedUsageLabel(usage), 'Document avancé',
+        map, binding.path, advancedUsageLabel(usage), t('Document avancé'),
         usage?.field ?? 'mediaBinding', statusByPath, true, null,
         { nodePath: usage?.nodePath ?? null },
       );
@@ -308,14 +309,14 @@ export function collectMediaLibrary({
   const map = new Map();
   addMedia(map, project?.rootAudio, 'Accueil', 'Projet', 'rootAudio', statusByPath, true);
   addMedia(map, project?.rootImage, 'Accueil', 'Projet', 'rootImage', statusByPath, true);
-  addMedia(map, project?.thumbnailImage, 'Bibliothèque', 'Projet', 'thumbnailImage', statusByPath, true);
+  addMedia(map, project?.thumbnailImage, t('Bibliothèque'), 'Projet', 'thumbnailImage', statusByPath, true);
   addMedia(map, project?.nightModeAudio, 'Mode nuit', 'Projet', 'nightModeAudio', statusByPath, true);
 
   const addGraph = (graph, scope) => {
     for (const stage of graph?.document?.stageNodes ?? []) {
       const label = `${scope} · ${stage.name || stage.uuid || 'Stage natif'}`;
-      addMedia(map, stage.audio, label, 'Graphe natif', 'audio', statusByPath, true);
-      addMedia(map, stage.image, label, 'Graphe natif', 'image', statusByPath, true);
+      addMedia(map, stage.audio, label, t('Graphe natif'), 'audio', statusByPath, true);
+      addMedia(map, stage.image, label, t('Graphe natif'), 'image', statusByPath, true);
     }
   };
   addGraph(project?.nativeGraph, 'Racine');
@@ -323,35 +324,35 @@ export function collectMediaLibrary({
   addAdvancedMedia(map, project, statusByPath, advancedUsages);
 
   visitProjectEntries(project, (entry) => {
-    const label = entry?.name || (entry?.type === 'menu' ? 'Menu sans titre' : entry?.type === 'zip' ? 'Archive importée' : 'Histoire sans titre');
+    const label = entry?.name || (entry?.type === 'menu' ? t('Menu sans titre') : entry?.type === 'zip' ? t('Archive importée') : t('Histoire sans titre'));
     const eid = entry?.id || null;
     addMedia(map, entry?.audio, label, entry?.type || 'Projet', 'audio', statusByPath, true, eid);
     addMedia(map, entry?.image, label, entry?.type || 'Projet', 'image', statusByPath, true, eid);
-    addMedia(map, entry?.itemAudio, label, 'Titre histoire', 'itemAudio', statusByPath, true, eid);
-    addMedia(map, entry?.itemImage, label, 'Titre histoire', 'itemImage', statusByPath, true, eid);
+    addMedia(map, entry?.itemAudio, label, t('Titre histoire'), 'itemAudio', statusByPath, true, eid);
+    addMedia(map, entry?.itemImage, label, t('Titre histoire'), 'itemImage', statusByPath, true, eid);
     addMedia(map, entry?.zipPath, label, 'Archive', 'zipPath', statusByPath, true, eid);
-    addMedia(map, entry?.afterPlaybackPromptAudio, label, 'Fin histoire', 'afterPlaybackPromptAudio', statusByPath, true, eid);
+    addMedia(map, entry?.afterPlaybackPromptAudio, label, t('Fin histoire'), 'afterPlaybackPromptAudio', statusByPath, true, eid);
     addGraph(entry?.nativeGraph, label);
     for (const step of entry?.afterPlaybackSequence ?? []) {
-      addMedia(map, step.audio, `${label} · ${step.name || 'Étape de fin'}`, 'Fin histoire', 'audio', statusByPath, true, eid);
-      addMedia(map, step.image, `${label} · ${step.name || 'Étape de fin'}`, 'Fin histoire', 'image', statusByPath, true, eid);
+      addMedia(map, step.audio, `${label} · ${step.name || t('Étape de fin')}`, t('Fin histoire'), 'audio', statusByPath, true, eid);
+      addMedia(map, step.image, `${label} · ${step.name || t('Étape de fin')}`, t('Fin histoire'), 'image', statusByPath, true, eid);
     }
-    addMedia(map, entry?.afterPlaybackHomeStep?.audio, `${label} · Home`, 'Fin histoire', 'audio', statusByPath, true, eid);
-    addMedia(map, entry?.afterPlaybackHomeStep?.image, `${label} · Home`, 'Fin histoire', 'image', statusByPath, true, eid);
+    addMedia(map, entry?.afterPlaybackHomeStep?.audio, `${label} · Home`, t('Fin histoire'), 'audio', statusByPath, true, eid);
+    addMedia(map, entry?.afterPlaybackHomeStep?.image, `${label} · Home`, t('Fin histoire'), 'image', statusByPath, true, eid);
   });
 
   for (const job of xttsJobs) {
     if (job?.status === 'done' && hasPath(job.resultPath)) {
-      addMedia(map, job.resultPath, job.targetLabel || job.label || 'Voix générée', 'XTTS', 'audio', statusByPath, false);
+      addMedia(map, job.resultPath, job.targetLabel || job.label || t('Voix générée'), 'XTTS', 'audio', statusByPath, false);
     }
   }
   for (const job of sdJobs) {
     for (const path of job?.resultPaths ?? []) {
-      addMedia(map, path, job.workflowName || 'Image générée', 'ComfyUI', 'image', statusByPath, false);
+      addMedia(map, path, job.workflowName || t('Image générée'), 'ComfyUI', 'image', statusByPath, false);
     }
   }
   for (const path of extraPaths) {
-    addMedia(map, path, 'Bibliothèque média', 'Explorateur', 'library', statusByPath, false, null, {
+    addMedia(map, path, t('Bibliothèque média'), 'Explorateur', 'library', statusByPath, false, null, {
       allowOriginalBackup: true,
       catalogOnly: true,
     });

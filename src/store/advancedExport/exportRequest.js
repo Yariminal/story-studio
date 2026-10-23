@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // Ce qui part à `export_advanced_pack`, et d'où ça vient.
 //
 // Deux règles se tiennent ici, à l'écart de React :
@@ -79,12 +80,12 @@ export function buildExportRequest({
   if (payload === null) {
     throw new ExportRequestError(
       'ADVANCED_PAYLOAD_REQUIRED',
-      "Ce projet ne porte pas de document d'auteur avancé : il n'y a rien à exporter.",
+      t("Ce projet ne porte pas de document d'auteur avancé : il n'y a rien à exporter."),
     );
   }
   const folder = typeof outputFolder === 'string' ? outputFolder.trim() : '';
   if (folder.length === 0) {
-    throw new ExportRequestError('OUTPUT_FOLDER_REQUIRED', 'Aucun dossier de sortie choisi.');
+    throw new ExportRequestError('OUTPUT_FOLDER_REQUIRED', t('Aucun dossier de sortie choisi.'));
   }
   const archive = typeof archiveName === 'string' ? archiveName.trim() : '';
   // Le titre livré dans `story.json` : le nom de convention, comme la chaîne

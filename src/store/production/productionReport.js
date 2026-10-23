@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // Le rapport de production, **un seul**, pour les deux chaînes.
 //
 // Les deux chaînes ne rendent pas la même chose, et ce module ne prétend pas
@@ -54,23 +55,23 @@ export const PRODUCTION_STATUS = Object.freeze({
 });
 
 export const PRODUCTION_STATUS_LABELS = Object.freeze({
-  [PRODUCTION_STATUS.IDLE]: 'Aucune production',
+  [PRODUCTION_STATUS.IDLE]: t('Aucune production'),
   [PRODUCTION_STATUS.PENDING]: 'En attente',
-  [PRODUCTION_STATUS.RUNNING]: 'Production en cours',
-  [PRODUCTION_STATUS.SUCCEEDED]: 'Pack produit',
-  [PRODUCTION_STATUS.CANCELLED]: 'Production annulée',
+  [PRODUCTION_STATUS.RUNNING]: t('Production en cours'),
+  [PRODUCTION_STATUS.SUCCEEDED]: t('Pack produit'),
+  [PRODUCTION_STATUS.CANCELLED]: t('Production annulée'),
   [PRODUCTION_STATUS.FAILED]: 'Production interrompue',
 });
 
 // Une attente utile, dite avec les mots de l'auteur. Une fois le travail fini,
 // il n'y a plus rien à annoncer : le résultat ou le problème est déjà visible.
-const PROGRESS_IN_PROGRESS = "Le pack apparaîtra ici dès qu'il sera prêt.";
+const PROGRESS_IN_PROGRESS = t("Le pack apparaîtra ici dès qu'il sera prêt.");
 
 // Une production antérieure au branchement des portes, ou un travail qui n'est
 // pas allé jusqu'à l'archive, n'a rien à en dire. Le dire est le seul moyen de
 // ne pas présenter comme exécuté un contrôle qui ne l'a pas été.
 export const GATES_NOT_REPORTED =
-  "Contrôles d'archive : cette production n'en rapporte aucun.";
+  t("Contrôles d'archive : cette production n'en rapporte aucun.");
 
 function asList(value) {
   return Array.isArray(value) ? value : [];

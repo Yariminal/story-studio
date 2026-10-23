@@ -8,6 +8,7 @@ import { KEYS, read, write } from '../../store/persistentSettings';
 import { Button } from '../common/Button';
 import './AudioAssemblyModal.css';
 
+import { t } from '../../i18n/index.js';
 function formatDuration(value) {
   if (!Number.isFinite(value) || value < 0) return '—';
   const s = Math.round(value);
@@ -137,7 +138,7 @@ export function AudioAssemblyModal({
 
   function readableError(value) {
     const text = String(value || '').trim();
-    if (!text) return "L'assemblage audio a échoué.";
+    if (!text) return t("L'assemblage audio a échoué.");
     const firstLine = text.split(/\r?\n/).find((line) => line.trim()) || text;
     if (/ffmpeg|invalid data|error/i.test(text)) {
       return `FFmpeg n'a pas pu assembler ces fichiers. ${firstLine}`;
@@ -148,16 +149,16 @@ export function AudioAssemblyModal({
   async function handleSubmit() {
     setError('');
     if (!workspaceDir) {
-      setError('Aucun emplacement de travail : impossible de créer un fichier assemblé.');
+      setError(t('Aucun emplacement de travail : impossible de créer un fichier assemblé.'));
       return;
     }
     if (orderedItems.length < 2) {
-      setError('Conservez au moins deux audios à assembler.');
+      setError(t('Conservez au moins deux audios à assembler.'));
       return;
     }
     const silence = addSilence ? Number(String(silenceSec).replace(',', '.')) : 0;
     if (!Number.isFinite(silence) || silence < 0 || silence > 30) {
-      setError('La durée du silence doit être comprise entre 0 et 30 secondes.');
+      setError(t('La durée du silence doit être comprise entre 0 et 30 secondes.'));
       return;
     }
 
@@ -190,7 +191,7 @@ export function AudioAssemblyModal({
     <div className="modal-overlay">
       <div className="modal-box audio-assembly-modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <span>{willReplaceStories ? 'Assembler et remplacer les histoires' : 'Assembler des audios'}</span>
+          <span>{willReplaceStories ? t('Assembler et remplacer les histoires') : t('Assembler des audios')}</span>
           <Button variant="icon" className="modal-close" onClick={onClose} disabled={submitting}>×</Button>
         </div>
 
@@ -211,7 +212,7 @@ export function AudioAssemblyModal({
 
           {ignoredCount > 0 && (
             <div className="audio-assembly-note">
-              Seuls les fichiers audio peuvent être assemblés. {ignoredCount} média{ignoredCount > 1 ? 's' : ''} non audio ignoré{ignoredCount > 1 ? 's' : ''}.
+              Seuls les fichiers audio peuvent être assemblés. {ignoredCount} média{ignoredCount > 1 ? 's' : 't('} non audio ignoré{ignoredCount > 1 ? ')s' : ''}.
             </div>
           )}
 
@@ -233,7 +234,7 @@ export function AudioAssemblyModal({
                   <span className="audio-assembly-duration">{formatDuration(item.durationSecs)}</span>
                   <Button variant="icon" className="audio-assembly-icon-btn" onClick={() => moveItem(index, -1)} disabled={submitting || index === 0} title="Monter">↑</Button>
                   <Button variant="icon" className="audio-assembly-icon-btn" onClick={() => moveItem(index, 1)} disabled={submitting || index === orderedItems.length - 1} title="Descendre">↓</Button>
-                  <Button variant="icon" className="audio-assembly-icon-btn is-danger" onClick={() => removeItem(index)} disabled={submitting || orderedItems.length <= 2} title="Retirer">×</Button>
+                  <Button variant="icon" className="audio-assembly-icon-btn is-danger" onClick={() => removeItem(index)} disabled={submitting || orderedItems.length <= 2} title={t("Retirer")}>×</Button>
                 </div>
               ))}
             </div>
@@ -293,7 +294,7 @@ export function AudioAssemblyModal({
           <Button onClick={onClose} disabled={submitting}>Annuler</Button>
           <Button variant="primary" className="audio-assembly-submit" onClick={handleSubmit} disabled={!canSubmit}>
             {submitting && <span className="audio-assembly-spinner" />}
-            {submitting ? 'Assemblage…' : (willReplaceStories ? 'Assembler et remplacer' : 'Assembler')}
+            {submitting ? 'Assemblage…' : (willReplaceStories ? t('Assembler et remplacer') : 'Assembler')}
           </Button>
         </div>
       </div>

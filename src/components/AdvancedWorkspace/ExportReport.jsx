@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // Ce qu'un refus d'export a empêché.
 //
 // Le branchement se fait sur `kind`, et sur `preparation.error.kind` pour les
@@ -59,12 +60,12 @@ function RefusalBody({ refusal, embedded, stagePaths, onFocusPath, onOpenDiagnos
       return (
         <div>
           <p className="advanced-export__row-message">
-            Le projet n'a pas pu être relu, le pack n'a pas été produit.
+            Le projet nt('a pas pu être relu, le pack n')a pas été produit.
           </p>
           {refusal.codecError && (
             <p className="advanced-export__row-path">
               <code>{refusal.codecError.code}</code> {refusal.codecError.path}
-              {' — trouvé : '}{refusal.codecError.found}
+              {t(' — trouvé : ')}{refusal.codecError.found}
               {' ; attendu : '}{refusal.codecError.expected}
             </p>
           )}
@@ -121,7 +122,7 @@ function RefusalBody({ refusal, embedded, stagePaths, onFocusPath, onOpenDiagnos
       return (
         <div>
           <p className="advanced-export__row-message">
-            Le pack n'a pas été produit : {groups.length} média{groups.length > 1 ? 's sont' : ' est'} introuvable{groups.length > 1 ? 's' : ''}.
+            Le pack nt('a pas été produit : {groups.length} média{groups.length > 1 ? ')s sont' : ' est'} introuvable{groups.length > 1 ? 's' : ''}.
             Pour chacun, les écrans qui l'utilisent sont listés.
           </p>
           <ul className="advanced-export__rows">
@@ -204,7 +205,7 @@ function RefusalBody({ refusal, embedded, stagePaths, onFocusPath, onOpenDiagnos
       return (
         <div>
           <p className="advanced-export__row-message">
-            L'écriture du pack a échoué. Le projet et tes fichiers d'origine restent intacts.
+            Lt('écriture du pack a échoué. Le projet et tes fichiers d')origine restent intacts.
           </p>
           {refusal.path && <p className="advanced-export__row-path"><code>{refusal.path}</code></p>}
           {message && <p className="advanced-export__row-message">{message}</p>}
@@ -224,7 +225,7 @@ function RefusalBody({ refusal, embedded, stagePaths, onFocusPath, onOpenDiagnos
         <p className="advanced-export__row-message">
           {/* Rien n'a été demandé au moteur : la garde est locale, et le dire
               évite de laisser croire qu'il a refusé. */}
-          {message ? `${message} ` : ''}La génération n'a pas été lancée.
+          {message ? `${message} ` : 't('}La génération n')a pas été lancée.
         </p>
       );
 

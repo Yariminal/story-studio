@@ -1,3 +1,4 @@
+import { t } from '../i18n/index.js';
 // L'inventaire des commandes de la barre — un seul, pour les deux éditeurs.
 //
 // Une barre qui mêlerait l'universel et le structurel serait inutilisable telle
@@ -50,16 +51,16 @@ export const TOOLBAR_GROUPS = Object.freeze({
 // commande, jamais à la place.
 // La fabrication d'un pack graphe commence au clic et se termine à l'archive,
 // attente dans la file comprise : la raison le dit dans ces mots-là.
-export const SUSPENDED_BY_EXPORT = 'Fabrication du pack en cours — édition suspendue.';
-export const SUSPENDED_BY_GESTURE = 'Geste en cours…';
-const NO_HISTORY_BACK = 'Rien à annuler.';
-const NO_HISTORY_FORWARD = 'Rien à rétablir.';
-const ISSUES_BEFORE_GENERATE = 'Passe par « à corriger » avant de générer.';
-const CHECKING_BEFORE_GENERATE = 'Vérification du pack en cours…';
+export const SUSPENDED_BY_EXPORT = t('Fabrication du pack en cours — édition suspendue.');
+export const SUSPENDED_BY_GESTURE = t('Geste en cours…');
+const NO_HISTORY_BACK = t('Rien à annuler.');
+const NO_HISTORY_FORWARD = t('Rien à rétablir.');
+const ISSUES_BEFORE_GENERATE = t('Passe par « à corriger » avant de générer.');
+const CHECKING_BEFORE_GENERATE = t('Vérification du pack en cours…');
 // Côté graphe, la fiche du pack et la qualification lisent toutes deux le
 // document, qui est chargé paresseusement. Tant qu'il n'a pas été lu une fois,
 // la production n'aurait ni fiche à remplir ni qualification à interroger.
-const DOCUMENT_NOT_READ = 'Lecture du document en cours…';
+const DOCUMENT_NOT_READ = t('Lecture du document en cours…');
 
 function command(id, label, scope, group, { shortcut = null, available = true, reason = null } = {}) {
   return Object.freeze({
@@ -123,27 +124,27 @@ export function buildToolbarInventory({
   // Changer de projet pendant un export laisserait l'archive en cours sans
   // document auquel l'attribuer : ces commandes attendent la fin, ou l'arrêt.
   const fileAvailable = !editingLocked;
-  universal('newProject', 'Retour à l’accueil', TOOLBAR_GROUPS.FILE, {
+  universal('newProject', t('Retour à l’accueil'), TOOLBAR_GROUPS.FILE, {
     shortcut: shortcutLabels.newProject ?? null,
     available: fileAvailable,
     reason: SUSPENDED_BY_EXPORT,
   });
-  universal('openProject', 'Ouvrir un projet', TOOLBAR_GROUPS.FILE, {
+  universal('openProject', t('Ouvrir un projet'), TOOLBAR_GROUPS.FILE, {
     shortcut: shortcutLabels.openProject ?? null,
     available: fileAvailable,
     reason: SUSPENDED_BY_EXPORT,
   });
-  universal('openPack', 'Ouvrir un pack', TOOLBAR_GROUPS.FILE, {
+  universal('openPack', t('Ouvrir un pack'), TOOLBAR_GROUPS.FILE, {
     shortcut: shortcutLabels.openPack ?? null,
     available: fileAvailable,
     reason: SUSPENDED_BY_EXPORT,
   });
-  universal('saveProject', 'Enregistrer', TOOLBAR_GROUPS.FILE, {
+  universal('saveProject', t('Enregistrer'), TOOLBAR_GROUPS.FILE, {
     shortcut: shortcutLabels.saveProject ?? null,
     available: fileAvailable,
     reason: SUSPENDED_BY_EXPORT,
   });
-  universal('saveProjectAs', 'Enregistrer sous…', TOOLBAR_GROUPS.FILE, {
+  universal('saveProjectAs', t('Enregistrer sous…'), TOOLBAR_GROUPS.FILE, {
     shortcut: shortcutLabels.saveAs ?? null,
     available: fileAvailable,
     reason: SUSPENDED_BY_EXPORT,
@@ -151,19 +152,19 @@ export function buildToolbarInventory({
   // La passerelle vers le graphe part de l'arbre seulement : elle crée une
   // copie graphe du projet, et il n'existe pas de chemin inverse.
   if (hierarchical) {
-    structural('continueInGraph', 'Continuer dans l’éditeur graphe…', TOOLBAR_GROUPS.FILE, {
+    structural('continueInGraph', t('Continuer dans l’éditeur graphe…'), TOOLBAR_GROUPS.FILE, {
       available: fileAvailable,
       reason: SUSPENDED_BY_EXPORT,
     });
   }
 
   // ── Historique ────────────────────────────────────────────────────────────
-  universal('undo', 'Annuler', TOOLBAR_GROUPS.HISTORY, {
+  universal('undo', t('Annuler'), TOOLBAR_GROUPS.HISTORY, {
     shortcut: shortcutLabels.undo ?? null,
     available: canUndo && !editingSuspended,
     reason: editingSuspended ? suspensionReason : NO_HISTORY_BACK,
   });
-  universal('redo', 'Rétablir', TOOLBAR_GROUPS.HISTORY, {
+  universal('redo', t('Rétablir'), TOOLBAR_GROUPS.HISTORY, {
     shortcut: shortcutLabels.redo ?? null,
     available: canRedo && !editingSuspended,
     reason: editingSuspended ? suspensionReason : NO_HISTORY_FORWARD,
@@ -171,13 +172,13 @@ export function buildToolbarInventory({
 
   // ── Structure ─────────────────────────────────────────────────────────────
   if (hierarchical) {
-    structural('toggleTree', 'Afficher/masquer l’arbre', TOOLBAR_GROUPS.PANELS, {
+    structural('toggleTree', t('Afficher/masquer l’arbre'), TOOLBAR_GROUPS.PANELS, {
       shortcut: shortcutLabels.toggleTree ?? null,
     });
-    structural('toggleSettings', 'Afficher/masquer les réglages', TOOLBAR_GROUPS.PANELS, {
+    structural('toggleSettings', t('Afficher/masquer les réglages'), TOOLBAR_GROUPS.PANELS, {
       shortcut: shortcutLabels.toggleSettings ?? null,
     });
-    structural('toggleDiagram', 'Afficher/masquer le diagramme', TOOLBAR_GROUPS.PANELS, {
+    structural('toggleDiagram', t('Afficher/masquer le diagramme'), TOOLBAR_GROUPS.PANELS, {
       shortcut: shortcutLabels.toggleDiagram ?? null,
     });
   }
@@ -186,8 +187,8 @@ export function buildToolbarInventory({
     // Le graphe reste la surface principale et n'a donc pas de commande
     // de fermeture. La liste de nœuds et l'inspecteur reprennent le même groupe
     // de panneaux que le Libre, avec une préférence distincte par éditeur.
-    structural('toggleNodeList', 'Afficher/masquer la liste des nœuds', TOOLBAR_GROUPS.PANELS);
-    structural('toggleInspector', 'Afficher/masquer les réglages', TOOLBAR_GROUPS.PANELS);
+    structural('toggleNodeList', t('Afficher/masquer la liste des nœuds'), TOOLBAR_GROUPS.PANELS);
+    structural('toggleInspector', t('Afficher/masquer les réglages'), TOOLBAR_GROUPS.PANELS);
     // Créer un Écran, une Action ou une construction dérivée **ne passe plus
     // par cette barre** : ces commandes vivent dans l'en-tête du panneau Graphe,
     // à portée de la surface qu'elles peuplent. Elles n'ont pas de raccourci
@@ -209,7 +210,7 @@ export function buildToolbarInventory({
   // archive s'écrit ferait diverger ce qui est affiché de ce qui est parti.
   // C'est un état, pas une branche par éditeur : la chaîne Libre n'a pas de
   // verrou et ne suspend donc jamais son tiroir.
-  universal('openPackOptions', 'Options', TOOLBAR_GROUPS.PACK_OPTIONS, {
+  universal('openPackOptions', t('Options'), TOOLBAR_GROUPS.PACK_OPTIONS, {
     shortcut: shortcutLabels.storySettings ?? null,
     available: !editingLocked,
     reason: SUSPENDED_BY_EXPORT,
@@ -220,7 +221,7 @@ export function buildToolbarInventory({
   // dit alors honnêtement qu'il n'y a rien, et côté graphe la même surface
   // conserve la qualification du document. La disponibilité ne doit donc pas
   // être recalculée à partir d'une famille de diagnostics particulière.
-  universal('toggleValidation', 'Éléments à corriger', TOOLBAR_GROUPS.ISSUES, {
+  universal('toggleValidation', t('Éléments à corriger'), TOOLBAR_GROUPS.ISSUES, {
     shortcut: shortcutLabels.toggleValidation ?? null,
   });
 
@@ -244,7 +245,7 @@ export function buildToolbarInventory({
   // la même révision une seconde fois. Le Libre, lui, n'a pas de verrou et
   // enfile autant de travaux que l'auteur en demande — c'est un état, pas une
   // branche par éditeur.
-  universal('generate', 'Générer le pack', TOOLBAR_GROUPS.PRODUCTION, {
+  universal('generate', t('Générer le pack'), TOOLBAR_GROUPS.PRODUCTION, {
     shortcut: shortcutLabels.generate ?? null,
     available: hierarchical
       ? !generateDisabled
@@ -260,7 +261,7 @@ export function buildToolbarInventory({
   // Cette commande garde le raccourci et son état de disponibilité dans
   // l'inventaire. Le point d'entrée visuel est la carte du popover Options,
   // partagé par les deux éditeurs.
-  universal('openPreferences', 'Préférences', TOOLBAR_GROUPS.PREFERENCES, {
+  universal('openPreferences', t('Préférences'), TOOLBAR_GROUPS.PREFERENCES, {
     shortcut: shortcutLabels.tabOptions ?? null,
   });
 

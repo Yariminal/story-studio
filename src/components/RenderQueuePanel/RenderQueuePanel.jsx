@@ -9,12 +9,13 @@ import { renderJobReport } from '../../store/production/productionReport.js';
 import { WORK_NATURE } from '../../store/production/renderQueueWork.js';
 import './RenderQueuePanel.css';
 
+import { t } from '../../i18n/index.js';
 const STATUS_LABEL = {
   pending: 'En attente',
-  running: 'Génération…',
-  done: 'Terminé',
+  running: t('Génération…'),
+  done: t('Terminé'),
   error: 'Erreur',
-  canceled: 'Annulé',
+  canceled: t('Annulé'),
 };
 const PANEL_DEFAULT_HEIGHT = 340;
 const PANEL_MIN_HEIGHT = 120;
@@ -100,7 +101,7 @@ function JobCard({ job, expanded, onToggle, onRemove, onCancel, advanced = null 
             <Button
               size="sm"
               className="rq-cancel-btn"
-              title={job.status === 'pending' ? 'Annuler ce rendu' : 'Annuler la génération en cours'}
+              title={job.status === 'pending' ? t('Annuler ce rendu') : t('Annuler la génération en cours')}
               disabled={job.cancelRequested}
               onClick={(e) => { e.stopPropagation(); onCancel?.(job.id); }}
             >Annuler</Button>
@@ -109,7 +110,7 @@ function JobCard({ job, expanded, onToggle, onRemove, onCancel, advanced = null 
             <Button
               size="sm"
               className="rq-remove-btn"
-              title="Retirer"
+              title={t("Retirer")}
               onClick={(e) => { e.stopPropagation(); onRemove(job.id); }}
             >✕</Button>
           )}
@@ -143,12 +144,12 @@ function JobCard({ job, expanded, onToggle, onRemove, onCancel, advanced = null 
           <div className="rq-job-actions">
             {job.logs.length > 0 && (
               <Button size="sm" onClick={handleCopyLogs}>
-                {copyStatus === 'copied' ? 'Copié ✓' : copyStatus === 'error' ? 'Erreur' : 'Copier logs'}
+                {copyStatus === 'copied' ? t('Copié ✓') : copyStatus === 'error' ? 'Erreur' : t('Copier logs')}
               </Button>
             )}
             {(job.status === 'done' || job.status === 'error' || job.status === 'canceled') && (
               <Button size="sm" onClick={handleOpenFolder}>
-                {openFolderError ? 'Erreur' : 'Ouvrir dossier'}
+                {openFolderError ? 'Erreur' : t('Ouvrir dossier')}
               </Button>
             )}
             {job.status === 'done' && job.resultPath && (
@@ -253,7 +254,7 @@ export function RenderQueuePanel({
           {/* En embedded, la fermeture est assurée par la croix du bottom panel
               (bottom-workspace-close) — pas de doublon ici, comme SDQueuePanel. */}
           {!embedded && (
-            <Button size="sm" onClick={onClose} title="Fermer">✕</Button>
+            <Button size="sm" onClick={onClose} title={t("Fermer")}>✕</Button>
           )}
         </div>
       </div>

@@ -7,6 +7,7 @@ import { FilePen, Scissors } from '../icons/LucideLocal';
 import { resolveUsageTarget } from './usageTarget';
 import './MediaPopover.css';
 
+import { t } from '../../i18n/index.js';
 function fmt(secs) {
   if (!Number.isFinite(secs) || secs < 0) return '--:--';
   const s = Math.floor(secs);
@@ -138,7 +139,7 @@ function TagEditor({ path, itemTags, allProjectTags, onAddMediaTag, onRemoveMedi
           className="mp-tag-input"
           value={newTag}
           onChange={(e) => setNewTag(e.target.value)}
-          placeholder="+ Nouveau tag"
+          placeholder={t("+ Nouveau tag")}
           onKeyDown={(e) => e.stopPropagation()}
         />
       </form>
@@ -205,7 +206,7 @@ export function MediaPopover({
     <div ref={popRef} className="media-popover" style={style} role="dialog" aria-modal="true">
       <div className="mp-header">
         <span className="mp-filename" title={item.path}>{item.name}</span>
-        <button className="mp-close-btn" type="button" onClick={onClose} title="Fermer">×</button>
+        <button className="mp-close-btn" type="button" onClick={onClose} title={t("Fermer")}>×</button>
       </div>
 
       {item.kind === 'image' && (

@@ -1,5 +1,6 @@
 import WebAudioPlayer from 'wavesurfer.js/dist/webaudio.js';
 
+import { t } from '../i18n/index.js';
 const PLAYBACK_TICK_MS = 100;
 const LOAD_TIMEOUT_MS = 30_000;
 
@@ -8,7 +9,7 @@ let sharedAudioContext = null;
 function getAudioContext() {
   if (sharedAudioContext && sharedAudioContext.state !== 'closed') return sharedAudioContext;
   const AudioContextClass = globalThis.AudioContext || globalThis.webkitAudioContext;
-  if (!AudioContextClass) throw new Error('Web Audio indisponible.');
+  if (!AudioContextClass) throw new Error(t('Web Audio indisponible.'));
   sharedAudioContext = new AudioContextClass();
   return sharedAudioContext;
 }
@@ -144,7 +145,7 @@ export class SharedAudioPlayer extends EventTarget {
       this._rejectReady = reject;
       this._loadTimer = globalThis.setTimeout(() => {
         if (generation !== this._loadGeneration) return;
-        const error = new Error('Le décodage audio a expiré.');
+        const error = new Error(t('Le décodage audio a expiré.'));
         this._resolveReady = null;
         this._rejectReady = null;
         reject(error);

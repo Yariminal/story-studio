@@ -8,6 +8,7 @@ import {
 } from './bundleChildren';
 import { ImportErrorNotice } from './ImportErrorNotice';
 
+import { t } from '../../i18n/index.js';
 /**
  * L'écran de choix d'une archive enveloppe : la liste des packs qu'elle
  * contient, une sélection unique, puis la suite du parcours d'import normal.
@@ -40,11 +41,11 @@ export function BundleChildStep({
     <div className="funnel-step-content">
       <FunnelSectionHeader
         icon={<Layers />}
-        title="Cette archive contient plusieurs packs"
-        description={`${containerLabel} — ${count} pack${count > 1 ? 's' : ''}. Choisis celui à ouvrir ; la suite se passe comme pour n'importe quel pack.`}
+        title={t("Cette archive contient plusieurs packs")}
+        description={`${containerLabel} — ${count} pack${count > 1 ? 's' : 't('}. Choisis celui à ouvrir ; la suite se passe comme pour n')importe quel pack.`}
       />
 
-      <ul className="bundle-child-list" role="radiogroup" aria-label="Packs de l'archive">
+      <ul className="bundle-child-list" role="radiogroup" aria-label={t("Packs de l'archive")}>
         {(packs ?? []).map((child) => {
           const selectable = isChildSelectable(child);
           const verdict = describeChildVerdict(child);

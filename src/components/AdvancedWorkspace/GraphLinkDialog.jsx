@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // La fenêtre d'un trait lâché dans le vide : créer le nœud qui manque au bout,
 // et son raccord, en un seul geste.
 //
@@ -31,7 +32,7 @@ function InsertionChoice({ id, count, value, onChange }) {
       <option value={String(count)}>À la fin</option>
       {Array.from({ length: count }, (unused, index) => (
         <option key={index} value={String(index)}>
-          {index === 0 ? 'Au début' : `Avant le choix ${index + 1}`}
+          {index === 0 ? t('Au début') : `Avant le choix ${index + 1}`}
         </option>
       ))}
     </select>
@@ -90,18 +91,18 @@ export function GraphLinkDialog({ index, intent, busy, onCancel, onConfirm }) {
   };
 
   const sourceName = source?.label.label ?? '';
-  const exitName = intent.slot === 'home' ? 'Le bouton Accueil' : 'La suite du parcours';
-  const buttonName = intent.slot === 'home' ? 'Le bouton Accueil' : 'Le bouton OK';
+  const exitName = intent.slot === 'home' ? t('Le bouton Accueil') : 'La suite du parcours';
+  const buttonName = intent.slot === 'home' ? t('Le bouton Accueil') : 'Le bouton OK';
 
   return (
     <AdvancedDialog
-      title={sourceIsStage ? 'Créer une liste de choix' : 'Créer un Écran'}
+      title={sourceIsStage ? t('Créer une liste de choix') : t('Créer un Écran')}
       description={sourceIsStage
         ? `${exitName} de « ${sourceName} » ouvrira cette nouvelle liste de choix.`
         : `« ${sourceName} » proposera ce nouvel Écran parmi ses choix.`}
       onCancel={onCancel}
       onConfirm={confirm}
-      confirmLabel="Créer"
+      confirmLabel={t("Créer")}
       confirmDisabled={!source}
       busy={busy}
     >
@@ -131,7 +132,7 @@ export function GraphLinkDialog({ index, intent, busy, onCancel, onConfirm }) {
             kind="stage"
             value={destinationPath}
             onChange={setDestinationPath}
-            emptyLabel="— à choisir plus tard —"
+            emptyLabel={t("— à choisir plus tard —")}
           />
         </>
       )}

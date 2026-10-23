@@ -1,17 +1,18 @@
+import { t } from '../../i18n/index.js';
 /**
  * Écran « Génération » du châssis pour les funnels génératifs/outils.
  * Spinner violet + liste de phases (à venir / en cours / faite) + barre de
  * progression. Stepper et pied sont masqués par le shell (`showChrome=false`).
  *
  * @param {Object}   props
- * @param {string}   [props.title='Génération…']
- * @param {string}   [props.hint='Ne ferme pas la fenêtre.']
+ * @param {string}   [props.title={t('Génération…')}]
+ * @param {string}   [props.hint={t('Ne ferme pas la fenêtre.')}]
  * @param {{label: string, status?: 'todo'|'active'|'done'}[]} [props.phases]
  * @param {number}   [props.progress]   0..1. Si fourni, affiche la barre + %.
  */
 export function FunnelGenerationState({
-  title = 'Génération…',
-  hint = 'Ne ferme pas la fenêtre.',
+  title = t('Génération…'),
+  hint = t('Ne ferme pas la fenêtre.'),
   phases = [],
   progress = null,
 }) {

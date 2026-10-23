@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // Les deux sorties d'un Écran, chacune dans son encadré : la **suite du
 // parcours** (`okTransition`) et le **bouton Accueil** (`homeTransition`).
 //
@@ -45,28 +46,28 @@ const EXITS = {
   ok: {
     title: 'Suite du parcours',
     term: 'okTransition',
-    copy: 'Où l’on va après cet Écran ?',
+    copy: t('Où l’on va après cet Écran ?'),
     triggers: ['ok', 'autoplay'],
-    triggerLabel: 'Se déclenche',
-    triggerHelp: 'Les deux déclencheurs mènent au même endroit : appuyer sur OK ou arriver à la fin du son ouvre la même liste, sur le même choix. Sans aucun déclencheur, l’Écran n’a pas de suite.',
-    destinationLabel: 'Mène à',
-    idle: 'Aucun déclencheur : cet Écran n’a pas de suite.',
-    unused: 'Cette destination est enregistrée mais ne sera jamais utilisée : aucun déclencheur n’est actif.',
+    triggerLabel: t('Se déclenche'),
+    triggerHelp: t('Les deux déclencheurs mènent au même endroit : appuyer sur OK ou arriver à la fin du son ouvre la même liste, sur le même choix. Sans aucun déclencheur, l’Écran n’a pas de suite.'),
+    destinationLabel: t('Mène à'),
+    idle: t('Aucun déclencheur : cet Écran n’a pas de suite.'),
+    unused: t('Cette destination est enregistrée mais ne sera jamais utilisée : aucun déclencheur n’est actif.'),
     formTitle: 'Configurer la suite du parcours',
-    formNote: 'La liste de choix ouverte après cet Écran, par l’appui sur OK comme à la fin du son.',
+    formNote: t('La liste de choix ouverte après cet Écran, par l’appui sur OK comme à la fin du son.'),
   },
   home: {
-    title: 'Bouton Accueil',
+    title: t('Bouton Accueil'),
     term: 'homeTransition',
-    copy: 'Où ramène le bouton Accueil ?',
+    copy: t('Où ramène le bouton Accueil ?'),
     triggers: ['home'],
     triggerLabel: null,
-    destinationLabel: 'Ramène à',
+    destinationLabel: t('Ramène à'),
     // « Bouton Accueil désactivé » se lit sur l'interrupteur : rien à ajouter.
     idle: null,
-    unused: 'Cette destination est enregistrée mais ne sera jamais utilisée : le bouton Accueil est désactivé.',
-    formTitle: 'Configurer le bouton Accueil',
-    formNote: 'La liste de choix que le bouton Accueil ouvre depuis cet Écran.',
+    unused: t('Cette destination est enregistrée mais ne sera jamais utilisée : le bouton Accueil est désactivé.'),
+    formTitle: t('Configurer le bouton Accueil'),
+    formNote: t('La liste de choix que le bouton Accueil ouvre depuis cet Écran.'),
   },
 };
 
@@ -94,7 +95,7 @@ function directStage(row) {
 }
 
 function DestinationActions({ row, label, disabled, onEdit, onRemove }) {
-  const removeLabel = `Supprimer la transition ${row.slot === 'ok' ? 'OK' : 'Accueil'}`;
+  const removeLabel = `Supprimer la transition ${row.slot === 'ok' ? t('OK') : 'Accueil'}`;
   return (
     <div className="advanced-exit__actions">
       <Tooltip text={label} asChild>
@@ -159,7 +160,7 @@ function Destination({ stage, row, disabled, thumbnails, onGesture, onFocusPath,
   );
 }
 
-const DEVICE_RETURN_HELP = 'Ce retour n’est pas écrit dans le pack : sans destination Accueil, la Lunii revient d’elle-même à l’Écran d’entrée. Le graphe le dessine en pointillé estompé. « Choisir une autre destination » écrit un vrai raccord à la place.';
+const DEVICE_RETURN_HELP = t('Ce retour n’est pas écrit dans le pack : sans destination Accueil, la Lunii revient d’elle-même à l’Écran d’entrée. Le graphe le dessine en pointillé estompé. « Choisir une autre destination » écrit un vrai raccord à la place.');
 
 // Accueil sans destination enregistrée : la Lunii et le simulateur reviennent
 // à l'Écran d'entrée du pack (`defaultHomeReturns.js`, la même règle que le
@@ -243,8 +244,8 @@ function ExitForm({ stage, row, index, disabled, onGesture, onClose }) {
       {!chosen && (
         <p className="advanced-field__note">
           {row.slot === 'home'
-            ? 'Sans liste ouverte, Accueil ramène par défaut à l’Écran d’entrée.'
-            : 'Sans liste ouverte, cet Écran n’a pas de suite.'}
+            ? t('Sans liste ouverte, Accueil ramène par défaut à l’Écran d’entrée.')
+            : t('Sans liste ouverte, cet Écran n’a pas de suite.')}
         </p>
       )}
       <ActionSelectionFields
@@ -366,7 +367,7 @@ function ExitCard({
           {!wired && !editing && (
             <div className="advanced-field__actions">
               <Button size="sm" disabled={disabled} onClick={onEdit}>
-                <Pencil /> {row.slot === 'home' ? 'Choisir une autre destination' : 'Choisir la destination'}
+                <Pencil /> {row.slot === 'home' ? t('Choisir une autre destination') : t('Choisir la destination')}
               </Button>
             </div>
           )}

@@ -1,6 +1,7 @@
 import { ChevronRight } from '../../icons/LucideLocal';
 
-export function StoryDisclosure({ open, onToggle, label = 'Réglages avancés', children }) {
+import { t } from '../../../i18n/index.js';
+export function StoryDisclosure({ open, onToggle, label = t('Réglages avancés'), children }) {
   return (
     <div className={`story-disclosure ${open ? 'is-open' : ''}`}>
       <button

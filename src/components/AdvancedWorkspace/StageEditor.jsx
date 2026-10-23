@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // L'éditeur d'un Écran : ce que MVP-A permet d'y changer, et rien de plus.
 //
 // Le nom d'un Écran est modifié par le geste natif `set-node-name` : le champ
@@ -76,7 +77,7 @@ export function StageEditor({
         <h2 className="advanced-editor__title">
           {inspected.label.label}
           {inspected.label.isFallback && (
-            <Tooltip text="Repli d'affichage, pas un nom d'auteur" asChild>
+            <Tooltip text={t("Repli d'affichage, pas un nom d'auteur")} asChild>
               <em className="advanced-editor__fallback">
                 {' '}(sans nom)
               </em>
@@ -84,7 +85,7 @@ export function StageEditor({
           )}
         </h2>
         {isEntry && (
-          <Tooltip text="Écran d’entrée : le pack commence ici" asChild>
+          <Tooltip text={t("Écran d’entrée : le pack commence ici")} asChild>
             <span className="advanced-editor__badge">racine</span>
           </Tooltip>
         )}
@@ -217,7 +218,7 @@ export function StageEditor({
               type="button"
               disabled={disabled}
               onClick={onDelete}
-              aria-label="Supprimer cet Écran"
+              aria-label={t("Supprimer cet Écran")}
             >
               <Trash2 className="card-danger-icon" />
             </button>

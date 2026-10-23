@@ -11,6 +11,7 @@ import { visitProjectEntries } from '../store/projectModel';
 import { createWorkSnapshot } from '../store/projectHelpers';
 import { logger } from '../utils/logger';
 
+import { t } from '../i18n/index.js';
 export function useProjectLoading({
   store,
   sdStore,
@@ -98,7 +99,7 @@ export function useProjectLoading({
     } catch (error) {
       logger.error(`load:error error=${error}`);
       showErrorDialog({
-        title: error?.code === 'menu_depth_limit' ? 'Limite d’imbrication' : 'Ouverture du projet',
+        title: error?.code === 'menu_depth_limit' ? 'Limite d’imbrication' : t('Ouverture du projet'),
         message: String(error?.message || error),
       });
     }
@@ -122,7 +123,7 @@ export function useProjectLoading({
       logger.error(`load-recent:error path='${path}' error=${e}`);
       setRecentProjects(forgetRecentProject(path));
       showErrorDialog({
-        title: 'Projet récent',
+        title: t('Projet récent'),
         message: `Impossible d'ouvrir ce projet récent :\n${e}`,
       });
     }

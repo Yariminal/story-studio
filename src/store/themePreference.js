@@ -1,9 +1,10 @@
 import { KEYS, read as readSetting, write as writeSetting } from './persistentSettings';
 
+import { t } from '../i18n/index.js';
 export const THEME_OPTIONS = [
-  { value: 'system', label: 'Système' },
-  { value: 'dark', label: 'Sombre' },
-  { value: 'light', label: 'Clair' },
+  { value: 'system', label: t('Système') },
+  { value: 'dark', label: t('Sombre') },
+  { value: 'light', label: t('Clair') },
 ];
 
 const DARK_QUERY = '(prefers-color-scheme: dark)';

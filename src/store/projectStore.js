@@ -58,6 +58,7 @@ import {
   updateGlobalEndPlaybackProject,
 } from './endMessageMutations';
 
+import { t } from '../i18n/index.js';
 export { sanitizeImportedEntries, sanitizeImportedName };
 
 const ENTRY_NAVIGATION_FIELDS = [
@@ -72,7 +73,7 @@ const DEFAULT_PROJECT = normalizeProjectData({
   version: 1,
   projectName: '',
   packMetadata: DEFAULT_PACK_METADATA,
-  rootName: 'Menu racine',
+  rootName: t('Menu racine'),
   endNodeName: 'Message de fin',
   projectType: null, // null = non choisi, 'simple' | 'pack'
   rootAudio: null,
@@ -534,9 +535,9 @@ export function useProjectStore() {
       if (!simpleStory || !audioPath) return null;
       if (simpleStory.audio) {
         setMutationError({
-          title: 'Audio du récit',
-          message: "L'histoire a déjà un audio du récit. Pour le remplacer, "
-            + "utilise le champ « Audio du récit ».",
+          title: t('Audio du récit'),
+          message: t("L'histoire a déjà un audio du récit. Pour le remplacer, ")
+            + t("utilise le champ « Audio du récit »."),
         });
         return null;
       }
@@ -547,7 +548,7 @@ export function useProjectStore() {
     const explicitName = typeof options.name === 'string' ? options.name.trim() : '';
     const hasImportedAudio = !!audioPath;
     const newStory = createStoryEntry({
-      name: explicitName || autoName || 'Nouvelle histoire',
+      name: explicitName || autoName || t('Nouvelle histoire'),
       audio: audioPath || null,
       ...(hasImportedAudio
         ? {
@@ -572,9 +573,9 @@ export function useProjectStore() {
       // Un projet simple n'a qu'une histoire : un pack ajouté serait une
       // seconde entrée racine, ni affichée ni générée.
       setMutationError({
-        title: 'Projet simple',
-        message: "Un projet simple ne contient qu'une histoire : on ne peut pas y ajouter "
-          + "un pack (.zip). Pour réunir plusieurs packs, crée un projet dans l'éditeur par menus.",
+        title: t('Projet simple'),
+        message: t("Un projet simple ne contient qu'une histoire : on ne peut pas y ajouter ")
+          + t("un pack (.zip). Pour réunir plusieurs packs, crée un projet dans l'éditeur par menus."),
       });
       return null;
     }

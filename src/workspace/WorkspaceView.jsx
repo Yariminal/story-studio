@@ -41,6 +41,7 @@ import {
 } from './selectionSync';
 import { WorkspaceEmptyState } from './WorkspaceEmptyState';
 
+import { t } from '../i18n/index.js';
 // L'espace avancé est chargé à la demande : le moteur d'affichage et ses
 // dépendances n'entrent dans le bundle que lorsqu'un projet avancé est ouvert.
 const AdvancedWorkspace = lazy(() => import('../components/AdvancedWorkspace/AdvancedWorkspace')
@@ -411,7 +412,7 @@ export function WorkspaceView({
 
   const renderResizeHandle = (boundary) => {
     const settingsConfig = {
-      ariaLabel: 'Redimensionner les réglages',
+      ariaLabel: t('Redimensionner les réglages'),
       panelClass: '.workspace-panel-slot--settings',
       cssVar: '--workspace-settings-panel-width',
       minWidth: SETTINGS_PANEL_WIDTH_MIN,
@@ -421,7 +422,7 @@ export function WorkspaceView({
       onResize: setSettingsPanelWidth,
     };
     const structureConfig = {
-      ariaLabel: 'Redimensionner l’arbre',
+      ariaLabel: t('Redimensionner l’arbre'),
       panelClass: '.workspace-panel-slot--structure',
       cssVar: '--col-left',
       minWidth: LEFT_PANEL_MIN_WIDTH,

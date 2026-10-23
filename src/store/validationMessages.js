@@ -1,52 +1,53 @@
+import { t } from '../i18n/index.js';
 // Validation shown in the React UI is an early, user-friendly warning layer.
 // Rust remains the final generation contract and may reject additional cases.
-// All helpers below use a unified em-dash separator and consistent French wording.
-
-const SEPARATOR = ' — ';
+// French strings below are i18n msgids; English comes from the locale catalog.
 
 const FIELD_LABELS = Object.freeze({
-  audio: 'Audio',
-  'audio intro': "Audio d'accueil",
-  'audio titre': 'Audio de sélection',
-  histoire: 'Histoire',
-  image: 'Image',
-  'image de couverture': 'Image de couverture',
-  'image bibliothèque': 'Image bibliothèque',
-  zip: 'Archive ZIP',
+  audio: () => t('Audio'),
+  'audio intro': () => t("Audio d'accueil"),
+  'audio titre': () => t('Audio de sélection'),
+  histoire: () => t('Histoire'),
+  image: () => t('Image'),
+  'image de couverture': () => t('Image de couverture'),
+  'image bibliothèque': () => t('Image bibliothèque'),
+  zip: () => t('Archive ZIP'),
 });
 
 function fieldLabel(field) {
-  return FIELD_LABELS[field] || String(field || 'Élément');
+  const resolver = FIELD_LABELS[field];
+  if (resolver) return resolver();
+  return String(field || t('Élément'));
 }
 
 export function missingField(label, field, { feminine = false } = {}) {
   void feminine;
-  return `${label}${SEPARATOR}${fieldLabel(field)} à ajouter`;
+  return t('{label} — {field} à ajouter', { label, field: fieldLabel(field) });
 }
 
 export function brokenField(label, field) {
-  return `${label}${SEPARATOR}Fichier ${fieldLabel(field).toLowerCase()} introuvable`;
+  return t('{label} — Fichier {field} introuvable', { label, field: fieldLabel(field).toLowerCase() });
 }
 
 export function missingTarget(label, what) {
-  return `${label}${SEPARATOR}destination ${what} introuvable`;
+  return t('{label} — destination {what} introuvable', { label, what });
 }
 
 export function emptyTarget(label, what) {
-  return `${label}${SEPARATOR}destination ${what} vide`;
+  return t('{label} — destination {what} vide', { label, what });
 }
 
 export const VALIDATION_MESSAGES = Object.freeze({
-  noProjectType: 'Type de projet à choisir.',
-  importedTransitionUnmodeled: 'Transition importée à vérifier.',
-  rootReservedId: "Identifiant réservé à corriger — aucun élément ne doit porter l'id root",
-  missingInternalId: (label) => `${label}${SEPARATOR}Identifiant interne à corriger`,
-  unsupportedEntryType: (label) => `${label}${SEPARATOR}Type d'élément non pris en charge`,
-  refTargetMissing: (label) => `${label}${SEPARATOR}Référence sans cible`,
-  reservedIdInvalid: (label) => `${label}${SEPARATOR}Identifiant réservé à corriger`,
-  duplicateId: (count, entryId) => `Identifiant dupliqué${SEPARATOR}${count} éléments partagent l'id ${entryId}`,
-  storyReturnLost: (label) => `${label}${SEPARATOR}Retour de fin introuvable`,
-  storyWithoutExit: (label) => `${label}${SEPARATOR}Fin sans sortie : activez le bouton Accueil de cette histoire, ou choisissez « Enchaîner » dans « Après la lecture »`,
-  emptyMenu: (label) => `${label}${SEPARATOR}Histoire à ajouter`,
-  emptyPack: 'Histoire à ajouter dans le pack.',
+  noProjectType: () => t('Type de projet à choisir.'),
+  importedTransitionUnmodeled: () => t('Transition importée à vérifier.'),
+  rootReservedId: () => t("Identifiant réservé à corriger — aucun élément ne doit porter l'id root"),
+  missingInternalId: (label) => t('{label} — Identifiant interne à corriger', { label }),
+  unsupportedEntryType: (label) => t("{label} — Type d'élément non pris en charge", { label }),
+  refTargetMissing: (label) => t('{label} — Référence sans cible', { label }),
+  reservedIdInvalid: (label) => t('{label} — Identifiant réservé à corriger', { label }),
+  duplicateId: (count, entryId) => t("Identifiant dupliqué — {count} éléments partagent l'id {entryId}", { count, entryId }),
+  storyReturnLost: (label) => t('{label} — Retour de fin introuvable', { label }),
+  storyWithoutExit: (label) => t("{label} — Fin sans sortie : activez le bouton Accueil de cette histoire, ou choisissez « Enchaîner » dans « Après la lecture »", { label }),
+  emptyMenu: (label) => t('{label} — Histoire à ajouter', { label }),
+  emptyPack: () => t('Histoire à ajouter dans le pack.'),
 });

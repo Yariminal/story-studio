@@ -31,6 +31,7 @@ import {
 import './CommunityPackChecker.css';
 import './CommunityPackCheckerFunnel.css';
 
+import { t } from '../../i18n/index.js';
 const STEPS = [
   { key: 'pack', label: 'Pack' },
   { key: 'report', label: 'Rapport' },
@@ -46,8 +47,8 @@ function correctionCount(result) {
   const parts = [];
   if (result.audioFixed) parts.push(`${result.audioFixed} audio`);
   if (result.imageFixed) parts.push(`${result.imageFixed} image${result.imageFixed > 1 ? 's' : ''}`);
-  if (result.metadataFixed) parts.push('métadonnées');
-  return parts.length ? parts.join(' · ') : 'Pack corrigé';
+  if (result.metadataFixed) parts.push(t('métadonnées'));
+  return parts.length ? parts.join(' · ') : t('Pack corrigé');
 }
 
 export function CommunityPackCheckerFunnel({ onClose }) {
@@ -85,8 +86,8 @@ export function CommunityPackCheckerFunnel({ onClose }) {
   async function pickPack() {
     const selected = await openDialog({
       multiple: false,
-      title: 'Pack à vérifier',
-      filters: [{ name: 'Pack Lunii', extensions: ['zip', '7z'] }],
+      title: t('Pack à vérifier'),
+      filters: [{ name: t('Pack Lunii'), extensions: ['zip', '7z'] }],
     });
     if (selected) await analyzePath(Array.isArray(selected) ? selected[0] : selected);
   }
@@ -95,7 +96,7 @@ export function CommunityPackCheckerFunnel({ onClose }) {
     const selected = await openDialog({
       directory: true,
       multiple: false,
-      title: 'Dossier du pack corrigé',
+      title: t('Dossier du pack corrigé'),
       defaultPath: outputDir || getLastExportDir() || undefined,
     });
     const nextOutputDir = Array.isArray(selected) ? selected[0] : selected;
@@ -155,8 +156,8 @@ export function CommunityPackCheckerFunnel({ onClose }) {
   const primaryLabel = step === 0
     ? 'Analyser'
     : step === 1
-      ? (canCreateFixedPack ? 'Corriger le pack' : (correctionCounts.optional > 0 ? 'Voir les suggestions' : 'Terminer'))
-      : 'Créer le pack corrigé';
+      ? (canCreateFixedPack ? t('Corriger le pack') : (correctionCounts.optional > 0 ? 'Voir les suggestions' : 'Terminer'))
+      : t('Créer le pack corrigé');
 
   function toggleOptionalSilence(issue) {
     const key = optionalSilenceSelectionKey(issue);
@@ -172,12 +173,12 @@ export function CommunityPackCheckerFunnel({ onClose }) {
   return (
     <FunnelShell
       icon={<Wrench />}
-      title="Vérifier / corriger un pack"
-      subtitle="Analyse un ZIP et crée une version corrigée si besoin."
+      title={t("Vérifier / corriger un pack")}
+      subtitle={t("Analyse un ZIP et crée une version corrigée si besoin.")}
       size="wide"
       onClose={busy ? () => {} : onClose}
       showChrome={phase === 'collect'}
-      ariaLabel="Vérifier ou corriger un pack"
+      ariaLabel={t("Vérifier ou corriger un pack")}
       stepper={(
         <FunnelStepper
           steps={STEPS}
@@ -198,17 +199,17 @@ export function CommunityPackCheckerFunnel({ onClose }) {
     >
       {phase === 'analyzing' ? (
         <FunnelGenerationState
-          title="Analyse du pack…"
-          hint={latestLine(checker.liveLog) || 'Lecture du ZIP, des médias et de la structure.'}
+          title={t("Analyse du pack…")}
+          hint={latestLine(checker.liveLog) || t('Lecture du ZIP, des médias et de la structure.')}
         />
       ) : phase === 'fixing' ? (
         <FunnelGenerationState
-          title="Correction du pack…"
-          hint={latestLine(checker.liveLog) || 'Création du nouveau ZIP corrigé.'}
+          title={t("Correction du pack…")}
+          hint={latestLine(checker.liveLog) || t('Création du nouveau ZIP corrigé.')}
         />
       ) : phase === 'done' ? (
         <FunnelDoneState
-          title="Pack corrigé créé"
+          title={t("Pack corrigé créé")}
           fileName={basename(result?.fixedZipPath) || result?.fixedZipPath}
           meta={correctionCount(result)}
         >
@@ -231,13 +232,13 @@ export function CommunityPackCheckerFunnel({ onClose }) {
             <div className="funnel-step-content pack-checker-step">
               <FunnelSectionHeader
                 icon={<Package />}
-                title="Pack à vérifier"
-                description="Choisis ou dépose un fichier ZIP ou 7z. Le fichier source reste intact."
+                title={t("Pack à vérifier")}
+                description={t("Choisis ou dépose un fichier ZIP ou 7z. Le fichier source reste intact.")}
               />
               <FunnelDropZone
                 icon={<Package />}
-                title="Déposer un pack .zip ou .7z"
-                hint="L'analyse vérifie l'audio, les images, le nom, la structure et le mode nuit."
+                title={t("Déposer un pack .zip ou .7z")}
+                hint={t("L'analyse vérifie l'audio, les images, le nom, la structure et le mode nuit.")}
                 disabled={busy}
                 onFiles={(paths) => analyzePath(paths?.[0])}
               >
@@ -259,7 +260,7 @@ export function CommunityPackCheckerFunnel({ onClose }) {
               <FunnelSectionHeader
                 icon={<TriangleAlert />}
                 title="Rapport"
-                description="Lis les points conformes, les corrections possibles et les vérifications manuelles."
+                description={t("Lis les points conformes, les corrections possibles et les vérifications manuelles.")}
               />
               {error ? <div className="funnel-error" role="alert">{error}</div> : null}
               <ReportView
@@ -284,8 +285,8 @@ export function CommunityPackCheckerFunnel({ onClose }) {
             <div className="funnel-step-content pack-checker-step">
               <FunnelSectionHeader
                 icon={<Wrench />}
-                title="Voici ce qui va être corrigé"
-                description="Le clic final ouvrira le choix du dossier de sortie, puis créera le ZIP corrigé."
+                title={t("Voici ce qui va être corrigé")}
+                description={t("Le clic final ouvrira le choix du dossier de sortie, puis créera le ZIP corrigé.")}
               />
               <FixableCorrectionsList
                 report={checker.report}

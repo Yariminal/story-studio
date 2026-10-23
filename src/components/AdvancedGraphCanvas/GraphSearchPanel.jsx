@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // La liste de recherche — chemin **principal** d'accès au graphe, pas un
 // complément du canvas.
 //
@@ -70,19 +71,19 @@ export function GraphNodeListActions({
     >
       <StructureActionsBar
         variant="panel"
-        ariaLabel="Outils de la liste des nœuds"
+        ariaLabel={t("Outils de la liste des nœuds")}
         leading={summary}
         trailing={(
           <>
             <StructureSearchButton
-              label="Rechercher dans la liste des nœuds"
+              label={t("Rechercher dans la liste des nœuds")}
               onClick={onSearch}
             />
-            <Tooltip text="Masquer la liste des nœuds" placement="below">
+            <Tooltip text={t("Masquer la liste des nœuds")} placement="below">
               <button
                 type="button"
                 className="structure-actions-btn"
-                aria-label="Masquer la liste des nœuds"
+                aria-label={t("Masquer la liste des nœuds")}
                 onClick={onClose}
               >
                 <X className="structure-actions-icon" aria-hidden="true" />
@@ -199,8 +200,8 @@ export default function GraphSearchPanel({
 
   const scopeLabels = [
     [SEARCH_SCOPES.ALL, 'Tout', false],
-    [SEARCH_SCOPES.STAGES, 'Écrans', false],
-    [SEARCH_SCOPES.ACTIONS, 'Listes de choix', false],
+    [SEARCH_SCOPES.STAGES, t('Écrans'), false],
+    [SEARCH_SCOPES.ACTIONS, t('Listes de choix'), false],
   ];
 
   // Le descendant actif ne peut désigner qu'une ligne **présente** dans le
@@ -280,7 +281,7 @@ export default function GraphSearchPanel({
   return (
     <>
       {renderHeader?.(summary)}
-      <section className="advanced-search" aria-label="Liste des nœuds du graphe">
+      <section className="advanced-search" aria-label={t("Liste des nœuds du graphe")}>
         {searchActive && (
           <>
             <TreeSearchBar
@@ -324,7 +325,7 @@ export default function GraphSearchPanel({
           className="advanced-search__list"
           role="listbox"
           tabIndex={0}
-          aria-label="Nœuds du graphe"
+          aria-label={t("Nœuds du graphe")}
           aria-activedescendant={activeDescendant}
           onKeyDown={onKeyDown}
         >
@@ -381,12 +382,12 @@ export default function GraphSearchPanel({
                   {result.label.isFallback && <em className="advanced-search__fallback"> (sans nom)</em>}
                 </span>
                 <span className="advanced-search__identifier">
-                  {result.kind === 'stage' ? 'Écran' : 'Liste de choix'} · {nodeIdentifier(result)}
+                  {result.kind === 'stage' ? t('Écran') : t('Liste de choix')} · {nodeIdentifier(result)}
                   {occurrenceLabel(result)}
                 </span>
               </span>
               {result.path === rootPath && (
-                <Tooltip text="Écran d’entrée : le pack commence ici" asChild>
+                <Tooltip text={t("Écran d’entrée : le pack commence ici")} asChild>
                   <span className="advanced-search__root-badge">racine</span>
                 </Tooltip>
               )}

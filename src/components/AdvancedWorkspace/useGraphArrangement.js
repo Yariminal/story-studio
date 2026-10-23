@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // Le rangement du graphe : un seul état pour le bouton et pour le clavier.
 //
 // Il vivait dans le bouton de la colonne. Le raccourci ne pouvait donc ni
@@ -14,7 +15,7 @@ import { useCallback, useMemo, useRef, useState } from 'react';
 
 import { NO_FOLD, parcoursLayout } from '../../store/advancedGraphView/graphParcoursLayout.js';
 
-export const ARRANGEMENT_REFUSED = 'Le rangement a été refusé : rien n’a été modifié.';
+export const ARRANGEMENT_REFUSED = t('Le rangement a été refusé : rien n’a été modifié.');
 
 export function useGraphArrangement({ index, applyLayout, disabled = false }) {
   const [busy, setBusy] = useState(false);

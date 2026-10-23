@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // La relecture d'une archive exportée, dans l'espace de travail avancé.
 //
 // C'est **le simulateur du dépôt**, pas une seconde implémentation : le même
@@ -36,7 +37,7 @@ export function ZipReviewPanel({ review, onClose }) {
         <span className="advanced-review-banner__state">
           {review.isCurrentRevision
             ? "elle correspond au document actuellement ouvert"
-            : "le document a changé depuis cet export : ce n'est plus ce que tu édites"}
+            : t("le document a changé depuis cet export : ce n'est plus ce que tu édites")}
         </span>
         <Button size="sm" onClick={onClose}>Fermer la relecture</Button>
       </div>

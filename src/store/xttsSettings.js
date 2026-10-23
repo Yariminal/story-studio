@@ -1,12 +1,13 @@
 import { KEYS, read as readSetting, write as writeSetting } from './persistentSettings.js';
 
+import { t } from '../i18n/index.js';
 // Voix Piper par défaut — doit correspondre au catalogue Rust
 // (`services/piper/catalog.rs`).
 export const PIPER_DEFAULT_VOICE = 'fr_FR-siwis-medium';
 export const PIPER_DEFAULT_LANGUAGE = 'fr_FR';
 
 export const PIPER_LANGUAGE_OPTIONS = [
-  { value: 'fr_FR', label: 'Français', defaultVoice: PIPER_DEFAULT_VOICE },
+  { value: 'fr_FR', label: t('Français'), defaultVoice: PIPER_DEFAULT_VOICE },
   { value: 'en_GB', label: 'English UK', defaultVoice: 'en_GB-jenny_dioco-medium' },
   { value: 'en_US', label: 'English US', defaultVoice: 'en_US-kristin-medium' },
   { value: 'it_IT', label: 'Italiano', defaultVoice: 'it_IT-serena-medium' },

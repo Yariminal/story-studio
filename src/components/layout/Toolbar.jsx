@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // La barre d'outils — **une seule**, pour les deux éditeurs.
 //
 // Un projet graphe n'a pas d'arbre : la séparation entre l'universel et le
@@ -245,7 +246,7 @@ export function Toolbar({
           trigger={({ openPopover }) => (
             <ToolbarButton
               id="project-menu"
-              title="Actions du projet"
+              title={t("Actions du projet")}
               label="Projet"
               onClick={openPopover}
               active={projectMenuOpen}
@@ -267,7 +268,7 @@ export function Toolbar({
       <div className="chrome-toolbar-center">
         {hasPanels ? (
           <PanelSortContext items={panelOrder} onMove={onMovePanel}>
-            <div className="chrome-panel-pill" role="group" aria-label="Panneaux visibles et réorganisables">
+            <div className="chrome-panel-pill" role="group" aria-label={t("Panneaux visibles et réorganisables")}>
               {panelOrder.map((panelId) => {
                 const panel = {
                   [WORKSPACE_PANEL_IDS.STRUCTURE]: {
@@ -300,7 +301,7 @@ export function Toolbar({
                   },
                   [ADVANCED_WORKSPACE_PANEL_IDS.GRAPH]: {
                     id: 'advanced-graph',
-                    title: 'Graphe — surface principale toujours visible',
+                    title: t('Graphe — surface principale toujours visible'),
                     Icon: Network,
                     active: true,
                     fixed: true,

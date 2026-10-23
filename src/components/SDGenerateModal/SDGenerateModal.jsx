@@ -8,6 +8,7 @@ import { Dices } from '../icons/LucideLocal';
 import { basename } from '../../utils/fileUtils';
 import './SDGenerateModal.css';
 
+import { t } from '../../i18n/index.js';
 function randomSeed() {
   return Math.floor(Math.random() * 0xFFFFFFFF);
 }
@@ -64,7 +65,7 @@ export function SDGenerateModal({
           }
         }
         if (initialJob && !initialWorkflow) {
-          setError('Le workflow utilisé par cette génération n’est plus disponible.');
+          setError(t('Le workflow utilisé par cette génération n’est plus disponible.'));
         }
       })
       .catch(e => setError(String(e)))
@@ -127,7 +128,7 @@ export function SDGenerateModal({
   async function handleSubmit() {
     if (!selected) return;
     if (selected.requiresReferenceImage && !effectiveReferenceImagePath) {
-      setError('Une image de référence est requise pour ce workflow.');
+      setError(t('Une image de référence est requise pour ce workflow.'));
       return;
     }
     setSubmitting(true);
@@ -296,7 +297,7 @@ export function SDGenerateModal({
                           value={params.seed}
                           onChange={e => setParams(p => ({ ...p, seed: parseInt(e.target.value, 10) || 0 }))}
                         />
-                        <Tooltip text="Seed aléatoire">
+                        <Tooltip text={t("Seed aléatoire")}>
                           <Button
                             size="sm"
                             variant="secondary-violet"

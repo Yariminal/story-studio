@@ -19,6 +19,7 @@ import { shouldPromptRegenerateImportedUuid } from '../../store/projectHelpers';
 import { packIdentityRefusal } from '../../store/packIdentityCheck';
 import './PackNameModal.css';
 
+import { t } from '../../i18n/index.js';
 // La fiche du pack, **commune aux deux éditeurs**.
 //
 // Elle écrit à deux endroits, et c'est la seule chose qu'il faut savoir en la
@@ -108,7 +109,7 @@ function countStats(project) {
 }
 
 function filenameTokens(exportName) {
-  if (!exportName) return [{ kind: 'empty', text: 'Titre requis pour générer le nom exporté', insert: '' }];
+  if (!exportName) return [{ kind: 'empty', text: t('Titre requis pour générer le nom exporté'), insert: '' }];
   const tokens = [];
   let rest = String(exportName || '');
   const ageMatch = rest.match(/^(\d+\+\])/);
@@ -343,25 +344,25 @@ export function PackNameModal({
   }
 
   const collisionText = collision === 'collision'
-    ? 'Un ZIP du même nom existe déjà dans le dossier d’export'
+    ? t('Un ZIP du même nom existe déjà dans le dossier d’export')
     : collision === 'free'
-      ? 'Nom disponible dans le dossier d’export'
+      ? t('Nom disponible dans le dossier d’export')
       : exportFolder
-        ? 'Statut du nom en cours de vérification'
-        : "Aucun dossier d'export disponible";
+        ? t('Statut du nom en cours de vérification')
+        : t("Aucun dossier d'export disponible");
   const generateButtonDisabled = !!saving || !hasExportName || generateDisabled;
   const generateButtonTooltip = saving
-    ? 'Une action est déjà en cours.'
+    ? t('Une action est déjà en cours.')
     : !hasExportName
-      ? 'Renseigne le titre du pack avant de générer.'
+      ? t('Renseigne le titre du pack avant de générer.')
       : generateDisabled
-        ? 'Passe par « à corriger » avant de pouvoir générer le pack.'
+        ? t('Passe par « à corriger » avant de pouvoir générer le pack.')
         : isAdvanced
           // Côté graphe, ce qui bloque est demandé au départ de la production,
           // sur le document courant : la fiche ne peut pas le promettre ici
           // sans tenir un second verdict.
-          ? 'Appliquer les métadonnées, vérifier ce qui bloque, puis générer le pack.'
-          : 'Appliquer les métadonnées et générer le pack.';
+          ? t('Appliquer les métadonnées, vérifier ce qui bloque, puis générer le pack.')
+          : t('Appliquer les métadonnées et générer le pack.');
 
   const modalContent = (
     <div className={`pack-meta-modal${embedded ? ' pack-meta-modal--embedded' : ''}`} onClick={(event) => event.stopPropagation()}>
@@ -370,10 +371,10 @@ export function PackNameModal({
         <div className="pack-meta-heading">
           <span className="pack-meta-eyebrow">Métadonnées du pack</span>
           <h2 title={(isAdvanced ? draft.title : exportName) || undefined}>
-            {(isAdvanced ? draft.title : exportName) || 'Métadonnées du pack'}
+            {(isAdvanced ? draft.title : exportName) || t('Métadonnées du pack')}
           </h2>
         </div>
-        <Button variant="icon" className="modal-close pack-meta-close" onClick={onClose} aria-label="Fermer">×</Button>
+        <Button variant="icon" className="modal-close pack-meta-close" onClick={onClose} aria-label={t("Fermer")}>×</Button>
       </header>
 
       <div className="pack-meta-body">
@@ -386,7 +387,7 @@ export function PackNameModal({
               fieldId="root:thumbnailImage"
               file={shownCover}
               badge="Catalogue · taille libre"
-              formatHint="Taille libre : utilisée par STUdio, LuniiQt et les bibliothèques"
+              formatHint={t("Taille libre : utilisée par STUdio, LuniiQt et les bibliothèques")}
               onPick={setCatalogDraft}
               // Retirer revient à l'image racine : il n'y a rien à retirer
               // tant que la vignette la reprend déjà.
@@ -395,10 +396,10 @@ export function PackNameModal({
             <div className="pack-meta-cover-copy">
               <span>
                 {catalogDraft
-                  ? 'Image propre au catalogue'
+                  ? t('Image propre au catalogue')
                   : fallbackImage
-                    ? (isAdvanced ? "Reprend l'image de l'Écran racine" : "Reprend l'image du menu racine")
-                    : 'Aucune image : choisis-en une, ou définis l’image racine'}
+                    ? (isAdvanced ? t("Reprend l'image de l'Écran racine") : t("Reprend l'image du menu racine"))
+                    : t('Aucune image : choisis-en une, ou définis l’image racine')}
               </span>
             </div>
           </aside>
@@ -406,10 +407,10 @@ export function PackNameModal({
           <aside className="pack-meta-cover-panel">
             <span className="pack-meta-cover-label">Couverture</span>
             <div className="pack-meta-cover">
-              {coverUrl ? <img src={coverUrl} alt="" /> : <Image className="pack-meta-cover-empty" strokeWidth={1.7} absoluteStrokeWidth />}
+              {coverUrl ? <img src={coverUrl} alt="t(" /> : <Image className=")pack-meta-cover-empty" strokeWidth={1.7} absoluteStrokeWidth />}
             </div>
             <div className="pack-meta-cover-copy">
-              <span>{coverUrl ? 'Définie dans la bibliothèque' : 'Aucune image racine définie'}</span>
+              <span>{coverUrl ? t('Définie dans la bibliothèque') : t('Aucune image racine définie')}</span>
               <small>non éditable ici</small>
             </div>
           </aside>
@@ -418,7 +419,7 @@ export function PackNameModal({
         <section className="pack-meta-form">
           <div className="pack-meta-field-row">
             <label>Titre du pack</label>
-            <input className="pack-meta-input" value={draft.title || ''} onChange={(event) => updateField('title', event.target.value)} placeholder="Titre de mon pack" />
+            <input className="pack-meta-input" value={draft.title || ''} onChange={(event) => updateField('title', event.target.value)} placeholder={t("Titre de mon pack")} />
           </div>
 
           {/* Le mode de nommage, offert des deux côtés. C'est lui
@@ -426,7 +427,7 @@ export function PackNameModal({
               convention ou librement, croisé avec versionner ou non. */}
           <div className="pack-meta-field-row">
             <label>Nom du fichier</label>
-            <div className="pack-meta-naming-modes" role="group" aria-label="Mode de nommage du fichier exporté">
+            <div className="pack-meta-naming-modes" role="group" aria-label={t("Mode de nommage du fichier exporté")}>
               <button
                 type="button"
                 className={`pack-meta-age-chip ${namingMode === ARCHIVE_NAMING_CONVENTION ? 'is-active' : ''}`}
@@ -451,7 +452,7 @@ export function PackNameModal({
                 className="pack-meta-input"
                 value={draft.legacyExportName || ''}
                 onChange={(event) => updateField('legacyExportName', event.target.value)}
-                placeholder={draft.title ? `${draft.title} (par défaut)` : 'Laisse vide pour utiliser le titre'}
+                placeholder={draft.title ? `${draft.title} (par défaut)` : t('Laisse vide pour utiliser le titre')}
               />
             </div>
           ) : (
@@ -459,7 +460,7 @@ export function PackNameModal({
           <div className="pack-meta-field-row">
             <label>Âge minimum</label>
             <div className="pack-meta-age-control">
-              <div className="pack-meta-age-chips" role="group" aria-label="Âges minimum prédéfinis">
+              <div className="pack-meta-age-chips" role="group" aria-label={t("Âges minimum prédéfinis")}>
                 {AGE_CHIPS.map((age) => (
                   <button
                     key={age}
@@ -480,7 +481,7 @@ export function PackNameModal({
                     onChange={(event) => updateAge(event.target.value)}
                     inputMode="numeric"
                     pattern="[0-9]*"
-                    aria-label="Âge minimum personnalisé"
+                    aria-label={t("Âge minimum personnalisé")}
                     placeholder="5"
                   />
                   <span aria-hidden="true">+</span>
@@ -491,7 +492,7 @@ export function PackNameModal({
 
           <div className="pack-meta-field-row">
             <label>Auteur</label>
-            <input className="pack-meta-input" value={draft.author || ''} onChange={(event) => updateField('author', event.target.value)} placeholder="Nom de l’auteur" />
+            <input className="pack-meta-input" value={draft.author || ''} onChange={(event) => updateField('author', event.target.value)} placeholder={t("Nom de l’auteur")} />
           </div>
 
           <div className="pack-meta-field-row">
@@ -521,7 +522,7 @@ export function PackNameModal({
                   value={draft.version ?? ''}
                   readOnly={!governance.version.editable}
                   disabled={!governance.version.editable}
-                  placeholder="Non renseignée"
+                  placeholder={t("Non renseignée")}
                   onChange={(event) => updateField('version', event.target.value)}
                 />
                 {governance.version.reason ? (
@@ -535,7 +536,7 @@ export function PackNameModal({
 
           <div className="pack-meta-field-row is-textarea">
             <label>Description <span>changelog</span></label>
-            <textarea className="pack-meta-input pack-meta-textarea" value={draft.description || ''} onChange={(event) => updateField('description', event.target.value)} rows={3} placeholder="Public visé, contenu, changements depuis la version précédente..." />
+            <textarea className="pack-meta-input pack-meta-textarea" value={draft.description || ''} onChange={(event) => updateField('description', event.target.value)} rows={3} placeholder={t("Public visé, contenu, changements depuis la version précédente...")} />
           </div>
 
           <div className="pack-meta-field-row">
@@ -547,12 +548,12 @@ export function PackNameModal({
                 onChange={(event) => updateField('uuid', event.target.value)}
                 readOnly={isAdvanced && !governance.uuid.editable}
                 disabled={isAdvanced && !governance.uuid.editable}
-                placeholder="UUID du pack"
+                placeholder={t("UUID du pack")}
               />
               {/* La même action est offerte dans les deux éditeurs. */}
               {isAdvanced && !governance.uuid.editable ? null : (
-                <Tooltip text="Générer un nouvel UUID de pack" wrap>
-                  <Button variant="icon" className="pack-meta-uuid-button" onClick={regenerateUuid} aria-label="Générer un nouvel UUID de pack">
+                <Tooltip text={t("Générer un nouvel UUID de pack")} wrap>
+                  <Button variant="icon" className="pack-meta-uuid-button" onClick={regenerateUuid} aria-label={t("Générer un nouvel UUID de pack")}>
                     <RotateCcw className="chrome-icon" strokeWidth={2} absoluteStrokeWidth />
                   </Button>
                 </Tooltip>
@@ -608,7 +609,7 @@ export function PackNameModal({
                   {' · '}
                   {advanced.counters.options} option{advanced.counters.options > 1 ? 's' : ''}
                   {' · '}
-                  {advanced.counters.media} média{advanced.counters.media > 1 ? 's' : ''} lié{advanced.counters.media > 1 ? 's' : ''}
+                  {advanced.counters.media} média{advanced.counters.media > 1 ? 's' : 't('} lié{advanced.counters.media > 1 ? ')s' : ''}
                 </span>
               </>
             ) : (
@@ -618,7 +619,7 @@ export function PackNameModal({
         ) : (
           <div className="pack-meta-summary">
             <strong>{stats.stories}</strong> histoire{stats.stories > 1 ? 's' : ''}
-            <span>{stats.media} média{stats.media > 1 ? 's' : ''} lié{stats.media > 1 ? 's' : ''}</span>
+            <span>{stats.media} média{stats.media > 1 ? 's' : 't('} lié{stats.media > 1 ? ')s' : ''}</span>
           </div>
         )}
         {notice ? (
@@ -642,7 +643,7 @@ export function PackNameModal({
               disabled={generateButtonDisabled}
               aria-label={generateButtonTooltip}
             >
-              {saving === 'generate' ? 'Préparation...' : 'Appliquer & générer'}
+              {saving === 'generate' ? t('Préparation...') : t('Appliquer & générer')}
             </Button>
           </Tooltip>
         </div>

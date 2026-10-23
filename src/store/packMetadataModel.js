@@ -1,3 +1,4 @@
+import { t } from '../i18n/index.js';
 // Les métadonnées communes aux deux éditeurs : leur source de vérité, ce qui
 // est éditable, et ce que la production en fait réellement.
 //
@@ -34,7 +35,7 @@ const DOCUMENT_ORIGIN_CREATED = 'created';
 export function suggestedPackTitle(project, view = null) {
   const advanced = project?.authoringMode === 'advanced';
   const title = advanced ? presenceValue(view?.metadata?.title) : project?.packMetadata?.title;
-  if (String(title ?? '').trim() && String(title).trim().toLowerCase() !== 'nouveau pack') return title;
+  if (String(title ?? '').trim() && String(title).trim().toLowerCase() !== t('nouveau pack')) return title;
   const root = advanced ? view?.entryTitle : project?.projectType === 'pack' ? project?.rootName : '';
   const rootText = String(root ?? '').trim();
   if (rootText && !/^(menu racine|écran 1|nouveau pack)$/i.test(rootText)) return rootText;
@@ -267,7 +268,7 @@ export function advancedPackRecap(view) {
     // défaut ; un document importé sans version explicite y est refusé. Dans les
     // deux cas, afficher « v1 » sans le dire mentirait.
     line: version == null
-      ? (view.documentOrigin === DOCUMENT_ORIGIN_CREATED ? 'v1 par défaut à la production' : 'Version non renseignée')
+      ? (view.documentOrigin === DOCUMENT_ORIGIN_CREATED ? t('v1 par défaut à la production') : t('Version non renseignée'))
       : `v${version}`,
   };
 }
@@ -284,11 +285,11 @@ export const METADATA_SAVE_CLOSED = 'closed';
 export const METADATA_SAVE_KEPT = 'kept';
 
 const SAVE_NOTICES = Object.freeze({
-  held: "Un export est en cours. La saisie est conservée ; clique de nouveau sur « Appliquer » une fois l'export terminé.",
-  busy: 'Un geste est déjà en cours. Réessaie dans un instant ; la saisie est conservée.',
-  queued: 'Un geste est déjà en cours. Réessaie dans un instant ; la saisie est conservée.',
-  stale: "Le projet a changé pendant l'application. Vérifie les valeurs avant de réessayer.",
-  refused: "La modification a été refusée et rien n'a été écrit. La saisie est conservée.",
+  held: t("Un export est en cours. La saisie est conservée ; clique de nouveau sur « Appliquer » une fois l'export terminé."),
+  busy: t('Un geste est déjà en cours. Réessaie dans un instant ; la saisie est conservée.'),
+  queued: t('Un geste est déjà en cours. Réessaie dans un instant ; la saisie est conservée.'),
+  stale: t("Le projet a changé pendant l'application. Vérifie les valeurs avant de réessayer."),
+  refused: t("La modification a été refusée et rien n'a été écrit. La saisie est conservée."),
 });
 
 /**
@@ -304,6 +305,6 @@ export function metadataSaveDecision(outcome) {
   return {
     result: METADATA_SAVE_KEPT,
     notice: SAVE_NOTICES[outcome.status]
-      ?? "La modification n'a pas été appliquée. La saisie est conservée.",
+      ?? t("La modification n'a pas été appliquée. La saisie est conservée."),
   };
 }

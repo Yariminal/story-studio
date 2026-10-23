@@ -1,5 +1,6 @@
 import { Button } from '../common/Button';
 
+import { t } from '../../i18n/index.js';
 export function MediaToolResultBanner({
   result,
   unavailableReason = '',
@@ -8,7 +9,7 @@ export function MediaToolResultBanner({
   if (!result) return null;
   const createdCount = result.createdPaths?.length ?? 0;
   const defaultMessage = createdCount === 1
-    ? 'Le fichier créé est sélectionné dans Médias.'
+    ? t('Le fichier créé est sélectionné dans Médias.')
     : `${createdCount} fichiers créés sont sélectionnés dans Médias.`;
 
   return (
@@ -17,11 +18,11 @@ export function MediaToolResultBanner({
         variant="icon"
         className="media-tool-result-close"
         onClick={onFinish}
-        aria-label="Fermer la notification"
-        title="Fermer"
+        aria-label={t("Fermer la notification")}
+        title={t("Fermer")}
       >×</Button>
       <div className="media-tool-result-copy">
-        <strong>{result.projectApplied ? 'Projet mis à jour' : 'Fichiers créés dans Médias'}</strong>
+        <strong>{result.projectApplied ? t('Projet mis à jour') : t('Fichiers créés dans Médias')}</strong>
         <span>{result.message || defaultMessage}</span>
         {unavailableReason ? (
           <small>{unavailableReason}{result.projectApplied ? '' : ' Les fichiers créés restent disponibles dans Médias.'}</small>

@@ -30,6 +30,7 @@ export const KEYS = Object.freeze({
   RECENT_PROJECTS: 'recentProjects',
   MEDIA_TAGS_VERSION: 'mediaTagsVersion',
   THEME: 'storyStudioThemePreference',
+  UI_LOCALE: 'storyStudio.uiLocale',
   SELECTION_OPENS_SETTINGS: 'storyStudio.selectionOpensSettings',
   VERBOSE_LOGGING: 'storyStudio.verboseLogging',
   PACK_LEADING_SILENCE_SECONDS: 'storyStudio.packLeadingSilenceSeconds',

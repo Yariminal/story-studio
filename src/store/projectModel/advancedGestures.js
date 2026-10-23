@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // Formes IPC des gestes d'auteur de l'Éditeur avancé.
 //
 // Ce module ne mute rien et n'ouvre jamais le payload : il assemble la demande
@@ -110,8 +111,8 @@ export const advancedGestures = Object.freeze({
   // --- Contrôles : chaque booléen indépendamment -----
   setStageControls(stageUuid, members) {
     const named = Object.keys(members ?? {});
-    if (named.length === 0) fail('Nommer au moins un contrôle à modifier.');
-    named.forEach((key) => requireOneOf(key, ADVANCED_CONTROL_KEYS, 'contrôle'));
+    if (named.length === 0) fail(t('Nommer au moins un contrôle à modifier.'));
+    named.forEach((key) => requireOneOf(key, ADVANCED_CONTROL_KEYS, t('contrôle')));
     return {
       gesture: 'set-stage-controls',
       stageUuid: requireText(stageUuid, 'stageUuid'),
@@ -122,10 +123,10 @@ export const advancedGestures = Object.freeze({
   // étape d'undo. Un Écran sans objet de contrôles fait refuser la demande
   // entière, comme il le ferait seul.
   setStagesControls(stageUuids, members) {
-    if (!Array.isArray(stageUuids) || stageUuids.length === 0) fail('Désigner au moins un Écran.');
+    if (!Array.isArray(stageUuids) || stageUuids.length === 0) fail(t('Désigner au moins un Écran.'));
     const named = Object.keys(members ?? {});
-    if (named.length === 0) fail('Nommer au moins un contrôle à modifier.');
-    named.forEach((key) => requireOneOf(key, ADVANCED_CONTROL_KEYS, 'contrôle'));
+    if (named.length === 0) fail(t('Nommer au moins un contrôle à modifier.'));
+    named.forEach((key) => requireOneOf(key, ADVANCED_CONTROL_KEYS, t('contrôle')));
     return {
       gesture: 'set-stages-controls',
       stageUuids: stageUuids.map((uuid) => requireText(uuid, 'stageUuid')),
@@ -190,7 +191,7 @@ export const advancedGestures = Object.freeze({
   // cibles : envoyer des cibles fusionnerait deux occurrences de même
   // destination, exactement ce que le panneau rend visible.
   reorderActionOptions(actionId, newPositionOfOld) {
-    if (!Array.isArray(newPositionOfOld)) fail('newPositionOfOld doit être un tableau de rangs.');
+    if (!Array.isArray(newPositionOfOld)) fail(t('newPositionOfOld doit être un tableau de rangs.'));
     newPositionOfOld.forEach((rank) => requireRank(rank, 'newPositionOfOld[]'));
     return {
       gesture: 'reorder-action-options',
@@ -272,7 +273,7 @@ export const advancedGestures = Object.freeze({
   // Les chemins viennent du DTO et restent opaques. Une sélection multiple
   // produit un seul geste, donc une seule étape d'annulation.
   setNodeColor(paths, color) {
-    if (!Array.isArray(paths) || paths.length === 0) fail('Nommer au moins un nœud à colorer.');
+    if (!Array.isArray(paths) || paths.length === 0) fail(t('Nommer au moins un nœud à colorer.'));
     paths.forEach((path) => requireText(path, 'paths[]'));
     return { gesture: 'set-node-color', paths, color: color ?? null };
   },
@@ -335,8 +336,8 @@ export const advancedGestures = Object.freeze({
   // pour un document importé, sa racine `uuid` dans la même transaction.
   setDocumentMetadata(members) {
     const named = Object.keys(members ?? {});
-    if (named.length === 0) fail('Nommer au moins une métadonnée à modifier.');
-    named.forEach((key) => requireOneOf(key, ADVANCED_METADATA_KEYS, 'métadonnée'));
+    if (named.length === 0) fail(t('Nommer au moins une métadonnée à modifier.'));
+    named.forEach((key) => requireOneOf(key, ADVANCED_METADATA_KEYS, t('métadonnée')));
     return { gesture: 'set-document-metadata', update: { ...members } };
   },
 
@@ -349,7 +350,7 @@ export const advancedGestures = Object.freeze({
   // d'undo. Chaque entrée est `{ node, position }`, comme une disposition.
   setAuthoredPositions(positions) {
     if (!Array.isArray(positions) || positions.length === 0) {
-      fail('Un déplacement de groupe porte au moins un nœud.');
+      fail(t('Un déplacement de groupe porte au moins un nœud.'));
     }
     return { gesture: 'set-authored-positions', positions };
   },
@@ -357,7 +358,7 @@ export const advancedGestures = Object.freeze({
   // `context.editorPositions` et ne touche pas au document.
   applyViewLayout(positions) {
     if (!Array.isArray(positions) || positions.length === 0) {
-      fail('Une disposition conservée porte au moins un nœud.');
+      fail(t('Une disposition conservée porte au moins un nœud.'));
     }
     return { gesture: 'apply-view-layout', positions };
   },

@@ -1,5 +1,6 @@
 import { formatFrenchCount } from './frenchText.js';
 
+import { t } from '../i18n/index.js';
 // Erreurs typées des commandes YouTube : `{ code, message }`, classées côté
 // Rust (services/youtube/error.rs) à partir de la sortie de yt-dlp. Un
 // blocage vise la connexion entière : chaque requête supplémentaire le
@@ -33,7 +34,7 @@ export function youtubeImportFailure(result, fallback) {
 export function youtubeBlockedNotice(result) {
   const { total, imported, skipped = 0, blocked = false } = result ?? {};
   if (!blocked || skipped <= 0) return null;
-  return `${formatFrenchCount(imported, 'vidéo importée', 'vidéos importées')} sur ${total}. `
-    + `YouTube a ensuite bloqué cette connexion : ${formatFrenchCount(skipped, 'vidéo restante n’a', 'vidéos restantes n’ont')} pas été ${skipped === 1 ? 'tentée' : 'tentées'}. `
-    + 'Réessaie dans quelques heures.';
+  return `${formatFrenchCount(imported, t('vidéo importée'), t('vidéos importées'))} sur ${total}. `
+    + `YouTube a ensuite bloqué cette connexion : ${formatFrenchCount(skipped, t('vidéo restante n’a'), t('vidéos restantes n’ont'))} pas été ${skipped === 1 ? t('tentée') : t('tentées')}. `
+    + t('Réessaie dans quelques heures.');
 }

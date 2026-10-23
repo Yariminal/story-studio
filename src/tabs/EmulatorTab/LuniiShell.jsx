@@ -2,6 +2,7 @@ import { Tooltip } from '../../components/common/Tooltip';
 import { formatPlaybackTime } from './navigationResolvers';
 import '../EmulatorTab.css';
 
+import { t } from '../../i18n/index.js';
 export function LuniiShell({
   image,
   title,
@@ -26,11 +27,11 @@ export function LuniiShell({
         <div className="lunii-top-controls">
           <div className="lunii-top-controls-left">
             {dragHandleProps && (
-              <Tooltip text="Déplacer le simulateur">
+              <Tooltip text={t("Déplacer le simulateur")}>
                 <button
                   type="button"
                   className="lunii-drag-handle"
-                  aria-label="Déplacer le simulateur"
+                  aria-label={t("Déplacer le simulateur")}
                   {...dragHandleProps}
                 >
                   ⋮⋮
@@ -39,7 +40,7 @@ export function LuniiShell({
             )}
             {chromeControls && (
               <>
-                <Tooltip text={chromeControls.autoPlaybackEnabled ? "Désactiver les transitions automatiques dans le simulateur" : "Réactiver les transitions automatiques dans le simulateur"}>
+                <Tooltip text={chromeControls.autoPlaybackEnabled ? t("Désactiver les transitions automatiques dans le simulateur") : t("Réactiver les transitions automatiques dans le simulateur")}>
                   <button
                     type="button"
                     className={`lunii-chip-btn${chromeControls.autoPlaybackEnabled ? ' is-active' : ''}`}
@@ -48,7 +49,7 @@ export function LuniiShell({
                     Auto
                   </button>
                 </Tooltip>
-                <Tooltip text={chromeControls.transparentPreview ? "Rendre l'aperçu opaque" : "Rendre l'aperçu transparent"}>
+                <Tooltip text={chromeControls.transparentPreview ? t("Rendre l'aperçu opaque") : t("Rendre l'aperçu transparent")}>
                   <button
                     type="button"
                     className={`lunii-chip-btn${chromeControls.transparentPreview ? ' is-active' : ''}`}
@@ -61,7 +62,7 @@ export function LuniiShell({
             )}
           </div>
           {onClose && (
-            <button type="button" className="lunii-close-btn" onClick={onClose} aria-label="Fermer le simulateur">
+            <button type="button" className="lunii-close-btn" onClick={onClose} aria-label={t("Fermer le simulateur")}>
               ×
             </button>
           )}

@@ -1,6 +1,7 @@
 import { KEYS, read, write, remove } from './persistentSettings.js';
 import { commandKeyIsMeta, commandKeyLabel } from '../utils/platformKeys.js';
 
+import { t } from '../i18n/index.js';
 // Les portées, rangées par **commande** et non par surface.
 //
 // Une commande qui existe dans les deux éditeurs — enregistrer, annuler,
@@ -26,14 +27,14 @@ const SHORTCUT_CONTEXTS = Object.freeze({
 const BOTH_EDITORS = Object.freeze([SHORTCUT_CONTEXTS.LIBRE, SHORTCUT_CONTEXTS.GRAPH]);
 
 export const SHORTCUT_SCOPES = [
-  { id: 'general',     label: 'Général',                  contexts: BOTH_EDITORS, description: 'Actifs dans les deux éditeurs, par menus et graphe.' },
-  { id: 'selection',   label: 'Sélection',                contexts: BOTH_EDITORS, description: 'Agissent sur la sélection, dans l\'arbre, le diagramme ou le graphe.' },
-  { id: 'libre',       label: 'Éditeur par menus',        contexts: [SHORTCUT_CONTEXTS.LIBRE], description: 'Actifs seulement dans l\'éditeur par menus.' },
-  { id: 'graph',       label: 'Éditeur graphe',           contexts: [SHORTCUT_CONTEXTS.GRAPH], description: 'Actifs seulement dans l\'éditeur graphe.' },
-  { id: 'mediaPanel',  label: 'Panneau Médias',           contexts: BOTH_EDITORS, description: 'Actifs quand le panneau Médias est ouvert.' },
-  { id: 'audioEditor', label: 'Éditeur audio',            contexts: [SHORTCUT_CONTEXTS.AUDIO_EDITOR], description: 'Actifs uniquement dans la fenêtre d\'édition audio.' },
+  { id: 'general',     label: t('Général'),                  contexts: BOTH_EDITORS, description: t('Actifs dans les deux éditeurs, par menus et graphe.') },
+  { id: 'selection',   label: t('Sélection'),                contexts: BOTH_EDITORS, description: 'Agissent sur la sélection, dans l\'arbre, le diagramme ou le graphe.' },
+  { id: 'libre',       label: t('Éditeur par menus'),        contexts: [SHORTCUT_CONTEXTS.LIBRE], description: 'Actifs seulement dans l\'éditeur par menus.' },
+  { id: 'graph',       label: t('Éditeur graphe'),           contexts: [SHORTCUT_CONTEXTS.GRAPH], description: 'Actifs seulement dans l\'éditeur graphe.' },
+  { id: 'mediaPanel',  label: t('Panneau Médias'),           contexts: BOTH_EDITORS, description: t('Actifs quand le panneau Médias est ouvert.') },
+  { id: 'audioEditor', label: t('Éditeur audio'),            contexts: [SHORTCUT_CONTEXTS.AUDIO_EDITOR], description: 'Actifs uniquement dans la fenêtre d\'édition audio.' },
   { id: 'imageEditor', label: 'Éditeur d\'image',         contexts: [SHORTCUT_CONTEXTS.IMAGE_EDITOR], description: 'Actifs uniquement dans la fenêtre d\'édition d\'image.' },
-  { id: 'a11y',        label: 'Navigation standard',      contexts: [], description: 'Raccourcis ARIA universels. Non modifiables pour préserver l\'accessibilité.' },
+  { id: 'a11y',        label: t('Navigation standard'),      contexts: [], description: 'Raccourcis ARIA universels. Non modifiables pour préserver l\'accessibilité.' },
 ];
 
 // Définition d'un raccourci.
@@ -47,13 +48,13 @@ export const SHORTCUT_SCOPES = [
 // - description : sous-titre court (optionnel)
 export const SHORTCUT_DEFINITIONS = [
   // ── Général ────────────────────────────────────────────────────────────────
-  { id: 'newProject',       scope: 'general', label: 'Retour à l’accueil',                  defaultShortcut: { ctrl: true, key: 'n', code: 'KeyN' } },
-  { id: 'openProject',      scope: 'general', label: 'Ouvrir un projet',                   defaultShortcut: { ctrl: true, key: 'o', code: 'KeyO' } },
-  { id: 'openPack',         scope: 'general', label: 'Ouvrir un pack',                     defaultShortcut: { ctrl: true, shift: true, key: 'p', code: 'KeyP' } },
-  { id: 'saveProject',      scope: 'general', label: 'Enregistrer le projet',              defaultShortcut: { ctrl: true, key: 's', code: 'KeyS' } },
-  { id: 'saveAs',           scope: 'general', label: 'Enregistrer sous',                    defaultShortcut: { ctrl: true, shift: true, key: 's', code: 'KeyS' } },
+  { id: 'newProject',       scope: 'general', label: t('Retour à l’accueil'),                  defaultShortcut: { ctrl: true, key: 'n', code: 'KeyN' } },
+  { id: 'openProject',      scope: 'general', label: t('Ouvrir un projet'),                   defaultShortcut: { ctrl: true, key: 'o', code: 'KeyO' } },
+  { id: 'openPack',         scope: 'general', label: t('Ouvrir un pack'),                     defaultShortcut: { ctrl: true, shift: true, key: 'p', code: 'KeyP' } },
+  { id: 'saveProject',      scope: 'general', label: t('Enregistrer le projet'),              defaultShortcut: { ctrl: true, key: 's', code: 'KeyS' } },
+  { id: 'saveAs',           scope: 'general', label: t('Enregistrer sous'),                    defaultShortcut: { ctrl: true, shift: true, key: 's', code: 'KeyS' } },
   {
-    id: 'storySettings', scope: 'general', label: 'Options du pack',
+    id: 'storySettings', scope: 'general', label: t('Options du pack'),
     defaultShortcut: { ctrl: true, key: ',', code: 'Comma' },
     aliases: [
       { ctrl: true, key: 'm', code: 'KeyM' },
@@ -61,27 +62,27 @@ export const SHORTCUT_DEFINITIONS = [
       { ctrl: true, key: ';', code: 'Semicolon' },
     ],
   },
-  { id: 'tabOptions',       scope: 'general', label: 'Préférences',                         defaultShortcut: { ctrl: true, shift: true, key: 'o', code: 'KeyO' } },
-  { id: 'generate',         scope: 'general', label: 'Générer le pack',                    defaultShortcut: { ctrl: true, key: 'g', code: 'KeyG' } },
-  { id: 'treeSearch',       scope: 'general', label: 'Rechercher dans la structure',        defaultShortcut: { ctrl: true, key: 'f', code: 'KeyF' } },
-  { id: 'toggleValidation', scope: 'general', label: 'Ouvrir les éléments à corriger',      defaultShortcut: { ctrl: true, shift: true, key: 'e', code: 'KeyE' } },
-  { id: 'undo',             scope: 'general', label: 'Annuler',                             defaultShortcut: { ctrl: true, key: 'z', code: 'KeyZ' } },
-  { id: 'redo',             scope: 'general', label: 'Rétablir',                            defaultShortcut: { ctrl: true, shift: true, key: 'z', code: 'KeyZ' } },
+  { id: 'tabOptions',       scope: 'general', label: t('Préférences'),                         defaultShortcut: { ctrl: true, shift: true, key: 'o', code: 'KeyO' } },
+  { id: 'generate',         scope: 'general', label: t('Générer le pack'),                    defaultShortcut: { ctrl: true, key: 'g', code: 'KeyG' } },
+  { id: 'treeSearch',       scope: 'general', label: t('Rechercher dans la structure'),        defaultShortcut: { ctrl: true, key: 'f', code: 'KeyF' } },
+  { id: 'toggleValidation', scope: 'general', label: t('Ouvrir les éléments à corriger'),      defaultShortcut: { ctrl: true, shift: true, key: 'e', code: 'KeyE' } },
+  { id: 'undo',             scope: 'general', label: t('Annuler'),                             defaultShortcut: { ctrl: true, key: 'z', code: 'KeyZ' } },
+  { id: 'redo',             scope: 'general', label: t('Rétablir'),                            defaultShortcut: { ctrl: true, shift: true, key: 'z', code: 'KeyZ' } },
 
   // ── Sélection (arbre, diagramme, graphe) ─────────────────────────────────
-  { id: 'selectionCopy',      scope: 'selection', label: 'Copier la sélection',     defaultShortcut: { ctrl: true, key: 'c', code: 'KeyC' } },
-  { id: 'selectionCut',       scope: 'selection', label: 'Couper la sélection',     defaultShortcut: { ctrl: true, key: 'x', code: 'KeyX' } },
+  { id: 'selectionCopy',      scope: 'selection', label: t('Copier la sélection'),     defaultShortcut: { ctrl: true, key: 'c', code: 'KeyC' } },
+  { id: 'selectionCut',       scope: 'selection', label: t('Couper la sélection'),     defaultShortcut: { ctrl: true, key: 'x', code: 'KeyX' } },
   { id: 'selectionPaste',     scope: 'selection', label: 'Coller',                  defaultShortcut: { ctrl: true, key: 'v', code: 'KeyV' } },
-  { id: 'selectionDuplicate', scope: 'selection', label: 'Dupliquer la sélection',  defaultShortcut: { ctrl: true, key: 'd', code: 'KeyD' } },
-  { id: 'selectionDelete',    scope: 'selection', label: 'Supprimer la sélection',  defaultShortcut: { key: 'Delete', code: 'Delete' }, aliases: [{ key: 'Backspace', code: 'Backspace' }] },
+  { id: 'selectionDuplicate', scope: 'selection', label: t('Dupliquer la sélection'),  defaultShortcut: { ctrl: true, key: 'd', code: 'KeyD' } },
+  { id: 'selectionDelete',    scope: 'selection', label: t('Supprimer la sélection'),  defaultShortcut: { key: 'Delete', code: 'Delete' }, aliases: [{ key: 'Backspace', code: 'Backspace' }] },
   { id: 'selectionRename',    scope: 'selection', label: 'Renommer',                defaultShortcut: { key: 'F2', code: 'F2' } },
 
   // ── Éditeur par menus ─────────────────────────────────────────────────────
-  { id: 'importStories',    scope: 'libre', label: 'Importer des histoires',              defaultShortcut: { ctrl: true, key: 'i', code: 'KeyI' } },
-  { id: 'addFolder',        scope: 'libre', label: 'Ajouter un dossier',                  defaultShortcut: { ctrl: true, shift: true, key: 'n', code: 'KeyN' } },
+  { id: 'importStories',    scope: 'libre', label: t('Importer des histoires'),              defaultShortcut: { ctrl: true, key: 'i', code: 'KeyI' } },
+  { id: 'addFolder',        scope: 'libre', label: t('Ajouter un dossier'),                  defaultShortcut: { ctrl: true, shift: true, key: 'n', code: 'KeyN' } },
   { id: 'toggleTree',       scope: 'libre', label: 'Afficher/masquer l\'arbre',           defaultShortcut: { ctrl: true, key: '1', code: 'Digit1' }, aliases: [{ ctrl: true, key: '1', code: 'Numpad1' }] },
-  { id: 'toggleSettings',   scope: 'libre', label: 'Afficher/masquer les réglages',       defaultShortcut: { ctrl: true, key: '2', code: 'Digit2' }, aliases: [{ ctrl: true, key: '2', code: 'Numpad2' }] },
-  { id: 'toggleDiagram',    scope: 'libre', label: 'Afficher/masquer le diagramme',       defaultShortcut: { ctrl: true, key: '3', code: 'Digit3' }, aliases: [{ ctrl: true, key: '3', code: 'Numpad3' }] },
+  { id: 'toggleSettings',   scope: 'libre', label: t('Afficher/masquer les réglages'),       defaultShortcut: { ctrl: true, key: '2', code: 'Digit2' }, aliases: [{ ctrl: true, key: '2', code: 'Numpad2' }] },
+  { id: 'toggleDiagram',    scope: 'libre', label: t('Afficher/masquer le diagramme'),       defaultShortcut: { ctrl: true, key: '3', code: 'Digit3' }, aliases: [{ ctrl: true, key: '3', code: 'Numpad3' }] },
 
   // ── Éditeur graphe ────────────────────────────────────────────────────────
   // `+` demande Maj sur un clavier AZERTY, pas sur un QWERTY où la touche porte
@@ -92,63 +93,63 @@ export const SHORTCUT_DEFINITIONS = [
     aliases: [{ shift: true, key: '+', code: 'Equal' }, { key: '=', code: 'Equal' }],
   },
   {
-    id: 'graphZoomOut', scope: 'graph', label: 'Réduire',
+    id: 'graphZoomOut', scope: 'graph', label: t('Réduire'),
     defaultShortcut: { key: '-', code: 'NumpadSubtract' },
     aliases: [{ key: '-', code: 'Minus' }],
   },
-  { id: 'graphFit',            scope: 'graph', label: 'Cadrer tout le graphe',     defaultShortcut: { key: '0', code: 'Digit0' }, aliases: [{ key: '0', code: 'Numpad0' }] },
-  { id: 'graphVisitBack',      scope: 'graph', label: 'Nœud visité précédent',     defaultShortcut: { alt: true, key: 'ArrowLeft', code: 'ArrowLeft' } },
-  { id: 'graphVisitForward',   scope: 'graph', label: 'Nœud visité suivant',       defaultShortcut: { alt: true, key: 'ArrowRight', code: 'ArrowRight' } },
-  { id: 'graphCreateStage',    scope: 'graph', label: 'Créer un Écran sous le pointeur',   defaultShortcut: { key: 'e', code: 'KeyE' } },
-  { id: 'graphCreateAction',   scope: 'graph', label: 'Créer une liste de choix sous le pointeur', defaultShortcut: { key: 'a', code: 'KeyA' } },
-  { id: 'graphToggleOverview', scope: 'graph', label: 'Afficher/masquer la vue d’ensemble', defaultShortcut: { key: 'm', code: 'KeyM' } },
-  { id: 'graphArrange',        scope: 'graph', label: 'Ranger le graphe',          defaultShortcut: { ctrl: true, shift: true, key: 'r', code: 'KeyR' } },
+  { id: 'graphFit',            scope: 'graph', label: t('Cadrer tout le graphe'),     defaultShortcut: { key: '0', code: 'Digit0' }, aliases: [{ key: '0', code: 'Numpad0' }] },
+  { id: 'graphVisitBack',      scope: 'graph', label: t('Nœud visité précédent'),     defaultShortcut: { alt: true, key: 'ArrowLeft', code: 'ArrowLeft' } },
+  { id: 'graphVisitForward',   scope: 'graph', label: t('Nœud visité suivant'),       defaultShortcut: { alt: true, key: 'ArrowRight', code: 'ArrowRight' } },
+  { id: 'graphCreateStage',    scope: 'graph', label: t('Créer un Écran sous le pointeur'),   defaultShortcut: { key: 'e', code: 'KeyE' } },
+  { id: 'graphCreateAction',   scope: 'graph', label: t('Créer une liste de choix sous le pointeur'), defaultShortcut: { key: 'a', code: 'KeyA' } },
+  { id: 'graphToggleOverview', scope: 'graph', label: t('Afficher/masquer la vue d’ensemble'), defaultShortcut: { key: 'm', code: 'KeyM' } },
+  { id: 'graphArrange',        scope: 'graph', label: t('Ranger le graphe'),          defaultShortcut: { ctrl: true, shift: true, key: 'r', code: 'KeyR' } },
   // Geste de la surface, tenu par le moteur du graphe : listé pour être connu,
   // jamais capturé ni comparé aux autres commandes.
   {
-    id: 'graphBoxSelect', scope: 'graph', label: 'Sélectionner une zone du graphe',
+    id: 'graphBoxSelect', scope: 'graph', label: t('Sélectionner une zone du graphe'),
     defaultShortcut: { shift: true, key: 'Drag', code: 'Drag' },
     readOnly: true,
-    readOnlyReason: 'Glisser sur le fond. Glisser ensuite un nœud sélectionné déplace toute la sélection.',
+    readOnlyReason: t('Glisser sur le fond. Glisser ensuite un nœud sélectionné déplace toute la sélection.'),
   },
 
   // ── Panneau Médias ────────────────────────────────────────────────────────
-  { id: 'mediaSearch', scope: 'mediaPanel', label: 'Rechercher dans les médias', defaultShortcut: { ctrl: true, shift: true, key: 'f', code: 'KeyF' } },
+  { id: 'mediaSearch', scope: 'mediaPanel', label: t('Rechercher dans les médias'), defaultShortcut: { ctrl: true, shift: true, key: 'f', code: 'KeyF' } },
 
   // ── Éditeur audio ─────────────────────────────────────────────────────────
-  { id: 'audioPlayPause',     scope: 'audioEditor', label: 'Lecture / Pause',                 defaultShortcut: { key: ' ', code: 'Space' } },
-  { id: 'audioShuttleBack',   scope: 'audioEditor', label: 'Lecture arrière (jog/shuttle)',   defaultShortcut: { key: 'j', code: 'KeyJ' } },
-  { id: 'audioShuttleStop',   scope: 'audioEditor', label: 'Pause (jog/shuttle)',             defaultShortcut: { key: 'k', code: 'KeyK' } },
-  { id: 'audioShuttleFwd',    scope: 'audioEditor', label: 'Lecture avant (jog/shuttle)',     defaultShortcut: { key: 'l', code: 'KeyL' } },
+  { id: 'audioPlayPause',     scope: 'audioEditor', label: t('Lecture / Pause'),                 defaultShortcut: { key: ' ', code: 'Space' } },
+  { id: 'audioShuttleBack',   scope: 'audioEditor', label: t('Lecture arrière (jog/shuttle)'),   defaultShortcut: { key: 'j', code: 'KeyJ' } },
+  { id: 'audioShuttleStop',   scope: 'audioEditor', label: t('Pause (jog/shuttle)'),             defaultShortcut: { key: 'k', code: 'KeyK' } },
+  { id: 'audioShuttleFwd',    scope: 'audioEditor', label: t('Lecture avant (jog/shuttle)'),     defaultShortcut: { key: 'l', code: 'KeyL' } },
   { id: 'audioNudgeBack',     scope: 'audioEditor', label: 'Reculer de 50 ms (avec preview)', defaultShortcut: { key: 'ArrowLeft', code: 'ArrowLeft' } },
   { id: 'audioNudgeFwd',      scope: 'audioEditor', label: 'Avancer de 50 ms (avec preview)', defaultShortcut: { key: 'ArrowRight', code: 'ArrowRight' } },
-  { id: 'audioGoStart',       scope: 'audioEditor', label: 'Aller au début',                  defaultShortcut: { key: 'Home', code: 'Home' } },
-  { id: 'audioGoEnd',         scope: 'audioEditor', label: 'Aller à la fin',                  defaultShortcut: { key: 'End', code: 'End' } },
+  { id: 'audioGoStart',       scope: 'audioEditor', label: t('Aller au début'),                  defaultShortcut: { key: 'Home', code: 'Home' } },
+  { id: 'audioGoEnd',         scope: 'audioEditor', label: t('Aller à la fin'),                  defaultShortcut: { key: 'End', code: 'End' } },
   { id: 'audioMarkIn',        scope: 'audioEditor', label: 'Marquer le point d\'entrée',      defaultShortcut: { key: 'i', code: 'KeyI' } },
   { id: 'audioMarkOut',       scope: 'audioEditor', label: 'Marquer le point de sortie',      defaultShortcut: { key: 'o', code: 'KeyO' } },
   { id: 'audioClearIn',       scope: 'audioEditor', label: 'Effacer le point d\'entrée',      defaultShortcut: { ctrl: true, key: 'i', code: 'KeyI' } },
   { id: 'audioClearOut',      scope: 'audioEditor', label: 'Effacer le point de sortie',      defaultShortcut: { ctrl: true, key: 'o', code: 'KeyO' } },
   { id: 'audioPreviewIn',     scope: 'audioEditor', label: 'Aller au point d\'entrée',        defaultShortcut: { shift: true, key: 'i', code: 'KeyI' } },
   { id: 'audioPreviewOut',    scope: 'audioEditor', label: 'Aller au point de sortie',        defaultShortcut: { shift: true, key: 'o', code: 'KeyO' } },
-  { id: 'audioKeepSelection', scope: 'audioEditor', label: 'Garder la sélection',             defaultShortcut: { ctrl: true, key: 'k', code: 'KeyK' } },
-  { id: 'audioCutSelection',  scope: 'audioEditor', label: 'Supprimer la sélection',          defaultShortcut: { ctrl: true, key: 'x', code: 'KeyX' } },
-  { id: 'audioUndo',          scope: 'audioEditor', label: 'Annuler la modification',          defaultShortcut: { ctrl: true, key: 'z', code: 'KeyZ' } },
+  { id: 'audioKeepSelection', scope: 'audioEditor', label: t('Garder la sélection'),             defaultShortcut: { ctrl: true, key: 'k', code: 'KeyK' } },
+  { id: 'audioCutSelection',  scope: 'audioEditor', label: t('Supprimer la sélection'),          defaultShortcut: { ctrl: true, key: 'x', code: 'KeyX' } },
+  { id: 'audioUndo',          scope: 'audioEditor', label: t('Annuler la modification'),          defaultShortcut: { ctrl: true, key: 'z', code: 'KeyZ' } },
   { id: 'audioZoomIn',        scope: 'audioEditor', label: 'Zoomer autour du curseur',         defaultShortcut: { ctrl: true, key: '+', code: 'Equal' }, aliases: [{ ctrl: true, key: '=', code: 'Equal' }, { ctrl: true, key: '+', code: 'NumpadAdd' }] },
-  { id: 'audioZoomOut',       scope: 'audioEditor', label: 'Dézoomer autour du curseur',       defaultShortcut: { ctrl: true, key: '-', code: 'Minus' }, aliases: [{ ctrl: true, key: '-', code: 'NumpadSubtract' }] },
-  { id: 'audioClose',         scope: 'audioEditor', label: 'Fermer l\'éditeur audio',          defaultShortcut: { key: 'Escape', code: 'Escape' }, readOnly: true, readOnlyReason: 'Convention universelle pour fermer une modale.' },
+  { id: 'audioZoomOut',       scope: 'audioEditor', label: t('Dézoomer autour du curseur'),       defaultShortcut: { ctrl: true, key: '-', code: 'Minus' }, aliases: [{ ctrl: true, key: '-', code: 'NumpadSubtract' }] },
+  { id: 'audioClose',         scope: 'audioEditor', label: 'Fermer l\'éditeur audio',          defaultShortcut: { key: 'Escape', code: 'Escape' }, readOnly: true, readOnlyReason: t('Convention universelle pour fermer une modale.') },
 
   // ── Éditeur d'image ───────────────────────────────────────────────────────
-  { id: 'imageClose', scope: 'imageEditor', label: 'Fermer l\'éditeur d\'image', defaultShortcut: { key: 'Escape', code: 'Escape' }, readOnly: true, readOnlyReason: 'Convention universelle pour fermer une modale.' },
+  { id: 'imageClose', scope: 'imageEditor', label: 'Fermer l\'éditeur d\'image', defaultShortcut: { key: 'Escape', code: 'Escape' }, readOnly: true, readOnlyReason: t('Convention universelle pour fermer une modale.') },
 
   // ── Navigation standard (a11y, lecture seule) ─────────────────────────────
-  { id: 'a11yNextItem',     scope: 'a11y', label: 'Élément suivant (arbre, listbox, menu)',    defaultShortcut: { key: 'ArrowDown', code: 'ArrowDown' }, readOnly: true, readOnlyReason: 'Standard ARIA — non modifiable.' },
-  { id: 'a11yPrevItem',     scope: 'a11y', label: 'Élément précédent (arbre, listbox, menu)',  defaultShortcut: { key: 'ArrowUp', code: 'ArrowUp' }, readOnly: true, readOnlyReason: 'Standard ARIA — non modifiable.' },
-  { id: 'a11yFirstItem',    scope: 'a11y', label: 'Premier élément (listbox)',                  defaultShortcut: { key: 'Home', code: 'Home' }, readOnly: true, readOnlyReason: 'Standard ARIA — non modifiable.' },
-  { id: 'a11yLastItem',     scope: 'a11y', label: 'Dernier élément (listbox)',                  defaultShortcut: { key: 'End', code: 'End' }, readOnly: true, readOnlyReason: 'Standard ARIA — non modifiable.' },
-  { id: 'a11yActivate',     scope: 'a11y', label: 'Activer / valider (bouton, option)',         defaultShortcut: { key: 'Enter', code: 'Enter' }, aliases: [{ key: ' ', code: 'Space' }], readOnly: true, readOnlyReason: 'Standard ARIA — non modifiable.' },
-  { id: 'a11yClose',        scope: 'a11y', label: 'Fermer un menu / popover / dialogue',        defaultShortcut: { key: 'Escape', code: 'Escape' }, readOnly: true, readOnlyReason: 'Convention universelle.' },
-  { id: 'a11yMultiSelect',  scope: 'a11y', label: 'Étendre la sélection (arbre, diagramme)',    defaultShortcut: { shift: true, key: 'ArrowDown', code: 'ArrowDown' }, readOnly: true, readOnlyReason: 'Standard ARIA — non modifiable.' },
-  { id: 'a11yToggleSelect', scope: 'a11y', label: 'Ajouter à la sélection (arbre, diagramme)',  defaultShortcut: { ctrl: true, key: 'Click', code: 'Click' }, readOnly: true, readOnlyReason: 'Convention système — non modifiable.' },
+  { id: 'a11yNextItem',     scope: 'a11y', label: t('Élément suivant (arbre, listbox, menu)'),    defaultShortcut: { key: 'ArrowDown', code: 'ArrowDown' }, readOnly: true, readOnlyReason: t('Standard ARIA — non modifiable.') },
+  { id: 'a11yPrevItem',     scope: 'a11y', label: t('Élément précédent (arbre, listbox, menu)'),  defaultShortcut: { key: 'ArrowUp', code: 'ArrowUp' }, readOnly: true, readOnlyReason: t('Standard ARIA — non modifiable.') },
+  { id: 'a11yFirstItem',    scope: 'a11y', label: t('Premier élément (listbox)'),                  defaultShortcut: { key: 'Home', code: 'Home' }, readOnly: true, readOnlyReason: t('Standard ARIA — non modifiable.') },
+  { id: 'a11yLastItem',     scope: 'a11y', label: t('Dernier élément (listbox)'),                  defaultShortcut: { key: 'End', code: 'End' }, readOnly: true, readOnlyReason: t('Standard ARIA — non modifiable.') },
+  { id: 'a11yActivate',     scope: 'a11y', label: t('Activer / valider (bouton, option)'),         defaultShortcut: { key: 'Enter', code: 'Enter' }, aliases: [{ key: ' ', code: 'Space' }], readOnly: true, readOnlyReason: t('Standard ARIA — non modifiable.') },
+  { id: 'a11yClose',        scope: 'a11y', label: t('Fermer un menu / popover / dialogue'),        defaultShortcut: { key: 'Escape', code: 'Escape' }, readOnly: true, readOnlyReason: 'Convention universelle.' },
+  { id: 'a11yMultiSelect',  scope: 'a11y', label: t('Étendre la sélection (arbre, diagramme)'),    defaultShortcut: { shift: true, key: 'ArrowDown', code: 'ArrowDown' }, readOnly: true, readOnlyReason: t('Standard ARIA — non modifiable.') },
+  { id: 'a11yToggleSelect', scope: 'a11y', label: t('Ajouter à la sélection (arbre, diagramme)'),  defaultShortcut: { ctrl: true, key: 'Click', code: 'Click' }, readOnly: true, readOnlyReason: t('Convention système — non modifiable.') },
 ];
 
 const EDITABLE_DEFINITIONS = SHORTCUT_DEFINITIONS.filter((d) => !d.readOnly);
@@ -204,9 +205,9 @@ function keyLabelFromCode(code, key) {
   if (code === 'Equal') return '=';
   if (code === 'NumpadAdd') return '+';
   if (code === 'NumpadSubtract') return '-';
-  if (code === 'Enter') return 'Entrée';
+  if (code === 'Enter') return t('Entrée');
   if (code === 'Space') return 'Espace';
-  if (code === 'Escape') return 'Échap';
+  if (code === 'Escape') return t('Échap');
   if (code === 'ArrowLeft') return '←';
   if (code === 'ArrowRight') return '→';
   if (code === 'ArrowUp') return '↑';

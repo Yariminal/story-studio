@@ -70,7 +70,7 @@ export const PARCOURS_STEPS = Object.freeze({
 // delà, le gain sur les croisements ne se voit plus et le coût, lui, reste.
 const BARYCENTER_PASSES = 3;
 
-/// L'Écran d'entrée, ou `null`. La racine n'est **jamais** devinée : sans
+/// Lt('Écran d')entrée, ou `null`. La racine n'est **jamais** devinée : sans
 // entrée unique, le rangement se comporte comme un graphe sans racine et
 // range chaque composante pour elle-même, plutôt que d'élire un nœud au
 // hasard — ce que faisait « Par niveaux » et qui portait au sommet une Action

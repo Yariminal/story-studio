@@ -9,6 +9,7 @@ import { isAdvancedProject } from '../store/projectModel/envelope';
 import { suggestedPackTitle } from '../store/packMetadataModel';
 import { ReleaseNotesModal } from './common/ReleaseNotesModal';
 
+import { t } from '../i18n/index.js';
 const OptionsTab = lazy(() => import('../tabs/OptionsTab').then((module) => ({ default: module.OptionsTab })));
 const AggregatePacksFunnel = lazy(() => import('./AggregatePacks/AggregatePacksFunnel')
   .then((module) => ({ default: module.AggregatePacksFunnel })));
@@ -129,7 +130,7 @@ export function AppModals({
         <GenerateVoiceModal
           savePath={savePath}
           xttsSettings={xttsSettings}
-          label="Nouvelle histoire"
+          label={t("Nouvelle histoire")}
           initialText=""
           filenameHint="histoire-tts"
           target={toolbarTtsTarget}
@@ -244,8 +245,8 @@ export function AppModals({
         />,
       )}
 
-      {saveAsProgress && <SaveProgressModal data={saveAsProgress} title="Enregistrement sous..." doneTitle="Copie terminée" />}
-      {saveProgress && <SaveProgressModal data={saveProgress} title="Enregistrement..." doneTitle="Projet enregistré" />}
+      {saveAsProgress && <SaveProgressModal data={saveAsProgress} title="Enregistrement sous..." doneTitle={t("Copie terminée")} />}
+      {saveProgress && <SaveProgressModal data={saveProgress} title="Enregistrement..." doneTitle={t("Projet enregistré")} />}
       {triageRequest && (
         <SessionMediaTriageModal items={triageRequest.items} onResolve={triageRequest.resolve} />
       )}
@@ -259,7 +260,7 @@ export function AppModals({
       )}
 
       {unpacking && (
-        <GenerateProgressModal title="Extraction en cours...">
+        <GenerateProgressModal title={t("Extraction en cours...")}>
           <div className="gen-progress-name">{unpacking.name}</div>
           <div className="gen-progress-desc">
             Story Studio analyse le pack et extrait les éléments éditables.
@@ -268,11 +269,11 @@ export function AppModals({
       )}
 
       {importing && (
-        <GenerateProgressModal title="Import en cours...">
+        <GenerateProgressModal title={t("Import en cours...")}>
           <div className="gen-progress-name">{importing.name}</div>
           <div className="gen-progress-desc">{importing.phase}</div>
           <div className="gen-progress-meta">
-            {importing.total > 1 ? `Fichier ${Math.max(importing.index, 1)} sur ${importing.total}` : 'Traitement du fichier importé'}
+            {importing.total > 1 ? `Fichier ${Math.max(importing.index, 1)} sur ${importing.total}` : t('Traitement du fichier importé')}
           </div>
         </GenerateProgressModal>
       )}

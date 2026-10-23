@@ -17,6 +17,7 @@ import { basename, dirname, joinPath, pathKey } from '../../utils/fileUtils';
 import { candidatePathsForRelinkRoot, mediaKindFromPath, refreshRelinkRows } from '../../store/missingMediaRelink';
 import './MissingMediaRelinkModal.css';
 
+import { t } from '../../i18n/index.js';
 const MAX_SCAN_FILES = 12000;
 
 function buildInitialRows(missingMedia) {
@@ -41,7 +42,7 @@ function splitFileName(fileName) {
 }
 
 function rowMeta(row) {
-  if (isResolved(row)) return 'Relié · chemin mis à jour';
+  if (isResolved(row)) return t('Relié · chemin mis à jour');
   if (row.status === 'ambiguous') return `${row.matches.length} correspondances à départager`;
   const labels = row.labels ?? [];
   if (labels.length === 0) return 'Introuvable';
@@ -213,7 +214,7 @@ export function MissingMediaRelinkModal({ missingMedia, workspaceDir = '', onApp
     const folder = await openDialog({
       directory: true,
       multiple: false,
-      title: 'Choisir le dossier qui contient ces médias',
+      title: t('Choisir le dossier qui contient ces médias'),
       defaultPath: group.dir || workspaceDir || dirname(group.rows[0]?.path),
     });
     if (!folder) return;
@@ -281,7 +282,7 @@ export function MissingMediaRelinkModal({ missingMedia, workspaceDir = '', onApp
 
   return (
     <AppModalPortal>
-      <div className="relink-modal" role="dialog" aria-label="Médias introuvables" onClick={(event) => event.stopPropagation()}>
+      <div className="relink-modal" role="dialog" aria-label={t("Médias introuvables")} onClick={(event) => event.stopPropagation()}>
         <header className="relink-head">
           <span className="relink-head-icon"><Link2 /></span>
           <span className="relink-head-title">Médias introuvables</span>
@@ -289,7 +290,7 @@ export function MissingMediaRelinkModal({ missingMedia, workspaceDir = '', onApp
             {remainingCount > 0 ? `${remainingCount} fichier${remainingCount > 1 ? 's' : ''}` : 'Tout relié'}
           </span>
           <span className="relink-spacer" />
-          <button type="button" className="relink-icon-btn" aria-label="Fermer" onClick={onClose} disabled={applying}>
+          <button type="button" className="relink-icon-btn" aria-label={t("Fermer")} onClick={onClose} disabled={applying}>
             <X />
           </button>
         </header>
@@ -306,7 +307,7 @@ export function MissingMediaRelinkModal({ missingMedia, workspaceDir = '', onApp
               <Search />
               <input
                 type="text"
-                placeholder="Filtrer par nom de fichier ou dossier…"
+                placeholder={t("Filtrer par nom de fichier ou dossier…")}
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
               />
@@ -348,7 +349,7 @@ export function MissingMediaRelinkModal({ missingMedia, workspaceDir = '', onApp
                   <button
                     type="button"
                     className="relink-ghead-chev"
-                    aria-label={isCollapsed ? 'Déplier' : 'Replier'}
+                    aria-label={isCollapsed ? t('Déplier') : 'Replier'}
                     onClick={() => toggleGroup(group.key)}
                   >
                     <ChevronDown />
@@ -371,7 +372,7 @@ export function MissingMediaRelinkModal({ missingMedia, workspaceDir = '', onApp
                       disabled={Boolean(scanningKey) || applying}
                     >
                       {isScanning ? <Loader2 className="relink-spin" /> : <FolderOpen />}
-                      {groupResolved ? 'Modifier le dossier' : 'Choisir le dossier'}
+                      {groupResolved ? t('Modifier le dossier') : t('Choisir le dossier')}
                     </button>
                   )}
                 </div>
@@ -453,7 +454,7 @@ export function MissingMediaRelinkModal({ missingMedia, workspaceDir = '', onApp
             disabled={resolvedCount === 0 || applying}
           >
             {applying && <Loader2 className="relink-spin" />}
-            {applying ? 'Application…' : 'Appliquer et enregistrer'}
+            {applying ? 'Application…' : t('Appliquer et enregistrer')}
           </button>
         </footer>
       </div>

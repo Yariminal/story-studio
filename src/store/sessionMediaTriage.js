@@ -47,7 +47,7 @@ export function collectSessionOnlyMedia({ project, mediaLibraryPaths, mediaTags 
  * session. Ce sont les dépendances qu'un nettoyage emporterait : tant qu'il en
  * reste une, le projet enregistré n'est pas autonome et la session ne peut pas
  * être supprimée. La traversée est celle de tous les consommateurs, donc une
- * liaison média du mode Avancé y figure au même titre qu'une référence d'arbre.
+ * liaison média du mode Avancé y figure au même titre qut('une référence d')arbre.
  * L'existence sur disque est vérifiée par l'appelant : ce module reste pur.
  */
 export function collectSessionBoundReferences({ project, sessionDir }) {

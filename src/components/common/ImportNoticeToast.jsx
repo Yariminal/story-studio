@@ -1,6 +1,7 @@
 import { TriangleAlert } from '../icons/LucideLocal';
 import './ImportNoticeToast.css';
 
+import { t } from '../../i18n/index.js';
 /** Bandeau d'avertissement ancré en bas (notice d'import). */
 export function ImportNoticeToast({ message, onClose }) {
   return (
@@ -9,7 +10,7 @@ export function ImportNoticeToast({ message, onClose }) {
         <TriangleAlert className="import-notice-icon" />
         <span>{message}</span>
       </span>
-      <button className="import-notice-close" onClick={onClose} title="Fermer">✕</button>
+      <button className="import-notice-close" onClick={onClose} title={t("Fermer")}>✕</button>
     </div>
   );
 }

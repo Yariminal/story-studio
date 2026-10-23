@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // L'étage de canvas : le moteur, sa caméra, ses avis et rien d'autre.
 //
 // Il reçoit la session de vue au lieu de la créer. C'est ce qui permet au banc
@@ -34,10 +35,10 @@ import {
 } from '../../store/advancedAuthoring/graphLinkDraft.js';
 
 const NOTICE_TEXT = {
-  'viewport-rejected': () => 'Caméra mémorisée inutilisable : vue recadrée.',
+  'viewport-rejected': () => t('Caméra mémorisée inutilisable : vue recadrée.'),
   'anchors-ignored': (notice) => `${notice.count} ancrage(s) mémorisé(s) ne désignent plus rien : ignorés, non supprimés.`,
-  'cache-unreadable': () => 'Vue précédente illisible : vue reconstruite.',
-  'cache-failure': (notice) => `Mémorisation de la vue indisponible${notice.disarmed ? ' (désarmée pour la session)' : ''}.`,
+  'cache-unreadable': () => t('Vue précédente illisible : vue reconstruite.'),
+  'cache-failure': (notice) => `Mémorisation de la vue indisponible${notice.disarmed ? t(' (désarmée pour la session)') : ''}.`,
 };
 
 // L'étiquette d'un lien survolé : « départ → arrivée · sortie ». Un trait droit

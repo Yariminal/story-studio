@@ -5,6 +5,7 @@ import { useEscapeKey } from '../../hooks/useEscapeKey';
 import { pathKey } from '../../utils/fileUtils';
 import './SessionMediaTriageModal.css';
 
+import { t } from '../../i18n/index.js';
 // Sous-dossier de session d'origine (voix-generees, enregistrements…) : aide à
 // reconnaître une prise IA d'un import. Dernier segment de dossier du chemin.
 function parentFolderHint(path) {
@@ -47,7 +48,7 @@ export function SessionMediaTriageModal({ items, onResolve }) {
           <div className="session-triage-body">
             <p className="session-triage-intro">
               {items.length === 1
-                ? '1 média de ta session n’est utilisé par aucune histoire.'
+                ? t('1 média de ta session n’est utilisé par aucune histoire.')
                 : `${items.length} médias de ta session ne sont utilisés par aucune histoire.`}
               {' '}Coche ceux à conserver avec le projet ; les autres seront supprimés avec la session.
             </p>

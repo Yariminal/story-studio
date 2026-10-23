@@ -1,3 +1,4 @@
+import { t } from '../i18n/index.js';
 // Le raccord React de la production graphe.
 //
 // **Ce hook ne fait pas tourner d'export.** Le travail vit dans la
@@ -197,7 +198,7 @@ async function defaultFolderPicker(defaultPath) {
   return openDialog({
     directory: true,
     multiple: false,
-    title: 'Dossier de sortie du pack',
+    title: t('Dossier de sortie du pack'),
     defaultPath,
   });
 }

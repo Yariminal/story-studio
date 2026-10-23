@@ -4,7 +4,8 @@ import { getEditedImageTags } from '../../store/mediaLibrary';
 import { pathKey } from '../../utils/fileUtils';
 import { logger } from '../../utils/logger';
 
-const SUCCESS_MESSAGE = 'Image modifiée créée dans Médias';
+import { t } from '../../i18n/index.js';
+const SUCCESS_MESSAGE = t('Image modifiée créée dans Médias');
 
 export function useMediaImageEdit({
   workspaceDir,
@@ -47,8 +48,8 @@ export function useMediaImageEdit({
     if (!item || item.kind !== 'image' || !item.exists) return;
     if (!workspaceDir?.trim() || !onMediaCreated) {
       showErrorDialog?.({
-        title: 'Création impossible',
-        message: 'Aucun dossier de projet durable n’est disponible. L’image source reste inchangée.',
+        title: t('Création impossible'),
+        message: t('Aucun dossier de projet durable n’est disponible. L’image source reste inchangée.'),
         variant: 'warning',
       });
       return;

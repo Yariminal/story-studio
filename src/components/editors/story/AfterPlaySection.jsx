@@ -45,6 +45,7 @@ import {
   selectLocalEndDraftAudio,
 } from '../../../store/localEndDraft';
 
+import { t } from '../../../i18n/index.js';
 function destinationHintLabel(label) {
   if (!label) return null;
   return String(label)
@@ -97,9 +98,9 @@ function routeDestinationFromTarget(targetId, project, allMenus, allStories) {
     const storyId = decodeNavigationStoryId(targetId);
     const story = allStories.find((s) => s.id === storyId);
     const prefix = isStoryPlayNavigationTarget(targetId)
-      ? 'Lecture directe - '
+      ? t('Lecture directe - ')
       : isStoryHomeStepNavigationTarget(targetId)
-        ? 'Retour de fin - '
+        ? t('Retour de fin - ')
         : '';
     return { name: `${prefix}${story?.name ?? 'Histoire'}`, type: 'story' };
   }
@@ -123,8 +124,8 @@ function getAutoNextContextText(autoNextResolution) {
   if (!autoNextResolution?.enabled) return null;
   if (autoNextResolution.applies) {
     return autoNextResolution.hasNextStory
-      ? "Auto-next est activé dans les options du pack : la sortie automatique lance directement l'histoire suivante."
-      : "Auto-next est activé dans les options du pack : aucune histoire suivante, la sortie automatique revient au dossier.";
+      ? t("Auto-next est activé dans les options du pack : la sortie automatique lance directement l'histoire suivante.")
+      : t("Auto-next est activé dans les options du pack : aucune histoire suivante, la sortie automatique revient au dossier.");
   }
   return null;
 }
@@ -207,7 +208,7 @@ export function AfterPlaySection({
     ? resolvedReturnSelectValueFromTarget(resolvedReturnTargetId, project)
     : null;
   const autoNextDestinationLabel = autoNextApplies
-    ? (routeFinalDestination?.name || (autoNextResolution?.isLastStory ? (parentMenu?.name || 'ce dossier') : "l'histoire suivante"))
+    ? (routeFinalDestination?.name || (autoNextResolution?.isLastStory ? (parentMenu?.name || t('ce dossier')) : t("l'histoire suivante")))
     : null;
   const returnEmptyResolvedLabel = autoNextApplies
     ? `Auto-next : ${autoNextDestinationLabel}`
@@ -223,29 +224,29 @@ export function AfterPlaySection({
     ? '__none__'
     : (node.afterPlaybackPromptHomeTarget ?? '');
   const promptAudioLabel = usesGlobalEndNodeAudio
-    ? 'Audio du message de fin'
+    ? t('Audio du message de fin')
     : hasEndNode
-      ? 'Audio de remplacement'
-      : 'Audio de fin';
+      ? t('Audio de remplacement')
+      : t('Audio de fin');
   const promptAudioDescription = usesGlobalEndNodeAudio
-    ? "Cette histoire utilise l'audio commun défini dans le message de fin du pack."
+    ? t("Cette histoire utilise l'audio commun défini dans le message de fin du pack.")
     : hasEndNode
-      ? "Joué à la place du message de fin pour cette histoire"
+      ? t("Joué à la place du message de fin pour cette histoire")
       : autoNextApplies
-        ? "Joué à la fin de l'histoire, avant la destination auto-next"
-        : "Joué à la fin de l'histoire";
+        ? t("Joué à la fin de l'histoire, avant la destination auto-next")
+        : t("Joué à la fin de l'histoire");
   const addPromptTooltip = hasEndNode
-    ? "Pour cette histoire uniquement : un seul audio joué à la fin, à la place du message de fin du pack."
-    : "Un seul audio joué à la fin (ex : « Bravo, l'histoire est finie ! »)";
+    ? t("Pour cette histoire uniquement : un seul audio joué à la fin, à la place du message de fin du pack.")
+    : t("Un seul audio joué à la fin (ex : « Bravo, l'histoire est finie ! »)");
   const addSequenceTooltip = hasEndNode
-    ? "Pour cette histoire uniquement : plusieurs étapes audio enchaînées à la place du message de fin du pack."
-    : 'Plusieurs étapes audio enchaînées (ex : question → réponse → conclusion)';
+    ? t("Pour cette histoire uniquement : plusieurs étapes audio enchaînées à la place du message de fin du pack.")
+    : t('Plusieurs étapes audio enchaînées (ex : question → réponse → conclusion)');
   const advancedTitle = hasEndNode
-    ? 'Message de fin personnalisé'
-    : 'Réglages avancés';
+    ? t('Message de fin personnalisé')
+    : t('Réglages avancés');
   const advancedDescription = hasEndNode
-      ? 'Par défaut, cette histoire utilise le message de fin du pack.'
-      : 'Options rarement nécessaires pour personnaliser la fin de cette histoire.';
+      ? t('Par défaut, cette histoire utilise le message de fin du pack.')
+      : t('Options rarement nécessaires pour personnaliser la fin de cette histoire.');
   const localDraftApplicability = localDraft
     ? getLocalEndDraftApplicability({
       draft: localDraft,
@@ -266,8 +267,8 @@ export function AfterPlaySection({
     if (rawHasPrompt || rawHasSequence) {
       const confirmed = await showConfirmDialog({
         title: 'Confirmer la suppression',
-        message: 'Supprimer le message de fin de cette histoire ?',
-        okLabel: 'Supprimer',
+        message: t('Supprimer le message de fin de cette histoire ?'),
+        okLabel: t('Supprimer'),
         okKind: 'danger',
       });
       if (!confirmed) return;
@@ -286,7 +287,7 @@ export function AfterPlaySection({
 
   function startSequence() {
     const firstStep = normalizeSequenceStep({
-      name: 'Étape 1',
+      name: t('Étape 1'),
       controlSettings: { ...SEQUENCE_CONTROL_DEFAULTS, autoplay: true, ok: true },
     }, 0);
     onUpdate({
@@ -346,14 +347,14 @@ export function AfterPlaySection({
   const routeFinalLabel = routeFinalDestination?.name || returnDestinationLabel;
   const routeFinalType = routeFinalDestination?.type || returnDestinationType;
   const routeEndStepLabel = hasSequence
-    ? 'Scénario de fin'
+    ? t('Scénario de fin')
     : hasPrompt && !usesGlobalEndNodeAudio
-      ? 'Message de fin personnalisé'
+      ? t('Message de fin personnalisé')
       : `${project?.endNodeName || 'Message de fin'}${nightModeActive ? ' (mode nuit)' : ''}`;
   const routeContextText = autoNextApplies
-    ? 'Auto-next activé'
+    ? t('Auto-next activé')
     : usesStorySpecificEndReturn
-      ? 'Destination réglée dans cette histoire'
+      ? t('Destination réglée dans cette histoire')
       : null;
   const showEndModeControls = !hasGeneratedEndNode && !autoNextApplies;
   const showReturnDestinationRow = !autoNextApplies && (
@@ -364,7 +365,7 @@ export function AfterPlaySection({
   const afterPlayNotes = [
     autoNextContextText,
     autoNextApplies
-      ? 'Les retours personnalisés, le message de fin et les scénarios de fin restent dans le projet, mais auto-next prend la main.'
+      ? t('Les retours personnalisés, le message de fin et les scénarios de fin restent dans le projet, mais auto-next prend la main.')
       : null,
   ].filter(Boolean);
   const showAfterPlayIntro = afterPlayNotes.length > 0;
@@ -380,7 +381,7 @@ export function AfterPlaySection({
         <div className="field-row end-local-audio-row">
           <div style={{ flex: 1 }}>
             <span className="field-label">Audio de la fin locale</span>
-            <div className="after-play-muted">{localDraft.audio ? basename(localDraft.audio) : 'Aucun audio choisi'}</div>
+            <div className="after-play-muted">{localDraft.audio ? basename(localDraft.audio) : t('Aucun audio choisi')}</div>
           </div>
           <Button size="sm" onClick={() => void pickLocalDraftAudio()}>Choisir un audio</Button>
           {localDraft.audio ? <Button size="sm" onClick={() => setLocalDraft((draft) => ({ ...draft, audio: null, audioSource: null }))}>Retirer</Button> : null}
@@ -394,7 +395,7 @@ export function AfterPlaySection({
               allMenus={allMenus}
               allStories={allStories}
               currentStoryId={node.id}
-              emptyLabel="Comme à la fin de l'histoire"
+              emptyLabel={t("Comme à la fin de l'histoire")}
             />
           </div>
           <div className="field-row field-row--flush">
@@ -465,24 +466,24 @@ export function AfterPlaySection({
                 Rattacher au message du pack
               </Button>
             )}
-            <Tooltip text={showSequenceEditor ? 'Masquer le scénario' : 'Afficher le scénario'}>
+            <Tooltip text={showSequenceEditor ? t('Masquer le scénario') : t('Afficher le scénario')}>
               <button
                 type="button"
                 className="sequence-summary-icon-btn"
                 onClick={() => setShowSequenceEditor((v) => !v)}
-                aria-label={showSequenceEditor ? 'Masquer le scénario' : 'Afficher le scénario'}
+                aria-label={showSequenceEditor ? t('Masquer le scénario') : t('Afficher le scénario')}
               >
                 {showSequenceEditor
                   ? <ChevronUp className="sequence-icon" />
                   : <ChevronDown className="sequence-icon" />}
               </button>
             </Tooltip>
-            <Tooltip text="Retirer le scénario de fin">
+            <Tooltip text={t("Retirer le scénario de fin")}>
               <button
                 type="button"
                 className="story-prompt-trash"
                 onClick={clearEndAfterPlayback}
-                aria-label="Retirer le scénario de fin"
+                aria-label={t("Retirer le scénario de fin")}
               >
                 <Trash2 className="card-danger-icon" />
               </button>
@@ -510,12 +511,12 @@ export function AfterPlaySection({
           <span className="field-label">
             Message audio de fin
           </span>
-          <Tooltip text="Retirer le message audio de fin">
+          <Tooltip text={t("Retirer le message audio de fin")}>
             <button
               type="button"
               className="story-prompt-trash"
               onClick={clearEndAfterPlayback}
-              aria-label="Retirer le message audio de fin"
+              aria-label={t("Retirer le message audio de fin")}
             >
               <Trash2 className="card-danger-icon" />
             </button>
@@ -579,7 +580,7 @@ export function AfterPlaySection({
                   allMenus={allMenus}
                   allStories={allStories}
                   currentStoryId={node.id}
-                  emptyLabel="Comme à la fin de l'histoire"
+                  emptyLabel={t("Comme à la fin de l'histoire")}
                 />
               </div>
               <div className="field-row field-row--flush">
@@ -660,7 +661,7 @@ export function AfterPlaySection({
           {showEndModeControls && (
             <div className="after-play-end-row">
               <span className="after-play-end-label">À la fin</span>
-              <div className="story-end-mode" role="group" aria-label="Comportement à la fin de l'histoire">
+              <div className="story-end-mode" role="group" aria-label={t("Comportement à la fin de l'histoire")}>
                 <button
                   type="button"
                   className={`story-end-mode-btn ${playbackEndMode === 'stay' ? 'is-active' : ''}`}
@@ -688,17 +689,17 @@ export function AfterPlaySection({
           <div className="after-play-destination-copy">
             <span className="field-label">
               {usesStorySpecificEndReturn
-                ? 'Destination après le message de fin'
+                ? t('Destination après le message de fin')
                 : autoNextApplies
-                  ? 'Exception à auto-next'
-                  : "Destination après l'histoire"}
+                  ? t('Exception à auto-next')
+                  : t("Destination après l'histoire")}
             </span>
             <div className="after-play-muted">
               {usesStorySpecificEndReturn
-                ? 'Utilisée lorsque le retour du message de fin est réglé sur « Selon chaque histoire ». Une valeur vide suit le dossier ou le comportement par défaut.'
+                ? t('Utilisée lorsque le retour du message de fin est réglé sur « Selon chaque histoire ». Une valeur vide suit le dossier ou le comportement par défaut.')
                 : autoNextApplies
-                ? 'Laisser vide pour suivre le comportement auto-next global.'
-                : "L'écran ou le menu affiché à la sortie automatique."}
+                ? t('Laisser vide pour suivre le comportement auto-next global.')
+                : t("L'écran ou le menu affiché à la sortie automatique.")}
             </div>
           </div>
           <div className="after-play-destination-select">
@@ -709,7 +710,7 @@ export function AfterPlaySection({
               allStories={allStories}
               currentStoryId={node.id}
               allowCurrentStory={!parentMenu}
-              emptyLabel={autoNextApplies ? 'Suit auto-next global' : (inheritedReturnLabel || resolvedReturnDestination?.name || 'Choisir une destination')}
+              emptyLabel={autoNextApplies ? 'Suit auto-next global' : (inheritedReturnLabel || resolvedReturnDestination?.name || t('Choisir une destination'))}
               resolvedDefaultValue={resolvedReturnValue}
               resolvedDefaultLabel={resolvedReturnDestination?.name}
               resolvedDefaultKind={resolvedReturnDestination?.type}

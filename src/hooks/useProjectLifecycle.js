@@ -2,6 +2,7 @@ import { logger } from '../utils/logger';
 import { bumpPackVersion } from '../utils/packConvention';
 import { DEFAULT_PROJECT } from '../store/projectStore';
 
+import { t } from '../i18n/index.js';
 // Grappe « cycle de vie du projet » extraite d'AppContent : retour à l'accueil
 // (reset vers l'accueil, PAS de session), choix du type (création de
 // la session éphémère) et atterrissage depuis les funnels « Modifier un pack »
@@ -61,7 +62,7 @@ export function useProjectLifecycle({
     } catch (error) {
       logger.error('session:start-error', error);
       showErrorDialog({
-        title: 'Nouveau projet',
+        title: t('Nouveau projet'),
         message: `Impossible de préparer le dossier de travail : ${error}`,
       });
     }
@@ -88,7 +89,7 @@ export function useProjectLifecycle({
         // comme depuis l'accueil, jamais du projet encore affiché.
         baseProject: DEFAULT_PROJECT,
       });
-      if (!transformed) throw new Error('Aucune histoire éditable trouvée dans ce pack.');
+      if (!transformed) throw new Error(t('Aucune histoire éditable trouvée dans ce pack.'));
       // Suggérer une version incrémentée (_V2 si aucune) et forcer la modal de
       // métadonnées pré-remplie à la première génération du pack importé.
       const landedProject = transformed.project.packMetadata
@@ -103,7 +104,7 @@ export function useProjectLifecycle({
       // Comme l'atterrissage graphe : nouvelle époque, rien de l'ancien projet.
       const depthOutcome = store.loadProject(landedProject);
       if (!depthOutcome.allowed) {
-        throw new Error(depthOutcome.message || 'Limite d’imbrication des Dossiers atteinte.');
+        throw new Error(depthOutcome.message || t('Limite d’imbrication des Dossiers atteinte.'));
       }
       store.setSelectedId('root');
       // Comme l'atterrissage graphe : ni les étiquettes, ni la médiathèque, ni
@@ -118,8 +119,8 @@ export function useProjectLifecycle({
       if (transformed.advancedTransitionsDetected) {
         const firstWarning = transformed.unresolvedTransitions[0]?.message;
         setImportNotice(
-          "Certaines transitions du pack importé n'ont pas pu être modélisées complètement. "
-          + "Story Studio a conservé la structure reconnue, mais vérifie les retours concernés avant export."
+          t("Certaines transitions du pack importé n'ont pas pu être modélisées complètement. ")
+          + t("Story Studio a conservé la structure reconnue, mais vérifie les retours concernés avant export.")
           + (firstWarning ? ` Exemple : ${firstWarning}` : '')
         );
       }

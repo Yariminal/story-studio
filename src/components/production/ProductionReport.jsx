@@ -141,7 +141,7 @@ export function ProductionReport({
       {hasProgress ? (
         <div className="production-report__progress">
           <p className="production-report__count">
-            {progress.count} étape{progress.count > 1 ? 's' : ''} journalisée{progress.count > 1 ? 's' : ''}
+            {progress.count} étape{progress.count > 1 ? 's' : 't('} journalisée{progress.count > 1 ? ')s' : ''}
           </p>
           <pre ref={logRef} className="production-report__log" aria-label="Journal de la production">
             {progress.lines.join('\n')}

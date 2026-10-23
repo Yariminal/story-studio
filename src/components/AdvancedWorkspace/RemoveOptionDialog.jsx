@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // Retirer une option ne choisit jamais une autre destination à la place de
 // l'auteur. Les transitions qui visaient cette occurrence perdent leur lien ;
 // le moteur les signale ensuite comme raccords rompus.
@@ -26,11 +27,11 @@ export function RemoveOptionDialog({ index, actionPath, ordinal, busy, onCancel,
     <AdvancedDialog
       title={`Retirer le choix ${ordinal}`}
       description={impact.decisions.length === 0
-        ? "Ce choix sera retiré de la liste."
+        ? t("Ce choix sera retiré de la liste.")
         : `Ce choix sera retiré. ${impact.decisions.length} raccord(s) vers lui seront coupés et signalés dans « À corriger ».`}
       onCancel={onCancel}
       onConfirm={confirm}
-      confirmLabel="Retirer"
+      confirmLabel={t("Retirer")}
       confirmKind="danger"
       busy={busy}
     >
@@ -39,7 +40,7 @@ export function RemoveOptionDialog({ index, actionPath, ordinal, busy, onCancel,
           {impact.decisions.map((row) => (
             <li key={`${row.stagePath}#${row.slot}`} className="advanced-decision-list__row">
               <span className="advanced-decision-list__what">
-                <strong>{row.stageLabel}</strong> — {row.slot === 'ok' ? 'OK' : 'Accueil'}
+                <strong>{row.stageLabel}</strong> — {row.slot === 'ok' ? t('OK') : 'Accueil'}
               </span>
             </li>
           ))}

@@ -2,6 +2,7 @@ import { makeId, normalizeMenuEntry, normalizeRefEntry, normalizeStoryEntry, nor
 import { walkMediaBindingReferences } from './mediaBindings.js';
 import { refTargetEntryId } from '../navigationTargets.js';
 
+import { t } from '../../i18n/index.js';
 function buildProjectIndexEntries(entries, ancestors, level, index) {
   let playableCount = 0;
 
@@ -91,7 +92,7 @@ function walkEntries(entries, visitor, ancestors = []) {
 }
 
 export function createMenuEntry(fields = {}) {
-  return normalizeMenuEntry({ name: 'Nouveau dossier', ...fields });
+  return normalizeMenuEntry({ name: t('Nouveau dossier'), ...fields });
 }
 
 export function createStoryEntry(fields = {}) {
@@ -299,7 +300,7 @@ export function* walkProjectMediaReferences(project) {
 
   yield* walkRootReferences(project);
   yield* walkMediaBindingReferences(project);
-  yield* walkNativeGraphReferences(project.nativeGraph, 'graphe natif (racine)');
+  yield* walkNativeGraphReferences(project.nativeGraph, t('graphe natif (racine)'));
   yield* walkEntriesMedia(project.rootEntries ?? []);
 }
 
@@ -319,10 +320,10 @@ function* walkEntriesMedia(entries) {
 }
 
 function* walkRootReferences(project) {
-  if (project.rootAudio) yield { obj: project, key: 'rootAudio', path: project.rootAudio, label: 'Audio de couverture', scope: 'root' };
-  if (project.rootImage) yield { obj: project, key: 'rootImage', path: project.rootImage, label: 'Image de couverture', scope: 'root' };
-  if (project.thumbnailImage) yield { obj: project, key: 'thumbnailImage', path: project.thumbnailImage, label: 'Image bibliothèque', scope: 'root' };
-  if (project.nightModeAudio) yield { obj: project, key: 'nightModeAudio', path: project.nightModeAudio, label: 'Audio mode nuit', scope: 'root' };
+  if (project.rootAudio) yield { obj: project, key: 'rootAudio', path: project.rootAudio, label: t('Audio de couverture'), scope: 'root' };
+  if (project.rootImage) yield { obj: project, key: 'rootImage', path: project.rootImage, label: t('Image de couverture'), scope: 'root' };
+  if (project.thumbnailImage) yield { obj: project, key: 'thumbnailImage', path: project.thumbnailImage, label: t('Image bibliothèque'), scope: 'root' };
+  if (project.nightModeAudio) yield { obj: project, key: 'nightModeAudio', path: project.nightModeAudio, label: t('Audio mode nuit'), scope: 'root' };
 }
 
 function* walkNativeGraphReferences(graph, labelPrefix) {

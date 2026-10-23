@@ -3,6 +3,7 @@ import { X } from '../icons/LucideLocal';
 import { useEscapeKey } from '../../hooks/useEscapeKey';
 import './funnels.css';
 
+import { t } from '../../i18n/index.js';
 /**
  * Coquille commune des funnels : overlay assombri/flouté
  * (`AppModalPortal`) + modale responsive avec en-tête (pastille violette, titre,
@@ -61,7 +62,7 @@ export function FunnelShell({
           <button
             type="button"
             className="funnel-icon-btn"
-            aria-label="Fermer"
+            aria-label={t("Fermer")}
             onClick={onClose}
             disabled={closeDisabled}
           >

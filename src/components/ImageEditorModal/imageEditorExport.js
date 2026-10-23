@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // Export PNG 320x240 d'une edition d'image vers le filesystem Tauri.
 // Extrait de ImageEditorModal.jsx : isole le pipeline canvas -> blob -> fichier
 // vers un emplacement géré du workspace effectif, ou vers le cache temporaire
@@ -40,7 +41,7 @@ async function writeUniqueImage({ directory, sourcePath, bytes, managedWorkspace
       throw error;
     }
   }
-  throw new Error('Impossible de trouver un nom disponible pour l’image modifiée.');
+  throw new Error(t('Impossible de trouver un nom disponible pour l’image modifiée.'));
 }
 
 async function cleanupIncompleteExport(imagePath) {
@@ -74,8 +75,8 @@ export async function exportEditedImage({
 
   const managedWorkspace = workspaceDir?.trim();
   if (requireManagedOutput && !managedWorkspace) {
-    const error = new Error('Aucun workspace géré n’est disponible pour enregistrer ce nouveau média.');
-    error.userMessage = 'Aucun dossier de projet durable n’est disponible. L’image n’a pas été créée.';
+    const error = new Error(t('Aucun workspace géré n’est disponible pour enregistrer ce nouveau média.'));
+    error.userMessage = t('Aucun dossier de projet durable n’est disponible. L’image n’a pas été créée.');
     throw error;
   }
 

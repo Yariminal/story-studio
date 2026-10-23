@@ -1,3 +1,4 @@
+import { t } from '../i18n/index.js';
 function getEntryName(projectIndex, entryId, fallback) {
   const entry = projectIndex?.entryById?.get?.(entryId);
   const name = typeof entry?.name === 'string' ? entry.name.trim() : '';
@@ -12,7 +13,7 @@ function fromContextLabel(context) {
     : '';
   if (regeneratedLabel) return regeneratedLabel;
   const imageLabel = typeof context?.currentImageLabel === 'string' ? context.currentImageLabel.trim() : '';
-  return imageLabel && imageLabel !== 'image actuelle' ? imageLabel : '';
+  return imageLabel && imageLabel !== t('image actuelle') ? imageLabel : '';
 }
 
 export function getImageJobTargetLabel(context = null, projectIndex = null) {
@@ -22,9 +23,9 @@ export function getImageJobTargetLabel(context = null, projectIndex = null) {
     : (typeof context?.regenerateJob?.fieldId === 'string' ? context.regenerateJob.fieldId : '');
   if (!fieldId) return explicitLabel;
 
-  if (fieldId === 'root:coverImage') return 'Menu racine - image Lunii + catalogue';
-  if (fieldId === 'root:rootImage') return 'Menu racine - image Lunii';
-  if (fieldId === 'root:thumbnailImage') return 'Menu racine - vignette catalogue';
+  if (fieldId === 'root:coverImage') return t('Menu racine - image Lunii + catalogue');
+  if (fieldId === 'root:rootImage') return t('Menu racine - image Lunii');
+  if (fieldId === 'root:thumbnailImage') return t('Menu racine - vignette catalogue');
 
   const homeStepSuffix = ':homeStep:image';
   if (fieldId.endsWith(homeStepSuffix)) {

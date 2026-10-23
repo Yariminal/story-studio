@@ -9,6 +9,7 @@ import { packIdentityRefusal } from '../../store/packIdentityCheck';
 import { useErrorDialog } from '../common/Dialog';
 import './CommunityPackMetadataModal.css';
 
+import { t } from '../../i18n/index.js';
 const AGE_CHIPS = ['2', '3', '6', '9', '12'];
 
 function normalizeVersion(value) {
@@ -54,7 +55,7 @@ function defaultDraft(report) {
 }
 
 function filenameTokens(exportName) {
-  if (!exportName) return [{ kind: 'empty', text: 'Titre requis' }];
+  if (!exportName) return [{ kind: 'empty', text: t('Titre requis') }];
   const tokens = [];
   const ageMatch = exportName.match(/^(\d+\+\])/);
   let rest = exportName;
@@ -114,12 +115,12 @@ export function CommunityPackMetadataModal({
         uuid: currentUuid,
         report,
         promise: showConfirmDialog({
-          title: 'Générer un nouvel UUID ?',
+          title: t('Générer un nouvel UUID ?'),
           message:
-            'La correction crée une nouvelle archive. Un nouvel UUID permet de '
-            + "l'identifier comme un pack distinct.",
+            t('La correction crée une nouvelle archive. Un nouvel UUID permet de ')
+            + t("l'identifier comme un pack distinct."),
           variant: 'warning',
-          okLabel: 'Générer un nouvel UUID',
+          okLabel: t('Générer un nouvel UUID'),
           cancelLabel: "Conserver l'UUID actuel",
         }),
       };
@@ -171,7 +172,7 @@ export function CommunityPackMetadataModal({
       data-modal-surface=""
       role="dialog"
       aria-modal="true"
-      aria-label="Correction des métadonnées"
+      aria-label={t("Correction des métadonnées")}
       onMouseDown={onCancel}
     >
       <div className="checker-meta-modal" onMouseDown={(event) => event.stopPropagation()}>
@@ -179,10 +180,10 @@ export function CommunityPackMetadataModal({
           <span className="checker-meta-header-icon"><FilePen className="checker-icon" aria-hidden="true" /></span>
           <div className="checker-meta-heading">
             <span>Correction des métadonnées</span>
-            <h2 title={exportName || undefined}>{exportName || 'Nom du pack'}</h2>
+            <h2 title={exportName || undefined}>{exportName || t('Nom du pack')}</h2>
             <p>Chaque correction crée une nouvelle révision : la version est proposée à +1.</p>
           </div>
-          <button type="button" className="checker-meta-close" onClick={onCancel} aria-label="Fermer">
+          <button type="button" className="checker-meta-close" onClick={onCancel} aria-label={t("Fermer")}>
             <X className="checker-icon" aria-hidden="true" />
           </button>
         </header>
@@ -193,7 +194,7 @@ export function CommunityPackMetadataModal({
               <Package className="checker-icon" aria-hidden="true" />
             </div>
             <div>
-              <strong>{report?.packName || 'Pack communautaire'}</strong>
+              <strong>{report?.packName || t('Pack communautaire')}</strong>
               <span title={report?.zipPath}>{report?.zipPath}</span>
             </div>
             {issues.length > 0 ? (
@@ -220,7 +221,7 @@ export function CommunityPackMetadataModal({
                 autoFocus
                 value={draft.title || ''}
                 onChange={(event) => updateField('title', event.target.value)}
-                placeholder="Titre du pack"
+                placeholder={t("Titre du pack")}
               />
             </label>
 
@@ -249,7 +250,7 @@ export function CommunityPackMetadataModal({
             <div className="checker-meta-grid">
               <label>
                 <span>Auteur</span>
-                <input value={draft.author || ''} onChange={(event) => updateField('author', event.target.value)} placeholder="Nom de l'auteur" />
+                <input value={draft.author || ''} onChange={(event) => updateField('author', event.target.value)} placeholder={t("Nom de l'auteur")} />
               </label>
               <label>
                 <span>Version</span>
@@ -270,13 +271,13 @@ export function CommunityPackMetadataModal({
 
             <label>
               <span>Description</span>
-              <textarea value={draft.description || ''} onChange={(event) => updateField('description', event.target.value)} rows={3} placeholder="Description ou changelog..." />
+              <textarea value={draft.description || ''} onChange={(event) => updateField('description', event.target.value)} rows={3} placeholder={t("Description ou changelog...")} />
             </label>
 
             <label>
               <span>UUID</span>
               <div className="checker-meta-uuid">
-                <input value={draft.uuid || ''} onChange={(event) => updateField('uuid', event.target.value)} placeholder="UUID du pack" />
+                <input value={draft.uuid || ''} onChange={(event) => updateField('uuid', event.target.value)} placeholder={t("UUID du pack")} />
                 <button type="button" onClick={regenerateUuid}>Générer</button>
               </div>
               {identityRefusal ? <p className="funnel-error" role="alert">{identityRefusal}</p> : null}
@@ -297,7 +298,7 @@ export function CommunityPackMetadataModal({
         <footer className="checker-meta-footer">
           <Button onClick={onCancel} disabled={busy}>Annuler</Button>
           <button type="button" className="chrome-toolbar-cta checker-correction-cta" onClick={submit} disabled={!canSubmit}>
-            {busy ? 'Correction...' : 'Corriger le pack'}
+            {busy ? 'Correction...' : t('Corriger le pack')}
           </button>
         </footer>
       </div>

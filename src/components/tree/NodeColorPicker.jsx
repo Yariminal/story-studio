@@ -1,5 +1,6 @@
 import { TREE_COLOR_PALETTE } from './treeOperations.js';
 
+import { t } from '../../i18n/index.js';
 // Palette partagée par le menu du Libre et l'éditeur Graphe. L'état mixte est
 // un état d'affichage : cliquer une couleur l'applique à toute la sélection,
 // cliquer × efface toute la sélection.
@@ -29,8 +30,8 @@ export function NodeColorPicker({
         <button
           type="button"
           className={`ctx-color-clear${currentColor === null ? ' is-active' : ''}`}
-          title={currentColor === '__mixed__' ? 'Couleurs différentes — cliquer pour effacer' : 'Aucune couleur'}
-          aria-label="Retirer la couleur"
+          title={currentColor === '__mixed__' ? t('Couleurs différentes — cliquer pour effacer') : t('Aucune couleur')}
+          aria-label={t("Retirer la couleur")}
           aria-pressed={currentColor === null}
           disabled={disabled}
           onClick={() => onChange(null)}

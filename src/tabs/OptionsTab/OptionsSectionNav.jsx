@@ -1,25 +1,26 @@
+import { t } from '../../i18n/index.js';
 const OPTION_GROUPS = [
   {
-    label: 'Général',
+    label: t('Général'),
     items: [
-      { id: 'save', label: 'Enregistrement' },
-      { id: 'interface', label: 'Interface' },
-      { id: 'projects-media', label: 'Projets et médias' },
+      { id: 'save', label: t('Enregistrement') },
+      { id: 'interface', label: t('Interface') },
+      { id: 'projects-media', label: t('Projets et médias') },
     ],
   },
   {
-    label: 'Intelligence artificielle',
+    label: t('Intelligence artificielle'),
     items: [
-      { id: 'xtts', label: 'Voix locale' },
-      { id: 'comfyui', label: 'Images IA' },
+      { id: 'xtts', label: t('Voix locale') },
+      { id: 'comfyui', label: t('Images IA') },
     ],
   },
   {
-    label: 'Avancé',
+    label: t('Avancé'),
     items: [
-      { id: 'advanced', label: 'Silences audio' },
-      { id: 'youtube', label: 'YouTube (yt-dlp)' },
-      { id: 'diagnostic', label: 'Diagnostic' },
+      { id: 'advanced', label: t('Silences audio') },
+      { id: 'youtube', label: t('YouTube (yt-dlp)') },
+      { id: 'diagnostic', label: t('Diagnostic') },
     ],
   },
 ];
@@ -28,7 +29,7 @@ export const OPTION_SECTION_IDS = OPTION_GROUPS.flatMap((group) => group.items.m
 
 export function OptionsSectionNav({ activeSectionId, onNavigate }) {
   return (
-    <nav className="opts-nav" aria-label="Sections des préférences">
+    <nav className="opts-nav" aria-label={t("Sections des préférences")}>
       {OPTION_GROUPS.map((group) => (
         <div className="opts-nav-group" key={group.label}>
           <div className="opts-nav-group-title">{group.label}</div>

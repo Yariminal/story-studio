@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // Brouillon pur du câblage direct du graphe.
 //
 // Les prises visibles décrivent les deux primitives réelles du dialecte :
@@ -53,7 +54,7 @@ export function graphLinkPorts(entry) {
         slot: 'home',
         active: settable,
         activateControl: !enabled(controls.home),
-        label: 'Raccorder le bouton Accueil (homeTransition)',
+        label: t('Raccorder le bouton Accueil (homeTransition)'),
         control: 'home',
       },
     ];
@@ -64,7 +65,7 @@ export function graphLinkPorts(entry) {
     return [{
       id: GRAPH_LINK_PORTS.ACTION_OPTION,
       active: true,
-      label: missingOptionIndex >= 0 ? 'Raccorder le choix manquant' : 'Ajouter un choix',
+      label: missingOptionIndex >= 0 ? t('Raccorder le choix manquant') : t('Ajouter un choix'),
       suggestedIndex: missingOptionIndex >= 0 ? missingOptionIndex : options.length,
       missingOptionIndex: missingOptionIndex >= 0 ? missingOptionIndex : null,
     }];
@@ -140,18 +141,18 @@ export function resolveGraphLinkDrop(index, draft, targetPath, graphPoint) {
       sourcePath: draft.sourcePath,
       targetPath,
       reason: draft.sourceKind === STAGE_KIND
-        ? 'Un Écran se raccorde à une liste de choix.'
-        : 'Une liste de choix se raccorde à un Écran.',
+        ? t('Un Écran se raccorde à une liste de choix.')
+        : t('Une liste de choix se raccorde à un Écran.'),
     };
   }
-  // L'Écran d'entrée n'est jamais le choix d'une liste : le moteur refuserait
+  // Lt('Écran d')entrée n'est jamais le choix d'une liste : le moteur refuserait
   // le geste, le trait le dit avant.
   if (draft.sourceKind === ACTION_KIND && isEntryStage(target)) {
     return {
       kind: GRAPH_LINK_DROP.INVALID,
       sourcePath: draft.sourcePath,
       targetPath,
-      reason: 'L’Écran d’entrée ne peut pas être le choix d’une liste : on y revient par le bouton Accueil laissé sans destination.',
+      reason: t('L’Écran d’entrée ne peut pas être le choix d’une liste : on y revient par le bouton Accueil laissé sans destination.'),
     };
   }
   return {
@@ -192,7 +193,7 @@ export function isGraphLinkAutoApplyable(intent) {
 
 export function buildExistingGraphLinkGesture(intent, decision) {
   if (intent?.kind !== GRAPH_LINK_DROP.EXISTING) {
-    throw new TypeError('Le raccord doit viser un nœud existant.');
+    throw new TypeError(t('Le raccord doit viser un nœud existant.'));
   }
   if (intent.sourceKind === STAGE_KIND) {
     if (intent.targetOptionCount === 0) {
@@ -217,7 +218,7 @@ export function buildExistingGraphLinkGesture(intent, decision) {
       ? RANDOM_OPTION_INDEX
       : Number(decision?.selection ?? 0);
     if (decision?.selection !== 'random' && (!Number.isInteger(selection) || selection < 0)) {
-      throw new TypeError('Choisir un choix d’arrivée fixe ou tiré au sort.');
+      throw new TypeError(t('Choisir un choix d’arrivée fixe ou tiré au sort.'));
     }
     return advancedGestures.setStageTransition(
       intent.sourceId,
@@ -249,7 +250,7 @@ export function buildExistingGraphLinkGesture(intent, decision) {
   const proposed = decision?.insertionIndex ?? intent.suggestedIndex ?? null;
   const insertionIndex = proposed === null ? Number.NaN : Number(proposed);
   if (!Number.isInteger(insertionIndex) || insertionIndex < 0) {
-    throw new TypeError('Choisir la place du nouveau choix.');
+    throw new TypeError(t('Choisir la place du nouveau choix.'));
   }
   return advancedGestures.insertActionOption(
     intent.sourceId,

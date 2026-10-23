@@ -40,17 +40,18 @@ import {
 } from './packCheckerIssueClassification';
 import './CommunityPackChecker.css';
 
+import { t } from '../../i18n/index.js';
 const EDGE_SILENCE_LABEL = formatPackAudioEdgeSilence();
 
 const PROBLEM_SECTIONS = [
   {
     id: 'quality',
-    title: 'Audio de mauvaise qualité (source saturée)',
+    title: t('Audio de mauvaise qualité (source saturée)'),
     badge: 'Source',
     bucket: 'listen',
     Icon: TriangleAlert,
-    explanation: "La saturation est présente dans le fichier d'origine : aucune correction ne la rattrape. Reprends le pack depuis une meilleure source.",
-    action: 'Reprends le pack depuis une meilleure source.',
+    explanation: t("La saturation est présente dans le fichier d'origine : aucune correction ne la rattrape. Reprends le pack depuis une meilleure source."),
+    action: t('Reprends le pack depuis une meilleure source.'),
     match: (issue) => (
       issue.category === 'audio'
       && !issue.autoFixAvailable
@@ -59,21 +60,21 @@ const PROBLEM_SECTIONS = [
   },
   {
     id: 'listen',
-    title: 'À écouter',
+    title: t('À écouter'),
     badge: 'Manuel',
     bucket: 'listen',
     Icon: Info,
     explanation: "L'outil ne sait pas corriger ce point tout seul.",
-    action: "Écoute ou vérifie ces fichiers avant de valider le pack.",
+    action: t("Écoute ou vérifie ces fichiers avant de valider le pack."),
     match: (issue) => !isOptionalSilenceIssue(issue) && !issue.autoFixAvailable && issue.category !== 'structure' && issue.category !== 'title',
   },
   {
     id: 'silence',
-    title: 'Silence début / fin incorrect',
+    title: t('Silence début / fin incorrect'),
     badge: 'Auto',
     bucket: 'fix',
     Icon: Scissors,
-    explanation: 'Le blanc avant ou après la voix sort de la fenêtre attendue.',
+    explanation: t('Le blanc avant ou après la voix sort de la fenêtre attendue.'),
     action: `On ajuste le silence vers ${EDGE_SILENCE_LABEL}.`,
     match: isAutomaticSilenceIssue,
   },
@@ -83,63 +84,63 @@ const PROBLEM_SECTIONS = [
     badge: 'Facultatif',
     bucket: 'optional',
     Icon: Scissors,
-    explanation: 'Ces silences longs peuvent être volontaires. Le pack reste conforme.',
+    explanation: t('Ces silences longs peuvent être volontaires. Le pack reste conforme.'),
     action: `Chaque bord peut être ramené à ${EDGE_SILENCE_LABEL} si tu le souhaites.`,
     match: isOptionalSilenceIssue,
   },
   {
     id: 'volume',
-    title: 'Niveau sonore incorrect',
+    title: t('Niveau sonore incorrect'),
     badge: 'Auto',
     bucket: 'fix',
     Icon: Music,
-    explanation: 'Le niveau moyen est trop faible ou trop fort par rapport au reste.',
-    action: 'On normalise le volume au bon niveau.',
+    explanation: t('Le niveau moyen est trop faible ou trop fort par rapport au reste.'),
+    action: t('On normalise le volume au bon niveau.'),
     match: isAutomaticVolumeIssue,
   },
   {
     id: 'audioFormat',
-    title: 'Format audio à convertir',
+    title: t('Format audio à convertir'),
     badge: 'Auto',
     bucket: 'fix',
     Icon: Wrench,
-    explanation: "L'audio n'est pas dans le format attendu.",
+    explanation: t("L'audio n'est pas dans le format attendu."),
     action: 'On reconvertit en MP3 mono 44,1 kHz.',
     match: (issue) => {
       const message = issue.message.toLowerCase();
       return issue.autoFixAvailable && issue.category === 'audio' && (
-        message.includes('format') || message.includes('fréquence') || message.includes('mono')
+        message.includes('format') || message.includes(t('fréquence')) || message.includes('mono')
       );
     },
   },
   {
     id: 'image',
-    title: 'Image à corriger',
+    title: t('Image à corriger'),
     badge: 'Auto',
     bucket: 'fix',
     Icon: Image,
-    explanation: "L'image n'a pas le format ou la taille attendue.",
+    explanation: t("L'image n'a pas le format ou la taille attendue."),
     action: 'On convertit ou redimensionne en 320×240.',
     match: (issue) => issue.autoFixAvailable && issue.category === 'image',
   },
   {
     id: 'title',
-    title: 'Nom du pack à corriger',
-    badge: 'Assisté',
+    title: t('Nom du pack à corriger'),
+    badge: t('Assisté'),
     bucket: 'fix',
     Icon: FilePen,
-    explanation: 'Le nom ou la convention du pack demande une correction.',
-    action: 'On ouvre les métadonnées avant de créer le ZIP corrigé.',
+    explanation: t('Le nom ou la convention du pack demande une correction.'),
+    action: t('On ouvre les métadonnées avant de créer le ZIP corrigé.'),
     match: (issue) => issue.category === 'title',
   },
   {
     id: 'structure',
-    title: 'Structure à vérifier',
+    title: t('Structure à vérifier'),
     badge: 'Manuel',
     bucket: 'listen',
     Icon: Network,
-    explanation: 'Un lien, une référence ou un champ du pack demande une vérification.',
-    action: 'Vérifie la navigation ou les fichiers référencés.',
+    explanation: t('Un lien, une référence ou un champ du pack demande une vérification.'),
+    action: t('Vérifie la navigation ou les fichiers référencés.'),
     match: (issue) => issue.category === 'structure',
   },
 ];
@@ -157,7 +158,7 @@ function severityLabel(severity) {
     case 'info':
       return 'Info';
     case 'ok':
-      return 'OK';
+      return t('OK');
     default:
       return severity || 'Info';
   }
@@ -178,19 +179,19 @@ function measuredIssueSummary(issue, item, kind) {
         : 'trop bas';
       return `Niveau sonore ${direction} (${formatLufs(lufs)})`;
     }
-    if (lower.includes('fréquence')) {
-      return `Échantillonnage incorrect (${item?.sampleRate ? `${item.sampleRate} Hz` : 'non mesuré'})`;
+    if (lower.includes(t('fréquence'))) {
+      return `Échantillonnage incorrect (${item?.sampleRate ? `${item.sampleRate} Hz` : t('non mesuré')})`;
     }
     if (lower.includes('mono')) {
-      return `Audio non mono (${item?.channels || 'canaux non mesurés'})`;
+      return `Audio non mono (${item?.channels || t('canaux non mesurés')})`;
     }
     if (lower.includes('format')) {
-      return `Mauvais format audio (${item?.codec || 'format non mesuré'})`;
+      return `Mauvais format audio (${item?.codec || t('format non mesuré')})`;
     }
   }
   if (kind === 'image') {
-    const dimensions = item?.width && item?.height ? `${item.width}×${item.height}` : 'dimensions non mesurées';
-    const format = item?.format || 'format non mesuré';
+    const dimensions = item?.width && item?.height ? `${item.width}×${item.height}` : t('dimensions non mesurées');
+    const format = item?.format || t('format non mesuré');
     if (lower.includes('format')) return `Mauvais format image (${format})`;
     if (lower.includes('dimension') || lower.includes('taille')) return `Dimensions incorrectes (${dimensions})`;
     return `Image incorrecte (${dimensions} · ${format})`;
@@ -202,7 +203,7 @@ function silenceSummaryParts(issues, item) {
   const hasStart = issues.some((issue) => {
     if (silenceEdgeForIssue(issue) === 'leading') return true;
     const message = (issue.message || '').toLowerCase();
-    return message.includes('début') || message.includes('debut');
+    return message.includes(t('début')) || message.includes('debut');
   });
   const hasEnd = issues.some((issue) => (
     silenceEdgeForIssue(issue) === 'trailing'
@@ -219,7 +220,7 @@ function recordProblemSummary(record) {
   if (record.kind === 'audio') {
     if (scopedIssues.some((issue) => (issue.message || '').toLowerCase().includes('satur'))) {
       const peak = record.item?.truePeakDb;
-      return typeof peak === 'number' ? `Saturé · crête ${formatPeak(peak)}` : 'Saturé (source)';
+      return typeof peak === 'number' ? `Saturé · crête ${formatPeak(peak)}` : t('Saturé (source)');
     }
     const silenceIssues = scopedIssues.filter((issue) => (issue.message || '').toLowerCase().includes('silence'));
     if (silenceIssues.length > 0) {
@@ -259,16 +260,16 @@ function hasMeasureIssue(record, key) {
       return messages.some((message) => message.includes('format') || message.includes('mono'));
     case 'sampleRate':
       return messages.some((message) => (
-        message.includes('fréquence') || message.includes('frequence') || message.includes('échantillonnage')
+        message.includes(t('fréquence')) || message.includes('frequence') || message.includes(t('échantillonnage'))
       ));
     case 'silenceStart':
-      return messages.some((message) => message.includes('silence') && (message.includes('début') || message.includes('debut')));
+      return messages.some((message) => message.includes('silence') && (message.includes(t('début')) || message.includes('debut')));
     case 'silenceEnd':
       return messages.some((message) => message.includes('silence') && message.includes('fin'));
     case 'volume':
-      return messages.some((message) => message.includes('volume') || message.includes('niveau sonore'));
+      return messages.some((message) => message.includes('volume') || message.includes(t('niveau sonore')));
     case 'peak':
-      return messages.some((message) => message.includes('crête') || message.includes('crete') || message.includes('satur') || message.includes('clipping'));
+      return messages.some((message) => message.includes(t('crête')) || message.includes('crete') || message.includes('satur') || message.includes('clipping'));
     case 'dimensions':
       return messages.some((message) => message.includes('dimension') || message.includes('taille'));
     case 'imageFormat':
@@ -377,8 +378,8 @@ function summarizeGroups(groups, report) {
     return {
       tone: 'ok',
       Icon: CircleCheck,
-      title: 'Pack conforme',
-      subtitle: 'Aucun problème automatique ou manuel détecté.',
+      title: t('Pack conforme'),
+      subtitle: t('Aucun problème automatique ou manuel détecté.'),
       listenCount,
       fixCount,
       optionalCount,
@@ -388,8 +389,8 @@ function summarizeGroups(groups, report) {
     return {
       tone: 'listen',
       Icon: TriangleAlert,
-      title: 'Pack à vérifier avant export',
-      subtitle: 'Certains points demandent une vérification manuelle.',
+      title: t('Pack à vérifier avant export'),
+      subtitle: t('Certains points demandent une vérification manuelle.'),
       listenCount,
       fixCount,
       optionalCount,
@@ -402,10 +403,10 @@ function summarizeGroups(groups, report) {
     return {
       tone: 'quality',
       Icon: TriangleAlert,
-      title: fixCount > 0 ? 'Pack corrigeable, mais audio déjà saturé' : 'Audio déjà saturé',
+      title: fixCount > 0 ? t('Pack corrigeable, mais audio déjà saturé') : t('Audio déjà saturé'),
       subtitle: fixCount > 0
-        ? "Le reste sera corrigé ; l'audio saturé doit être repris depuis une source propre."
-        : 'Nous conseillons de refaire le pack depuis une source audio propre.',
+        ? t("Le reste sera corrigé ; l'audio saturé doit être repris depuis une source propre.")
+        : t('Nous conseillons de refaire le pack depuis une source audio propre.'),
       listenCount,
       fixCount,
       optionalCount,
@@ -416,9 +417,9 @@ function summarizeGroups(groups, report) {
       tone: 'listen',
       Icon: Info,
       title: listenCount === 1
-        ? 'Pack corrigeable, avec un fichier à écouter'
+        ? t('Pack corrigeable, avec un fichier à écouter')
         : `Pack corrigeable, avec ${listenCount} fichiers à écouter`,
-      subtitle: 'Le reste peut être corrigé automatiquement.',
+      subtitle: t('Le reste peut être corrigé automatiquement.'),
       listenCount,
       fixCount,
       optionalCount,
@@ -429,7 +430,7 @@ function summarizeGroups(groups, report) {
       tone: 'ok',
       Icon: CircleCheck,
       title: `Pack conforme, avec ${optionalCount} ajustement${optionalCount > 1 ? 's' : ''} facultatif${optionalCount > 1 ? 's' : ''}`,
-      subtitle: 'Les pauses longues peuvent être conservées telles quelles.',
+      subtitle: t('Les pauses longues peuvent être conservées telles quelles.'),
       listenCount,
       fixCount,
       optionalCount,
@@ -438,8 +439,8 @@ function summarizeGroups(groups, report) {
   return {
     tone: 'fix',
     Icon: Wrench,
-    title: 'Pack corrigeable en un clic',
-    subtitle: 'Aucun point manuel détecté.',
+    title: t('Pack corrigeable en un clic'),
+    subtitle: t('Aucun point manuel détecté.'),
     listenCount,
     fixCount,
     optionalCount,
@@ -481,29 +482,29 @@ function SummaryTiles({ report, saturatedCount = 0 }) {
   const structureOk = report.structureSummary?.luniiCompatible && report.structureSummary?.storyStudioEditable;
   const nightMode = Boolean(report.nightMode?.detected);
   return (
-    <div className="checker-summary-tiles" aria-label="Résumé du pack">
+    <div className="checker-summary-tiles" aria-label={t("Résumé du pack")}>
       <SummaryTile title="Audio" Icon={Music} tone={saturatedCount > 0 ? 'danger' : (audio.needsFix > 0 ? 'fix' : 'ok')}>
         <SplitStat ok={audio.ok} needsFix={audio.needsFix} />
       </SummaryTile>
       <SummaryTile title="Images" Icon={Image} tone={images.needsFix ? 'fix' : 'ok'}>
         <SplitStat ok={images.ok} needsFix={images.needsFix} />
       </SummaryTile>
-      <SummaryTile title="Nom du pack" Icon={FilePen} tone={titleOk ? 'ok' : 'fix'}>
+      <SummaryTile title={t("Nom du pack")} Icon={FilePen} tone={titleOk ? 'ok' : 'fix'}>
         <div className="checker-single-stat">
-          <strong>{titleOk ? 'Valide' : 'À corriger'}</strong>
-          <span>{titleOk ? 'Convention OK' : 'Métadonnées'}</span>
+          <strong>{titleOk ? 'Valide' : t('À corriger')}</strong>
+          <span>{titleOk ? 'Convention OK' : t('Métadonnées')}</span>
         </div>
       </SummaryTile>
       <SummaryTile title="Structure" Icon={Network} tone={structureOk ? 'ok' : 'listen'}>
         <div className="checker-single-stat">
-          <strong>{structureOk ? 'Correcte' : 'Vérification manuelle'}</strong>
+          <strong>{structureOk ? 'Correcte' : t('Vérification manuelle')}</strong>
           <span>{report.structureSummary?.stageCount ?? 0} étapes</span>
         </div>
       </SummaryTile>
       <SummaryTile title="Mode nuit" Icon={Moon} tone={nightMode ? 'ok' : 'neutral'}>
         <div className="checker-single-stat">
           <strong>{nightMode ? 'Disponible' : 'Absent'}</strong>
-          <span>{nightMode ? 'Détecté dans le pack' : 'Non bloquant'}</span>
+          <span>{nightMode ? t('Détecté dans le pack') : t('Non bloquant')}</span>
         </div>
       </SummaryTile>
     </div>
@@ -540,7 +541,7 @@ function TechnicalDetail({ record }) {
             <Measure label="Attendu" value="320×240" status={expectedImageOk(item) ? 'ok' : 'bad'} />
           </>
         ) : (
-          <Measure label="Catégorie" value={record.issue.category} status={record.issue.severity === 'ok' ? 'ok' : 'bad'} />
+          <Measure label={t("Catégorie")} value={record.issue.category} status={record.issue.severity === 'ok' ? 'ok' : 'bad'} />
         )}
       </div>
       <div>
@@ -760,7 +761,7 @@ export function ReportView({
             onClick={startFixFlow}
             disabled={!canFix || busy}
           >
-            {busy ? 'Correction...' : 'Corriger le pack'}
+            {busy ? 'Correction...' : t('Corriger le pack')}
           </button>
         ) : null}
       </div>
@@ -805,10 +806,10 @@ export function ProcessLog({ status, lines }) {
 
   if (!lines?.length) return null;
   const title = status === 'fixing'
-    ? 'Correction en cours'
+    ? t('Correction en cours')
     : status === 'analyzing'
-      ? 'Analyse en cours'
-      : 'Dernières opérations';
+      ? t('Analyse en cours')
+      : t('Dernières opérations');
   return (
     <div className={`checker-process-log ${status === 'idle' ? 'is-idle' : 'is-active'}`}>
       <div className="checker-process-log-head">

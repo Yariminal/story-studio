@@ -29,6 +29,7 @@ import { logger } from '../utils/logger';
 import { errorMessage, isYoutubeBlocked, youtubeErrorCode } from '../utils/youtubeErrors.js';
 import { FREE_EDITOR_REFUSAL_MESSAGE, isFreeEditorRefusal } from '../components/EditPack/importErrorPresentation';
 
+import { t } from '../i18n/index.js';
 /**
  * Construit le projet résultant d'une extraction de ZIP à partir du résultat
  * Rust (`unpack_zip_to_entries`). Pur (aucune I/O, aucun store) : applique la
@@ -142,8 +143,8 @@ export function useImportSession({
         index: index + 1,
         total: files.length,
         phase: isImportedPackPath(f)
-          ? "Analyse du pack importé..."
-          : "Import de l'audio...",
+          ? t("Analyse du pack importé...")
+          : t("Import de l'audio..."),
       });
 
       const file = await maybeCopyToProject(f);
@@ -156,7 +157,7 @@ export function useImportSession({
             name: displayName,
             index: index + 1,
             total: files.length,
-            phase: 'Lecture des métadonnées du pack...',
+            phase: t('Lecture des métadonnées du pack...'),
           });
           const json = await invoke('load_pack_zip', { zipPath: file });
           const data = JSON.parse(json);
@@ -166,7 +167,7 @@ export function useImportSession({
           zipCoverAudio = sq?.audio || null;
         } catch (e) {
           showErrorDialog({
-            title: 'Archive invalide',
+            title: t('Archive invalide'),
             message: `Archive importée invalide ou inaccessible : ${file}\n\n${e}`,
           });
           continue;
@@ -177,7 +178,7 @@ export function useImportSession({
           name: displayName,
           index: index + 1,
           total: files.length,
-          phase: "Analyse de l'audio importé...",
+          phase: t("Analyse de l'audio importé..."),
         });
         const embeddedImage = await extractAudioEmbeddedImage(file);
         const storyId = store.addStory(menuId, file);
@@ -194,7 +195,7 @@ export function useImportSession({
       name: getImportDisplayName(files[0]),
       index: 0,
       total: files.length,
-      phase: "Préparation de l'import...",
+      phase: t("Préparation de l'import..."),
     });
     try {
       await dispatchFiles(null, files);
@@ -210,7 +211,7 @@ export function useImportSession({
       name: getImportDisplayName(files[0]),
       index: 0,
       total: files.length,
-      phase: "Préparation de l'import...",
+      phase: t("Préparation de l'import..."),
     });
     try {
       await dispatchFiles(menuId ?? null, files);
@@ -251,14 +252,14 @@ export function useImportSession({
       }
     } else if (node.type === 'audio') {
       counter.value += 1;
-      setImporting({ name: node.name, index: counter.value, total, phase: "Import de l'audio..." });
+      setImporting({ name: node.name, index: counter.value, total, phase: t("Import de l'audio...") });
       const copiedPath = await maybeCopyToProject(node.path);
       const embeddedImage = await extractAudioEmbeddedImage(copiedPath);
       const storyId = store.addStory(parentMenuId, copiedPath);
       if (embeddedImage) store.updateItem(storyId, { itemImage: embeddedImage });
     } else if (node.type === 'zip') {
       counter.value += 1;
-      setImporting({ name: node.name, index: counter.value, total, phase: "Import de l'archive..." });
+      setImporting({ name: node.name, index: counter.value, total, phase: t("Import de l'archive...") });
       const copiedPath = await maybeCopyToProject(node.path);
       store.addZip(parentMenuId, copiedPath, null, null, null);
     }
@@ -274,7 +275,7 @@ export function useImportSession({
     } catch (e) {
       logger.error(`import-folder:scan-error path='${folderPath}' error=${e}`);
       showErrorDialog({
-        title: 'Import dossier',
+        title: t('Import dossier'),
         message: `Impossible de lire le dossier : ${e}`,
       });
       return;
@@ -283,8 +284,8 @@ export function useImportSession({
     if (total === 0) {
       logger.warn(`import-folder:empty path='${folderPath}'`);
       showErrorDialog({
-        title: 'Import dossier',
-        message: 'Aucun fichier audio ou archive trouvé dans ce dossier.',
+        title: t('Import dossier'),
+        message: t('Aucun fichier audio ou archive trouvé dans ce dossier.'),
         variant: 'info',
       });
       return;
@@ -303,7 +304,7 @@ export function useImportSession({
       return;
     }
     logger.info(`import-folder:found count=${total}`);
-    setImporting({ name: tree.name, index: 0, total, phase: 'Analyse du dossier...' });
+    setImporting({ name: tree.name, index: 0, total, phase: t('Analyse du dossier...') });
     try {
       await processFolderNode(tree, targetMenuId, { value: 0 }, total);
     } finally {
@@ -332,13 +333,13 @@ export function useImportSession({
     const wsDir = workspaceDirRef.current || await getWorkspaceDir().catch(() => '');
     if (!wsDir) {
       showErrorDialog({
-        title: 'Extraction du pack',
-        message: "Aucun espace de travail n'est disponible pour extraire ce pack.",
+        title: t('Extraction du pack'),
+        message: t("Aucun espace de travail n'est disponible pour extraire ce pack."),
       });
       return;
     }
 
-    setUnpacking({ name: currentZipItem.name || 'ZIP en cours' });
+    setUnpacking({ name: currentZipItem.name || t('ZIP en cours') });
     try {
       const extractedDirName = sanitizeImportedName(currentZipItem.name || itemId, itemId).replace(/[/\\:*?"<>|]/g, '_');
       const destDir = `${getExtractedZipsDir(wsDir)}/${extractedDirName}`;
@@ -358,8 +359,8 @@ export function useImportSession({
       });
       if (!transformed) {
         showErrorDialog({
-          title: 'Extraction du pack',
-          message: 'Aucune entrée trouvée dans ce ZIP.',
+          title: t('Extraction du pack'),
+          message: t('Aucune entrée trouvée dans ce ZIP.'),
           variant: 'warning',
         });
         return;
@@ -380,26 +381,26 @@ export function useImportSession({
       if (transformed.advancedTransitionsDetected) {
         const firstWarning = transformed.unresolvedTransitions[0]?.message;
         notices.push(
-          "Certaines transitions du pack importé n'ont pas pu être modélisées complètement. "
-          + "Story Studio a conservé la structure reconnue, mais vérifie les retours concernés avant export."
+          t("Certaines transitions du pack importé n'ont pas pu être modélisées complètement. ")
+          + t("Story Studio a conservé la structure reconnue, mais vérifie les retours concernés avant export.")
           + (firstWarning ? ` Exemple : ${firstWarning}` : '')
         );
       }
       if (transformed.autoNextNotAdopted) {
-        notices.push("Ce pack enchaînait ses histoires ; ce réglage n'a pas été repris.");
+        notices.push(t("Ce pack enchaînait ses histoires ; ce réglage n'a pas été repris."));
       }
       if (notices.length) setImportNotice(notices.join('\n\n'));
     } catch (e) {
       if (isFreeEditorRefusal(e)) {
         showErrorDialog({
-          title: 'Extraction du pack',
+          title: t('Extraction du pack'),
           message: FREE_EDITOR_REFUSAL_MESSAGE,
           variant: 'warning',
         });
         return;
       }
       showErrorDialog({
-        title: e?.code === 'menu_depth_limit' ? 'Limite d’imbrication' : 'Extraction du pack',
+        title: e?.code === 'menu_depth_limit' ? 'Limite d’imbrication' : t('Extraction du pack'),
         message: e?.code === 'menu_depth_limit'
           ? e.message
           : `Erreur lors de l'extraction : ${e}`,
@@ -441,7 +442,7 @@ export function useImportSession({
     const files = await pickMultipleMediaFiles();
     if (files.length === 0) return;
     const total = files.length;
-    setImporting({ name: basename(files[0]) || files[0], index: 0, total, phase: "Préparation de l'import..." });
+    setImporting({ name: basename(files[0]) || files[0], index: 0, total, phase: t("Préparation de l'import...") });
     try {
       const nextPaths = await importFilesToMediaLibrary({
         files,
@@ -465,7 +466,7 @@ export function useImportSession({
       if (!files.length) return;
       const total = files.length;
       const folderName = basename(folderPath) || folderPath;
-      setImporting({ name: folderName, index: 0, total, phase: 'Scan du dossier...' });
+      setImporting({ name: folderName, index: 0, total, phase: t('Scan du dossier...') });
       const nextPaths = await importFilesToMediaLibrary({
         files,
         maybeCopyToProject,
@@ -536,7 +537,7 @@ export function useImportSession({
     const toLibrary = landing === MEDIA_LANDING_LIBRARY;
     const report = onProgress ?? setImporting;
     const isYoutube = source === 'youtube';
-    const itemLabel = isYoutube ? 'vidéo' : 'épisode';
+    const itemLabel = isYoutube ? t('vidéo') : t('épisode');
 
     // La cible d'arbre n'est déduite que lorsqu'il y a un arbre : sur un
     // document de graphe, la sélection courante désigne un Écran, qui n'est
@@ -558,7 +559,7 @@ export function useImportSession({
     const feedTitle = feed?.title || (isYoutube ? 'YouTube' : 'Podcast');
     const feedImage = feed?.imageUrl || null;
     logger.info(`import-media:start source=${source} count=${total} landing=${landing} target=${toLibrary ? 'library' : (targetMenuId ?? 'root')}`);
-    report({ name: feedTitle, index: 0, total, phase: "Préparation de l'import..." });
+    report({ name: feedTitle, index: 0, total, phase: t("Préparation de l'import...") });
 
     let failures = 0;
     let skipped = 0;
@@ -569,7 +570,7 @@ export function useImportSession({
     try {
       for (let index = 0; index < episodes.length; index += 1) {
         const episode = episodes[index];
-        const displayName = episode.title || `${isYoutube ? 'Vidéo' : 'Épisode'} ${index + 1}`;
+        const displayName = episode.title || `${isYoutube ? t('Vidéo') : t('Épisode')} ${index + 1}`;
         try {
           report({ name: displayName, index: index + 1, total, phase: `Téléchargement de la ${itemLabel}...` });
           const tmpAudio = await downloadEntryAudio(source, episode, displayName);
@@ -578,7 +579,7 @@ export function useImportSession({
           let itemImage = null;
           const imageUrl = episode.imageUrl || feedImage;
           if (imageUrl) {
-            report({ name: displayName, index: index + 1, total, phase: 'Récupération de la vignette...' });
+            report({ name: displayName, index: index + 1, total, phase: t('Récupération de la vignette...') });
             try {
               // download_podcast_media est un téléchargeur HTTP générique : il sert
               // aussi à récupérer les miniatures YouTube.
@@ -633,7 +634,7 @@ export function useImportSession({
       showErrorDialog({
         title: isYoutube ? 'Import YouTube' : 'Import du podcast',
         message: failures === total
-          ? `Aucune ${itemLabel} n'a pu être importée. Vérifie ta connexion ou l'adresse ${isYoutube ? 'YouTube' : 'du flux'}.`
+          ? `Aucune ${itemLabel} nt('a pu être importée. Vérifie ta connexion ou l')adresse ${isYoutube ? 'YouTube' : 'du flux'}.`
           : `${formatFrenchCount(failures, itemLabel, `${itemLabel}s`)} sur ${total} n'ont pas pu être ${isYoutube ? 'importées' : 'importés'}. Les autres ont bien été ${isYoutube ? 'ajoutées' : 'ajoutés'}.`,
         variant: failures === total ? 'warning' : 'info',
       });

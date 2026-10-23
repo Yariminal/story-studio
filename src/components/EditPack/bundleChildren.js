@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 /**
  * Les règles de l'écran de choix d'une archive enveloppe, séparées de son
  * rendu : ce qui est sélectionnable, ce qu'on peut continuer, et comment un
@@ -18,8 +19,8 @@ export const BUNDLE_CHILD_STATUS = {
 
 const VERDICT_LABELS = {
   [BUNDLE_CHILD_STATUS.editable]: 'Modifiable',
-  [BUNDLE_CHILD_STATUS.readOnly]: 'Lecture seule',
-  [BUNDLE_CHILD_STATUS.unsupported]: 'Non supporté',
+  [BUNDLE_CHILD_STATUS.readOnly]: t('Lecture seule'),
+  [BUNDLE_CHILD_STATUS.unsupported]: t('Non supporté'),
   [BUNDLE_CHILD_STATUS.error]: 'Illisible',
 };
 

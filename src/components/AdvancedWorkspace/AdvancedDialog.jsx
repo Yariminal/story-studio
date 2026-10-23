@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // Le châssis de dialogue de l'Éditeur avancé.
 //
 // Il porte la classe `app-modal-overlay` du portail commun, et c'est ce qui
@@ -24,7 +25,7 @@ export function AdvancedDialog({
   onCancel,
   onConfirm = null,
   confirmLabel = 'Appliquer',
-  cancelLabel = 'Annuler',
+  cancelLabel = t('Annuler'),
   confirmDisabled = false,
   confirmKind = 'primary',
   busy = false,

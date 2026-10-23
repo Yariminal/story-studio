@@ -14,6 +14,7 @@ import {
 import { isTauriRuntime } from '../../utils/tauriRuntime';
 import { releaseTauriListener } from '../../utils/tauriListener';
 
+import { t } from '../../i18n/index.js';
 const EXPORTS = {
   report: {
     extension: 'html',
@@ -87,9 +88,9 @@ export function useCommunityPackChecker() {
     statusRef.current = 'analyzing';
     setStatus('analyzing');
     if (options.appendLog) {
-      appendLiveLog(options.label || 'Réanalyse du ZIP corrigé...');
+      appendLiveLog(options.label || t('Réanalyse du ZIP corrigé...'));
     } else {
-      setLiveLog(['Analyse du pack demandée...']);
+      setLiveLog([t('Analyse du pack demandée...')]);
     }
     try {
       const nextReport = await invoke('analyze_community_pack', {
@@ -100,7 +101,7 @@ export function useCommunityPackChecker() {
       setLiveLog((current) => [
         ...current,
         ...finalLines,
-        'Analyse terminée.',
+        t('Analyse terminée.'),
       ].slice(-9));
       statusRef.current = 'idle';
       setStatus('idle');
@@ -117,7 +118,7 @@ export function useCommunityPackChecker() {
   const pickPack = useCallback(async () => {
     const selected = await open({
       multiple: false,
-      filters: [{ name: 'Pack Lunii', extensions: ['zip', '7z'] }],
+      filters: [{ name: t('Pack Lunii'), extensions: ['zip', '7z'] }],
     });
     if (selected) {
       await analyzePath(Array.isArray(selected) ? selected[0] : selected);
@@ -130,7 +131,7 @@ export function useCommunityPackChecker() {
     setExportNotice('');
     statusRef.current = 'fixing';
     setStatus('fixing');
-    setLiveLog(['Correction du pack demandée...']);
+    setLiveLog([t('Correction du pack demandée...')]);
     try {
       const result = await invoke('create_fixed_community_pack', {
         zipPath,
@@ -139,12 +140,12 @@ export function useCommunityPackChecker() {
         correctionSelection: options.correctionSelection || null,
       });
       appendLiveLog(`ZIP corrigé créé : ${result.fixedZipPath}`);
-      appendLiveLog('Réanalyse automatique du ZIP corrigé...');
+      appendLiveLog(t('Réanalyse automatique du ZIP corrigé...'));
       // La réanalyse réinitialise fixedResult (via analyzePath) : on positionne
       // donc le résultat APRÈS, pour que la bannière « ZIP corrigé » persiste.
       const correctedReport = await analyzePath(result.fixedZipPath, {
         appendLog: true,
-        label: 'Analyse du ZIP corrigé...',
+        label: t('Analyse du ZIP corrigé...'),
       });
       if (correctedReport) {
         const correctionLine = `[OK] Correction appliquée : ${result.automaticCorrectionsApplied ?? 0} automatique(s), ${result.optionalAudioSilencesFixed ?? 0} suggestion(s) facultative(s) sélectionnée(s).`;
@@ -187,9 +188,9 @@ export function useCommunityPackChecker() {
     if (!report) return;
     try {
       await navigator.clipboard.writeText(formatTechnicalLog(report));
-      setExportNotice('Journal copié.');
+      setExportNotice(t('Journal copié.'));
     } catch {
-      setError('Impossible de copier le journal.');
+      setError(t('Impossible de copier le journal.'));
     }
   }, [report]);
 

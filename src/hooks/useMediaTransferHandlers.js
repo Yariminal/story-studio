@@ -16,6 +16,7 @@ import { getProjectFilePrefix } from '../utils/projectPrefix';
 import { formatFrenchCount } from '../utils/frenchText.js';
 import { logger } from '../utils/logger';
 
+import { t } from '../i18n/index.js';
 export function useMediaTransferHandlers({
   store,
   copyImportedFilesEnabled,
@@ -165,13 +166,13 @@ export function useMediaTransferHandlers({
     const confirmed = skipPrompt || (await ask(
         `${formatFrenchCount(
           candidates.length,
-          'fichier déjà lié au projet est',
-          'fichiers déjà liés au projet sont',
+          t('fichier déjà lié au projet est'),
+          t('fichiers déjà liés au projet sont'),
         )} encore hors de l’emplacement de travail.\n\n${sample}${suffix}\n\nLes copier dans fichiers-importes/ et mettre à jour le projet ?`,
         {
-          title: 'Transférer les fichiers existants ?',
+          title: t('Transférer les fichiers existants ?'),
           kind: 'warning',
-          okLabel: 'Transférer',
+          okLabel: t('Transférer'),
           cancelLabel: 'Plus tard',
         }
       ));

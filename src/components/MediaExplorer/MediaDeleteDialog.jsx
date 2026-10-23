@@ -2,15 +2,16 @@ import { Button } from '../common/Button';
 import { useEscapeKey } from '../../hooks/useEscapeKey';
 import { isMediaHeldByProject } from '../../store/mediaLibrary';
 
+import { t } from '../../i18n/index.js';
 // Ce qu'on peut dire d'un média retenu par le projet, sans rien affirmer de
 // plus que ce qui est su. Trois états : des écrans nommés, un inventaire non
 // calculé, ou une liaison que le document ne cite plus.
 function holdReason(item) {
   const labels = [...new Set((item.usages ?? []).map((usage) => usage.label).filter(Boolean))];
   if (labels.length > 0) return labels.slice(0, 3).join(', ');
-  if (item.usageKnown === false) return 'usages non calculés';
+  if (item.usageKnown === false) return t('usages non calculés');
   if (item.projectUsedCount > 0) return `${item.projectUsedCount} usage${item.projectUsedCount > 1 ? 's' : ''}`;
-  return 'média lié au document';
+  return t('média lié au document');
 }
 
 export function MediaDeleteDialog({
@@ -27,7 +28,7 @@ export function MediaDeleteDialog({
 
   const usedItems = items.filter(isMediaHeldByProject);
   const usedCount = usedItems.length;
-  const actionLabel = deleteDisk ? 'Supprimer définitivement' : 'Retirer';
+  const actionLabel = deleteDisk ? t('Supprimer définitivement') : t('Retirer');
 
   return (
     // data-modal-surface : overlay à styles inline, reconnu par la garde des
@@ -37,15 +38,15 @@ export function MediaDeleteDialog({
         <div className="gen-header">
           <span className="gen-title">
             {usedCount > 0
-              ? (usedCount === 1 ? 'Média encore utilisé' : `${usedCount} médias encore utilisés`)
-              : (deleteDisk ? 'Supprimer définitivement' : 'Retirer de la médiathèque')}
+              ? (usedCount === 1 ? t('Média encore utilisé') : `${usedCount} médias encore utilisés`)
+              : (deleteDisk ? t('Supprimer définitivement') : t('Retirer de la médiathèque'))}
           </span>
         </div>
         <div style={{ padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: 12 }}>
           {usedCount > 0 && (
             <div style={{ fontSize: 12, color: 'var(--warning-text)', lineHeight: 1.5 }}>
               {usedCount === 1
-                ? 'Ce média ne peut pas être retiré de la médiathèque car il est encore utilisé dans le projet. Retirez d’abord ses affectations depuis les réglages concernés.'
+                ? t('Ce média ne peut pas être retiré de la médiathèque car il est encore utilisé dans le projet. Retirez d’abord ses affectations depuis les réglages concernés.')
                 : `${usedCount} médias ne peuvent pas être retirés de la médiathèque car ils sont encore utilisés dans le projet. Retirez d’abord leurs affectations depuis les réglages concernés.`}
               <ul style={{ margin: '8px 0 0', paddingLeft: 18 }}>
                 {usedItems.slice(0, 5).map((item) => (

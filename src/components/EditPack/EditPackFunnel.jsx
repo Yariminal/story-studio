@@ -25,6 +25,7 @@ import { ImportErrorNotice } from './ImportErrorNotice';
 import { presentImportError } from './importErrorPresentation';
 import { releaseTauriListener } from '../../utils/tauriListener';
 
+import { t } from '../../i18n/index.js';
 const ARCHIVE_RE = /\.(zip|7z)$/i;
 
 /// Avancement de l'examen d'une archive enveloppe. L'évènement ne porte que des
@@ -152,7 +153,7 @@ export function EditPackFunnel({
     // celle de l'archive ouverte.
     setBundle(null);
     setSelectedChildId(null);
-    setBusy({ title: 'Vérification du pack…', hint: 'Un instant.' });
+    setBusy({ title: t('Vérification du pack…'), hint: 'Un instant.' });
     setPhase('busy');
     const packLabel = basename(path);
     const isFolder = kind === 'folder' || (kind === 'auto' && !ARCHIVE_RE.test(path));
@@ -165,16 +166,16 @@ export function EditPackFunnel({
       inspect: (archivePath) => invoke('inspect_pack_archive', { path: archivePath }),
       beforeInspect: () => {
         setBusy({
-          title: 'Examen de l’archive…',
-          hint: 'Si elle contient plusieurs packs, ils sont examinés un par un.',
+          title: t('Examen de l’archive…'),
+          hint: t('Si elle contient plusieurs packs, ils sont examinés un par un.'),
         });
       },
       beforeLand: (editor) => {
         setBusy({
           title: editor === 'advanced'
-            ? 'Ouverture de l’Éditeur graphe…'
-            : 'Décompression du pack…',
-          hint: 'Ne ferme pas la fenêtre.',
+            ? t('Ouverture de l’Éditeur graphe…')
+            : t('Décompression du pack…'),
+          hint: t('Ne ferme pas la fenêtre.'),
         });
       },
       land: (zipPath) => onLand({ zipPath, packLabel }),
@@ -207,7 +208,7 @@ export function EditPackFunnel({
     setError('');
     setProgress(null);
     onNotice?.(null);
-    setBusy({ title: 'Préparation du pack choisi…', hint: 'Ne ferme pas la fenêtre.' });
+    setBusy({ title: t('Préparation du pack choisi…'), hint: t('Ne ferme pas la fenêtre.') });
     setPhase('busy');
     const result = await runEditPackBundleChildOperation({
       lifecycle: operation,
@@ -222,9 +223,9 @@ export function EditPackFunnel({
       beforeLand: (editor) => {
         setBusy({
           title: editor === 'advanced'
-            ? 'Ouverture de l’Éditeur graphe…'
-            : 'Décompression du pack…',
-          hint: 'Ne ferme pas la fenêtre.',
+            ? t('Ouverture de l’Éditeur graphe…')
+            : t('Décompression du pack…'),
+          hint: t('Ne ferme pas la fenêtre.'),
         });
       },
       land: (zipPath) => onLand({ zipPath, packLabel }),
@@ -255,14 +256,14 @@ export function EditPackFunnel({
 
   function askEditor() {
     return showChoiceDialog({
-      title: 'Choisir l’éditeur',
-      message: 'Ce pack peut être modifié avec les deux éditeurs.',
+      title: t('Choisir l’éditeur'),
+      message: t('Ce pack peut être modifié avec les deux éditeurs.'),
       variant: 'info',
       cancelValue: null,
       actions: [
-        { value: 'free', label: 'Éditeur par menus', kind: 'secondary' },
-        { value: 'advanced', label: 'Éditeur graphe', kind: 'primary', autoFocus: true },
-        { value: null, label: 'Annuler', kind: 'ghost' },
+        { value: 'free', label: t('Éditeur par menus'), kind: 'secondary' },
+        { value: 'advanced', label: t('Éditeur graphe'), kind: 'primary', autoFocus: true },
+        { value: null, label: t('Annuler'), kind: 'ghost' },
       ],
     });
   }
@@ -285,7 +286,7 @@ export function EditPackFunnel({
     const operation = operationLifecycleRef.current;
     const token = operation.begin();
     if (token === null) return;
-    setBusy({ title: 'Préparation du simulateur…', hint: 'Un instant.' });
+    setBusy({ title: t('Préparation du simulateur…'), hint: 'Un instant.' });
     setPhase('busy');
     try {
       if (!operation.claimCompletion(token)) return;
@@ -304,12 +305,12 @@ export function EditPackFunnel({
   return (
     <FunnelShell
       icon={<Package />}
-      title="Modifier un pack"
+      title={t("Modifier un pack")}
       onClose={handleClose}
       closeDisabled={phase === 'busy'}
       showChrome={false}
       fitContent
-      ariaLabel="Modifier un pack"
+      ariaLabel={t("Modifier un pack")}
     >
       {phase === 'busy' && (
         <FunnelGenerationState title={busy.title} hint={busy.hint} progress={progress} />
@@ -331,12 +332,12 @@ export function EditPackFunnel({
         <div className="funnel-step-content">
           <FunnelSectionHeader
             icon={<Upload />}
-            title="Choisis un pack"
-            description="Un .zip, un .7z ou un dossier d'histoire déjà décompressé."
+            title={t("Choisis un pack")}
+            description={t("Un .zip, un .7z ou un dossier d'histoire déjà décompressé.")}
           />
           <FunnelDropZone
-            title="Dépose ton pack ici"
-            hint="Formats : .zip, .7z ou dossier d'histoire décompressé"
+            title={t("Dépose ton pack ici")}
+            hint={t("Formats : .zip, .7z ou dossier d'histoire décompressé")}
             onFiles={handleDrop}
           >
             <FunnelToolButton icon={<Package />} accent="neutral" onClick={handleBrowseFile}>
@@ -354,10 +355,10 @@ export function EditPackFunnel({
         <div className="funnel-step-content">
           <FunnelSectionHeader
             icon={<TriangleAlert />}
-            title="Pack non éditable"
+            title={t("Pack non éditable")}
             description={pending?.advancedError
-              ? "Ce pack n'a pu être ouvert ni dans l'Éditeur par menus ni dans l'Éditeur graphe. La simulation reste disponible en lecture seule."
-              : "Ce pack n'est pas éditable avec Story Studio. Tu peux quand même le simuler (lecture seule)."}
+              ? t("Ce pack nt('a pu être ouvert ni dans l')Éditeur par menus ni dans l'Éditeur graphe. La simulation reste disponible en lecture seule.")
+              : t("Ce pack n'est pas éditable avec Story Studio. Tu peux quand même le simuler (lecture seule).")}
           />
           <ImportErrorNotice error={pending?.advancedError} context="graph" />
           <ImportErrorNotice error={pending?.report?.reason} context="readOnly" role="status" />
@@ -381,8 +382,8 @@ export function EditPackFunnel({
         <div className="funnel-step-content">
           <FunnelSectionHeader
             icon={<TriangleAlert />}
-            title="Pack non supporté"
-            description="Ce pack ne peut pas être ouvert ni simulé par Story Studio."
+            title={t("Pack non supporté")}
+            description={t("Ce pack ne peut pas être ouvert ni simulé par Story Studio.")}
           />
           <ImportErrorNotice error={pending?.report?.reason} context="unsupported" role="status" />
           <ImportErrorNotice error={pending?.advancedError} context="graph" />

@@ -51,6 +51,7 @@ import {
   writeImageEditMetadata,
 } from './imageEditMetadata';
 
+import { t } from '../i18n/index.js';
 const PROJECT_OPEN_KEYS = [KEYS.LAST_OPEN_PROJECT_DIR, KEYS.LAST_PROJECT_DIR];
 const PROJECT_SAVE_KEYS = [KEYS.LAST_SAVE_PROJECT_DIR, KEYS.LAST_PROJECT_DIR];
 const RECENT_PROJECT_LIMIT = 8;
@@ -123,7 +124,7 @@ export async function pickWorkspaceDir() {
     directory: true,
     multiple: false,
     defaultPath: current,
-    title: 'Choisir l’emplacement de travail',
+    title: t('Choisir l’emplacement de travail'),
   });
   if (!chosen) return null;
   setWorkspaceDir(chosen);
@@ -159,8 +160,8 @@ export function rememberRecentProject(project, path) {
   const normalizedPath = pathKey(path);
   const nextEntry = {
     path,
-    projectName: project?.projectName?.trim() || basenameNoExt(path) || 'Projet sans nom',
-    name: project?.projectName?.trim() || basenameNoExt(path) || 'Projet sans nom',
+    projectName: project?.projectName?.trim() || basenameNoExt(path) || t('Projet sans nom'),
+    name: project?.projectName?.trim() || basenameNoExt(path) || t('Projet sans nom'),
     projectType: project?.projectType || 'pack',
     thumbnailImage: projectPreviewThumbnail(project),
     updatedAt: Date.now(),
@@ -313,7 +314,7 @@ function collectTransferTargets(project, savePath, statusByPath = null) {
 export function collectTransferableProjectFiles(project, savePath, statusByPath = null) {
   if (!hasPath(savePath)) return [];
   // Le mode Avancé passe par la même vue : une liaison média déclarée est une
-  // candidate au même titre qu'une référence d'arbre, et `assetRef` n'est jamais
+  // candidate au même titre qut('une référence d')arbre, et `assetRef` n'est jamais
   // proposé au transfert — seul son `path` l'est.
   const seen = new Set();
   const candidates = [];
@@ -496,9 +497,9 @@ export async function saveProject(project, existingPath = null, onProgress = nul
     const defaultDir = workspaceAutosaveDir ?? lastDir;
     const suggestedName = await projectSaveFilename(project);
     const chosenPath = await save({
-      filters: [{ name: 'Projet LuniiPack', extensions: ['mbah'] }],
+      filters: [{ name: t('Projet LuniiPack'), extensions: ['mbah'] }],
       defaultPath: defaultDir ? joinPath(defaultDir, `${suggestedName}.mbah`) : `${suggestedName}.mbah`,
-      title: 'Enregistrer le projet...',
+      title: t('Enregistrer le projet...'),
     });
     if (!chosenPath) return null;
     path = /\.mbah$/i.test(chosenPath) ? chosenPath : `${chosenPath}.mbah`;
@@ -507,10 +508,10 @@ export async function saveProject(project, existingPath = null, onProgress = nul
   if (options.autosave
     && !isProjectWorthAutosaving(project, options.mediaLibraryPaths ?? [], options.totalMediaCount ?? 0)
     && Object.keys(options.mediaTags ?? {}).length === 0) {
-    throw new Error('Autosave annulée : le projet courant semble vide.');
+    throw new Error(t('Autosave annulée : le projet courant semble vide.'));
   }
 
-  onProgress?.('Enregistrement du projet...');
+  onProgress?.(t('Enregistrement du projet...'));
   const mbahDir = getProjectDir(path);
   const resolvedWs = options.workspaceDir || readSetting(KEYS.WORKSPACE_DIR) || null;
   const projectForPath = options.autosave
@@ -554,7 +555,7 @@ export async function saveProject(project, existingPath = null, onProgress = nul
   if (!options.autosave) {
     saveProjectDir(PROJECT_SAVE_KEYS[0], path);
   }
-  onProgress?.('Projet enregistré');
+  onProgress?.(t('Projet enregistré'));
   // Return the project with absolute paths for in-memory use
   return { path, project: projectWithImages, mediaLibraryPaths: reconciledMediaLibraryPaths };
 }
@@ -593,25 +594,25 @@ export async function saveProjectAs(project, currentSavePath, onProgress = null,
     ? getProjectDir(currentSavePath)
     : (workspaceAutosaveDir ?? getStoredDir(PROJECT_SAVE_KEYS) ?? getStoredDir(PROJECT_OPEN_KEYS));
   const chosenPath = await save({
-    filters: [{ name: 'Projet LuniiPack', extensions: ['mbah'] }],
+    filters: [{ name: t('Projet LuniiPack'), extensions: ['mbah'] }],
     defaultPath: defaultDir ? joinPath(defaultDir, `${safeCurrentName}.mbah`) : `${safeCurrentName}.mbah`,
-    title: 'Enregistrer une copie sous...',
+    title: t('Enregistrer une copie sous...'),
   });
   if (!chosenPath) return null;
 
   const newPath = /\.mbah$/i.test(chosenPath) ? chosenPath : `${chosenPath}.mbah`;
   const newProjectDir = getProjectDir(newPath);
 
-  onProgress?.('Enregistrement du projet...');
+  onProgress?.(t('Enregistrement du projet...'));
 
   const resolvedWs = options?.workspaceDir || readSetting(KEYS.WORKSPACE_DIR) || null;
-  onProgress?.('Décollage vers la lune...');
+  onProgress?.(t('Décollage vers la lune...'));
   const projectForPath = withLocalProjectNameForPath(project, newPath, { force: true });
   const catalogPathsForSave = mediaLibraryPaths.filter((mediaPath) => !isTempImage(mediaPath));
   // `deferWrite` : le chemin est choisi et le projet préparé, mais rien n'est
-  // écrit. L'appelant écrit lui-même une fois ses médias à l'abri — un fichier
+  // écrit. Lt('appelant écrit lui-même une fois ses médias à l')abri — un fichier
   // posé avant eux désignerait des médias qui peuvent disparaître, et un
-  // fichier existant qu'on écrase ne doit pas être perdu si l'opération
+  // fichier existant qut('on écrase ne doit pas être perdu si l')opération
   // échoue ensuite. Les images temporaires restent en place : l'écriture de
   // l'appelant les copie, et une opération abandonnée avant n'en laisse aucune
   // copie orpheline.
@@ -643,7 +644,7 @@ export async function saveProjectAs(project, currentSavePath, onProgress = null,
   }
   saveProjectDir(PROJECT_SAVE_KEYS[0], newPath);
 
-  onProgress?.('Projet enregistré');
+  onProgress?.(t('Projet enregistré'));
   return {
     path: newPath,
     project: projectWithImages,
@@ -655,7 +656,7 @@ export async function saveProjectAs(project, currentSavePath, onProgress = null,
 export async function loadProject() {
   const path = await open({
     multiple: false,
-    filters: [{ name: 'Projet LuniiPack', extensions: ['mbah'] }],
+    filters: [{ name: t('Projet LuniiPack'), extensions: ['mbah'] }],
     defaultPath: getStoredDir(PROJECT_OPEN_KEYS) ?? getStoredDir(PROJECT_SAVE_KEYS),
   });
   if (!path) return null;
@@ -695,11 +696,11 @@ export async function loadProjectFromPath(path, { preserveEmptyProjectName = fal
   };
 }
 
-// Aperçu d'un fichier projet pour une liste, sans l'ouvrir. Le codec ne lit que
+// Aperçu dt('un fichier projet pour une liste, sans l')ouvrir. Le codec ne lit que
 // l'enveloppe : ni migration, ni normalisation, ni validation Rust du payload,
 // et aucune écriture — énumérer des reprises de session ne peut donc pas générer
 // une identité ni modifier un snapshot. Seul le chemin de la vignette est résolu,
-// parce qu'il doit être affichable ; le reste du fichier n'est pas touché.
+// parce qut('il doit être affichable ; le reste du fichier n')est pas touché.
 export async function previewProjectFromPath(path) {
   const text = await readTextFile(path);
   const preview = readProjectFilePreview(text, { fileName: basename(path) || path });
@@ -801,9 +802,9 @@ export async function consolidateProject(project, savePath, destinationDir, onPr
 
 // Dépendances du projet qui vivent encore dans le dossier de session **et**
 // existent sur le disque. Ce sont exactement les fichiers qu'un nettoyage de
-// session détruirait : tant qu'il en reste un, le projet enregistré n'est pas
+// session détruirait : tant qut('il en reste un, le projet enregistré n')est pas
 // autonome et la promotion ne doit pas supprimer la session. Une référence dont
-// le fichier a déjà disparu n'en est pas une — un média manquant n'a jamais
+// le fichier a déjà disparu nt('en est pas une — un média manquant n')a jamais
 // empêché un enregistrement, et le nettoyage ne lui retire rien.
 export async function collectLiveSessionDependencies(project, sessionDir) {
   const bound = collectSessionBoundReferences({ project, sessionDir });

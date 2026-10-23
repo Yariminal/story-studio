@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // Ce que l'export rend, et ce qu'un refus dit — sans jamais lire une phrase.
 //
 // Tous les refus de `export_advanced_pack` portent un `kind`, et les refus de
@@ -45,45 +46,45 @@ export const PREPARATION_REFUSAL = Object.freeze({
 
 const REFUSAL_TITLES = Object.freeze({
   [EXPORT_REFUSAL.PAYLOAD_DECODE]: 'Document illisible',
-  [EXPORT_REFUSAL.PREPARATION]: 'Préparation refusée',
-  [EXPORT_REFUSAL.MEDIA_UNAVAILABLE]: 'Médias indisponibles',
-  [EXPORT_REFUSAL.ARCHIVE_NAME_COLLISION]: "Collision de noms dans l'archive",
-  [EXPORT_REFUSAL.MEDIA_ORACLE]: 'Rattachement des médias en désaccord',
-  [EXPORT_REFUSAL.CANCELLED]: 'Export annulé',
-  [EXPORT_REFUSAL.OUTPUT_WRITE]: 'Écriture impossible',
+  [EXPORT_REFUSAL.PREPARATION]: t('Préparation refusée'),
+  [EXPORT_REFUSAL.MEDIA_UNAVAILABLE]: t('Médias indisponibles'),
+  [EXPORT_REFUSAL.ARCHIVE_NAME_COLLISION]: t("Collision de noms dans l'archive"),
+  [EXPORT_REFUSAL.MEDIA_ORACLE]: t('Rattachement des médias en désaccord'),
+  [EXPORT_REFUSAL.CANCELLED]: t('Export annulé'),
+  [EXPORT_REFUSAL.OUTPUT_WRITE]: t('Écriture impossible'),
   [EXPORT_REFUSAL.UNTYPED]: 'Export interrompu',
-  [EXPORT_REFUSAL.REQUEST]: 'Export impossible',
+  [EXPORT_REFUSAL.REQUEST]: t('Export impossible'),
 });
 
 const PREPARATION_TITLES = Object.freeze({
-  [PREPARATION_REFUSAL.GRAPH_INTEGRITY]: 'Intégrité du graphe',
-  [PREPARATION_REFUSAL.AUTHORING_ACTION_REQUIRED]: "Décision d'auteur requise",
-  [PREPARATION_REFUSAL.PACK_IDENTITY]: 'Identité du pack',
-  [PREPARATION_REFUSAL.READINESS_BLOCKED]: "Qualification d'export bloquée",
-  [PREPARATION_REFUSAL.STANDARD_SERIALIZATION]: 'Sérialisation du document',
+  [PREPARATION_REFUSAL.GRAPH_INTEGRITY]: t('Intégrité du graphe'),
+  [PREPARATION_REFUSAL.AUTHORING_ACTION_REQUIRED]: t("Décision d'auteur requise"),
+  [PREPARATION_REFUSAL.PACK_IDENTITY]: t('Identité du pack'),
+  [PREPARATION_REFUSAL.READINESS_BLOCKED]: t("Qualification d'export bloquée"),
+  [PREPARATION_REFUSAL.STANDARD_SERIALIZATION]: t('Sérialisation du document'),
 });
 
 const MEDIA_CAUSE_LABELS = Object.freeze({
-  'binding-absent': 'aucune liaison enregistrée pour cette référence',
-  'path-null': 'liaison sans chemin : le fichier doit être choisi par référence',
-  'not-found': 'fichier introuvable au chemin enregistré',
-  'not-regular': "le chemin ne désigne pas un fichier régulier",
-  'read-denied': 'lecture refusée par le système',
-  empty: 'fichier vide',
-  undecodable: 'contenu non décodable',
+  'binding-absent': t('aucune liaison enregistrée pour cette référence'),
+  'path-null': t('liaison sans chemin : le fichier doit être choisi par référence'),
+  'not-found': t('fichier introuvable au chemin enregistré'),
+  'not-regular': t("le chemin ne désigne pas un fichier régulier"),
+  'read-denied': t('lecture refusée par le système'),
+  empty: t('fichier vide'),
+  undecodable: t('contenu non décodable'),
   // Un décodage partiel puis échoué emprunte cette cause. Ce n'est pas la
   // preuve que l'auteur a fourni un fichier volontairement invalide.
-  'validation-failed': 'le fichier a été rejeté par la validation',
-  'tool-unavailable': "l'outil de conversion n'est pas disponible",
-  'tool-interrupted': "l'outil de conversion a été interrompu",
-  'processing-failed': 'la conversion a échoué',
+  'validation-failed': t('le fichier a été rejeté par la validation'),
+  'tool-unavailable': t("l'outil de conversion n'est pas disponible"),
+  'tool-interrupted': t("l'outil de conversion a été interrompu"),
+  'processing-failed': t('la conversion a échoué'),
 });
 
 const TRANSFORMATION_LABELS = Object.freeze({
-  verbatim: 'copié tel quel',
-  renamed: 'renommé pour le paquet',
-  reencoded: 'ré-encodé pour le paquet',
-  resized: 'redimensionné pour le paquet',
+  verbatim: t('copié tel quel'),
+  renamed: t('renommé pour le paquet'),
+  reencoded: t('ré-encodé pour le paquet'),
+  resized: t('redimensionné pour le paquet'),
 });
 
 const MEDIA_FIELD_LABELS = Object.freeze({ image: 'image', audio: 'audio' });
@@ -179,7 +180,7 @@ export function groupUnavailableMedia(entries) {
 }
 
 export function mediaFieldLabel(field) {
-  return MEDIA_FIELD_LABELS[field] ?? field ?? 'média';
+  return MEDIA_FIELD_LABELS[field] ?? field ?? t('média');
 }
 
 // La relecture porte-t-elle encore sur le document ouvert ?

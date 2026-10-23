@@ -6,6 +6,7 @@ import {
 import { usePersistentState } from '../../hooks/usePersistentState';
 import { KEYS } from '../../store/persistentSettings';
 
+import { t } from '../../i18n/index.js';
 const SILENCE_CODEC = {
   decode: (raw) => normalizePackAudioEdgeSilence(raw),
   encode: (value) => String(normalizePackAudioEdgeSilence(value)),
@@ -48,12 +49,12 @@ export function AdvancedSection({ className, sectionRef }) {
     <section id="advanced" className={className} ref={sectionRef}>
       <div className="opts-card-title">Silences audio</div>
       <SilenceDurationRow
-        label="Silence au début"
+        label={t("Silence au début")}
         value={leadingSilenceSeconds}
         onChange={setLeadingSilenceSeconds}
       />
       <SilenceDurationRow
-        label="Silence à la fin"
+        label={t("Silence à la fin")}
         value={trailingSilenceSeconds}
         onChange={setTrailingSilenceSeconds}
       />
