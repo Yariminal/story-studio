@@ -5,6 +5,7 @@ import { TriangleAlert } from '../icons/LucideLocal';
 import { useEscapeKey } from '../../hooks/useEscapeKey';
 import './Dialog.css';
 
+import { t } from '../../i18n/index.js';
 const ErrorDialogContext = createContext(null);
 
 function actionVariant(kind) {
@@ -23,7 +24,7 @@ function Dialog({ dialog, onClose, onConfirm, onAction }) {
 
   const variant = dialog.variant || 'error';
   const title = dialog.title || 'Erreur';
-  const closeLabel = dialog.okLabel || 'Fermer';
+  const closeLabel = dialog.okLabel || t('Fermer');
   const hasConfirm = typeof dialog.onConfirm === 'function';
   const actions = Array.isArray(dialog.actions) ? dialog.actions : null;
 
@@ -54,7 +55,7 @@ function Dialog({ dialog, onClose, onConfirm, onAction }) {
             </Button>
           )) : hasConfirm && (
             <Button ref={closeButtonRef} onClick={onClose} autoFocus>
-              {dialog.cancelLabel || 'Annuler'}
+              {dialog.cancelLabel || t('Annuler')}
             </Button>
           )}
           {!actions ? (
@@ -132,9 +133,9 @@ export function ErrorDialogProvider({ children }) {
       title: nextDialog?.title || 'Confirmer',
       message: String(nextDialog?.message ?? ''),
       variant: nextDialog?.variant || 'warning',
-      okLabel: nextDialog?.okLabel || 'OK',
+      okLabel: nextDialog?.okLabel || t('OK'),
       okKind: nextDialog?.okKind,
-      cancelLabel: nextDialog?.cancelLabel || 'Annuler',
+      cancelLabel: nextDialog?.cancelLabel || t('Annuler'),
       onConfirm: () => resolve(true),
       onClose: () => resolve(false),
     });
@@ -170,7 +171,7 @@ export function ErrorDialogProvider({ children }) {
 export function useErrorDialog() {
   const context = useContext(ErrorDialogContext);
   if (!context) {
-    throw new Error('useErrorDialog must be used inside ErrorDialogProvider');
+    throw new Error(t('useErrorDialog must be used inside ErrorDialogProvider'));
   }
   return context;
 }

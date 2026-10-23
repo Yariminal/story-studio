@@ -23,9 +23,10 @@ import { errorMessage, isYoutubeBlocked } from '../../utils/youtubeErrors.js';
 import { releaseTauriListener } from '../../utils/tauriListener';
 import './YoutubeImportFunnel.css';
 
+import { t } from '../../i18n/index.js';
 const STEPS = [
   { key: 'url', label: 'Adresse' },
-  { key: 'videos', label: 'Vidéos' },
+  { key: 'videos', label: t('Vidéos') },
 ];
 const LANGUAGE_STEP = { key: 'language', label: 'Audio' };
 
@@ -240,7 +241,7 @@ export function YoutubeImportFunnel({ onClose, onImport, mode = 'home', toLibrar
     setError('');
     setImportError('');
     setLogMessage('');
-    setProgress({ name: list?.title || 'YouTube', index: 0, total: chosen.length, phase: "Préparation de l'import…" });
+    setProgress({ name: list?.title || 'YouTube', index: 0, total: chosen.length, phase: t("Préparation de l'import…") });
     setPhase('importing');
     try {
       // onImport route la progression dans cet écran et lève en cas d'échec total.
@@ -301,25 +302,25 @@ export function YoutubeImportFunnel({ onClose, onImport, mode = 'home', toLibrar
   const overCap = selected.size > SELECTION_SOFT_CAP;
   const primaryDisabled = step === 0 ? !url.trim() : selected.size === 0;
   const primaryLabel = step === 0
-    ? 'Charger les vidéos'
+    ? t('Charger les vidéos')
     : (selected.size > 0
       ? `Importer ${selected.size} vidéo${selected.size > 1 ? 's' : ''}`
-      : 'Importer');
+      : t('Importer'));
 
   const subtitle = mode === 'editor'
     ? (toLibrary
-      ? 'Importe l’audio et les vignettes YouTube dans les médias du projet.'
-      : 'Importe des vidéos YouTube comme histoires dans ce projet.')
-    : 'Colle une URL YouTube, puis choisis les vidéos à transformer en histoires.';
+      ? t('Importe l’audio et les vignettes YouTube dans les médias du projet.')
+      : t('Importe des vidéos YouTube comme histoires dans ce projet.'))
+    : t('Colle une URL YouTube, puis choisis les vidéos à transformer en histoires.');
 
   return (
     <FunnelShell
       icon={<Youtube />}
-      title="Pack depuis YouTube"
+      title={t("Pack depuis YouTube")}
       subtitle={subtitle}
       onClose={busy ? () => {} : onClose}
       showChrome={phase === 'collect'}
-      ariaLabel="Créer un pack depuis YouTube"
+      ariaLabel={t("Créer un pack depuis YouTube")}
       stepper={(
         <FunnelStepper
           steps={steps}
@@ -347,7 +348,7 @@ export function YoutubeImportFunnel({ onClose, onImport, mode = 'home', toLibrar
           <FunnelSectionHeader
             icon={<Info />}
             title="Avant de commencer"
-            description="Une dernière chose, une seule fois."
+            description={t("Une dernière chose, une seule fois.")}
           />
           <p className="youtube-funnel-cgu-text">
             Cette fonction télécharge l'audio de vidéos YouTube pour un <strong>usage personnel
@@ -366,27 +367,27 @@ export function YoutubeImportFunnel({ onClose, onImport, mode = 'home', toLibrar
         </div>
       ) : phase === 'loading' ? (
         <FunnelGenerationState
-          title="Préparation…"
-          hint={logMessage || 'Lecture des vidéos (yt-dlp se prépare au premier usage).'}
+          title={t("Préparation…")}
+          hint={logMessage || t('Lecture des vidéos (yt-dlp se prépare au premier usage).')}
         />
       ) : phase === 'analyzing' ? (
         <FunnelGenerationState
-          title="Analyse des pistes audio…"
-          hint={logMessage || 'Recherche des langues proposées par les vidéos sélectionnées.'}
+          title={t("Analyse des pistes audio…")}
+          hint={logMessage || t('Recherche des langues proposées par les vidéos sélectionnées.')}
         />
       ) : phase === 'importing' ? (
         <FunnelGenerationState
           title="Import depuis YouTube…"
           hint={progress?.phase
             ? (progress.name ? `${progress.name} — ${progress.phase}` : progress.phase)
-            : (logMessage || "Les histoires arrivent dans l'éditeur.")}
+            : (logMessage || t("Les histoires arrivent dans l'éditeur."))}
           progress={progress && progress.total ? progress.index / progress.total : null}
         />
       ) : phase === 'error' ? (
         <FunnelDoneState
           tone="error"
           icon={<TriangleAlert />}
-          title="L'import a échoué"
+          title={t("L'import a échoué")}
           meta={importError}
         >
           <button type="button" className="funnel-btn funnel-btn-primary" onClick={onClose}>
@@ -398,7 +399,7 @@ export function YoutubeImportFunnel({ onClose, onImport, mode = 'home', toLibrar
           <FunnelSectionHeader
             icon={<Youtube />}
             title="Adresse YouTube"
-            description="Colle l'URL d'une vidéo, d'une playlist ou d'une chaîne."
+            description={t("Colle l'URL d'une vidéo, d'une playlist ou d'une chaîne.")}
           />
           <form className="youtube-funnel-form" onSubmit={handleLoadList}>
             <label className="youtube-funnel-field" htmlFor="youtube-funnel-url">
@@ -416,8 +417,8 @@ export function YoutubeImportFunnel({ onClose, onImport, mode = 'home', toLibrar
           </form>
           <p className="youtube-funnel-hint">
             Tu pourras filtrer et sélectionner les vidéos avant {toLibrary
-              ? "de retrouver leurs médias dans la bibliothèque."
-              : "qu'elles soient ajoutées dans l'arbre."}
+              ? t("de retrouver leurs médias dans la bibliothèque.")
+              : t("qu'elles soient ajoutées dans l'arbre.")}
           </p>
           {error && <div className="funnel-error" role="alert">{error}</div>}
         </div>
@@ -427,13 +428,13 @@ export function YoutubeImportFunnel({ onClose, onImport, mode = 'home', toLibrar
             icon={<Youtube />}
             title={list?.title || 'YouTube'}
             description={toLibrary
-              ? 'Sélectionne les vidéos dont tu veux importer l’audio et la vignette.'
-              : 'Sélectionne les vidéos à importer dans le pack.'}
+              ? t('Sélectionne les vidéos dont tu veux importer l’audio et la vignette.')
+              : t('Sélectionne les vidéos à importer dans le pack.')}
             trailing={(
               <span className="funnel-badge">
                 {videos.length > 0
                   ? `${firstVisibleIndex}–${lastVisibleIndex}`
-                  : 'Aucune vidéo'}
+                  : t('Aucune vidéo')}
               </span>
             )}
           />
@@ -491,7 +492,7 @@ export function YoutubeImportFunnel({ onClose, onImport, mode = 'home', toLibrar
               })
             )}
           </div>
-          <nav className="youtube-funnel-pagination" aria-label="Pages de vidéos YouTube">
+          <nav className="youtube-funnel-pagination" aria-label={t("Pages de vidéos YouTube")}>
             <button
               type="button"
               className="youtube-funnel-page-btn"
@@ -518,10 +519,10 @@ export function YoutubeImportFunnel({ onClose, onImport, mode = 'home', toLibrar
         <div className="funnel-step-content youtube-funnel-step youtube-funnel-step--audio">
           <FunnelSectionHeader
             icon={<Youtube />}
-            title="Piste audio"
-            description="Plusieurs langues sont disponibles dans au moins une vidéo sélectionnée."
+            title={t("Piste audio")}
+            description={t("Plusieurs langues sont disponibles dans au moins une vidéo sélectionnée.")}
           />
-          <div className="youtube-funnel-language-list" role="radiogroup" aria-label="Piste audio à importer">
+          <div className="youtube-funnel-language-list" role="radiogroup" aria-label={t("Piste audio à importer")}>
             <label className={`youtube-funnel-language${audioLanguage === '' ? ' is-selected' : ''}`}>
               <input
                 type="radio"

@@ -15,6 +15,7 @@ import { getGeneratedEndMessageControls, getGeneratedStoryPlayControls } from '.
 import { classifyGlobalEndHome, resolveGlobalEndHome, resolvePromptEndHome, END_HOME_NONE } from './endMessageHome.js';
 import { classifyEndMessagePresentation } from './endMessagePresentation.js';
 
+import { t } from '../i18n/index.js';
 export const CONTEXTUAL_NEXT_STORY_TARGET = '__contextual_next_story__';
 
 export function hasVisibleEndNode(project) {
@@ -101,7 +102,7 @@ export function getPackStartReturnLabel(project) {
   const destination = getDefaultPackEntryDestination(project);
   return destination?.name
     ? `Retour vers « ${destination.name} »`
-    : 'Retour à la couverture du pack';
+    : t('Retour à la couverture du pack');
 }
 
 function resolveNavigationTargetId(target, parentMenu = null) {
@@ -114,10 +115,10 @@ function resolveNavigationTargetId(target, parentMenu = null) {
   return decodeNavigationMenuId(normalized);
 }
 
-export function getGeneratedNavigationTargetName(targetId, projectIndex, fallback = 'destination introuvable') {
+export function getGeneratedNavigationTargetName(targetId, projectIndex, fallback = t('destination introuvable')) {
   if (targetId === 'root') return 'Racine';
-  if (targetId === NAV_TARGET_NEXT_STORY) return 'Histoire suivante';
-  if (targetId === CONTEXTUAL_NEXT_STORY_TARGET) return "Histoire suivante selon l'histoire source";
+  if (targetId === NAV_TARGET_NEXT_STORY) return t('Histoire suivante');
+  if (targetId === CONTEXTUAL_NEXT_STORY_TARGET) return t("Histoire suivante selon l'histoire source");
   if (!targetId) return fallback;
   if (isStoryNavigationTarget(targetId)) {
     const storyId = decodeNavigationStoryId(targetId);

@@ -11,9 +11,10 @@ import {
 import { Check, Loader2, Rss, Search, TriangleAlert } from '../icons/LucideLocal';
 import './PodcastImportFunnel.css';
 
+import { t } from '../../i18n/index.js';
 const STEPS = [
   { key: 'feed', label: 'Flux RSS' },
-  { key: 'episodes', label: 'Épisodes' },
+  { key: 'episodes', label: t('Épisodes') },
 ];
 
 function formatBytes(bytes) {
@@ -111,7 +112,7 @@ export function PodcastImportFunnel({ onClose, onImport }) {
     const chosen = episodes.filter((ep) => selected.has(ep.id));
     setError('');
     setImportError('');
-    setProgress({ name: feed?.title || 'Podcast', index: 0, total: chosen.length, phase: "Préparation de l'import…" });
+    setProgress({ name: feed?.title || 'Podcast', index: 0, total: chosen.length, phase: t("Préparation de l'import…") });
     setImportPhase('importing');
     try {
       // onImport route la progression dans cet écran (et non dans la modale
@@ -130,19 +131,19 @@ export function PodcastImportFunnel({ onClose, onImport }) {
     ? loadingFeed || !url.trim()
     : selected.size === 0 || importing;
   const primaryLabel = step === 0
-    ? (loadingFeed ? 'Chargement…' : 'Charger les épisodes')
+    ? (loadingFeed ? t('Chargement…') : t('Charger les épisodes'))
     : (selected.size > 0
       ? `Importer ${selected.size} épisode${selected.size > 1 ? 's' : ''}`
-      : 'Importer');
+      : t('Importer'));
 
   return (
     <FunnelShell
       icon={<Rss />}
-      title="Pack depuis un podcast"
-      subtitle="Choisis un flux RSS, puis les épisodes à transformer en histoires."
+      title={t("Pack depuis un podcast")}
+      subtitle={t("Choisis un flux RSS, puis les épisodes à transformer en histoires.")}
       onClose={importing ? () => {} : onClose}
       showChrome={importPhase === 'collect'}
-      ariaLabel="Créer un pack depuis un podcast"
+      ariaLabel={t("Créer un pack depuis un podcast")}
       stepper={(
         <FunnelStepper
           steps={STEPS}
@@ -171,14 +172,14 @@ export function PodcastImportFunnel({ onClose, onImport }) {
           title="Import du podcast…"
           hint={progress?.phase
             ? (progress.name ? `${progress.name} — ${progress.phase}` : progress.phase)
-            : "Les histoires arrivent dans l'éditeur."}
+            : t("Les histoires arrivent dans l'éditeur.")}
           progress={progress && progress.total ? progress.index / progress.total : null}
         />
       ) : importPhase === 'error' ? (
         <FunnelDoneState
           tone="error"
           icon={<TriangleAlert />}
-          title="L'import a échoué"
+          title={t("L'import a échoué")}
           meta={importError}
         >
           <button type="button" className="funnel-btn funnel-btn-primary" onClick={onClose}>
@@ -190,7 +191,7 @@ export function PodcastImportFunnel({ onClose, onImport }) {
           <FunnelSectionHeader
             icon={<Rss />}
             title="Adresse du podcast"
-            description="Colle l'URL du flux RSS pour afficher les épisodes disponibles."
+            description={t("Colle l'URL du flux RSS pour afficher les épisodes disponibles.")}
           />
           <form className="podcast-funnel-form" onSubmit={handleLoadFeed}>
             <label className="podcast-funnel-field" htmlFor="podcast-funnel-url">
@@ -208,7 +209,7 @@ export function PodcastImportFunnel({ onClose, onImport }) {
             </label>
           </form>
           <p className="podcast-funnel-hint">
-            Tu pourras filtrer et sélectionner les épisodes avant qu'ils soient ajoutés dans l'arbre.
+            Tu pourras filtrer et sélectionner les épisodes avant qut('ils soient ajoutés dans l')arbre.
           </p>
           {error && <div className="funnel-error" role="alert">{error}</div>}
         </div>
@@ -217,7 +218,7 @@ export function PodcastImportFunnel({ onClose, onImport }) {
           <FunnelSectionHeader
             icon={<Rss />}
             title={feed?.title || 'Podcast'}
-            description="Sélectionne les épisodes à importer dans le pack."
+            description={t("Sélectionne les épisodes à importer dans le pack.")}
             trailing={<span className="funnel-badge">{episodes.length} épisode{episodes.length > 1 ? 's' : ''}</span>}
           />
           <div className="podcast-funnel-toolbar">
@@ -225,7 +226,7 @@ export function PodcastImportFunnel({ onClose, onImport }) {
               <Search />
               <input
                 type="text"
-                placeholder="Filtrer les épisodes…"
+                placeholder={t("Filtrer les épisodes…")}
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
               />

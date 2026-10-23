@@ -1,3 +1,4 @@
+import { t } from '../i18n/index.js';
 const AUDIO_EXTENSIONS = new Set(['mp3', 'wav', 'ogg', 'm4a', 'flac', 'webm']);
 
 function extension(path) {
@@ -26,12 +27,12 @@ export async function importFilesToMediaLibrary({
   for (let i = 0; i < files.length; i += 1) {
     const file = files[i];
     const displayName = getImportDisplayName(file);
-    setImporting({ name: displayName, index: i + 1, total, phase: 'Copie dans le projet...' });
+    setImporting({ name: displayName, index: i + 1, total, phase: t('Copie dans le projet...') });
     const copiedPath = await maybeCopyToProject(file);
     nextPaths.push(copiedPath);
 
     if (!extractAudioEmbeddedImage || !isAudioPath(copiedPath)) continue;
-    setImporting({ name: displayName, index: i + 1, total, phase: 'Extraction de la jaquette...' });
+    setImporting({ name: displayName, index: i + 1, total, phase: t('Extraction de la jaquette...') });
     const embeddedImage = await extractAudioEmbeddedImage(copiedPath);
     if (embeddedImage) {
       const persistExtractedImage = copyGeneratedMediaToProject ?? maybeCopyToProject;

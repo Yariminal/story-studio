@@ -10,6 +10,7 @@ import { formatFrenchCount } from '../../utils/frenchText.js';
 import './EditorPanel.css';
 import './RootEditor.css';
 
+import { t } from '../../i18n/index.js';
 export const RootEditor = memo(function RootEditor({ node, projectType, onUpdateRoot, onUpdateMedia, onUpdateStoryAudio }) {
   const sameImage = !!node.sameImage;
   const nativeGraph = node.nativeGraph ?? null;
@@ -73,8 +74,8 @@ export const RootEditor = memo(function RootEditor({ node, projectType, onUpdate
           <span className="media-col-subtitle">Titre audio — entendu dans le menu principal</span>
         </div>
         <AudioField
-          label="Titre audio"
-          description="Entendu dans le menu principal"
+          label={t("Titre audio")}
+          description={t("Entendu dans le menu principal")}
           file={node.rootAudio}
           ttsTextSuggestion={rootTitle}
           ttsFilenameHint={`titre-${rootTitle || 'projet'}`}
@@ -120,8 +121,8 @@ export const RootEditor = memo(function RootEditor({ node, projectType, onUpdate
             type="button"
             className="simple-mode-info-dismiss"
             onClick={dismissSimpleInfo}
-            aria-label="Masquer ce message"
-            title="Masquer ce message"
+            aria-label={t("Masquer ce message")}
+            title={t("Masquer ce message")}
           >
             ×
           </button>
@@ -130,11 +131,11 @@ export const RootEditor = memo(function RootEditor({ node, projectType, onUpdate
 
       <div className="card root-identity-card">
         <div className="card-title-row">
-          <div className="card-title">{isSimple ? 'Mon histoire' : 'Menu Racine'}</div>
+          <div className="card-title">{isSimple ? t('Mon histoire') : t('Menu Racine')}</div>
           <div className="card-copy card-copy--inline">
             {isSimple
-              ? "Image et audio utilisés quand l'enfant choisit cette histoire."
-              : "Image et audio utilisés quand l'enfant choisit ce pack."}
+              ? t("Image et audio utilisés quand l'enfant choisit cette histoire.")
+              : t("Image et audio utilisés quand l'enfant choisit ce pack.")}
           </div>
         </div>
 
@@ -146,11 +147,11 @@ export const RootEditor = memo(function RootEditor({ node, projectType, onUpdate
                 className="field-input"
                 value={node.rootName ?? ''}
                 onChange={(e) => onUpdateRoot({ rootName: e.target.value })}
-                placeholder="Menu racine"
+                placeholder={t("Menu racine")}
               />
             </div>
             <span className="root-entry-count">
-              {formatFrenchCount(node.rootEntries?.length ?? 0, 'élément', 'éléments')}
+              {formatFrenchCount(node.rootEntries?.length ?? 0, t('élément'), t('éléments'))}
             </span>
           </div>
         ) : null}
@@ -182,8 +183,8 @@ export const RootEditor = memo(function RootEditor({ node, projectType, onUpdate
                 Image
                 <span className="media-col-subtitle">
                   {isSimple
-                    ? "Visuel utilisé pour présenter l'histoire"
-                    : 'Visuel utilisé pour présenter le pack'}
+                    ? t("Visuel utilisé pour présenter l'histoire")
+                    : t('Visuel utilisé pour présenter le pack')}
                 </span>
               </div>
               {/* La vignette catalogue se choisit dans la fiche du pack. Tant
@@ -192,13 +193,13 @@ export const RootEditor = memo(function RootEditor({ node, projectType, onUpdate
                 fieldId="root:coverImage"
                 file={node.rootImage}
                 badge="Lunii · 320×240"
-                formatHint="Choisis une image : elle sera adaptée en 320 × 240 px à l’export"
+                formatHint={t("Choisis une image : elle sera adaptée en 320 × 240 px à l’export")}
                 extraActions={[
                   {
                     key: 'generate-text',
-                    label: 'Générer une image-titre',
+                    label: t('Générer une image-titre'),
                     onClick: handleGenerateTextImage,
-                    title: "Créer une image-titre à partir du nom de l'histoire",
+                    title: t("Créer une image-titre à partir du nom de l'histoire"),
                   },
                 ]}
                 onPick={(f) => {
@@ -228,8 +229,8 @@ export const RootEditor = memo(function RootEditor({ node, projectType, onUpdate
             <div className="card-copy card-copy--inline">Le fichier audio joué quand l'enfant valide son choix sur la Lunii — c'est l'histoire en elle-même.</div>
           </div>
           <AudioField
-            label="Audio du récit"
-            description="Joué quand l'enfant valide son choix"
+            label={t("Audio du récit")}
+            description={t("Joué quand l'enfant valide son choix")}
             file={node.storyAudio}
             ttsFilenameHint={`histoire-complete-${simpleStoryName || 'histoire'}`}
             xttsTarget={{ kind: 'rootStory', field: 'audio' }}

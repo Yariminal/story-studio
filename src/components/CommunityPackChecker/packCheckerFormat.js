@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // Helpers purs (sans React) partages par l'UI du verificateur et l'export du
 // rapport : formatteurs de mesures, construction des lignes audio/image, et
 // predicats de conformite. Garde l'export texte independant de tout JSX.
@@ -8,17 +9,17 @@ function formatNumber(value, digits = 1) {
 
 export function formatSeconds(value) {
   const formatted = formatNumber(value, 2);
-  return formatted ? `${formatted} s` : 'Non mesuré';
+  return formatted ? `${formatted} s` : t('Non mesuré');
 }
 
 export function formatLufs(value) {
   const formatted = formatNumber(value, 1);
-  return formatted ? `${formatted} LUFS` : 'Non mesuré';
+  return formatted ? `${formatted} LUFS` : t('Non mesuré');
 }
 
 export function formatPeak(value) {
   const formatted = formatNumber(value, 1);
-  return formatted ? `${formatted} dBTP` : 'Non mesuré';
+  return formatted ? `${formatted} dBTP` : t('Non mesuré');
 }
 
 export function cleanLabel(label) {
@@ -37,18 +38,18 @@ export function expectedImageOk(item) {
 export function audioMeasureRows(item) {
   return [
     { key: 'format', label: 'Format', value: `${item?.codec || 'Inconnu'} · ${item?.channels || 'canaux ?'}` },
-    { key: 'sampleRate', label: 'Échantillonnage', value: item?.sampleRate ? `${formatNumber(item.sampleRate / 1000, 1)} kHz` : 'Non mesuré' },
-    { key: 'silenceStart', label: 'Silence début', value: formatSeconds(item?.leadingSilenceSecs) },
-    { key: 'silenceEnd', label: 'Silence fin', value: formatSeconds(item?.trailingSilenceSecs) },
+    { key: 'sampleRate', label: t('Échantillonnage'), value: item?.sampleRate ? `${formatNumber(item.sampleRate / 1000, 1)} kHz` : t('Non mesuré') },
+    { key: 'silenceStart', label: t('Silence début'), value: formatSeconds(item?.leadingSilenceSecs) },
+    { key: 'silenceEnd', label: t('Silence fin'), value: formatSeconds(item?.trailingSilenceSecs) },
     { key: 'volume', label: 'Volume', value: formatLufs(item?.integratedLufs) },
-    { key: 'peak', label: 'Crête vraie', value: formatPeak(item?.truePeakDb) },
+    { key: 'peak', label: t('Crête vraie'), value: formatPeak(item?.truePeakDb) },
   ];
 }
 
 export function imageMeasureRows(item) {
   return [
-    { key: 'dimensions', label: 'Dimensions', value: item?.width && item?.height ? `${item.width}×${item.height}` : 'Non mesuré' },
-    { key: 'imageFormat', label: 'Format', value: item?.format || 'Non mesuré' },
+    { key: 'dimensions', label: 'Dimensions', value: item?.width && item?.height ? `${item.width}×${item.height}` : t('Non mesuré') },
+    { key: 'imageFormat', label: 'Format', value: item?.format || t('Non mesuré') },
   ];
 }
 

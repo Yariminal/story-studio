@@ -5,6 +5,7 @@ import { FICHIERS_IMPORTES } from '../store/workspaceDirs';
 import { pathKey } from '../utils/fileUtils';
 import { logger } from '../utils/logger';
 
+import { t } from '../i18n/index.js';
 /**
  * Tri des médias de session à la promotion.
  *
@@ -85,15 +86,15 @@ export function useSessionMediaTriage({ store, mediaLibraryPathsRef, setMediaLib
         logger.error(`session:triage-copy-errors count=${failed.length}`);
         const details = failed.slice(0, 5).map((item) => `• ${item.path}\n  ${item.error}`).join('\n');
         const action = await showChoiceDialog({
-          title: 'Copie incomplète',
+          title: t('Copie incomplète'),
           message: 'Certains médias conservés n\'ont pas pu être copiés :\n\n'
             + details
             + '\n\nRéessayer, ou les abandonner (ils seront supprimés avec le dossier temporaire de session) ?',
           variant: 'warning',
           cancelValue: 'retry',
           actions: [
-            { value: 'drop', label: 'Abandonner ces fichiers', kind: 'danger-outline' },
-            { value: 'retry', label: 'Réessayer', kind: 'primary', autoFocus: true },
+            { value: 'drop', label: t('Abandonner ces fichiers'), kind: 'danger-outline' },
+            { value: 'retry', label: t('Réessayer'), kind: 'primary', autoFocus: true },
           ],
         });
         if (action === 'drop') {

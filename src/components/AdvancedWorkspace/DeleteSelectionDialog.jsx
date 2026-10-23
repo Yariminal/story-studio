@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // Retirer plusieurs nœuds d'un coup : la confirmation de Suppr sur une
 // sélection, et de « Retirer… » au clic droit dans une sélection.
 //
@@ -13,7 +14,7 @@ import { selectionRemovalImpact } from '../../store/advancedAuthoring/authoringP
 import { STAGE_KIND } from '../../store/advancedGraphView/graphViewModel.js';
 import { useShortcutLabels } from '../../store/ShortcutLabelsContext.js';
 
-const ENTRY_NOT_REMOVABLE = 'L’Écran racine ne se retire pas : désignez d’abord un autre Écran racine.';
+const ENTRY_NOT_REMOVABLE = t('L’Écran racine ne se retire pas : désignez d’abord un autre Écran racine.');
 
 export function DeleteSelectionDialog({ index, paths, busy, onCancel, onConfirm }) {
   const labels = useShortcutLabels();
@@ -30,10 +31,10 @@ export function DeleteSelectionDialog({ index, paths, busy, onCancel, onConfirm 
       title={`Retirer ${entries.length} éléments`}
       description={`${counted} seront retirés ensemble. ${labels.undo
         ? `${labels.undo} les rétablit en une fois.`
-        : 'Annuler les rétablit en une fois.'}`}
+        : t('Annuler les rétablit en une fois.')}`}
       onCancel={onCancel}
       onConfirm={confirm}
-      confirmLabel="Retirer"
+      confirmLabel={t("Retirer")}
       confirmKind="danger"
       confirmDisabled={!gesture}
       busy={busy}
@@ -42,7 +43,7 @@ export function DeleteSelectionDialog({ index, paths, busy, onCancel, onConfirm 
         {entries.map((entry) => (
           <li key={entry.path} className="advanced-decision-list__row">
             <span className="advanced-decision-list__what">
-              <strong>{entry.label.label}</strong> — {entry.kind === STAGE_KIND ? 'Écran' : 'Liste de choix'}
+              <strong>{entry.label.label}</strong> — {entry.kind === STAGE_KIND ? t('Écran') : t('Liste de choix')}
             </span>
           </li>
         ))}
@@ -53,7 +54,7 @@ export function DeleteSelectionDialog({ index, paths, busy, onCancel, onConfirm 
       {!entryIncluded && loose > 0 && (
         <p className="advanced-field__note">
           {loose === 1
-            ? 'Un raccord venu du reste du graphe visait cette sélection : il restera à raccorder, dans « À corriger ».'
+            ? t('Un raccord venu du reste du graphe visait cette sélection : il restera à raccorder, dans « À corriger ».')
             : `${loose} raccords venus du reste du graphe visaient cette sélection : ils resteront à raccorder, dans « À corriger ».`}
         </p>
       )}

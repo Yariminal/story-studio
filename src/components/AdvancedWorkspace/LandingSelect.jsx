@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // « commence sur [choix ▾] » : le choix sur lequel un Écran ouvre une liste,
 // réglable sur place, depuis le panneau de l'Écran comme depuis celui de la
 // liste. La liste garde son ordre ; c'est l'Écran de départ qui dit où l'on
@@ -41,12 +42,12 @@ export function LandingSelect({ id, landing, choices, disabled, onChange }) {
       <select id={id} value={value} disabled={disabled} onChange={(event) => onChange(event.target.value)}>
         {value === '' && (
           <option value="" disabled>
-            {landing.unknown ? 'choix illisible' : `choix ${positionText(landing.rank, count)} absent`}
+            {landing.unknown ? t('choix illisible') : `choix ${positionText(landing.rank, count)} absent`}
           </option>
         )}
         {choices.map((choice) => (
           <option key={choice.key} value={String(choice.rank)}>
-            {positionText(choice.rank, count)} · {choice.label ?? 'Écran à choisir'}
+            {positionText(choice.rank, count)} · {choice.label ?? t('Écran à choisir')}
           </option>
         ))}
         {offersRandom && <option value="random">Au hasard, à chaque fois</option>}

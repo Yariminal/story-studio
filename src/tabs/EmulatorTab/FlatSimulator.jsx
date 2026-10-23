@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // Le simulateur de graphe à plat — Écrans, Actions, options, boucles.
 //
 // Il s'appelait `ZipSimulator` tant qu'il n'avait qu'une provenance. Il en a
@@ -126,7 +127,7 @@ export function FlatSimulator({
         if (cancelled) return;
         const story = typeof json === 'string' ? JSON.parse(json) : json;
         const built = packFlatGraph(story, zipPath);
-        if (!built.entryId) throw new Error('Nœud de départ (squareOne) introuvable');
+        if (!built.entryId) throw new Error(t('Nœud de départ (squareOne) introuvable'));
         install(built);
       })
       .catch(e => { if (!cancelled) setLoadError(String(e?.message ?? e)); });
@@ -335,8 +336,8 @@ export function FlatSimulator({
   if (!currentStage) return (
     <div style={{ padding: 24, color: 'var(--muted)', fontSize: 13, lineHeight: 1.6 }}>
       {documentGraph
-        ? 'Aucun Écran de départ. Choisissez l’Écran racine depuis « À corriger », ou lancez l’écoute depuis l’Écran sélectionné.'
-        : 'Ce pack n’a pas d’Écran de départ.'}
+        ? t('Aucun Écran de départ. Choisissez l’Écran racine depuis « À corriger », ou lancez l’écoute depuis l’Écran sélectionné.')
+        : t('Ce pack n’a pas d’Écran de départ.')}
     </div>
   );
 

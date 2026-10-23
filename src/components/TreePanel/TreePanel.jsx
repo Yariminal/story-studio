@@ -31,6 +31,7 @@ import { buildRefDisplay } from '../tree/refDisplay';
 import { hasVisibleEndNode } from '../../store/generatedNavigation';
 import './TreePanel.css';
 
+import { t } from '../../i18n/index.js';
 // Les natures qu'on duplique, comme le menu contextuel de l'arbre.
 const DUPLICABLE_TREE_TYPES = Object.freeze(['menu', 'story', 'zip']);
 
@@ -498,8 +499,8 @@ export function TreePanel({
               id="root"
               type="root"
               label={projectType === 'pack'
-                ? (project.rootName || 'Menu racine')
-                : (project.projectName || 'Mon histoire')}
+                ? (project.rootName || t('Menu racine'))
+                : (project.projectName || t('Mon histoire'))}
               level={0}
               selected={selectedIds.has('root')}
               hovered={hoveredNodeId === 'root'}
@@ -510,7 +511,7 @@ export function TreePanel({
                 key: 'native-graph-root',
                 kind: 'graph',
                 label: 'Graphe',
-                title: 'Graphe interactif natif actif pour le round-trip.',
+                title: t('Graphe interactif natif actif pour le round-trip.'),
               }] : EMPTY_BADGES}
               showNavigationBadgeColumn={showNavigationBadgeColumn}
               dropTarget={resolveDropTargetForNode('root', 'root', dropInfo)}

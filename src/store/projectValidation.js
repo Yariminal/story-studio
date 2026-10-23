@@ -1,3 +1,4 @@
+import { t } from '../i18n/index.js';
 // Validation projet cote frontend.
 //
 // Contrat partage avec Rust : src-tauri/src/domain/validation.rs#validate_project_for_generation.
@@ -33,7 +34,7 @@
 //
 // Taxonomie UI actuelle :
 //   - aucune issue bloquante/warning -> "Pack prêt" ;
-//   - status "error" ou "warning" -> "À corriger".
+//   - status "error" ou "warning" -> t("À corriger").
 // Les deux statuts empechent aujourd'hui la generation cote React
 // (voir App.jsx/canGenerate et getGenerateErrors). La distinction interne
 // reste utile pour diagnostiquer les erreurs structurelles, mais elle n'est
@@ -116,13 +117,13 @@ function validateStorySelectionItem(issues, item, fallbackName, fileAudit, proje
   else if (isBrokenPath(item?.audio, fileAudit)) pushWarning(issues, itemId, brokenField(name, 'histoire'));
   if (!hasPath(item?.itemImage)) pushWarning(issues, itemId, missingField(name, 'image', { feminine: true }));
   else if (isBrokenPath(item?.itemImage, fileAudit)) pushWarning(issues, itemId, brokenField(name, 'image'));
-  if (!hasPath(item?.itemAudio) && selectionAudioRequired) pushWarning(issues, itemId, missingField(name, 'audio titre'));
-  else if (isBrokenPath(item?.itemAudio, fileAudit)) pushWarning(issues, itemId, brokenField(name, 'audio titre'));
+  if (!hasPath(item?.itemAudio) && selectionAudioRequired) pushWarning(issues, itemId, missingField(name, t('audio titre')));
+  else if (isBrokenPath(item?.itemAudio, fileAudit)) pushWarning(issues, itemId, brokenField(name, t('audio titre')));
   // Médias de fin : seuls ceux que le moteur écrit sont vérifiés (miroir des
   // règles d'activité Rust). Une étape ou une réaction sans média reste valide :
   // le moteur et les lecteurs acceptent un écran muet.
   if (isEndPromptActive(item, project) && isBrokenPath(item?.afterPlaybackPromptAudio, fileAudit)) {
-    pushWarning(issues, itemId, brokenField(name, "audio de fin d'histoire"));
+    pushWarning(issues, itemId, brokenField(name, t("audio de fin d'histoire")));
   }
   if (isEndSequenceActive(item, project)) {
     for (const [index, step] of item.afterPlaybackSequence.entries()) {
@@ -132,8 +133,8 @@ function validateStorySelectionItem(issues, item, fallbackName, fileAudit, proje
   }
   const homeStep = item?.afterPlaybackHomeStep;
   if (homeStep && isEndHomeStepActive(item, project)) {
-    if (isBrokenPath(homeStep.audio, fileAudit)) pushWarning(issues, itemId, brokenField(name, 'audio de la réaction Accueil'));
-    if (isBrokenPath(homeStep.image, fileAudit)) pushWarning(issues, itemId, brokenField(name, 'image de la réaction Accueil'));
+    if (isBrokenPath(homeStep.audio, fileAudit)) pushWarning(issues, itemId, brokenField(name, t('audio de la réaction Accueil')));
+    if (isBrokenPath(homeStep.image, fileAudit)) pushWarning(issues, itemId, brokenField(name, t('image de la réaction Accueil')));
   }
 }
 
@@ -146,7 +147,7 @@ function validateZipItem(issues, item, fallbackName, fileAudit) {
 export function getProjectValidationIssues(project, fileAudit = {}, providedProjectIndex = null) {
   const issues = [];
   const projectType = project?.projectType;
-  const rootName = labelOrFallback(project?.projectName || project?.packMetadata?.title, 'Pack sans nom');
+  const rootName = labelOrFallback(project?.projectName || project?.packMetadata?.title, t('Pack sans nom'));
   const autoNext = !!project?.globalOptions?.autoNext;
   const nightMode = !!project?.globalOptions?.nightMode;
   // Le message de fin global n'est vérifié que si une histoire l'emprunte : remplacé
@@ -159,7 +160,7 @@ export function getProjectValidationIssues(project, fileAudit = {}, providedProj
   const navigation = { menuIds: new Set(menuMap.keys()), project };
 
   if (!projectType) {
-    pushWarning(issues, 'root', VALIDATION_MESSAGES.noProjectType);
+    pushWarning(issues, 'root', VALIDATION_MESSAGES.noProjectType());
     return issues;
   }
 
@@ -167,7 +168,7 @@ export function getProjectValidationIssues(project, fileAudit = {}, providedProj
     pushWarning(
       issues,
       warning?.entryId ?? 'root',
-      warning?.message || VALIDATION_MESSAGES.importedTransitionUnmodeled,
+      warning?.message || VALIDATION_MESSAGES.importedTransitionUnmodeled(),
     );
   }
 
@@ -177,17 +178,17 @@ export function getProjectValidationIssues(project, fileAudit = {}, providedProj
     }
   }
   if (entryIdCounts.has('root')) {
-    pushError(issues, 'root', VALIDATION_MESSAGES.rootReservedId);
+    pushError(issues, 'root', VALIDATION_MESSAGES.rootReservedId());
   }
 
-  if (!hasPath(project?.rootAudio)) pushWarning(issues, 'root', missingField('Menu racine', 'audio intro'));
-  else if (isBrokenPath(project?.rootAudio, fileAudit)) pushWarning(issues, 'root', brokenField('Menu racine', 'audio intro'));
-  if (!hasPath(project?.rootImage)) pushWarning(issues, 'root', missingField('Menu racine', 'image de couverture', { feminine: true }));
-  else if (isBrokenPath(project?.rootImage, fileAudit)) pushWarning(issues, 'root', brokenField('Menu racine', 'image de couverture'));
+  if (!hasPath(project?.rootAudio)) pushWarning(issues, 'root', missingField(t('Menu racine'), t('audio intro')));
+  else if (isBrokenPath(project?.rootAudio, fileAudit)) pushWarning(issues, 'root', brokenField(t('Menu racine'), t('audio intro')));
+  if (!hasPath(project?.rootImage)) pushWarning(issues, 'root', missingField(t('Menu racine'), t('image de couverture'), { feminine: true }));
+  else if (isBrokenPath(project?.rootImage, fileAudit)) pushWarning(issues, 'root', brokenField(t('Menu racine'), t('image de couverture')));
   // Sans vignette propre, le catalogue reprend l'image racine : il ne manque
   // donc jamais de vignette. Une vignette propre se vérifie comme un média.
   if (!project?.sameImage && hasPath(project?.thumbnailImage) && isBrokenPath(project?.thumbnailImage, fileAudit)) {
-    pushWarning(issues, 'root', brokenField('Fiche du pack', 'vignette catalogue'));
+    pushWarning(issues, 'root', brokenField(t('Fiche du pack'), 'vignette catalogue'));
   }
   if (hasEndNode && !hasPath(project?.nightModeAudio)) {
     pushWarning(issues, 'end-node', missingField('Message de fin', 'audio'));
@@ -208,8 +209,8 @@ export function getProjectValidationIssues(project, fileAudit = {}, providedProj
   // dossier supprimé) reste visible et à corriger : le moteur la remplacerait
   // sans le dire par le retour propre à chaque histoire.
   if (hasEndNode) {
-    validateNavigationTarget(issues, 'end-node', 'Message de fin — destination après le message', project?.nightModeReturn, projectIndex, navigation);
-    validateNavigationTarget(issues, 'end-node', 'Message de fin — bouton Accueil', project?.nightModeHomeReturn, projectIndex, navigation);
+    validateNavigationTarget(issues, 'end-node', t('Message de fin — destination après le message'), project?.nightModeReturn, projectIndex, navigation);
+    validateNavigationTarget(issues, 'end-node', t('Message de fin — bouton Accueil'), project?.nightModeHomeReturn, projectIndex, navigation);
   }
 
   visitProjectEntries(project, (entry, ancestors) => {
@@ -409,7 +410,7 @@ export function getProjectValidationIssues(project, fileAudit = {}, providedProj
   }, projectIndex);
 
   if (rootPlayableCount === 0) {
-    pushWarning(issues, 'root', VALIDATION_MESSAGES.emptyPack);
+    pushWarning(issues, 'root', VALIDATION_MESSAGES.emptyPack());
   }
   return issues;
 }

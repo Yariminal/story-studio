@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // Réparer un compte de racines faux.
 //
 // Ouvert seulement depuis « À corriger », quand le document a zéro ou plusieurs
@@ -32,7 +33,7 @@ export function SquareOneRepairForm({ index, disabled, onGesture, onClose }) {
   };
 
   return (
-    <div className="advanced-field__form" role="group" aria-label="Choisir l’Écran racine">
+    <div className="advanced-field__form" role="group" aria-label={t("Choisir l’Écran racine")}>
       <p className="advanced-field__note">
         Le pack doit avoir un seul Écran racine : c’est par lui que l’écoute commence.
         L’Écran choisi le devient, et les autres cessent de l’être.

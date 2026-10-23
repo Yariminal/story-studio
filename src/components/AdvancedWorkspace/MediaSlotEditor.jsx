@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // Adaptateur entre les champs média du Libre et les gestes du graphe.
 // L'apparence, le choix de fichier, le glisser-déposer, l'édition, la lecture,
 // l'enregistrement et la génération restent ceux des composants communs. La
@@ -45,17 +46,17 @@ export function MediaSlotEditor({
           file={file}
           extraActions={[{
             key: 'generate-text',
-            label: 'Générer une image-titre',
+            label: t('Générer une image-titre'),
             onClick: () => setTextImageOpen(true),
-            title: 'Créer une image-titre à partir du nom de l’Écran',
+            title: t('Créer une image-titre à partir du nom de l’Écran'),
           }]}
           onPick={assign}
           onClear={clear}
         />
       ) : (
         <AudioField
-          label="Audio de l’Écran"
-          description="Joué lorsque cet Écran s’affiche"
+          label={t("Audio de l’Écran")}
+          description={t("Joué lorsque cet Écran s’affiche")}
           file={file}
           required={false}
           ttsTextSuggestion={stageName}

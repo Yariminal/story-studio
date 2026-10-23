@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // Index de lecture dérivé du DTO Rust.
 //
 // Ce module ne connaît **aucun moteur d'affichage** : il ne produit ni nœud
@@ -16,13 +17,13 @@ export const ACTION_KIND = 'action';
 
 // Le nom que STUdio donne d'office à une Action, et le repli du moteur pour
 // une Action sans nom (`ACTION_NODE_FALLBACK_NAME`, `native_pack/document.rs`).
-const STUDIO_UNNAMED_ACTION = 'Action node';
+const STUDIO_UNNAMED_ACTION = t('Action node');
 // Ce que l'auteur lit à sa place : une Liste de choix qui n'a pas de nom.
 const UNNAMED_LIST_LABEL = 'Liste sans nom';
 
 // Le libellé d'affichage d'un nœud, avec l'information « est-ce un repli ? ».
 //
-// Un repli historique — `""` pour un Écran sans nom, `"Action node"` pour une
+// Un repli historique — `""` pour un Écran sans nom, `t("Action node")` pour une
 // Action sans nom — est **exposé comme tel**, jamais présenté comme une valeur
 // d'auteur. Sans ce drapeau, l'inspecteur laisserait croire qu'un nom existe.
 //

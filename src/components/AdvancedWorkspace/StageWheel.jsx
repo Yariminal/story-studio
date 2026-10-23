@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // La molette d'un Écran, troisième sortie après la suite du parcours et le
 // bouton Accueil : activée, elle fait passer aux choix voisins dans la liste
 // par laquelle on est arrivé. L'encadré le dit concrètement — quel Écran à
@@ -13,9 +14,9 @@ import { NodeLink, NodeThumbnail } from './connectionRows.jsx';
 import { CONTROL_PHRASES, ControlRow, controlValue } from './ControlsEditor.jsx';
 
 const SIDES = {
-  previous: { text: 'à gauche', icons: <ChevronLeft /> },
-  next: { text: 'à droite', icons: <ChevronRight /> },
-  both: { text: 'des deux côtés', icons: <><ChevronLeft /><ChevronRight /></> },
+  previous: { text: t('à gauche'), icons: <ChevronLeft /> },
+  next: { text: t('à droite'), icons: <ChevronRight /> },
+  both: { text: t('des deux côtés'), icons: <><ChevronLeft /><ChevronRight /></> },
 };
 
 function Neighbour({ neighbour, thumbnails, onFocusPath }) {

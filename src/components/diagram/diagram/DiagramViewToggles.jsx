@@ -1,5 +1,6 @@
 import { Focus, IterationCcw, SquareStack } from '../../icons/LucideLocal';
 
+import { t } from '../../../i18n/index.js';
 export function DiagramViewToggles({
   showReturns,
   onShowReturnsChange,
@@ -14,9 +15,9 @@ export function DiagramViewToggles({
       <button
         type="button"
         className={`fd-diagram-option ${showReturns ? 'is-active' : ''}`}
-        aria-label="Afficher les liens de retour"
+        aria-label={t("Afficher les liens de retour")}
         aria-pressed={showReturns}
-        title="Afficher les liens de retour"
+        title={t("Afficher les liens de retour")}
         onClick={() => onShowReturnsChange(!showReturns)}
       >
         <IterationCcw />
@@ -25,9 +26,9 @@ export function DiagramViewToggles({
       <button
         type="button"
         className={`fd-diagram-option ${focusMode ? 'is-active' : ''}`}
-        aria-label={canFocusBranch ? 'Limiter la vue à la branche du nœud sélectionné' : 'Sélectionne un nœud pour focaliser sa branche'}
+        aria-label={canFocusBranch ? t('Limiter la vue à la branche du nœud sélectionné') : t('Sélectionne un nœud pour focaliser sa branche')}
         aria-pressed={focusMode}
-        title={canFocusBranch ? 'Limiter la vue à la branche du nœud sélectionné' : 'Sélectionne un nœud pour focaliser sa branche'}
+        title={canFocusBranch ? t('Limiter la vue à la branche du nœud sélectionné') : t('Sélectionne un nœud pour focaliser sa branche')}
         disabled={!canFocusBranch}
         onClick={onFocusModeToggle}
       >
@@ -40,7 +41,7 @@ export function DiagramViewToggles({
           type="button"
           className="fd-diagram-option"
           aria-label="Tout replier"
-          title="Replier tous les dossiers d’histoires"
+          title={t("Replier tous les dossiers d’histoires")}
           onClick={onCollapseAllStories}
         >
           <SquareStack />

@@ -7,6 +7,7 @@ import { isTauriRuntime } from '../../utils/tauriRuntime';
 import { errorMessage } from '../../utils/youtubeErrors.js';
 import { releaseTauriListener } from '../../utils/tauriListener';
 
+import { t } from '../../i18n/index.js';
 export function YoutubeSection({ className, sectionRef }) {
   const [ytDlpPath, setYtDlpPath] = useState(() => readSetting(KEYS.YTDLP_CUSTOM_PATH, { defaultValue: '' }));
   const [ytDlpUpdate, setYtDlpUpdate] = useState({ state: 'idle', message: '' });
@@ -32,10 +33,10 @@ export function YoutubeSection({ className, sectionRef }) {
   }
 
   async function handleUpdateYtDlp() {
-    setYtDlpUpdate({ state: 'loading', message: 'Mise à jour de yt-dlp…' });
+    setYtDlpUpdate({ state: 'loading', message: t('Mise à jour de yt-dlp…') });
     try {
       await invoke('update_ytdlp');
-      setYtDlpUpdate({ state: 'ok', message: 'yt-dlp est à jour.' });
+      setYtDlpUpdate({ state: 'ok', message: t('yt-dlp est à jour.') });
     } catch (e) {
       setYtDlpUpdate({ state: 'error', message: errorMessage(e) });
     }
@@ -59,7 +60,7 @@ export function YoutubeSection({ className, sectionRef }) {
           </div>
         </div>
         <Button onClick={handleUpdateYtDlp} disabled={ytDlpUpdate.state === 'loading'} style={{ flexShrink: 0 }}>
-          {ytDlpUpdate.state === 'loading' ? 'Mise à jour…' : 'Mettre à jour'}
+          {ytDlpUpdate.state === 'loading' ? t('Mise à jour…') : t('Mettre à jour')}
         </Button>
       </div>
       {ytDlpUpdate.state !== 'idle' && (

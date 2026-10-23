@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // Les actions du menu contextuel du graphe à plat.
 //
 // Pendant de `treeContextMenuActions.jsx` pour la surface avancée, et construit
@@ -74,7 +75,7 @@ export function buildGraphContextActions({
       label: 'Simuler depuis ici',
       fn: () => onListenFromAction(inspected.path),
       disabledReason: ready.length === 0
-        ? 'Aucun de ses choix ne mène à un Écran exploitable.'
+        ? t('Aucun de ses choix ne mène à un Écran exploitable.')
         : null,
     });
   }
@@ -108,7 +109,7 @@ export function buildGraphContextActions({
       fn: () => onDuplicate(targets),
       shortcut: shortcutLabels.selectionDuplicate ?? null,
       disabledReason: editingDisabled
-        ? 'Édition suspendue le temps du geste en cours.'
+        ? t('Édition suspendue le temps du geste en cours.')
         : null,
     });
   }
@@ -138,9 +139,9 @@ export function buildGraphContextActions({
       fn: () => onCut(targets),
       shortcut: shortcutLabels.selectionCut ?? null,
       disabledReason: entry
-        ? 'L’Écran racine ne se retire pas : désignez d’abord un autre Écran racine.'
+        ? t('L’Écran racine ne se retire pas : désignez d’abord un autre Écran racine.')
         : editingDisabled
-          ? 'Édition suspendue le temps du geste en cours.'
+          ? t('Édition suspendue le temps du geste en cours.')
           : null,
     });
   }
@@ -177,7 +178,7 @@ export function buildGraphContextActions({
       danger: true,
       shortcut: shortcutLabels.selectionDelete ?? null,
       disabledReason: editingDisabled
-        ? 'Édition suspendue le temps du geste en cours.'
+        ? t('Édition suspendue le temps du geste en cours.')
         : null,
     });
   }
@@ -206,12 +207,12 @@ export function buildGraphSurfaceActions({
   shortcutLabels = {},
 }) {
   if (!graphPoint) return [];
-  const blocked = editingDisabled ? 'Édition indisponible.' : null;
+  const blocked = editingDisabled ? t('Édition indisponible.') : null;
   const actions = [];
   if (onCreateStage) {
     actions.push({
       icon: <Package />,
-      label: 'Créer un Écran ici',
+      label: t('Créer un Écran ici'),
       shortcut: shortcutLabels.graphCreateStage ?? null,
       disabledReason: blocked,
       fn: () => onCreateStage(graphPoint),
@@ -220,7 +221,7 @@ export function buildGraphSurfaceActions({
   if (onCreateAction) {
     actions.push({
       icon: <Waypoints />,
-      label: 'Créer une liste de choix ici',
+      label: t('Créer une liste de choix ici'),
       shortcut: shortcutLabels.graphCreateAction ?? null,
       disabledReason: blocked,
       fn: () => onCreateAction(graphPoint),
@@ -231,7 +232,7 @@ export function buildGraphSurfaceActions({
     actions.push('sep');
     actions.push({
       icon: <ClipboardPaste />,
-      label: count > 1 ? `Coller ici (${count} éléments)` : 'Coller ici',
+      label: count > 1 ? `Coller ici (${count} éléments)` : t('Coller ici'),
       shortcut: shortcutLabels.selectionPaste ?? null,
       disabledReason: blocked,
       fn: () => onPaste(graphPoint),

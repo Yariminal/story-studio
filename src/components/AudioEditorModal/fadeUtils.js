@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // Helpers purs pour la gestion des fondus (fade in / fade out / fade de cut)
 // dans la modale d'edition audio. Extraits de AudioEditorModal.jsx.
 
@@ -29,12 +30,12 @@ export function fadeLimit(target, { outputFadeMax, cutFadeMax }) {
 // Config UI (label, value clampe, max) pour le popover.
 export function fadeConfig(target, { fadeInSec, fadeOutSec, cutFadeSec, outputFadeMax, cutFadeMax }) {
   if (target === 'in') {
-    return { label: 'Fondu entrée', value: Math.min(fadeInSec, outputFadeMax), max: outputFadeMax };
+    return { label: t('Fondu entrée'), value: Math.min(fadeInSec, outputFadeMax), max: outputFadeMax };
   }
   if (target === 'out') {
-    return { label: 'Fondu sortie', value: Math.min(fadeOutSec, outputFadeMax), max: outputFadeMax };
+    return { label: t('Fondu sortie'), value: Math.min(fadeOutSec, outputFadeMax), max: outputFadeMax };
   }
-  return { label: 'Fondu de coupe', value: Math.min(cutFadeSec, cutFadeMax), max: cutFadeMax };
+  return { label: t('Fondu de coupe'), value: Math.min(cutFadeSec, cutFadeMax), max: cutFadeMax };
 }
 
 // Determine le target ('in' / 'out' / 'cut') le plus proche du pointeur dans

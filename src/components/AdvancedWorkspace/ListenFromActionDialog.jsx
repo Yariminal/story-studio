@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // Simuler depuis une Action : choisir d'abord où l'on part.
 //
 // Une Action n'est pas un point de départ. Le simulateur part d'un **Écran**, et
@@ -47,8 +48,8 @@ export function actionDestinations(index, path) {
 }
 
 const STATE_TEXT = {
-  null: 'choix vide — il ne mène à aucun Écran',
-  dangling: 'Écran manquant — l’Écran désigné n’existe pas dans le document',
+  null: t('choix vide — il ne mène à aucun Écran'),
+  dangling: t('Écran manquant — l’Écran désigné n’existe pas dans le document'),
 };
 
 export function ListenFromActionDialog({ inspected, index, onCancel, onListen }) {
@@ -63,8 +64,8 @@ export function ListenFromActionDialog({ inspected, index, onCancel, onListen })
       title={`Simuler depuis « ${inspected.label.label} »`}
       description={
         ready.length === 0
-          ? 'Cette liste de choix ne mène à aucun Écran exploitable : il n’y a pas de point de départ à simuler.'
-          : 'Une liste de choix n’est pas un point de départ. Choisissez l’Écran d’où commencer la simulation.'
+          ? t('Cette liste de choix ne mène à aucun Écran exploitable : il n’y a pas de point de départ à simuler.')
+          : t('Une liste de choix n’est pas un point de départ. Choisissez l’Écran d’où commencer la simulation.')
       }
       onCancel={onCancel}
       onConfirm={chosen ? () => onListen(chosen) : null}

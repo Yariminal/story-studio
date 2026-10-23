@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // Barre de recherche du TreePanel : input + bouton clear.
 // Extraite de TreePanel.jsx pour reduire la surface du composant orchestrateur.
 
@@ -41,7 +42,7 @@ export function TreeSearchBar({
           ref={inputRef}
           className="tree-search-input"
           type="text"
-          placeholder="Rechercher…"
+          placeholder={t("Rechercher…")}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           onKeyDown={(e) => {

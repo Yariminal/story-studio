@@ -7,6 +7,7 @@ import { useLocalFile } from '../../hooks/useLocalFile';
 import { useProjectContext } from '../../store/ProjectContext';
 import { basename, stripWindowsLongPathPrefix } from '../../utils/fileUtils';
 import { readImageEditMetadata, writeImageEditMetadata } from '../../store/imageEditMetadata';
+import { t } from '../../i18n/index.js';
 // reason: lazy() pour sortir ImageEditorModal (~3 KB gz) + canvas/PNG export
 // du chunk partage. Charge uniquement quand l'utilisateur edite une image.
 const ImageEditorModal = lazy(() => import('../ImageEditorModal/ImageEditorModal')
@@ -27,13 +28,13 @@ import './ImageField.css';
 // une ligne, sans toucher au rendu ni au CSS, et le changement porte partout —
 // Libre et graphe, écran, dossier, histoire et menu racine.
 const IMAGE_ACTIONS = Object.freeze({
-  replace: { Icon: ArrowRightLeft, label: 'Remplacer l’image' },
-  edit: { Icon: Pencil, label: 'Éditer l’image' },
+  replace: { Icon: ArrowRightLeft, label: t('Remplacer l’image') },
+  edit: { Icon: Pencil, label: t('Éditer l’image') },
   // Les actions apportées par un consommateur sont retrouvées **par leur clé**,
   // pour que l'icône vive ici comme les autres plutôt que dans six appels.
-  'generate-text': { Icon: CaseUpper, label: 'Générer une image-titre' },
-  ai: { Icon: Sparkles, label: 'Générer avec l’IA (ComfyUI)' },
-  clear: { Icon: Trash2, label: 'Supprimer l’image' },
+  'generate-text': { Icon: CaseUpper, label: t('Générer une image-titre') },
+  ai: { Icon: Sparkles, label: t('Générer avec l’IA (ComfyUI)') },
+  clear: { Icon: Trash2, label: t('Supprimer l’image') },
 });
 
 function ToolbarButton({ action, onClick, title = null, disabled = false, tone = null, busy = false }) {
@@ -60,16 +61,16 @@ function SdResultThumb({ path, onPick, onRemove }) {
   const url = useLocalFile(path);
   return (
     <div className="image-sd-thumb-wrap">
-      <Tooltip text="Utiliser cette image">
+      <Tooltip text={t("Utiliser cette image")}>
         <button className="image-sd-thumb" onClick={() => onPick(path)}>
           {url ? <img src={url} alt="" /> : <div className="image-sd-thumb-placeholder" />}
         </button>
       </Tooltip>
-      <Tooltip text="Supprimer" className="image-sd-thumb-remove-wrap">
+      <Tooltip text={t("Supprimer")} className="image-sd-thumb-remove-wrap">
         <button
           className="image-sd-thumb-remove"
           onClick={(e) => { e.stopPropagation(); onRemove(); }}
-          aria-label="Supprimer"
+          aria-label={t("Supprimer")}
         >×</button>
       </Tooltip>
     </div>
@@ -85,7 +86,7 @@ export function ImageField({
   compact = false,
   align = 'center',
   fieldId = null,
-  formatHint = 'Format recommandé : 320 × 240 px',
+  formatHint = t('Format recommandé : 320 × 240 px'),
   badge = null,
 }) {
   const { notifyCutPaste } = useMediaTransfer();
@@ -249,7 +250,7 @@ export function ImageField({
           peut pas les compter, on le lui dit. */}
       <div className="image-slot" data-tools={toolCount}>
         <div className="image-slot__frame">
-          <Tooltip text={displayPath || 'Cliquer pour choisir'} wrap={!!displayPath} className="image-drop-wrap">
+          <Tooltip text={displayPath || t('Cliquer pour choisir')} wrap={!!displayPath} className="image-drop-wrap">
             <div
               ref={dropRef}
               data-drop-kind="image"
@@ -262,10 +263,10 @@ export function ImageField({
                   <div className="image-placeholder">
                     <span className="image-placeholder-icon"><ImageIcon aria-hidden="true" /></span>
                     <span className="image-placeholder-text image-placeholder-text--strong">
-                      {file && !fileAvailable ? 'Image introuvable' : 'Cliquer pour choisir une image'}
+                      {file && !fileAvailable ? t('Image introuvable') : t('Cliquer pour choisir une image')}
                     </span>
                     <span className="image-placeholder-text">
-                      {file && !fileAvailable ? 'Le fichier lié est inaccessible' : formatHint}
+                      {file && !fileAvailable ? t('Le fichier lié est inaccessible') : formatHint}
                     </span>
                   </div>
                 )
@@ -294,10 +295,10 @@ export function ImageField({
                 tone="ai"
                 busy={isGeneratingForField}
                 disabled={isGeneratingForField}
-                title={isGeneratingForField ? 'Génération en cours…' : null}
+                title={isGeneratingForField ? t('Génération en cours…') : null}
                 onClick={() => onOpenSDGenerate({
                   currentImagePath: fileAvailable ? file : null,
-                  currentImageLabel: label || 'image actuelle',
+                  currentImageLabel: label || t('image actuelle'),
                   fieldId,
                 })}
               />
@@ -353,7 +354,7 @@ export function ImageField({
             ...(imageClipboard.get() && onPick ? [
               {
                 icon: <ClipboardPaste />,
-                label: imageClipboard.getEntry()?.mode === 'cut' ? 'Déplacer ici' : 'Coller',
+                label: imageClipboard.getEntry()?.mode === 'cut' ? t('Déplacer ici') : 'Coller',
                 fn: pasteClipboardImage,
               },
             ] : []),

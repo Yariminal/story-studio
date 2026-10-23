@@ -1,9 +1,10 @@
 import projectLimits from '../../shared/projectLimits.json' with { type: 'json' };
 
+import { t } from '../../i18n/index.js';
 const configuredMaxMenuDepth = Number(projectLimits?.maxMenuDepth);
 
 if (!Number.isInteger(configuredMaxMenuDepth) || configuredMaxMenuDepth < 1) {
-  throw new Error('La limite de profondeur des Dossiers est absente ou invalide.');
+  throw new Error(t('La limite de profondeur des Dossiers est absente ou invalide.'));
 }
 
 export const MAX_MENU_DEPTH = configuredMaxMenuDepth;
@@ -18,11 +19,11 @@ export const MENU_DEPTH_LIMIT_TITLE = 'Limite d’imbrication';
 // au collage ; les deux emploient la même phrase.
 export const MENU_CYCLE_CODE = 'menu_cycle';
 export const MENU_CYCLE_MESSAGE =
-  'Un Dossier ne peut pas être déplacé dans lui-même ni dans l’un de ses sous-dossiers.';
-export const MENU_CYCLE_PASTE_TITLE = 'Collage impossible';
+  t('Un Dossier ne peut pas être déplacé dans lui-même ni dans l’un de ses sous-dossiers.');
+export const MENU_CYCLE_PASTE_TITLE = t('Collage impossible');
 export const MENU_CYCLE_PASTE_MESSAGE =
-  'Un Dossier ne peut pas être collé dans lui-même ni dans l’un de ses sous-dossiers. '
-  + 'Il est toujours coupé : choisissez un autre emplacement.';
+  t('Un Dossier ne peut pas être collé dans lui-même ni dans l’un de ses sous-dossiers. ')
+  + t('Il est toujours coupé : choisissez un autre emplacement.');
 
 function formatProjectMenuDepthError(observedDepth) {
   return `Ce projet contient ${observedDepth} Dossiers imbriqués. Story Studio en prend en charge au maximum ${MAX_MENU_DEPTH}.`;
@@ -53,7 +54,7 @@ function entryPathPart(entry) {
     id: typeof entry?.id === 'string' ? entry.id : null,
     name: typeof entry?.name === 'string' && entry.name.trim()
       ? entry.name.trim()
-      : 'Dossier sans nom',
+      : t('Dossier sans nom'),
   };
 }
 

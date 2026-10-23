@@ -1,12 +1,13 @@
 import { useRef, useState } from 'react';
 import { KEYS, read, write } from '../../store/persistentSettings';
 
+import { t } from '../../i18n/index.js';
 export const COLUMNS = [
   { id: 'name',  label: 'Nom',        defaultWidth: 200 },
   { id: 'usage', label: 'Usage',      defaultWidth: 120 },
   { id: 'size',  label: 'Taille',     defaultWidth: 60  },
   { id: 'dim',   label: 'Dimensions', defaultWidth: 80  },
-  { id: 'dur',   label: 'Durée',      defaultWidth: 72  },
+  { id: 'dur',   label: t('Durée'),      defaultWidth: 72  },
   { id: 'fmt',   label: 'Format',     defaultWidth: 100 },
   { id: 'date',  label: 'Date',       defaultWidth: 110 },
   { id: 'path',  label: 'Chemin',     defaultWidth: 260 },

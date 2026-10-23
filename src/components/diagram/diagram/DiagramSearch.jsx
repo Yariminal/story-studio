@@ -6,10 +6,11 @@ import { buildUsedNodeColors, toggleNodeColorFilter } from '../../tree/nodeColor
 import { END_NODE_ID } from '../flowDiagramLayout';
 import { filterDiagramSearchCandidates } from './diagramSearchFilter.js';
 
+import { t } from '../../../i18n/index.js';
 const TYPE_LABELS = {
   menu: 'Dossier',
   story: 'Histoire',
-  zip: 'Pack importé',
+  zip: t('Pack importé'),
   ref: 'Lien',
 };
 
@@ -25,7 +26,7 @@ export function DiagramSearch({ project, projectIndex, focusTrigger, onChoose, o
   const candidates = useMemo(() => [
     {
       id: 'root',
-      label: project.rootName || project.projectName || 'Menu racine',
+      label: project.rootName || project.projectName || t('Menu racine'),
       typeLabel: 'Racine',
       treeColor: project.treeColor ?? null,
     },
@@ -126,8 +127,8 @@ export function DiagramSearch({ project, projectIndex, focusTrigger, onChoose, o
           ref={inputRef}
           type="text"
           value={term}
-          placeholder="Rechercher un nœud…"
-          aria-label="Rechercher dans le diagramme"
+          placeholder={t("Rechercher un nœud…")}
+          aria-label={t("Rechercher dans le diagramme")}
           onChange={(event) => {
             setTerm(event.target.value);
             setActiveIndex(0);
@@ -152,7 +153,7 @@ export function DiagramSearch({ project, projectIndex, focusTrigger, onChoose, o
         <button
           type="button"
           className="fd-diagram-search-close"
-          aria-label="Fermer la recherche"
+          aria-label={t("Fermer la recherche")}
           onClick={() => {
             closeSearch();
           }}
@@ -171,7 +172,7 @@ export function DiagramSearch({ project, projectIndex, focusTrigger, onChoose, o
       />
 
       {filterActive ? (
-        <div className="fd-diagram-search-results" role="listbox" aria-label="Résultats de recherche">
+        <div className="fd-diagram-search-results" role="listbox" aria-label={t("Résultats de recherche")}>
           {results.length > 0 ? results.map((candidate, index) => (
             <button
               key={candidate.id}

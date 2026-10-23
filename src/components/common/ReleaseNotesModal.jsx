@@ -8,6 +8,7 @@ import { RELEASE_NOTES, shouldShowReleaseNotes } from '../../config/releaseNotes
 import { isTauriRuntime } from '../../utils/tauriRuntime';
 import './ReleaseNotesModal.css';
 
+import { t } from '../../i18n/index.js';
 export function ReleaseNotesModal({ appVersion }) {
   const [open, setOpen] = useState(() => shouldShowReleaseNotes(appVersion, read(KEYS.RELEASE_NOTES_SEEN)));
   const [linkError, setLinkError] = useState('');
@@ -26,7 +27,7 @@ export function ReleaseNotesModal({ appVersion }) {
   async function openLink(event, url) {
     if (!isTauriRuntime()) return;
     event.preventDefault();
-    try { await openUrl(url); } catch { setLinkError('Le lien n’a pas pu être ouvert. Réessaie dans un instant.'); }
+    try { await openUrl(url); } catch { setLinkError(t('Le lien n’a pas pu être ouvert. Réessaie dans un instant.')); }
   }
   if (!open) return null;
   return (
@@ -56,7 +57,7 @@ export function ReleaseNotesModal({ appVersion }) {
           <p>De nouvelles façons de donner vie à tes histoires.</p>
         </header>
         <div className="release-notes-body">
-          <section aria-label="Les nouveautés">
+          <section aria-label={t("Les nouveautés")}>
             <h3>Ce qui change</h3>
             <ul className="release-notes-highlights">
               {[
@@ -71,7 +72,7 @@ export function ReleaseNotesModal({ appVersion }) {
               ))}
             </ul>
           </section>
-          <section className="release-notes-letter" aria-label="Un mot du créateur">
+          <section className="release-notes-letter" aria-label={t("Un mot du créateur")}>
             <h3>Un mot de ma part</h3>
             {RELEASE_NOTES.message.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
             <span className="release-notes-signature">— hugs11</span>

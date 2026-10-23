@@ -5,6 +5,7 @@ import { useErrorDialog } from './Dialog';
 import { isTauriRuntime } from '../../utils/tauriRuntime';
 import './CreditsModal.css';
 
+import { t } from '../../i18n/index.js';
 const DOCUMENTATION_URL = 'https://hugs11.github.io/story-studio/docs/';
 
 /** Modale « À propos de Story Studio » (crédits). */
@@ -19,7 +20,7 @@ export function CreditsModal({ appVersion, onClose }) {
       await openUrl(DOCUMENTATION_URL);
     } catch (error) {
       showErrorDialog({
-        title: 'Documentation inaccessible',
+        title: t('Documentation inaccessible'),
         message: `Impossible d’ouvrir la documentation dans le navigateur : ${error}`,
       });
     }
@@ -36,7 +37,7 @@ export function CreditsModal({ appVersion, onClose }) {
       >
         <div className="modal-header">
           <span id="credits-modal-title">À propos de Story Studio</span>
-          <Button variant="icon" className="modal-close" onClick={onClose} aria-label="Fermer">✕</Button>
+          <Button variant="icon" className="modal-close" onClick={onClose} aria-label={t("Fermer")}>✕</Button>
         </div>
         <div className="credits-body">
           <div className="credits-head">

@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // La readiness, lue en deux informations qui ne se confondent pas.
 //
 // `SUPPORTED` ne veut pas dire export autorisé : un document peut avoir toutes
@@ -38,22 +39,22 @@ const QUALIFICATION = Object.freeze({
 });
 
 const QUALIFICATION_LABELS = Object.freeze({
-  UNTESTED: 'non qualifié',
-  PREPARED: 'préparé',
-  SUPPORTED: 'supporté',
+  UNTESTED: t('non qualifié'),
+  PREPARED: t('préparé'),
+  SUPPORTED: t('supporté'),
 });
 
 const SOURCE_LABELS = Object.freeze({
-  decode: 'décodage',
-  'graph-integrity': 'intégrité du graphe',
-  authoring: "décision d'auteur",
+  decode: t('décodage'),
+  'graph-integrity': t('intégrité du graphe'),
+  authoring: t("décision d'auteur"),
   readiness: 'qualification',
 });
 
 const LEVEL_LABELS = Object.freeze({
   INFO: 'information',
   WARNING: 'avertissement',
-  ACTION_REQUIRED: 'décision requise',
+  ACTION_REQUIRED: t('décision requise'),
   ERROR: 'erreur',
 });
 

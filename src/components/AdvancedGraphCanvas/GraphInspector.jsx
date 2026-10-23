@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // Inspecteur de lecture du graphe avancé. Le canvas restant muet, ce panneau
 // porte la représentation DOM complète du nœud, sans geste d'auteur.
 
@@ -60,7 +61,7 @@ function LinkSummary({ inspected, onFocusPath }) {
       direction: 'Sortant',
       path: edge.to,
       description: edge.kind === 'stage-ok'
-        ? 'OK'
+        ? t('OK')
         : edge.kind === 'stage-home'
           ? 'HOME'
           : `choix ${edge.ordinal ?? '—'}`,
@@ -122,13 +123,13 @@ export default function GraphInspector({ inspected, onFocusPath }) {
     <aside className="advanced-inspector advanced-inspector--readonly" aria-label="Inspecteur">
       <header className="advanced-inspector__header">
         <div className="advanced-inspector__headline">
-          <span className="advanced-inspector__kind">{isStage ? 'Écran' : 'Liste de choix'}</span>
+          <span className="advanced-inspector__kind">{isStage ? t('Écran') : t('Liste de choix')}</span>
           {isEntry && <span className="advanced-inspector__badge advanced-inspector__badge--entry">Racine</span>}
         </div>
         <h2 className="advanced-inspector__title">
           {inspected.label.label}
           {inspected.label.isFallback && (
-            <em className="advanced-inspector__fallback" title="Repli d'affichage, pas un nom d'auteur">
+            <em className="advanced-inspector__fallback" title={t("Repli d'affichage, pas un nom d'auteur")}>
               {' '}(sans nom)
             </em>
           )}
@@ -136,7 +137,7 @@ export default function GraphInspector({ inspected, onFocusPath }) {
         <code className="advanced-inspector__identifier">{inspected.identifier}</code>
       </header>
 
-      <Section title="Identité">
+      <Section title={t("Identité")}>
         <Row label="Identifiant">
           <code>{inspected.identifier}</code>
           {node.occurrence > 0 && <em> — occurrence {node.occurrence}</em>}
@@ -151,7 +152,7 @@ export default function GraphInspector({ inspected, onFocusPath }) {
 
       {isStage && (
         <>
-          <Section title="Médias" count={inspected.media.length}>
+          <Section title={t("Médias")} count={inspected.media.length}>
             <Row label="Audio">
               <PresenceValue field={{ presence: node.audio.presence, value: node.audio.assetRef }} />
             </Row>
@@ -166,26 +167,26 @@ export default function GraphInspector({ inspected, onFocusPath }) {
             ))}
           </Section>
 
-          <Section title="Contrôles" className="advanced-inspector__controls">
+          <Section title={t("Contrôles")} className="advanced-inspector__controls">
             {['wheel', 'ok', 'home', 'pause', 'autoplay'].map((control) => (
               <Row key={control} label={control}>
                 <PresenceValue
                   field={node.controls[control]}
-                  render={(value) => (value ? 'activé' : 'désactivé')}
+                  render={(value) => (value ? t('activé') : t('désactivé'))}
                 />
               </Row>
             ))}
           </Section>
 
           <Section title="Transitions">
-            <Transition label="OK" transition={node.okTransition} />
+            <Transition label={t("OK")} transition={node.okTransition} />
             <Transition label="HOME" transition={node.homeTransition} />
           </Section>
         </>
       )}
 
       {!isStage && (
-        <Section title="Options" count={node.options.length} className="advanced-inspector__options">
+        <Section title={t("Options")} count={node.options.length} className="advanced-inspector__options">
           <ol start={0}>
             {node.options.map((option) => (
               <li key={option.optionId}>

@@ -20,6 +20,7 @@ import {
 import { StructureActionsOverflow } from './StructureActionsOverflow';
 import './StructureActionsBar.css';
 
+import { t } from '../../i18n/index.js';
 function ActionIcon({ Icon }) {
   return <Icon className="structure-actions-icon" aria-hidden="true" strokeWidth={2} absoluteStrokeWidth />;
 }
@@ -46,7 +47,7 @@ function StructureActionButton({ action }) {
 // libellé de raccourci, sans recopier le bouton dans chaque panneau.
 export function StructureSearchButton({
   onClick,
-  label = 'Rechercher dans la structure',
+  label = t('Rechercher dans la structure'),
   tooltip = `${label} (Ctrl+F)`,
 }) {
   return (
@@ -90,8 +91,8 @@ export function StructureActionsBar({
   canRecord = true,
   canGenerateStoryTts = true,
   canLaunchSimulator = true,
-  label = 'Ajouter',
-  ariaLabel = 'Ajouter à la structure',
+  label = t('Ajouter'),
+  ariaLabel = t('Ajouter à la structure'),
   showLabel = false,
   // Texte d'état à gauche de la barre (le décompte de la liste du graphe).
   // Il prend la place libre et ne pousse jamais les boutons hors de la barre.
@@ -125,63 +126,63 @@ export function StructureActionsBar({
   // synthèse et le simulateur s'effacent quand l'hôte ne les tend pas.
   const catalog = {
     [MEDIA_TOOL_ACTIONS.IMPORT_STORY]: onAddStory && {
-      title: 'Importer audio, ZIP ou 7z',
+      title: t('Importer audio, ZIP ou 7z'),
       priority: 'primary',
       disabled: !canAddStory,
       onClick: () => onAddStory?.(targetMenuId),
       icon: <ActionIcon Icon={FilePlus} />,
     },
     [MEDIA_TOOL_ACTIONS.ADD_FOLDER]: onAddFolder && {
-      title: 'Créer un dossier',
+      title: t('Créer un dossier'),
       priority: 'primary',
       disabled: !canAddFolder,
       onClick: () => onAddFolder?.(targetMenuId),
       icon: <ActionIcon Icon={FolderPlus} />,
     },
     [MEDIA_TOOL_ACTIONS.IMPORT_FOLDER]: onImportFolder && {
-      title: 'Importer un dossier',
+      title: t('Importer un dossier'),
       priority: 'secondary',
       disabled: !canImportFolder,
       onClick: () => onImportFolder?.(targetMenuId),
       icon: <ActionIcon Icon={FolderInput} />,
     },
     [MEDIA_TOOL_ACTIONS.IMPORT_MEDIA]: onImportMedia && {
-      title: 'Importer des médias dans la bibliothèque',
+      title: t('Importer des médias dans la bibliothèque'),
       priority: 'primary',
       disabled: !canImportMedia,
       onClick: onImportMedia,
       icon: <ActionIcon Icon={FilePlus} />,
     },
     [MEDIA_TOOL_ACTIONS.IMPORT_PODCAST]: onImportPodcast && {
-      title: 'Ajouter un podcast',
+      title: t('Ajouter un podcast'),
       priority: 'secondary',
       disabled: !canImportPodcast,
       onClick: onImportPodcast,
       icon: <ActionIcon Icon={Rss} />,
     },
     [MEDIA_TOOL_ACTIONS.IMPORT_YOUTUBE]: onImportYoutube && {
-      title: 'Importer depuis YouTube',
+      title: t('Importer depuis YouTube'),
       priority: 'secondary',
       disabled: !canImportYoutube,
       onClick: onImportYoutube,
       icon: <ActionIcon Icon={Youtube} />,
     },
     [MEDIA_TOOL_ACTIONS.RECORD]: onRecord && {
-      title: 'Enregistrer une histoire avec le micro',
+      title: t('Enregistrer une histoire avec le micro'),
       priority: 'secondary',
       disabled: !canRecord,
       onClick: onRecord,
       icon: <ActionIcon Icon={Mic} />,
     },
     [MEDIA_TOOL_ACTIONS.GENERATE_TTS]: onGenerateStoryTts && {
-      title: 'Créer une histoire avec TTS',
+      title: t('Créer une histoire avec TTS'),
       priority: 'secondary',
       disabled: !canGenerateStoryTts,
       onClick: onGenerateStoryTts,
       icon: <ActionIcon Icon={Speech} />,
     },
     [MEDIA_TOOL_ACTIONS.SIMULATOR]: onLaunchSimulator && {
-      title: 'Lancer le simulateur',
+      title: t('Lancer le simulateur'),
       priority: 'secondary',
       disabled: !canLaunchSimulator,
       onClick: onLaunchSimulator,

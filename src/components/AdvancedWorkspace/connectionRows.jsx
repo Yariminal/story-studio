@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // Les briques des lignes bordées que partagent les panneaux d'Écran et de
 // Liste de choix : la vignette d'un nœud, son nom cliquable, la place d'un
 // choix dans sa liste, et la phrase qui dit sur quel choix une transition
@@ -58,5 +59,5 @@ export function positionText(rank, count) {
 // seule la touche compte ; une pastille « Suite » ne se lisait pas.
 export const OPENER_SLOT_LABELS = {
   ok: 'Par la suite du parcours de',
-  home: 'Par le bouton Accueil de',
+  home: t('Par le bouton Accueil de'),
 };

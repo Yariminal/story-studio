@@ -12,16 +12,17 @@ import { Eye } from '../icons/LucideLocal';
 import { useEscapeKey } from '../../hooks/useEscapeKey';
 import './TreeDisplayPopover.css';
 
+import { t } from '../../i18n/index.js';
 const OPTIONS = [
   {
     key: 'badges',
-    label: 'Badges de navigation',
-    help: 'Affiche les indications de retour et de parcours sur les lignes.',
+    label: t('Badges de navigation'),
+    help: t('Affiche les indications de retour et de parcours sur les lignes.'),
   },
   {
     key: 'guides',
     label: 'Rails de guidage',
-    help: "Affiche les lignes d'indentation et de branche active dans l'arbre.",
+    help: t("Affiche les lignes d'indentation et de branche active dans l'arbre."),
   },
 ];
 
@@ -101,12 +102,12 @@ export function TreeDisplayPopover({
 
   return (
     <div className={`tree-display-wrap${open ? ' is-open' : ''}`} ref={wrapRef}>
-      <Tooltip text="Affichage de l'arbre" placement="below">
+      <Tooltip text={t("Affichage de l'arbre")} placement="below">
         <button
           ref={triggerRef}
           type="button"
           className={`tree-display-trigger${open ? ' is-active' : ''}`}
-          aria-label="Affichage de l'arbre"
+          aria-label={t("Affichage de l'arbre")}
           aria-haspopup="dialog"
           aria-expanded={open}
           onClick={() => onOpenChange?.(!open)}
@@ -120,7 +121,7 @@ export function TreeDisplayPopover({
           ref={popoverRef}
           className={`tree-display-popover${position?.isAbove ? ' is-above' : ''}`}
           role="dialog"
-          aria-label="Affichage de l'arbre"
+          aria-label={t("Affichage de l'arbre")}
           style={position
             ? {
               left: position.left,

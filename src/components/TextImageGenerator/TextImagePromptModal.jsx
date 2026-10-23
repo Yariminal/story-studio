@@ -7,6 +7,7 @@ import { useEscapeKey } from '../../hooks/useEscapeKey';
 import { useProjectContext } from '../../store/ProjectContext';
 import './TextImagePromptModal.css';
 
+import { t } from '../../i18n/index.js';
 const OVERLAY_STYLE = {
   position: 'fixed',
   inset: 0,
@@ -33,7 +34,7 @@ export function TextImagePromptModal({ defaultText, workspaceDir: workspaceOverr
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    drawTextImage(canvas.getContext('2d'), text || 'Sans titre');
+    drawTextImage(canvas.getContext('2d'), text || t('Sans titre'));
   }, [text]);
 
   async function handleGenerate() {
@@ -41,7 +42,7 @@ export function TextImagePromptModal({ defaultText, workspaceDir: workspaceOverr
     setGenerating(true);
     try {
       const path = await generateTextImage(
-        text || 'Sans titre',
+        text || t('Sans titre'),
         workspaceOverride || contextWorkspaceDir,
       );
       onConfirm(path);
@@ -71,7 +72,7 @@ export function TextImagePromptModal({ defaultText, workspaceDir: workspaceOverr
             value={text}
             onChange={e => setText(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Texte à afficher"
+            placeholder={t("Texte à afficher")}
             maxLength={200}
           />
           <canvas
@@ -84,7 +85,7 @@ export function TextImagePromptModal({ defaultText, workspaceDir: workspaceOverr
         <div className="text-img-footer">
           <Button variant="ghost" onClick={onCancel}>Annuler</Button>
           <Button variant="primary-violet" onClick={handleGenerate} disabled={generating}>
-            {generating ? 'Génération…' : 'Générer'}
+            {generating ? t('Génération…') : t('Générer')}
           </Button>
         </div>
       </div>

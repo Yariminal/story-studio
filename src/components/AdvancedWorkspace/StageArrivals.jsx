@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // Comment on arrive sur un Écran : par les listes de choix où il figure.
 //
 // Sur la Lunii, on n'arrive jamais sur un Écran sans passer par une liste :
@@ -32,9 +33,9 @@ import { advancedGestures, optionTarget } from '../../store/projectModel/advance
 // 170 Écrans.
 const SHOWN_ARRIVALS = 3;
 
-const HOW = { ok: 'par sa suite du parcours', home: 'par son bouton Accueil' };
+const HOW = { ok: 'par sa suite du parcours', home: t('par son bouton Accueil') };
 
-const WHEEL_HELP = 'C’est la molette des choix voisins qui amène ici : sur l’un d’eux, tourner la molette passe à ce choix. La molette de cet Écran-ci règle où l’on va en partant, dans l’encadré « Molette ».';
+const WHEEL_HELP = t('C’est la molette des choix voisins qui amène ici : sur l’un d’eux, tourner la molette passe à ce choix. La molette de cet Écran-ci règle où l’on va en partant, dans l’encadré « Molette ».');
 
 function ArrivalLine({ label, help = null, children }) {
   return (
@@ -59,7 +60,7 @@ function DirectArrivals({ row, thumbnails, onFocusPath }) {
           <NodeThumbnail path={opener.sourcePath} thumbnails={thumbnails} />
           <NodeLink path={opener.sourcePath} label={opener.source.label.label} onFocusPath={onFocusPath} />
           <span className="advanced-arrival__how">
-            {HOW[opener.slot]}{opener.random ? ', au hasard parmi les choix' : ''}
+            {HOW[opener.slot]}{opener.random ? t(', au hasard parmi les choix') : ''}
           </span>
         </li>
       ))}
@@ -118,12 +119,12 @@ function ListArrival({ row, disabled, thumbnails, onFocusPath, onRemove }) {
         </Button>
       </div>
       {row.direct.length > 0 && (
-        <ArrivalLine label="À l’ouverture">
+        <ArrivalLine label={t("À l’ouverture")}>
           <DirectArrivals row={row} thumbnails={thumbnails} onFocusPath={onFocusPath} />
         </ArrivalLine>
       )}
       {byWheel.length > 0 && (
-        <ArrivalLine label="À la molette" help={WHEEL_HELP}>
+        <ArrivalLine label={t("À la molette")} help={WHEEL_HELP}>
           <WheelArrivals active={byWheel} thumbnails={thumbnails} onFocusPath={onFocusPath} />
         </ArrivalLine>
       )}
@@ -218,7 +219,7 @@ export function StageArrivals({
           </ol>
         )}
 
-      {/* L'Écran d'entrée n'est jamais le choix d'une liste. */}
+      {/* Lt('Écran d')entrée n'est jamais le choix d'une liste. */}
       {!isEntry && (
         <div className="advanced-field__actions">
           <Button size="sm" disabled={disabled} onClick={() => setAdding(true)}>

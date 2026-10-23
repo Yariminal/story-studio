@@ -4,6 +4,7 @@ import { AppModalPortal } from '../common/AppModalPortal';
 import { Check, Loader2, Rss, Search, X } from '../icons/LucideLocal';
 import './PodcastImportModal.css';
 
+import { t } from '../../i18n/index.js';
 function formatBytes(bytes) {
   if (!bytes || bytes <= 0) return '';
   const mb = bytes / (1024 * 1024);
@@ -95,7 +96,7 @@ export function PodcastImportModal({ onImport, onClose, toLibrary = false }) {
       <div
         className="podcast-modal"
         role="dialog"
-        aria-label="Importer un podcast"
+        aria-label={t("Importer un podcast")}
         onClick={(event) => event.stopPropagation()}
       >
         {phase === 'url' ? (
@@ -104,7 +105,7 @@ export function PodcastImportModal({ onImport, onClose, toLibrary = false }) {
               <span className="podcast-head-icon"><Rss /></span>
               <span className="podcast-head-title">Importer un podcast</span>
               <span className="podcast-spacer" />
-              <button type="button" className="podcast-icon-btn" aria-label="Fermer" onClick={onClose} disabled={loading}>
+              <button type="button" className="podcast-icon-btn" aria-label={t("Fermer")} onClick={onClose} disabled={loading}>
                 <X />
               </button>
             </header>
@@ -127,7 +128,7 @@ export function PodcastImportModal({ onImport, onClose, toLibrary = false }) {
               </form>
               <p className="podcast-hint">
                 Colle l'URL du flux RSS du podcast. Tu pourras choisir les épisodes à télécharger
-                {toLibrary ? ' avant de les retrouver dans Médias.' : " avant qu'ils ne deviennent des histoires."}
+                {toLibrary ? t(' avant de les retrouver dans Médias.') : t(" avant qu'ils ne deviennent des histoires.")}
               </p>
               {error && <div className="podcast-error" role="alert">{error}</div>}
             </div>
@@ -144,7 +145,7 @@ export function PodcastImportModal({ onImport, onClose, toLibrary = false }) {
                 disabled={loading || !url.trim()}
               >
                 {loading && <Loader2 className="podcast-spin" />}
-                {loading ? 'Chargement…' : 'Charger les épisodes'}
+                {loading ? t('Chargement…') : t('Charger les épisodes')}
               </button>
             </footer>
           </>
@@ -157,7 +158,7 @@ export function PodcastImportModal({ onImport, onClose, toLibrary = false }) {
                 {episodes.length} épisode{episodes.length > 1 ? 's' : ''}
               </span>
               <span className="podcast-spacer" />
-              <button type="button" className="podcast-icon-btn" aria-label="Fermer" onClick={onClose}>
+              <button type="button" className="podcast-icon-btn" aria-label={t("Fermer")} onClick={onClose}>
                 <X />
               </button>
             </header>
@@ -168,7 +169,7 @@ export function PodcastImportModal({ onImport, onClose, toLibrary = false }) {
                   <Search />
                   <input
                     type="text"
-                    placeholder="Filtrer les épisodes…"
+                    placeholder={t("Filtrer les épisodes…")}
                     value={query}
                     onChange={(event) => setQuery(event.target.value)}
                   />
@@ -225,7 +226,7 @@ export function PodcastImportModal({ onImport, onClose, toLibrary = false }) {
               >
                 {selected.size > 0
                   ? `Importer ${selected.size} épisode${selected.size > 1 ? 's' : ''}`
-                  : 'Importer'}
+                  : t('Importer')}
               </button>
             </footer>
           </>

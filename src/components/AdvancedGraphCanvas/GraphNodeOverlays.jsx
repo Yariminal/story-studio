@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // La couche HTML posée au-dessus du canvas : noms, pastilles, bandeaux de
 // groupe et repères de la vue éloignée.
 //
@@ -236,7 +237,7 @@ function isAddPort(node, port, anchor) {
 // allume le bouton. L'infobulle le dit avant le geste.
 function portHint(port) {
   if (!port.activateControl) return port.label;
-  return `${port.label} — allume aussi le bouton ${port.slot === 'home' ? 'Accueil' : 'OK'}`;
+  return `${port.label} — allume aussi le bouton ${port.slot === 'home' ? 'Accueil' : t('OK')}`;
 }
 
 function groupTone(id) {

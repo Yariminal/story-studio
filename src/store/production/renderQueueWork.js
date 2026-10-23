@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // Une file, deux natures de travail.
 //
 // La file de rendu sert deux genres de travail : un document Libre sérialisé,
@@ -172,7 +173,7 @@ export function freeJobOutcome(generationResult) {
   const resultPath = typeof generationResult === 'string'
     ? generationResult
     : generationResult?.zipPath ?? null;
-  if (!resultPath) throw new Error('Le moteur n’a renvoyé aucun chemin de ZIP.');
+  if (!resultPath) throw new Error(t('Le moteur n’a renvoyé aucun chemin de ZIP.'));
   return {
     resultPath,
     warnings: Array.isArray(generationResult?.warnings) ? generationResult.warnings : [],

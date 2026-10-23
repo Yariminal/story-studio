@@ -13,6 +13,7 @@ import {
   resolveNavigationTargetId,
 } from './storyUtils';
 
+import { t } from '../../../i18n/index.js';
 export function EndSequenceEditor({
   node,
   parentMenuId,
@@ -20,7 +21,7 @@ export function EndSequenceEditor({
   homeStep,
   allMenus,
   allStories,
-  packStartReturnLabel = 'Retour à la couverture du pack',
+  packStartReturnLabel = t('Retour à la couverture du pack'),
   onUpdate,
 }) {
   const { showConfirmDialog } = useErrorDialog();
@@ -56,7 +57,7 @@ export function EndSequenceEditor({
     const confirmed = await showConfirmDialog({
       title: 'Confirmer la suppression',
       message: `Supprimer l'étape "${step.name || `Étape ${index + 1}`}" ?`,
-      okLabel: 'Supprimer',
+      okLabel: t('Supprimer'),
       okKind: 'danger',
     });
     if (!confirmed) return;
@@ -81,7 +82,7 @@ export function EndSequenceEditor({
     onUpdate({
       afterPlaybackHomeStep: normalizeSequenceStep({
         ...(homeStep ?? {
-          name: "Écran d'attente",
+          name: t("Écran d'attente"),
           controlSettings: { ...SEQUENCE_CONTROL_DEFAULTS, ok: true },
         }),
         ...fields,
@@ -142,7 +143,7 @@ export function EndSequenceEditor({
                       <MoveDown className="sequence-icon" />
                     </Button>
                   </Tooltip>
-                  <Tooltip text="Supprimer cette étape">
+                  <Tooltip text={t("Supprimer cette étape")}>
                     <Button
                       size="sm"
                       className="sequence-icon-btn sequence-icon-btn--danger"
@@ -189,12 +190,12 @@ export function EndSequenceEditor({
                         allMenus={allMenus}
                         allStories={allStories}
                         currentStoryId={node.id}
-                        emptyLabel="Comme à la fin de l'histoire"
+                        emptyLabel={t("Comme à la fin de l'histoire")}
                       />
                     </div>
                     {continuationMenu ? (
                       <div className="sequence-note">
-                        Cette étape mène vers la continuation importée "{continuationMenu.name || 'Suite'}"
+                        Cette étape mène vers la continuation importée t("{continuationMenu.name || 'Suite'}")
                         {continuationMenu.importedContinuation?.sourceStoryName
                           ? ` depuis ${continuationMenu.importedContinuation.sourceStoryName}`
                           : ''}.
@@ -222,7 +223,7 @@ export function EndSequenceEditor({
                     currentStoryId={node.id}
                     includeNone
                     noneLabel={packStartReturnLabel}
-                    emptyLabel="Comme à la fin de l'histoire"
+                    emptyLabel={t("Comme à la fin de l'histoire")}
                     includeStoryPlay={false}
                   />
                 </div>
@@ -263,12 +264,12 @@ export function EndSequenceEditor({
           )}
         </div>
         {homeStep ? (
-          <Tooltip text="Retirer la réaction Accueil">
+          <Tooltip text={t("Retirer la réaction Accueil")}>
             <button
               type="button"
               className="story-prompt-trash"
               onClick={() => onUpdate({ afterPlaybackHomeStep: null })}
-              aria-label="Retirer la réaction Accueil"
+              aria-label={t("Retirer la réaction Accueil")}
             >
               <Trash2 className="card-danger-icon" />
             </button>
@@ -288,11 +289,11 @@ export function EndSequenceEditor({
               className="field-input sequence-step-name"
               value={homeStep.name || ''}
               onChange={(e) => updateHomeStep({ name: e.target.value })}
-              placeholder="Réaction au bouton Accueil"
+              placeholder={t("Réaction au bouton Accueil")}
             />
           </div>
           <AudioField
-            label="Audio joué quand l'enfant appuie sur Accueil"
+            label={t("Audio joué quand l'enfant appuie sur Accueil")}
             file={homeStep.audio}
             ttsTextSuggestion={homeStep.name || node.name || ''}
             ttsFilenameHint={`attente-${node.name || 'histoire'}`}
@@ -302,7 +303,7 @@ export function EndSequenceEditor({
           />
           <ImageField
             fieldId={`${node.id}:homeStep:image`}
-            label="Image affichée pendant la réaction Accueil"
+            label={t("Image affichée pendant la réaction Accueil")}
             file={homeStep.image}
             onPick={(file) => updateHomeStep({ image: file })}
             onClear={() => updateHomeStep({ image: null })}
@@ -336,7 +337,7 @@ export function EndSequenceEditor({
               currentStoryId={node.id}
               includeNone
               noneLabel={packStartReturnLabel}
-              emptyLabel="Comme à la fin de l'histoire"
+              emptyLabel={t("Comme à la fin de l'histoire")}
               includeStoryPlay={false}
             />
           </div>

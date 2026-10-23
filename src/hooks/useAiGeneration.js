@@ -4,6 +4,7 @@ import { getImageJobTargetLabel } from '../store/aiJobLabels';
 import { getProjectFilePrefix } from '../utils/projectPrefix';
 import { applyGeneratedAudioToTarget as dispatchGeneratedAudioToTarget } from '../store/generatedAudioTarget';
 
+import { t } from '../i18n/index.js';
 function getTtsStoryName(text) {
   const normalized = String(text || '').replace(/\s+/g, ' ').trim();
   if (!normalized) return '';
@@ -67,8 +68,8 @@ export function useAiGeneration({
 
   async function handleQueueXttsGenerate(job) {
     xttsStore.addJob({
-      label: job.targetLabel || 'Audio IA',
-      targetLabel: job.targetLabel || 'Audio IA',
+      label: job.targetLabel || t('Audio IA'),
+      targetLabel: job.targetLabel || t('Audio IA'),
       voiceLabel: job.voiceLabel || 'XTTS',
       // Toute cible est liée au travail qui l'a demandée : une voix revenue
       // après l'ouverture d'un autre projet ne s'y applique pas (garde de

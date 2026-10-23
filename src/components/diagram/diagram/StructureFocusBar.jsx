@@ -1,3 +1,4 @@
+import { t } from '../../../i18n/index.js';
 export function StructureFocusBar({ focus, pinned, onClear }) {
   if (!focus) return null;
   return (
@@ -14,7 +15,7 @@ export function StructureFocusBar({ focus, pinned, onClear }) {
         {focus.breadcrumb.join(' › ')}
       </div>
       {pinned ? (
-        <button type="button" className="fd-structure-focus-clear" onClick={onClear} title="Libérer la structure (Échap)">
+        <button type="button" className="fd-structure-focus-clear" onClick={onClear} title={t("Libérer la structure (Échap)")}>
           ×
         </button>
       ) : (

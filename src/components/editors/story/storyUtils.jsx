@@ -15,7 +15,8 @@ import {
 } from '../../../store/navigationTargets';
 import { CircleX, FolderOpen, Link2, Music, Play } from '../../icons/LucideLocal';
 
-export const NAV_ROOT_LABEL = 'Menu racine';
+import { t } from '../../../i18n/index.js';
+export const NAV_ROOT_LABEL = t('Menu racine');
 
 export function generatedTargetIdToSelectValue(targetId) {
   if (!targetId || isRootNavigationTarget(targetId)) return '';
@@ -44,8 +45,8 @@ function buildNavigationTargetOptions({
   currentStoryId = null,
   allowCurrentStory = false,
   includeNone = false,
-  noneLabel = 'Retour à la couverture du pack',
-  emptyLabel = 'Choisir une destination',
+  noneLabel = t('Retour à la couverture du pack'),
+  emptyLabel = t('Choisir une destination'),
   includeDefault = true,
   includeNextStory = true,
   includeStoryPlay = true,
@@ -55,7 +56,7 @@ function buildNavigationTargetOptions({
   if (value === '__mixed__') {
     options.push({
       value: '__mixed__',
-      label: 'Valeurs mixtes — ne pas modifier',
+      label: t('Valeurs mixtes — ne pas modifier'),
       kind: 'default',
       disabled: true,
     });
@@ -65,7 +66,7 @@ function buildNavigationTargetOptions({
   }
   if (includeNone) options.push({ value: '__none__', label: noneLabel, kind: 'none' });
   if (includeNextStory) {
-    options.push({ value: NAV_TARGET_NEXT_STORY, label: 'Histoire suivante', kind: 'story' });
+    options.push({ value: NAV_TARGET_NEXT_STORY, label: t('Histoire suivante'), kind: 'story' });
   }
   for (const menu of allMenus) {
     options.push({
@@ -101,7 +102,7 @@ function buildNavigationTargetOptions({
   // Une destination dont l'histoire ou le dossier a été supprimé reste affichée
   // comme telle, jamais confondue avec le choix par défaut de la ligne vide.
   if (flagMissingValue && isMissingNavigationValue(value, allMenus, allStories)) {
-    options.unshift({ value, label: 'Destination supprimée — à choisir', kind: 'none', disabled: true });
+    options.unshift({ value, label: t('Destination supprimée — à choisir'), kind: 'none', disabled: true });
   }
   return options;
 }
@@ -120,10 +121,10 @@ function isMissingNavigationValue(value, allMenus, allStories) {
 }
 
 export const CONTROL_DEFS = [
-  { key: 'autoplay', label: 'Lecture automatique', def: true },
+  { key: 'autoplay', label: t('Lecture automatique'), def: true },
   { key: 'ok',       label: 'Bouton OK',            def: true },
-  { key: 'home',     label: 'Bouton Accueil',        def: true },
-  { key: 'pause',    label: 'Bouton pause',          def: false },
+  { key: 'home',     label: t('Bouton Accueil'),        def: true },
+  { key: 'pause',    label: t('Bouton pause'),          def: false },
   { key: 'wheel',    label: 'Molette',               def: false },
 ];
 
@@ -181,7 +182,7 @@ export function getNavigationSelectHint({
   if (!normalized) return emptyResolvedLabel;
   if (isRootNavigationTarget(normalized)) {
     const def = project?.rootEntries?.[0];
-    if (!def) return 'Aucune entrée dans le pack';
+    if (!def) return t('Aucune entrée dans le pack');
     return `${def.name || '(sans nom)'} (premier élément du pack)`;
   }
   if (isNextStoryNavigationTarget(normalized)) {
@@ -205,8 +206,8 @@ export function NavigationTargetSelect({
   currentStoryId,
   allowCurrentStory = false,
   includeNone = false,
-  noneLabel = 'Retour à la couverture du pack',
-  emptyLabel = 'Choisir une destination',
+  noneLabel = t('Retour à la couverture du pack'),
+  emptyLabel = t('Choisir une destination'),
   includeDefault = true,
   resolvedDefaultValue = null,
   resolvedDefaultLabel = null,

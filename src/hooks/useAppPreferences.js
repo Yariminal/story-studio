@@ -8,6 +8,7 @@ import { isTauriRuntime } from '../utils/tauriRuntime';
 import { formatFrenchCount } from '../utils/frenchText.js';
 import { collectEndMessagePresentations } from '../store/generatedNavigation';
 
+import { t } from '../i18n/index.js';
 // Grappe « préférences & réglages » extraite d'AppContent : dossier workspace,
 // logging verbeux (+ chemins de log), consolidation projet,
 // options globales du pack, message de fin (end node) et réglages XTTS. Ce sont les
@@ -96,18 +97,18 @@ export function useAppPreferences({
     const destinationDir = await openDialog({
       directory: true,
       multiple: false,
-      title: 'Choisir le dossier de consolidation',
+      title: t('Choisir le dossier de consolidation'),
     });
     if (!destinationDir) return null;
-    setSaveProgress({ lines: ['Consolidation du projet...'], complete: false });
+    setSaveProgress({ lines: [t('Consolidation du projet...')], complete: false });
     try {
       const result = await consolidateProject(store.project, store.savePath, destinationDir, (step) => {
         setSaveProgress(prev => prev ? { ...prev, lines: [...prev.lines, step] } : { lines: [step], complete: false });
       });
       const summary = formatFrenchCount(
         result.copiedCount,
-        'fichier copié',
-        'fichiers copiés',
+        t('fichier copié'),
+        t('fichiers copiés'),
       );
       const warnings = result.errors.length > 0
         ? `, ${formatFrenchCount(result.errors.length, 'erreur', 'erreurs')}`
@@ -119,7 +120,7 @@ export function useAppPreferences({
       }
       if (result.errors.length > 0) {
         showErrorDialog({
-          title: 'Projet consolidé',
+          title: t('Projet consolidé'),
           message: `Projet consolidé avec des fichiers manquants :\n\n${result.errors.slice(0, 5).map((error) => `• ${error.path}\n  ${error.error}`).join('\n')}`,
           variant: 'warning',
         });
@@ -128,7 +129,7 @@ export function useAppPreferences({
     } catch (error) {
       setSaveProgress(null);
       showErrorDialog({
-        title: 'Consolidation impossible',
+        title: t('Consolidation impossible'),
         message: `Consolidation impossible : ${error}`,
       });
       return null;
@@ -152,14 +153,14 @@ export function useAppPreferences({
     )).length;
     if (!options?.skipConfirm) {
       const confirmed = await showConfirmDialog({
-        title: 'Supprimer le message de fin',
+        title: t('Supprimer le message de fin'),
         message:
           `Le message sera retiré de ${globalCount} histoire${globalCount > 1 ? 's' : ''}. `
           + `${localCount} fin${localCount !== 1 ? 's locales seront' : ' locale sera'} conservée${localCount !== 1 ? 's' : ''}.`,
         variant: 'warning',
-        okLabel: 'Supprimer',
+        okLabel: t('Supprimer'),
         okKind: 'danger',
-        cancelLabel: 'Annuler',
+        cancelLabel: t('Annuler'),
       });
       if (!confirmed) return false;
     }

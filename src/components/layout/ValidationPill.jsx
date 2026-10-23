@@ -3,6 +3,7 @@ import { ArrowRight, TriangleAlert, CircleCheck, Loader2 } from '../icons/Lucide
 import { Tooltip } from '../common/Tooltip';
 import './ValidationPill.css';
 
+import { t } from '../../i18n/index.js';
 const AdvancedIssuesPanel = lazy(() => import('../AdvancedWorkspace/DiagnosticsPanel.jsx')
   .then((module) => ({ default: module.AdvancedIssuesPanel })));
 
@@ -156,7 +157,7 @@ export function ValidationPill({
   }, [isOpen, advanced, activeIndex]);
 
   const tooltipText = state === 'verifying'
-    ? 'Vérification en cours…'
+    ? t('Vérification en cours…')
     : `${totalCount} élément${totalCount > 1 ? 's' : ''} à corriger${shortcutLabel ? ` (${shortcutLabel})` : ''}`;
   const popoverSubtitle = advanced
     ? `${totalCount} élément${totalCount > 1 ? 's' : ''} empêche${totalCount > 1 ? 'nt' : ''} la génération.`
@@ -232,7 +233,7 @@ export function ValidationPill({
             className={`validation-pill-dd is-${state} ${advanced ? 'is-advanced' : ''}`}
             ref={dropdownRef}
             role="dialog"
-            aria-label="Liste des éléments à corriger"
+            aria-label={t("Liste des éléments à corriger")}
           >
             <div className="validation-pill-dd-head">
               <span className="validation-pill-dd-title">À corriger</span>
@@ -248,7 +249,7 @@ export function ValidationPill({
                 </Suspense>
               ) : (
                 <>
-                  <div className="validation-pill-filters" role="group" aria-label="Filtrer par gravité">
+                  <div className="validation-pill-filters" role="group" aria-label={t("Filtrer par gravité")}>
                     <button type="button" aria-pressed={severity === 'all'} onClick={() => setSeverity('all')}>
                       Tous ({totalCount})
                     </button>

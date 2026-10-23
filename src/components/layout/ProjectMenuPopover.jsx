@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { FilePen, FolderOpen, House, Package, Save, Waypoints } from '../icons/LucideLocal';
 import './ProjectMenuPopover.css';
 
+import { t } from '../../i18n/index.js';
 function ToolbarIcon({ Icon, className = 'chrome-icon' }) {
   return <Icon className={className} aria-hidden="true" strokeWidth={2} absoluteStrokeWidth />;
 }
@@ -111,35 +112,35 @@ export function ProjectMenuPopover({
             </div>
             <ProjectMenuItem
               entry={find('newProject')}
-              fallbackLabel="Retour à l’accueil"
+              fallbackLabel={t("Retour à l’accueil")}
               fallbackShortcut={shortcutLabels.newProject}
               Icon={House}
               onClick={() => handleAction(onNewProject)}
             />
             <ProjectMenuItem
               entry={find('openProject')}
-              fallbackLabel="Ouvrir un projet"
+              fallbackLabel={t("Ouvrir un projet")}
               fallbackShortcut={shortcutLabels.openProject}
               Icon={FolderOpen}
               onClick={() => handleAction(onOpenProject)}
             />
             <ProjectMenuItem
               entry={find('openPack')}
-              fallbackLabel="Ouvrir un pack"
+              fallbackLabel={t("Ouvrir un pack")}
               Icon={Package}
               onClick={() => handleAction(onOpenPack)}
             />
             <span className="project-menu-sep" />
             <ProjectMenuItem
               entry={find('saveProject')}
-              fallbackLabel="Enregistrer"
+              fallbackLabel={t("Enregistrer")}
               fallbackShortcut={shortcutLabels.saveProject}
               Icon={Save}
               onClick={() => handleAction(onSaveProject)}
             />
             <ProjectMenuItem
               entry={find('saveProjectAs')}
-              fallbackLabel="Enregistrer sous..."
+              fallbackLabel={t("Enregistrer sous...")}
               fallbackShortcut={shortcutLabels.saveAs}
               Icon={FilePen}
               onClick={() => handleAction(onSaveProjectAs)}
@@ -149,7 +150,7 @@ export function ProjectMenuPopover({
                 <span className="project-menu-sep" />
                 <ProjectMenuItem
                   entry={find('continueInGraph')}
-                  fallbackLabel="Continuer dans l’éditeur graphe…"
+                  fallbackLabel={t("Continuer dans l’éditeur graphe…")}
                   Icon={Waypoints}
                   onClick={() => handleAction(onContinueInGraph)}
                 />

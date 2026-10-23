@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // Les contrôles ancrés à la surface : actions du L, zoom, cadrage, légende et vue d'ensemble.
 //
 // Ils ne bougent pas avec la caméra — ce sont les seules surimpressions du
@@ -23,27 +24,27 @@ const EDGE_FILTERS = Object.freeze([
     group: EDGE_VISIBILITY_GROUPS.STRUCTURE,
     label: 'Structure',
     className: 'is-structure',
-    ariaLabel: 'Afficher les liens de structure',
+    ariaLabel: t('Afficher les liens de structure'),
   },
   {
     group: EDGE_VISIBILITY_GROUPS.RETURNS,
     label: 'Retour',
     className: 'is-return',
-    ariaLabel: 'Afficher les retours',
+    ariaLabel: t('Afficher les retours'),
   },
   {
     group: EDGE_VISIBILITY_GROUPS.DEVICE_RETURNS,
-    label: 'Retour Lunii',
+    label: t('Retour Lunii'),
     className: 'is-device-return',
-    ariaLabel: 'Afficher les retours par défaut de la Lunii',
-    title: 'Bouton Accueil sans destination : la Lunii revient d’elle-même à l’Écran d’entrée. Ce retour n’est pas écrit dans le pack.',
+    ariaLabel: t('Afficher les retours par défaut de la Lunii'),
+    title: t('Bouton Accueil sans destination : la Lunii revient d’elle-même à l’Écran d’entrée. Ce retour n’est pas écrit dans le pack.'),
   },
   {
     group: EDGE_VISIBILITY_GROUPS.RANDOM,
-    label: 'Aléatoire',
+    label: t('Aléatoire'),
     className: 'is-random',
-    ariaLabel: 'Afficher les liens à sélection aléatoire',
-    title: 'Choix tiré au sort à chaque ouverture de la liste',
+    ariaLabel: t('Afficher les liens à sélection aléatoire'),
+    title: t('Choix tiré au sort à chaque ouverture de la liste'),
   },
 ]);
 
@@ -137,12 +138,12 @@ function Overview({ engineRef, index, viewport, hostSize, livePositions, onClose
       <div className="advanced-graph-overview__title">
         <span>Vue d’ensemble</span>
         {onClose && (
-          <Tooltip text="Fermer la vue d’ensemble" asChild>
+          <Tooltip text={t("Fermer la vue d’ensemble")} asChild>
             <button
               type="button"
               className="advanced-graph-overview__close"
               onClick={onClose}
-              aria-label="Fermer la vue d’ensemble"
+              aria-label={t("Fermer la vue d’ensemble")}
             >
               <X />
             </button>
@@ -153,7 +154,7 @@ function Overview({ engineRef, index, viewport, hostSize, livePositions, onClose
         viewBox={`0 0 ${MAP_WIDTH} ${MAP_HEIGHT}`}
         role="application"
         tabIndex={0}
-        aria-label="Vue d’ensemble du graphe : cliquer ou glisser déplace la caméra, les flèches la déplacent au clavier"
+        aria-label={t("Vue d’ensemble du graphe : cliquer ou glisser déplace la caméra, les flèches la déplacent au clavier")}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
@@ -237,7 +238,7 @@ function LayoutControls({ arrangement, shortcut = '' }) {
   // droite au survol : ce sont des variantes du même geste, pas un réglage
   // séparé.
   return (
-    <div className="advanced-layout-control" role="group" aria-label="Ranger le graphe">
+    <div className="advanced-layout-control" role="group" aria-label={t("Ranger le graphe")}>
       <Tooltip text={withShortcut('Ranger le graphe en suivant le parcours de l’histoire', shortcut)} asChild wrap>
         <button
           type="button"
@@ -245,7 +246,7 @@ function LayoutControls({ arrangement, shortcut = '' }) {
           onClick={() => press(NO_FOLD)}
           disabled={disabled || busy}
           aria-busy={busy ? 'true' : undefined}
-          aria-label={busy ? 'Rangement…' : 'Ranger le graphe'}
+          aria-label={busy ? 'Rangement…' : t('Ranger le graphe')}
         >
           <BroomSparkles />
         </button>
@@ -307,7 +308,7 @@ export function GraphSurfaceControls({
         <StructureActionsBar
           variant="canvas"
           workspaceMode={WORKSPACE_MODE_ADVANCED}
-          ariaLabel="Actions du graphe"
+          ariaLabel={t("Actions du graphe")}
           onImportMedia={surfaceTools.onImportMedia}
           onImportPodcast={surfaceTools.onImportPodcast}
           onImportYoutube={surfaceTools.onImportYoutube}
@@ -319,7 +320,7 @@ export function GraphSurfaceControls({
           availableInlineSize={hostSize.width ? hostSize.width - 24 : null}
           trailing={surfaceTools.onSearch && (
             <StructureSearchButton
-              label="Rechercher dans les nœuds du graphe"
+              label={t("Rechercher dans les nœuds du graphe")}
               onClick={surfaceTools.onSearch}
             />
           )}
@@ -331,16 +332,16 @@ export function GraphSurfaceControls({
           restaure aussi le cadrage — et le pourcentage qui change alors est
           juste au-dessus. */}
       <div className={`advanced-graph-camera${surfaceTools ? ' advanced-graph-camera--joined' : ''}`}>
-        <div className="advanced-graph-zoom" role="group" aria-label="Zoom du graphe">
+        <div className="advanced-graph-zoom" role="group" aria-label={t("Zoom du graphe")}>
           <Tooltip text={withShortcut('Agrandir', labels.graphZoomIn)} asChild>
             <button type="button" onClick={() => zoomBy(GRAPH_ZOOM_STEP)} aria-label="Agrandir">+</button>
           </Tooltip>
-          <output aria-label="Niveau de zoom">{Math.round(zoom * 100)}%</output>
+          <output aria-label={t("Niveau de zoom")}>{Math.round(zoom * 100)}%</output>
           <Tooltip text={withShortcut('Réduire', labels.graphZoomOut)} asChild>
-            <button type="button" onClick={() => zoomBy(1 / GRAPH_ZOOM_STEP)} aria-label="Réduire">−</button>
+            <button type="button" onClick={() => zoomBy(1 / GRAPH_ZOOM_STEP)} aria-label={t("Réduire")}>−</button>
           </Tooltip>
           <Tooltip text={withShortcut('Cadrer tout le graphe', labels.graphFit)} asChild>
-            <button type="button" className="advanced-graph-zoom__fit" onClick={() => void engineRef.current?.fitContent()} aria-label="Cadrer tout le graphe">⌗</button>
+            <button type="button" className="advanced-graph-zoom__fit" onClick={() => void engineRef.current?.fitContent()} aria-label={t("Cadrer tout le graphe")}>⌗</button>
           </Tooltip>
         </div>
         {/* Précédent et Suivant portent sur les **révélations volontaires** —
@@ -348,18 +349,18 @@ export function GraphSurfaceControls({
             aucun geste : une commande impossible reste donc affichée et
             expliquée par son titre, au lieu de disparaître sans raison. */}
         {history && (
-          <div className="advanced-graph-steps" role="group" aria-label="Navigation dans les nœuds visités">
+          <div className="advanced-graph-steps" role="group" aria-label={t("Navigation dans les nœuds visités")}>
             <Tooltip
               text={history.canBack
                 ? withShortcut('Revenir au nœud visité juste avant. Ne défait aucune modification.', labels.graphVisitBack)
-                : 'Aucun nœud visité avant celui-ci.'}
+                : t('Aucun nœud visité avant celui-ci.')}
               wrap
             >
               <button
                 type="button"
                 onClick={history.onBack}
                 aria-disabled={history.canBack ? undefined : 'true'}
-                aria-label="Nœud visité précédent"
+                aria-label={t("Nœud visité précédent")}
               >
                 ‹
               </button>
@@ -367,14 +368,14 @@ export function GraphSurfaceControls({
             <Tooltip
               text={history.canForward
                 ? withShortcut('Repartir vers le nœud visité ensuite. Disponible après un retour en arrière.', labels.graphVisitForward)
-                : 'Aucun nœud visité après celui-ci.'}
+                : t('Aucun nœud visité après celui-ci.')}
               wrap
             >
               <button
                 type="button"
                 onClick={history.onForward}
                 aria-disabled={history.canForward ? undefined : 'true'}
-                aria-label="Nœud visité suivant"
+                aria-label={t("Nœud visité suivant")}
               >
                 ›
               </button>
@@ -394,7 +395,7 @@ export function GraphSurfaceControls({
             {onToggleOverview && (
               <Tooltip
                 text={withShortcut(
-                  overviewOpen ? 'Replier la vue d’ensemble' : 'Afficher la vue d’ensemble',
+                  overviewOpen ? 'Replier la vue d’ensemble' : t('Afficher la vue d’ensemble'),
                   labels.graphToggleOverview,
                 )}
                 asChild
@@ -413,7 +414,7 @@ export function GraphSurfaceControls({
           </div>
         )}
       </div>
-      <div className="advanced-graph-legend" role="group" aria-label="Filtres des chemins du graphe">
+      <div className="advanced-graph-legend" role="group" aria-label={t("Filtres des chemins du graphe")}>
         {EDGE_FILTERS.map((filter) => {
           const isVisible = edgeVisibility[filter.group] !== false;
           return (

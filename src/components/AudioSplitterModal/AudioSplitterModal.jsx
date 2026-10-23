@@ -22,6 +22,7 @@ import { useShuttlePlayback } from '../AudioEditorModal/useShuttlePlayback';
 import { createAudioEditorWaveformOptions, styleRegionHandles } from '../AudioEditorModal/audioEditorWaveform';
 import './AudioSplitterModal.css';
 
+import { t } from '../../i18n/index.js';
 function fileStem(name) {
   const clean = name || 'audio';
   const dot = clean.lastIndexOf('.');
@@ -38,7 +39,7 @@ function defaultSegmentName(sourceName, index) {
 
 function readableError(value) {
   const text = String(value || '').trim();
-  if (!text) return "Le découpage audio a échoué.";
+  if (!text) return t("Le découpage audio a échoué.");
   const firstLine = text.split(/\r?\n/).find((line) => line.trim()) || text;
   if (/ffmpeg|invalid data|error/i.test(text)) {
     return `FFmpeg n'a pas pu découper cet audio. ${firstLine}`;
@@ -136,7 +137,7 @@ export function AudioSplitterModal({
     ws.on('error', () => {
       if (!mounted) return;
       setLoading(false);
-      setError('Impossible de charger le fichier audio.');
+      setError(t('Impossible de charger le fichier audio.'));
     });
     ws.on('play', () => { if (mounted) setIsPlaying(true); });
     ws.on('pause', () => {
@@ -353,7 +354,7 @@ export function AudioSplitterModal({
 
   function previewRange(range, key) {
     if (!range || range.end <= range.start) {
-      setError("La sélection doit avoir un point de sortie après le point d'entrée.");
+      setError(t("La sélection doit avoir un point de sortie après le point d'entrée."));
       return;
     }
     setError('');
@@ -369,7 +370,7 @@ export function AudioSplitterModal({
 
   function addSegment() {
     if (!canUseSelection) {
-      setError("La sélection doit avoir un point de sortie après le point d'entrée.");
+      setError(t("La sélection doit avoir un point de sortie après le point d'entrée."));
       return;
     }
     const index = counterRef.current;
@@ -400,11 +401,11 @@ export function AudioSplitterModal({
   async function handleSubmit() {
     setError('');
     if (!workspaceDir) {
-      setError('Aucun emplacement de travail : impossible de découper un audio.');
+      setError(t('Aucun emplacement de travail : impossible de découper un audio.'));
       return;
     }
     if (segments.length === 0) {
-      setError('Ajoutez au moins un extrait à générer.');
+      setError(t('Ajoutez au moins un extrait à générer.'));
       return;
     }
 
@@ -422,7 +423,7 @@ export function AudioSplitterModal({
       const createdPaths = result?.created?.map((entry) => entry.outputPath).filter(Boolean) ?? [];
       if (createdPaths.length === 0) {
         const firstFailure = result?.failed?.[0]?.error;
-        setError(firstFailure ? readableError(firstFailure) : "Aucun extrait n'a pu être généré.");
+        setError(firstFailure ? readableError(firstFailure) : t("Aucun extrait n'a pu être généré."));
         return;
       }
       onCreated?.(createdPaths, result?.failed ?? []);
@@ -472,16 +473,16 @@ export function AudioSplitterModal({
             </div>
             <div className="audio-splitter-toolbar">
               <div className="audio-tb">
-                <Tooltip text="Marquer le point d'entrée à la position du curseur (i)">
+                <Tooltip text={t("Marquer le point d'entrée à la position du curseur (i)")}>
                   <Button variant="icon" className="audio-tb-btn audio-tb-btn-marker" onClick={markStartHere} disabled={loading}>{`{`}</Button>
                 </Tooltip>
-                <Tooltip text="Marquer le point de sortie à la position du curseur (o)">
+                <Tooltip text={t("Marquer le point de sortie à la position du curseur (o)")}>
                   <Button variant="icon" className="audio-tb-btn audio-tb-btn-marker" onClick={markEndHere} disabled={loading}>{`}`}</Button>
                 </Tooltip>
 
                 <div className="audio-tb-sep" />
 
-                <Tooltip text={isPlaying ? 'Pause (Espace)' : 'Play / Pause (Espace)'}>
+                <Tooltip text={isPlaying ? t('Pause (Espace)') : t('Play / Pause (Espace)')}>
                   <Button variant="icon" className={`audio-tb-btn${isPlaying ? ' is-active' : ''}`} onClick={handlePlayPause} disabled={loading}>
                     {isPlaying ? <Pause /> : <Play />}
                   </Button>
@@ -498,7 +499,7 @@ export function AudioSplitterModal({
 
                 <div className="audio-tb-sep" />
 
-                <Tooltip text="Aller au point d'entrée (Shift+I)">
+                <Tooltip text={t("Aller au point d'entrée (Shift+I)")}>
                   <Button variant="icon" className="audio-tb-btn audio-tb-btn-text" onClick={goToSelectionStart} disabled={loading}>|▶</Button>
                 </Tooltip>
                 <Tooltip text="Aller au point de sortie (Shift+O)">
@@ -563,7 +564,7 @@ export function AudioSplitterModal({
                       className="audio-splitter-icon-btn"
                       onClick={() => previewRange({ start: segment.startSec, end: segment.endSec }, segment.id)}
                       disabled={submitting}
-                      title="Prévisualiser cet extrait"
+                      title={t("Prévisualiser cet extrait")}
                     >
                       <Play strokeWidth={2} absoluteStrokeWidth />
                     </Button>
@@ -572,7 +573,7 @@ export function AudioSplitterModal({
                       className="audio-splitter-icon-btn is-danger"
                       onClick={() => removeSegment(segment.id)}
                       disabled={submitting}
-                      title="Supprimer cet extrait"
+                      title={t("Supprimer cet extrait")}
                     >
                       <Trash2 strokeWidth={2} absoluteStrokeWidth />
                     </Button>
@@ -594,7 +595,7 @@ export function AudioSplitterModal({
           <Button onClick={onClose} disabled={submitting}>Annuler</Button>
           <Button variant="primary" className="audio-splitter-submit" onClick={handleSubmit} disabled={!canSubmit}>
             {submitting && <span className="audio-splitter-spinner" />}
-            {submitting ? 'Génération…' : 'Générer'}
+            {submitting ? t('Génération…') : t('Générer')}
           </Button>
         </div>
       </div>

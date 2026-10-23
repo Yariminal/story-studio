@@ -7,6 +7,7 @@ import { editorLayoutKeys } from '../../store/persistentSettings';
 import { Button } from '../common/Button';
 import './FloatingSimulator.css';
 
+import { t } from '../../i18n/index.js';
 // Ce que le simulateur montre quand il n'a pas encore de graphe, ou n'en aura
 // pas. Un refus du générateur est une issue **normale** : un projet en cours
 // d'écriture peut contenir un dossier encore vide, que la production refuse
@@ -24,8 +25,8 @@ function SimulatorNotice({ tone = 'muted', title = null, children, onClose }) {
           variant="icon"
           size="sm"
           className="floating-simulator-notice__close"
-          aria-label="Fermer le message du simulateur"
-          title="Fermer le message du simulateur"
+          aria-label={t("Fermer le message du simulateur")}
+          title={t("Fermer le message du simulateur")}
           onClick={onClose}
         >
           ×
@@ -64,7 +65,7 @@ function EmbeddedSimulator({
     }
     if (documentStatus === 'failed') {
       return (
-        <SimulatorNotice tone="error" title="Écoute impossible" onClose={onClose}>
+        <SimulatorNotice tone="error" title={t("Écoute impossible")} onClose={onClose}>
           {documentError}
         </SimulatorNotice>
       );
@@ -140,7 +141,7 @@ export function FloatingSimulator({
         <button
           type="button"
           className="floating-simulator-resize"
-          aria-label="Redimensionner le simulateur"
+          aria-label={t("Redimensionner le simulateur")}
           onPointerDown={beginResize}
         />
       )}

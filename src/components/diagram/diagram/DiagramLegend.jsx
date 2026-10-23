@@ -1,6 +1,7 @@
+import { t } from '../../../i18n/index.js';
 export function DiagramLegend({ returnEdges, homeEdges, afterEndEdges, referenceEdges }) {
   return (
-    <div className="fd-stage-legend" aria-label="Légende du diagramme">
+    <div className="fd-stage-legend" aria-label={t("Légende du diagramme")}>
       <div className="fd-complete-legend-item">
         <span className="fd-complete-legend-line" />
         <span>Structure principale</span>

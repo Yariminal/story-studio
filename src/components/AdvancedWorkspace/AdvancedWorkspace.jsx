@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // L'espace de travail de l'Éditeur avancé.
 //
 // C'est le prototype de lecture devenu un lieu d'édition : même
@@ -1283,7 +1284,7 @@ export function AdvancedWorkspace({
 
   const renderResizeHandle = (boundary) => {
     const nodeListConfig = {
-      ariaLabel: 'Redimensionner la liste des nœuds',
+      ariaLabel: t('Redimensionner la liste des nœuds'),
       panelClass: '.advanced-panel-slot--advanced-node-list',
       cssVar: '--advanced-node-list-panel-width',
       minWidth: ADVANCED_NODE_LIST_WIDTH_MIN,
@@ -1293,7 +1294,7 @@ export function AdvancedWorkspace({
       onResize: panelViewState?.setNodeListPanelWidth,
     };
     const inspectorConfig = {
-      ariaLabel: 'Redimensionner les réglages',
+      ariaLabel: t('Redimensionner les réglages'),
       panelClass: '.advanced-panel-slot--advanced-inspector',
       cssVar: '--advanced-inspector-panel-width',
       minWidth: ADVANCED_INSPECTOR_WIDTH_MIN,
@@ -1310,7 +1311,7 @@ export function AdvancedWorkspace({
   };
 
   const renderNodeListPanel = (dragHandleProps) => (
-    <section className="advanced-panel advanced-panel--nodes" aria-label="Liste des nœuds et Écrans">
+    <section className="advanced-panel advanced-panel--nodes" aria-label={t("Liste des nœuds et Écrans")}>
       {/* Cette liste est l'équivalent structurel de l'Arbre côté Libre. Elle
           garde sa recherche et ses compteurs, rendus dans sa barre ; les
           outils communs sont sur le L. */}
@@ -1363,14 +1364,14 @@ export function AdvancedWorkspace({
               }}
             >
               <CommandButton
-                entry={headerCommand('createStage', 'Créer un Écran…', creationBlocked, shortcutLabels.graphCreateStage)}
+                entry={headerCommand('createStage', t('Créer un Écran…'), creationBlocked, shortcutLabels.graphCreateStage)}
                 Icon={Fullscreen}
                 onClick={() => createStageAt(viewCenter())}
               />
               <button
                 type="button"
                 className="chrome-toolbar-btn is-icon-only advanced-create-stage-split__toggle"
-                aria-label="Options de création d’un Écran"
+                aria-label={t("Options de création d’un Écran")}
                 aria-haspopup="menu"
                 aria-expanded={Boolean(stageDefaultsMenu)}
                 onMouseEnter={() => setStageDefaultsMenu(true)}
@@ -1385,7 +1386,7 @@ export function AdvancedWorkspace({
                 <ChevronDown className="chrome-icon" aria-hidden="true" />
               </button>
               {stageDefaultsMenu && (
-                <div className="advanced-create-stage-menu" role="menu" aria-label="Options de création d’un Écran">
+                <div className="advanced-create-stage-menu" role="menu" aria-label={t("Options de création d’un Écran")}>
                   <button
                     type="button"
                     role="menuitem"
@@ -1401,13 +1402,13 @@ export function AdvancedWorkspace({
               )}
             </div>
             <CommandButton
-              entry={headerCommand('createAction', 'Créer une liste de choix…', creationBlocked, shortcutLabels.graphCreateAction)}
+              entry={headerCommand('createAction', t('Créer une liste de choix…'), creationBlocked, shortcutLabels.graphCreateAction)}
               className="advanced-create-command"
               Icon={Waypoints}
               onClick={() => createActionAt(viewCenter())}
             />
             {DERIVED_CONSTRUCTION_CREATION_ENABLED && <CommandButton
-              entry={headerCommand('createConstruction', 'Constructions dérivées…', creationBlocked)}
+              entry={headerCommand('createConstruction', t('Constructions dérivées…'), creationBlocked)}
               className="advanced-create-command"
               Icon={Wrench}
               onClick={() => setDialog({ kind: 'create-construction' })}
@@ -1461,9 +1462,9 @@ export function AdvancedWorkspace({
   );
 
   const renderInspectorPanel = (dragHandleProps) => (
-    <section className="advanced-panel advanced-panel--inspector" aria-label="Réglages du nœud sélectionné">
+    <section className="advanced-panel advanced-panel--inspector" aria-label={t("Réglages du nœud sélectionné")}>
       <AdvancedPanelHeader
-        title="Réglages"
+        title={t("Réglages")}
         onClose={panelViewState?.toggleInspector}
         dragHandleProps={dragHandleProps}
       />

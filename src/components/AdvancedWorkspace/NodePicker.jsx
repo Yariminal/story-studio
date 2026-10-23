@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // Choisir un nœud, explicitement.
 //
 // Aucune cible n'est jamais préremplie par défaut : ni le premier Écran venu,
@@ -14,7 +15,7 @@ import { useMemo, useState } from 'react';
 import { searchGraph } from '../../store/advancedGraphView/graphSearch.js';
 import { isEntryStage } from '../../store/advancedGraphView/graphViewModel.js';
 
-const PLACEHOLDER = '— choisir —';
+const PLACEHOLDER = t('— choisir —');
 
 export function NodePicker({
   index,
@@ -52,7 +53,7 @@ export function NodePicker({
         className="advanced-picker__query"
         value={query}
         placeholder="Filtrer par nom ou identifiant"
-        aria-label="Filtrer les nœuds proposés"
+        aria-label={t("Filtrer les nœuds proposés")}
         disabled={disabled}
         onChange={(event) => setQuery(event.target.value)}
       />
@@ -68,7 +69,7 @@ export function NodePicker({
           <option key={entry.path} value={entry.path}>
             {entry.label.label}
             {entry.label.isFallback ? ' (sans nom)' : ''}
-            {entry.node.uniqueId === false ? ' — identifiant dupliqué' : ''}
+            {entry.node.uniqueId === false ? t(' — identifiant dupliqué') : ''}
           </option>
         ))}
       </select>

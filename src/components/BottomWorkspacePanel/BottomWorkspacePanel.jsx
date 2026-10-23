@@ -6,6 +6,7 @@ import { collectMediaLibrary } from '../../store/mediaLibrary';
 import { read, write } from '../../store/persistentSettings';
 import './BottomWorkspacePanel.css';
 
+import { t } from '../../i18n/index.js';
 const DEFAULT_HEIGHT = 270;
 const MIN_HEIGHT = 180;
 const MAX_HEIGHT = 600;
@@ -136,7 +137,7 @@ export function BottomWorkspacePanel({
           {aiActiveCount > 0 ? <span>{aiActiveCount}</span> : aiDoneCount > 0 ? <span>✓</span> : null}
         </button>
         <div className="bottom-workspace-spacer" />
-        <button type="button" className="bottom-workspace-close" onClick={onClose} title="Réduire">×</button>
+        <button type="button" className="bottom-workspace-close" onClick={onClose} title={t("Réduire")}>×</button>
       </div>
       <div className="bottom-workspace-body">
         {activeTab === 'media' ? (

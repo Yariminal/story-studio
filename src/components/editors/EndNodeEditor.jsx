@@ -13,6 +13,7 @@ import {
 import { EndMessagePlaybackControl } from './EndMessagePlaybackControl';
 import './EditorPanel.css';
 
+import { t } from '../../i18n/index.js';
 export function EndNodeEditor({
   endNodeName = 'Message de fin',
   nightModeAudio,
@@ -68,7 +69,7 @@ export function EndNodeEditor({
         </div>
 
         <AudioField
-          label="Audio de fin d'histoire"
+          label={t("Audio de fin d'histoire")}
           file={nightModeAudio}
           ttsTextSuggestion={endNodeName || ''}
           ttsFilenameHint={`fin-histoire-${projectName || 'projet'}`}
@@ -88,7 +89,7 @@ export function EndNodeEditor({
             {localStories.map((item) => (
               <div key={item.entry.id} className="end-node-local-list-row">
                 <button type="button" className="link-button" onClick={() => onExamineStory?.(item.entry.id)}>
-                  Examiner {item.entry.name || 'cette histoire'}
+                  Examiner {item.entry.name || t('cette histoire')}
                 </button>
                 <button type="button" className="link-button" onClick={() => onAttachStory?.(item.entry.id)}>
                   Rattacher au message du pack
@@ -149,8 +150,8 @@ export function EndNodeEditor({
               <div className="editor-setting-title">Retour après le message</div>
               <div className="editor-setting-desc">
                 {nightModeReturn
-                  ? 'Cette destination remplace les réglages individuels des histoires.'
-                  : 'Chaque histoire utilise sa destination individuelle, héritée ou par défaut.'}
+                  ? t('Cette destination remplace les réglages individuels des histoires.')
+                  : t('Chaque histoire utilise sa destination individuelle, héritée ou par défaut.')}
               </div>
             </div>
             <div className="editor-setting-control">
@@ -160,7 +161,7 @@ export function EndNodeEditor({
                 allMenus={allMenus}
                 allStories={allStories}
                 currentStoryId={null}
-                emptyLabel="Selon chaque histoire"
+                emptyLabel={t("Selon chaque histoire")}
                 flagMissingValue
               />
             </div>
@@ -188,7 +189,7 @@ export function EndNodeEditor({
             className="card-danger-trash"
             type="button"
             onClick={() => onRemove?.()}
-            aria-label="Supprimer le message de fin"
+            aria-label={t("Supprimer le message de fin")}
           >
             <Trash2 className="card-danger-icon" />
           </button>

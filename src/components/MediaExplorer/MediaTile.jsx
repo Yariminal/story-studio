@@ -12,6 +12,7 @@ import { TagSection } from './TagSection';
 import { UsageBadge } from './UsageBadge';
 import { resolveUsageTarget } from './usageTarget';
 
+import { t } from '../../i18n/index.js';
 export function MediaTile({
   item, view, getMeta, markForProbe,
   index, isPopoverOpen, onActivate, onNavigate,
@@ -65,13 +66,13 @@ export function MediaTile({
 
   const ctxActions = [
     ...(mediaClipboard ? [
-      { icon: <Copy />, label: clipboardPaths.length > 1 ? `Copier ${clipboardPaths.length} sons` : 'Copier le média', fn: () => mediaClipboard.set(clipboardPaths) },
+      { icon: <Copy />, label: clipboardPaths.length > 1 ? `Copier ${clipboardPaths.length} sons` : t('Copier le média'), fn: () => mediaClipboard.set(clipboardPaths) },
       'sep',
     ] : []),
-    { icon: <FolderOpen />, label: "Révéler dans l'explorateur", fn: () => revealItemInDir(item.path) },
-    { icon: <Copy />, label: 'Copier le chemin', fn: () => navigator.clipboard.writeText(item.path).catch(() => {}) },
+    { icon: <FolderOpen />, label: t("Révéler dans l'explorateur"), fn: () => revealItemInDir(item.path) },
+    { icon: <Copy />, label: t('Copier le chemin'), fn: () => navigator.clipboard.writeText(item.path).catch(() => {}) },
     ...(usageTarget ? [
-      { icon: <Eye />, label: 'Voir l’utilisation dans le projet', fn: () => usageTarget.go() },
+      { icon: <Eye />, label: t('Voir l’utilisation dans le projet'), fn: () => usageTarget.go() },
     ] : []),
     ...(onAssemble && contextAudioItems.length >= 2 ? [
       'sep',
@@ -79,11 +80,11 @@ export function MediaTile({
     ] : []),
     ...(onSplit && item.kind === 'audio' && item.exists ? [
       'sep',
-      { icon: <Scissors />, label: 'Découper un audio', fn: () => onSplit(item) },
+      { icon: <Scissors />, label: t('Découper un audio'), fn: () => onSplit(item) },
     ] : []),
     ...(onEditImage && item.kind === 'image' && item.exists ? [
       'sep',
-      { icon: <FilePen />, label: 'Modifier l’image…', fn: () => onEditImage(item) },
+      { icon: <FilePen />, label: t('Modifier l’image…'), fn: () => onEditImage(item) },
     ] : []),
     ...(onDeleteRequest ? [
       'sep',
@@ -91,7 +92,7 @@ export function MediaTile({
         icon: <Trash2 />,
         label: contextItems.length > 1
           ? `Retirer ${contextItems.length} fichiers de la médiathèque`
-          : 'Retirer de la médiathèque',
+          : t('Retirer de la médiathèque'),
         fn: () => onDeleteRequest(contextItems),
         danger: true,
       },
@@ -244,7 +245,7 @@ export function MediaTile({
 
   const { size: sizeDisp, dim: dimDisp, dur: durDisp, fmt: fmtDisp } = getMetaDisplay(item, m, duration);
   const usageSuffix = item.usageKnown === false
-    ? ' · usages non calculés'
+    ? t(' · usages non calculés')
     : (item.usedCount > 1 ? ` ×${item.usedCount}` : '');
   const usageText = `${kindLabel(item.kind)} · ${usage?.label || item.source}${usageSuffix}`;
 

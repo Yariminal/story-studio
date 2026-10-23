@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // Noeud unitaire du diagramme complet (story, menu, zip, root, end-node).
 // Extrait de FullDiagramTree.jsx pour reduire la surface de l'orchestrateur.
 
@@ -101,7 +102,7 @@ export function FullDiagramNode({
   const isCut = cutIds?.has(entry.id);
   const nodeColor = entry.treeColor ?? null;
   const canRegroupStories = (entry.type === 'menu' || entry.type === 'root') && hasExpandedStoryGroup;
-  const collapseLabel = 'Replier les histoires';
+  const collapseLabel = t('Replier les histoires');
   const dropLabel = isDropTarget
     ? isForbiddenDepth
       ? MENU_DEPTH_LIMIT_REACHED_MESSAGE

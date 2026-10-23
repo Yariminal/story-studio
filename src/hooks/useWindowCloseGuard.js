@@ -4,6 +4,7 @@ import { isTauriRuntime } from '../utils/tauriRuntime.js';
 import { releaseTauriListener } from '../utils/tauriListener.js';
 import { nativeGenerationLock } from '../store/nativeGenerationLock.js';
 
+import { t } from '../i18n/index.js';
 // La garde porte sur toute fermeture, même sans travail à sauvegarder. La
 // réservation native empêche un export de démarrer pendant le nettoyage async.
 export function createWindowCloseHandler({ readCurrent, win, lock = nativeGenerationLock }) {
@@ -20,7 +21,7 @@ export function createWindowCloseHandler({ readCurrent, win, lock = nativeGenera
       }
       const canClose = await askSaveBeforeLeave(saveHandlerRef.current);
       if (!canClose || readCurrent().isCloseBlocked?.()) return;
-      const permit = lock.acquire({ owner: 'closing', label: 'fermeture de fenêtre' });
+      const permit = lock.acquire({ owner: 'closing', label: t('fermeture de fenêtre') });
       if (!permit) return;
       try {
         await readCurrent().beforeClose?.();

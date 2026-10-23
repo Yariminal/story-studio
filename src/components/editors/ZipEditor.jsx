@@ -5,6 +5,7 @@ import { useZipCover } from './useZipCover.js';
 import './EditorPanel.css';
 import './ImageField.css';
 
+import { t } from '../../i18n/index.js';
 function ZipCover({ zipPath, coverImage }) {
   // useZipCover gere le chargement de l'asset + la revocation de l'object URL
   // (l'ancienne implementation locale ne revoquait jamais -> fuite memoire).
@@ -49,13 +50,13 @@ export function ZipEditor({ node, onUpdate, onDelete }) {
             className="field-input"
             value={node.name || ''}
             onChange={(e) => onUpdate({ name: e.target.value })}
-            placeholder="Nom affiché"
+            placeholder={t("Nom affiché")}
           />
         </div>
         <div className="field-row">
           <span className="field-label">Fichier</span>
           <span style={{ fontSize: 12, color: 'var(--text-secondary)', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-            {filename || 'Aucun fichier'}
+            {filename || t('Aucun fichier')}
           </span>
           <Button size="sm" onClick={handlePick}>
             {filename ? 'Remplacer' : 'Choisir'}

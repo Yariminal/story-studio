@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // La fenêtre du modèle des nouveaux Écrans : les cinq boutons avec lesquels
 // naît chaque Écran créé dans le graphe.
 //
@@ -62,14 +63,14 @@ export function NewStageDefaultsDialog({ selectedStage = null, onClose }) {
   const [draft, setDraft] = useState(() => ({ ...readNewStageControls() }));
   return (
     <AdvancedDialog
-      title="Boutons des nouveaux Écrans"
-      description="Chaque Écran créé dans le graphe naît avec ces boutons. C’est une préférence de l’application : elle ne modifie aucun Écran existant."
+      title={t("Boutons des nouveaux Écrans")}
+      description={t("Chaque Écran créé dans le graphe naît avec ces boutons. C’est une préférence de l’application : elle ne modifie aucun Écran existant.")}
       onCancel={onClose}
       onConfirm={() => {
         writeNewStageControls(draft);
         onClose();
       }}
-      confirmLabel="Enregistrer"
+      confirmLabel={t("Enregistrer")}
     >
       <NewStageDefaultsForm draft={draft} onChange={setDraft} selectedStage={selectedStage} />
     </AdvancedDialog>

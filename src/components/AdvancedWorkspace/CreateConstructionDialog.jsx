@@ -8,6 +8,7 @@ import {
   buildConstructionGesture, CONSTRUCTION_LABELS, NARRATIVE_CONTROLS, CHOICE_CONTROLS,
 } from '../../store/advancedAuthoring/constructions.js';
 
+import { t } from '../../i18n/index.js';
 // Les interrupteurs et les libellés du panneau d'un Écran.
 function ConstructionControls({ title, value, onChange }) {
   return (
@@ -54,10 +55,10 @@ export function CreateConstructionDialog({ index, busy, onCancel, onConfirm }) {
 
   return (
     <AdvancedDialog
-      title="Constructions dérivées"
-      description="Ces raccourcis créent des Écrans et des listes de choix ordinaires, modifiables séparément. L’ensemble se crée et s’annule en une seule opération."
+      title={t("Constructions dérivées")}
+      description={t("Ces raccourcis créent des Écrans et des listes de choix ordinaires, modifiables séparément. L’ensemble se crée et s’annule en une seule opération.")}
       busy={busy} onCancel={onCancel} onConfirm={() => onConfirm(gesture)}
-      confirmLabel={{ scene: 'Créer la scène', choice: 'Créer le choix', sequence: 'Créer la séquence', random: 'Créer le tirage au sort' }[kind]}
+      confirmLabel={{ scene: t('Créer la scène'), choice: t('Créer le choix'), sequence: t('Créer la séquence'), random: t('Créer le tirage au sort') }[kind]}
       confirmDisabled={!gesture}
     >
       <fieldset disabled={busy} className="advanced-field">
@@ -67,7 +68,7 @@ export function CreateConstructionDialog({ index, busy, onCancel, onConfirm }) {
         </select>
         {kind !== 'sequence' && (
           <>
-            <label className="advanced-field__label" htmlFor="construction-name">{kind === 'choice' && question ? 'Nom de la question et du choix' : 'Nom'}</label>
+            <label className="advanced-field__label" htmlFor="construction-name">{kind === 'choice' && question ? t('Nom de la question et du choix') : 'Nom'}</label>
             <input id="construction-name" value={name} onChange={(event) => setName(event.target.value)} />
           </>
         )}
@@ -79,18 +80,18 @@ export function CreateConstructionDialog({ index, busy, onCancel, onConfirm }) {
         )}
         {kind !== 'scene' && (
           <fieldset className="advanced-field">
-            <legend>{kind === 'choice' ? 'Propositions, dans l’ordre de la molette' : kind === 'sequence' ? 'Passages, dans l’ordre de lecture' : 'Destinations du tirage'}</legend>
+            <legend>{kind === 'choice' ? 'Propositions, dans l’ordre de la molette' : kind === 'sequence' ? t('Passages, dans l’ordre de lecture') : 'Destinations du tirage'}</legend>
             <ol className="advanced-options">
               {items.map((item, position) => (
                 <li key={item.key} className="advanced-field">
-                  <label className="advanced-field__label" htmlFor={`construction-item-${item.key}`}>{position + 1}. {kind === 'random' ? 'Nom du nouvel Écran (si aucune cible existante)' : 'Nom'}</label>
+                  <label className="advanced-field__label" htmlFor={`construction-item-${item.key}`}>{position + 1}. {kind === 'random' ? t('Nom du nouvel Écran (si aucune cible existante)') : 'Nom'}</label>
                   <input id={`construction-item-${item.key}`} value={item.name} onChange={(event) => setItem(item.key, { name: event.target.value })} disabled={kind === 'random' && !!item.targetPath} />
                   {kind !== 'sequence' && (
                     <>
-                      <label className="advanced-field__label" htmlFor={`construction-target-${item.key}`}>{kind === 'choice' ? 'Après validation, aller à' : 'Ou réutiliser cet Écran'}</label>
+                      <label className="advanced-field__label" htmlFor={`construction-target-${item.key}`}>{kind === 'choice' ? t('Après validation, aller à') : t('Ou réutiliser cet Écran')}</label>
                       <NodePicker id={`construction-target-${item.key}`} index={index} kind="stage" forChoice value={item.targetPath}
                         onChange={(targetPath) => setItem(item.key, { targetPath })}
-                        emptyLabel={kind === 'choice' ? '— destination commune ci-dessous —' : '— créer un nouvel Écran —'} />
+                        emptyLabel={kind === 'choice' ? '— destination commune ci-dessous —' : t('— créer un nouvel Écran —')} />
                     </>
                   )}
                   <div className="advanced-dialog__footer">
@@ -110,15 +111,15 @@ export function CreateConstructionDialog({ index, busy, onCancel, onConfirm }) {
         <fieldset className="advanced-field">
           <legend>Suite {kind === 'choice' ? 'commune (sauf destination par proposition)' : ''}</legend>
           <label className="advanced-field__label" htmlFor="construction-destination">Destination finale</label>
-          <NodePicker id="construction-destination" index={index} kind="stage" forChoice value={destinationPath} onChange={setDestinationPath} emptyLabel="— à raccorder plus tard —" />
-          <p className="advanced-field__note">{kind === 'random' ? 'Cette suite concerne uniquement les nouveaux Écrans. Les Écrans réutilisés gardent leurs contrôles et leurs transitions.' : kind === 'sequence' ? 'Seule la dernière scène rejoint cette destination.' : 'Sans destination, les sorties restent à raccorder.'}</p>
+          <NodePicker id="construction-destination" index={index} kind="stage" forChoice value={destinationPath} onChange={setDestinationPath} emptyLabel={t("— à raccorder plus tard —")} />
+          <p className="advanced-field__note">{kind === 'random' ? t('Cette suite concerne uniquement les nouveaux Écrans. Les Écrans réutilisés gardent leurs contrôles et leurs transitions.') : kind === 'sequence' ? t('Seule la dernière scène rejoint cette destination.') : t('Sans destination, les sorties restent à raccorder.')}</p>
         </fieldset>
-        {(kind !== 'choice' || question) && <ConstructionControls title="Boutons des Écrans de lecture" value={controls} onChange={setControls} />}
-        {kind === 'choice' && <ConstructionControls title="Boutons des Écrans de choix" value={optionControls} onChange={setOptionControls} />}
+        {(kind !== 'choice' || question) && <ConstructionControls title={t("Boutons des Écrans de lecture")} value={controls} onChange={setControls} />}
+        {kind === 'choice' && <ConstructionControls title={t("Boutons des Écrans de choix")} value={optionControls} onChange={setOptionControls} />}
         <fieldset className="advanced-field">
-          <legend>Arrivée {kind === 'random' ? '(obligatoire pour le tirage)' : '(facultative)'}</legend>
+          <legend>Arrivée {kind === 'random' ? t('(obligatoire pour le tirage)') : '(facultative)'}</legend>
           <label className="advanced-field__label" htmlFor="construction-source">Écran de départ</label>
-          <NodePicker id="construction-source" index={index} kind="stage" value={sourcePath} onChange={setSourcePath} emptyLabel="— créer sans arrivée —" />
+          <NodePicker id="construction-source" index={index} kind="stage" value={sourcePath} onChange={setSourcePath} emptyLabel={t("— créer sans arrivée —")} />
           {sourcePath && (
             <>
               <label className="advanced-field__label" htmlFor="construction-trigger">Depuis cet Écran</label>
@@ -126,11 +127,11 @@ export function CreateConstructionDialog({ index, busy, onCancel, onConfirm }) {
                 <option value="autoplay">Suite du parcours, à la fin du son</option><option value="ok">Suite du parcours, au bouton OK</option><option value="home">Bouton Accueil</option>
               </select>
               <p className="advanced-field__warning">
-                Ce raccord remplace {trigger === 'home' ? 'la destination du bouton Accueil (homeTransition)' : 'la suite du parcours (okTransition)'} de l’Écran choisi
-                et active {trigger === 'autoplay' ? 'la suite automatique à la fin du son' : trigger === 'ok' ? 'le bouton OK' : 'le bouton Accueil'}.
+                Ce raccord remplace {trigger === 'home' ? t('la destination du bouton Accueil (homeTransition)') : 'la suite du parcours (okTransition)'} de l’Écran choisi
+                et active {trigger === 'autoplay' ? t('la suite automatique à la fin du son') : trigger === 'ok' ? 'le bouton OK' : t('le bouton Accueil')}.
                 Les autres contrôles restent inchangés.
               </p>
-              <p className="advanced-field__note">{kind === 'random' ? 'La transition tirera un choix au sort à chaque ouverture.' : 'Les listes de raccord s’ouvrent sur leur premier choix.'}</p>
+              <p className="advanced-field__note">{kind === 'random' ? t('La transition tirera un choix au sort à chaque ouverture.') : t('Les listes de raccord s’ouvrent sur leur premier choix.')}</p>
             </>
           )}
         </fieldset>

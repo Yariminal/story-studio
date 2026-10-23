@@ -10,6 +10,7 @@ import { Tooltip } from '../common/Tooltip';
 import { Ellipsis } from '../icons/LucideLocal';
 import { useEscapeKey } from '../../hooks/useEscapeKey';
 
+import { t } from '../../i18n/index.js';
 const VIEWPORT_PADDING = 8;
 const MENU_GAP = 7;
 
@@ -108,12 +109,12 @@ export function StructureActionsOverflow({ actions }) {
 
   return (
     <>
-      <Tooltip text="Plus d’actions" placement="below">
+      <Tooltip text={t("Plus d’actions")} placement="below">
         <button
           ref={triggerRef}
           type="button"
           className={`structure-actions-btn structure-actions-overflow-trigger${open ? ' is-active' : ''}`}
-          aria-label="Plus d’actions"
+          aria-label={t("Plus d’actions")}
           aria-haspopup="menu"
           aria-expanded={open}
           onClick={() => {
@@ -130,7 +131,7 @@ export function StructureActionsOverflow({ actions }) {
           ref={menuRef}
           className="structure-actions-overflow-menu"
           role="menu"
-          aria-label="Actions supplémentaires"
+          aria-label={t("Actions supplémentaires")}
           onKeyDown={handleMenuKeyDown}
           style={position
             ? { left: position.left, top: position.top }

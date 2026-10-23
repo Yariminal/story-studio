@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // Le nom donné à un nœud créé sans nom dans l'Éditeur graphe.
 //
 // Un Écran sans nom s'affichait par son UUID, une Action par le repli
@@ -14,7 +15,7 @@
 
 import { STAGE_KIND } from '../advancedGraphView/graphViewModel.js';
 
-const DEFAULT_STAGE_PREFIX = 'Écran';
+const DEFAULT_STAGE_PREFIX = t('Écran');
 const DEFAULT_ACTION_PREFIX = 'Liste';
 
 function prefixOf(kind) {

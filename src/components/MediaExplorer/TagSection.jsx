@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { tagStyle } from './helpers';
 import { selectionTagStates } from '../../store/mediaTags';
 
+import { t } from '../../i18n/index.js';
 export function TagSection({ paths, mediaTags, itemTags, allProjectTags, onAddMediaTag, onRemoveMediaTag }) {
   const [newTag, setNewTag] = useState('');
   const targetPaths = (paths ?? []).filter(Boolean);
@@ -47,7 +48,7 @@ export function TagSection({ paths, mediaTags, itemTags, allProjectTags, onAddMe
           className="ctx-tag-new-input"
           value={newTag}
           onChange={(e) => setNewTag(e.target.value)}
-          placeholder="+ Nouveau tag"
+          placeholder={t("+ Nouveau tag")}
           onKeyDown={(e) => e.stopPropagation()}
         />
       </form>

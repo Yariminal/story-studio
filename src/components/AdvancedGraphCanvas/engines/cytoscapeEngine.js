@@ -1,3 +1,4 @@
+import { t } from '../../../i18n/index.js';
 // Adaptateur Cytoscape.js — finaliste « robustesse et approvisionnement ».
 //
 // **Canvas 2D forcé** : aucune extension WebGL n'est chargée. Le canvas 2D est
@@ -546,10 +547,10 @@ function stylesheet(color, ink = edgeInk(1), far = nodesFar(1)) {
         'border-width': 1,
         'border-color': color.cardBorder,
         color: color.secondary,
-        'background-image': 'data(renderedImages)',
-        'background-fit': 'data(renderedImageFits)',
-        'background-clip': 'data(renderedImageClips)',
-        'background-image-containment': 'data(renderedImageContainments)',
+        'background-image': t('data(renderedImages)'),
+        'background-fit': t('data(renderedImageFits)'),
+        'background-clip': t('data(renderedImageClips)'),
+        'background-image-containment': t('data(renderedImageContainments)'),
         // La couche des prises déborde de la silhouette, et Cytoscape doit le
         // savoir : sans cette déclaration, la tuile de cache d'un nœud est
         // taillée à sa boîte englobante et coupe les pastilles — visible à

@@ -10,11 +10,12 @@ import { Image as ImageIcon, Music, Pause, Play, RotateCcw, X } from '../icons/L
 import { QUEUE_COLUMNS, resolveQueueGrid, useQueueColumnWidths } from './useQueueColumnWidths';
 import './SDQueuePanel.css';
 
+import { t } from '../../i18n/index.js';
 const STATUS_LABEL = {
   pending: 'En attente',
   submitting: 'Envoi...',
-  running: 'Génération...',
-  done: 'Terminé',
+  running: t('Génération...'),
+  done: t('Terminé'),
   error: 'Erreur',
 };
 
@@ -40,7 +41,7 @@ function isActiveJob(job) {
 
 function startQueueMediaDrag(event, { kind, path, label, onDragStart = null }) {
   if (!path || (kind !== 'audio' && kind !== 'image') || event.button !== 0) return;
-  if (event.target?.closest?.('input, textarea, [role="slider"], .sd-queue-row-actions, .sd-result-play')) return;
+  if (event.target?.closest?.(t('input, textarea, [role="slider"], .sd-queue-row-actions, .sd-result-play'))) return;
 
   const startX = event.clientX;
   const startY = event.clientY;
@@ -164,7 +165,7 @@ function JobResultThumb({ path, onPreview }) {
   }
 
   return (
-    <Tooltip text="Glisser vers un placeholder image, cliquer pour prévisualiser">
+    <Tooltip text={t("Glisser vers un placeholder image, cliquer pour prévisualiser")}>
       <button
         className="sd-result-thumb"
         onPointerDown={(event) => startQueueMediaDrag(event, {
@@ -194,8 +195,8 @@ function ImagePreviewModal({ path, onClose }) {
     <div className="modal-overlay sd-preview-overlay" onMouseDown={onClose}>
       <div className="modal-box sd-preview-box" onMouseDown={e => e.stopPropagation()}>
         <div className="modal-header">
-          <span>{filename || 'Image générée'}</span>
-          <Button variant="icon" className="modal-close" onClick={onClose} aria-label="Fermer">
+          <span>{filename || t('Image générée')}</span>
+          <Button variant="icon" className="modal-close" onClick={onClose} aria-label={t("Fermer")}>
             <X className="sd-modal-close-icon" strokeWidth={2} absoluteStrokeWidth />
           </Button>
         </div>
@@ -270,8 +271,8 @@ function QueueAudioButton({ path, filename }) {
         size="sm"
         className={`sd-result-play${playing ? ' is-playing' : ''}`}
         onClick={togglePlayback}
-        aria-label={`${playing ? 'Arrêter' : 'Lire'} ${filename}`}
-        title={playing ? 'Arrêter' : 'Lire'}
+        aria-label={`${playing ? t('Arrêter') : 'Lire'} ${filename}`}
+        title={playing ? t('Arrêter') : 'Lire'}
         disabled={!url}
       >
         <Icon className="sd-row-icon" strokeWidth={2} absoluteStrokeWidth />
@@ -283,8 +284,8 @@ function QueueAudioButton({ path, filename }) {
 function ResultCell({ job, isImageJob, onPreviewImage }) {
   if (job.status === 'error') {
     return (
-      <Tooltip text={job.errorMessage || 'Erreur de génération'} wrap className="sd-result-error-wrap">
-        <span className="sd-result-error">{job.errorMessage || 'Erreur de génération'}</span>
+      <Tooltip text={job.errorMessage || t('Erreur de génération')} wrap className="sd-result-error-wrap">
+        <span className="sd-result-error">{job.errorMessage || t('Erreur de génération')}</span>
       </Tooltip>
     );
   }
@@ -335,7 +336,7 @@ function ResultCell({ job, isImageJob, onPreviewImage }) {
 
 function QueueRow({ job, onRemove, onPreviewImage, onRegenerateImage, getAudioUsage, getImageUsage }) {
   const isImageJob = job.kind !== 'audio';
-  const title = isImageJob ? (job.workflowName || 'Image IA') : (job.label || 'Audio IA');
+  const title = isImageJob ? (job.workflowName || t('Image IA')) : (job.label || t('Audio IA'));
   const subtitle = isImageJob ? 'ComfyUI' : (job.voiceLabel || 'XTTS');
   const usage = job.status === 'done'
     ? (isImageJob ? getImageUsage?.(job) : getAudioUsage?.(job))
@@ -377,8 +378,8 @@ function QueueRow({ job, onRemove, onPreviewImage, onRegenerateImage, getAudioUs
             size="sm"
             className="sd-row-action"
             onClick={() => onRegenerateImage?.(job)}
-            aria-label="Régénérer l'image"
-            title="Régénérer"
+            aria-label={t("Régénérer l'image")}
+            title={t("Régénérer")}
           >
             <RotateCcw className="sd-row-icon" strokeWidth={2} absoluteStrokeWidth />
           </Button>
@@ -389,8 +390,8 @@ function QueueRow({ job, onRemove, onPreviewImage, onRegenerateImage, getAudioUs
             size="sm"
             className="sd-row-action"
             onClick={() => onRemove(job.id)}
-            aria-label="Retirer de la file"
-            title="Retirer"
+            aria-label={t("Retirer de la file")}
+            title={t("Retirer")}
           >
             <X className="sd-row-icon" strokeWidth={2} absoluteStrokeWidth />
           </Button>
@@ -504,7 +505,7 @@ export function SDQueuePanel({
             </Button>
           )}
           {!embedded && (
-            <Button variant="icon" className="modal-close" onClick={onClose} aria-label="Fermer">
+            <Button variant="icon" className="modal-close" onClick={onClose} aria-label={t("Fermer")}>
               <X className="sd-modal-close-icon" strokeWidth={2} absoluteStrokeWidth />
             </Button>
           )}

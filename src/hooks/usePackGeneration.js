@@ -8,6 +8,7 @@ import { KEYS, read as readSetting } from '../store/persistentSettings';
 import { logger } from '../utils/logger';
 import { askImportedUuidRevision } from './importedUuidRevision';
 
+import { t } from '../i18n/index.js';
 // Grappe « générer le pack » extraite d'AppContent : étape métadonnées
 // (PackNameModal), gardes de validation (audit en cours puis erreurs bloquantes),
 // résolution du dossier d'export et enfilement du job de génération dans la file
@@ -67,8 +68,8 @@ export function usePackGeneration({
     }
     if (pathAuditPending) {
       showErrorDialog({
-        title: 'Vérification en cours',
-        message: 'Vérification des fichiers du projet en cours. Attendez une seconde puis réessayez.',
+        title: t('Vérification en cours'),
+        message: t('Vérification des fichiers du projet en cours. Attendez une seconde puis réessayez.'),
         variant: 'warning',
       });
       return;
@@ -77,13 +78,13 @@ export function usePackGeneration({
     if (validationErrors.length > 0) {
       logger.warn(`generate:blocked count=${validationErrors.length}`);
       showErrorDialog({
-        title: 'Impossible de générer',
+        title: t('Impossible de générer'),
         message: `Impossible de générer le pack :\n\n• ${validationErrors.join('\n• ')}`,
       });
       return;
     }
     const defaultPath = await resolveDefaultExportDir();
-    const outputFolder = await openDialog({ directory: true, multiple: false, title: 'Dossier de sortie du pack', defaultPath });
+    const outputFolder = await openDialog({ directory: true, multiple: false, title: t('Dossier de sortie du pack'), defaultPath });
     if (!outputFolder) return;
     saveLastExportDir(outputFolder);
     logger.info(`generate:queued projectType=${projectForGeneration.projectType} name='${projectForGeneration.projectName}' outputFolder='${outputFolder}'`);

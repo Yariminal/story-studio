@@ -6,6 +6,7 @@ import { isOriginalBackup } from '../utils/mediaConventions.js';
 import { pathKey } from '../utils/fileUtils.js';
 import { reconcileMediaLibraryPaths } from './mediaLibrary.js';
 
+import { t } from '../i18n/index.js';
 export function classifyOsDroppedFiles(paths) {
   const ext = (p) => (String(p).split('.').pop() || '').toLowerCase();
   const AUDIO = new Set(['mp3', 'wav', 'ogg', 'm4a', 'flac', 'webm']);
@@ -113,7 +114,7 @@ export function isSaveInputStillCurrent(inputAtSaveStart, currentInput) {
 
 export function assertProjectCanSaveInPlace(project, savePath) {
   if (savePath && !isProjectOpen(project)) {
-    throw new Error('Enregistrement refusé : aucun projet valide n’est ouvert. Le fichier existant a été conservé.');
+    throw new Error(t('Enregistrement refusé : aucun projet valide n’est ouvert. Le fichier existant a été conservé.'));
   }
 }
 

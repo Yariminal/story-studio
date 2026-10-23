@@ -8,6 +8,7 @@ import { parseConventionName, splitLeadingAge } from '../utils/packConvention.js
 import { sanitizeImportedName } from './importedNames.js';
 import { generateUuid } from '../utils/uuid.js';
 
+import { t } from '../i18n/index.js';
 // Remonte un préfixe d'âge « libre » (« 3+ Example… », « 6+_Titre ») vers minAge et le
 // retire du titre. Contrairement à la convention stricte « N+] » (gérée par
 // parseConventionName), certains packs notent l'âge sans crochet ; sans ce traitement,
@@ -24,8 +25,8 @@ export function getUnpackedPackDetails({ result = {}, zipPath = '', zipName = ''
   const isZipConvention = /^\d+\+\]/.test(zipFilename);
   const isTitleConvention = /^\d+\+\]/.test(rawTitle);
   const packName = (rawTitle && (isTitleConvention || !isZipConvention))
-    ? sanitizeImportedName(rawTitle, zipName || 'Pack importé')
-    : sanitizeImportedName(zipFilename || zipName, 'Pack importé');
+    ? sanitizeImportedName(rawTitle, zipName || t('Pack importé'))
+    : sanitizeImportedName(zipFilename || zipName, t('Pack importé'));
   const fallbackAge = (zipFilename || zipName || '').match(/^\s*(\d+)\s*\+/)?.[1] || '3';
   const lifted = liftLeadingAge(packName, fallbackAge);
   // Un titre de convention réduit à l'âge (« 6+] ») n'a rien de lisible : le

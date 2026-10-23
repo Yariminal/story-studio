@@ -14,6 +14,7 @@ import {
 import { normalizeFrenchSearchText } from '../../utils/frenchText.js';
 import './KeyboardShortcutsModal.css';
 
+import { t } from '../../i18n/index.js';
 function matchesQuery(definition, shortcut, query) {
   if (!query) return true;
   const haystack = [
@@ -120,7 +121,7 @@ export function KeyboardShortcutsModal({
           <input
             type="search"
             className="keyboard-shortcuts-search"
-            placeholder="Rechercher un raccourci…"
+            placeholder={t("Rechercher un raccourci…")}
             value={query}
             onChange={(event) => setQuery(event.target.value)}
           />
@@ -192,7 +193,7 @@ export function KeyboardShortcutsModal({
                           }}
                           onKeyDown={(event) => captureId === definition.id && handleKeyDown(event, definition)}
                         >
-                          {captureId === definition.id ? 'Appuie sur un raccourci…' : formatShortcut(currentShortcut)}
+                          {captureId === definition.id ? t('Appuie sur un raccourci…') : formatShortcut(currentShortcut)}
                         </button>
                       </div>
                     );

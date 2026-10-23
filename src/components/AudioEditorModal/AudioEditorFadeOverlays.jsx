@@ -1,6 +1,7 @@
 import { Button } from '../common/Button';
 import { formatTime } from './audioEditorConstants';
 
+import { t } from '../../i18n/index.js';
 // Menu contextuel + popover de réglage d'un fondu, positionnés au pointeur.
 export function AudioEditorFadeOverlays({
   fadeContextMenu,
@@ -22,12 +23,12 @@ export function AudioEditorFadeOverlays({
         >
           <button className="audio-editor-fade-context-item" onClick={onOpenContextFadePopover}>
             {currentFadeValue(fadeContextMenu.target) > 0
-              ? 'Modifier le fondu'
+              ? t('Modifier le fondu')
               : fadeContextMenu.target === 'in'
-                ? 'Ajouter un fondu en entrée'
+                ? t('Ajouter un fondu en entrée')
                 : fadeContextMenu.target === 'out'
-                  ? 'Ajouter un fondu en sortie'
-                  : 'Ajouter un fondu'}
+                  ? t('Ajouter un fondu en sortie')
+                  : t('Ajouter un fondu')}
           </button>
         </div>
       )}

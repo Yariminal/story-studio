@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // Ce qu'une résolution de diagnostic demande réellement à l'auteur.
 //
 // Règle tenue ici et vérifiée par les tests : **pas de dialogue sans
@@ -24,40 +25,40 @@ export const RESOLUTION_FORM = 'form';
 export const RESOLUTION_REVEAL = 'reveal';
 
 const BLOCKING_COPY = Object.freeze({
-  STAGE_ID_EMPTY: ['Erreur de structure', "Cet Écran n’a pas d’identifiant."],
-  DUPLICATE_STAGE_ID: ['Erreur de structure', 'Plusieurs Écrans utilisent le même identifiant.'],
-  ACTION_ID_EMPTY: ['Erreur de structure', "Cette liste de choix n’a pas d’identifiant."],
-  DUPLICATE_ACTION_ID: ['Erreur de structure', 'Plusieurs listes de choix utilisent le même identifiant.'],
-  SQUARE_ONE_COUNT: ['Erreur de structure', 'Le pack doit avoir un seul Écran racine.'],
-  TRANSITION_ACTION_MISSING: ['Erreur de structure', 'Une transition mène vers une liste de choix inexistante.'],
-  OPTION_TARGET_NULL: ['Erreur de structure', 'Un choix de cette liste attend son Écran.'],
-  OPTION_TARGET_MISSING: ['Erreur de structure', 'Un choix de cette liste mène vers un Écran inexistant.'],
-  OPTION_SELECTION_INVALID: ['Erreur de structure', 'Le choix d’arrivée dans cette liste est invalide.'],
-  ENRICHED_GROUP_INCOHERENT: ['Décision requise', 'Ce groupe doit être réparé ou aplati avant la génération.'],
-  ORPHAN_ACTION_AUTHORED_CONTENT: ['Erreur de structure', 'Cette liste de choix doit être ouverte par un Écran, ou retirée.'],
+  STAGE_ID_EMPTY: [t('Erreur de structure'), t("Cet Écran n’a pas d’identifiant.")],
+  DUPLICATE_STAGE_ID: [t('Erreur de structure'), t('Plusieurs Écrans utilisent le même identifiant.')],
+  ACTION_ID_EMPTY: [t('Erreur de structure'), t("Cette liste de choix n’a pas d’identifiant.")],
+  DUPLICATE_ACTION_ID: [t('Erreur de structure'), t('Plusieurs listes de choix utilisent le même identifiant.')],
+  SQUARE_ONE_COUNT: [t('Erreur de structure'), t('Le pack doit avoir un seul Écran racine.')],
+  TRANSITION_ACTION_MISSING: [t('Erreur de structure'), t('Une transition mène vers une liste de choix inexistante.')],
+  OPTION_TARGET_NULL: [t('Erreur de structure'), t('Un choix de cette liste attend son Écran.')],
+  OPTION_TARGET_MISSING: [t('Erreur de structure'), t('Un choix de cette liste mène vers un Écran inexistant.')],
+  OPTION_SELECTION_INVALID: [t('Erreur de structure'), t('Le choix d’arrivée dans cette liste est invalide.')],
+  ENRICHED_GROUP_INCOHERENT: [t('Décision requise'), t('Ce groupe doit être réparé ou aplati avant la génération.')],
+  ORPHAN_ACTION_AUTHORED_CONTENT: [t('Erreur de structure'), t('Cette liste de choix doit être ouverte par un Écran, ou retirée.')],
   // Posé par une coupe, jamais déduit du document : un Écran sans destination
   // est indiscernable d'un Écran de fin, et un projet neuf en est un.
-  TRANSITION_SEVERED_BY_REMOVAL: ['Erreur de structure', 'Cet Écran a perdu sa destination : le raccorder, ou désactiver son bouton.'],
-  POSITION_DISPOSITION_STALE: ['Décision requise', 'La position de ce nœud doit être validée de nouveau.'],
-  POSITION_OUT_OF_RANGE_ACTION_REQUIRED: ['Décision requise', 'La position de ce nœud doit être adaptée avant la génération.'],
-  OPAQUE_EXTENSION_DISPOSITION_STALE: ['Décision requise', 'Une donnée importée doit être validée de nouveau.'],
-  OPAQUE_EXTENSION_DISPOSITION_REQUIRED: ['Décision requise', 'Choisissez comment traiter une donnée importée non reconnue.'],
-  CONTROL_SETTINGS_INCOMPLETE: ['Réglage incomplet', 'Configurez les boutons de cet Écran.'],
+  TRANSITION_SEVERED_BY_REMOVAL: [t('Erreur de structure'), t('Cet Écran a perdu sa destination : le raccorder, ou désactiver son bouton.')],
+  POSITION_DISPOSITION_STALE: [t('Décision requise'), t('La position de ce nœud doit être validée de nouveau.')],
+  POSITION_OUT_OF_RANGE_ACTION_REQUIRED: [t('Décision requise'), t('La position de ce nœud doit être adaptée avant la génération.')],
+  OPAQUE_EXTENSION_DISPOSITION_STALE: [t('Décision requise'), t('Une donnée importée doit être validée de nouveau.')],
+  OPAQUE_EXTENSION_DISPOSITION_REQUIRED: [t('Décision requise'), t('Choisissez comment traiter une donnée importée non reconnue.')],
+  CONTROL_SETTINGS_INCOMPLETE: [t('Réglage incomplet'), t('Configurez les boutons de cet Écran.')],
   // Règles de navigation de la Lunii (`port_rules.rs`), les mêmes qu'au
   // générateur par menus : la Lunii s'y bloque ou y montre un faux menu racine.
-  HOME_LOOPS_TO_SELF: ['Navigation bloquante', 'Le bouton Accueil ramène cet Écran sur lui-même.'],
-  OK_LOOPS_TO_SELF: ['Navigation bloquante', 'Le bouton OK ramène cet Écran sur lui-même.'],
-  OK_WITHOUT_USABLE_DESTINATION: ['Navigation bloquante', 'OK ou la fin automatique est actif sans destination utilisable.'],
-  NO_USABLE_EXIT: ['Navigation bloquante', 'Cet Écran accessible ne permet aucune sortie, même par la molette.'],
-  ENTRY_STAGE_AS_OPTION: ['Navigation bloquante', 'Un choix de cette liste mène à l’Écran d’entrée.'],
+  HOME_LOOPS_TO_SELF: [t('Navigation bloquante'), t('Le bouton Accueil ramène cet Écran sur lui-même.')],
+  OK_LOOPS_TO_SELF: [t('Navigation bloquante'), t('Le bouton OK ramène cet Écran sur lui-même.')],
+  OK_WITHOUT_USABLE_DESTINATION: [t('Navigation bloquante'), 'OK ou la fin automatique est actif sans destination utilisable.'],
+  NO_USABLE_EXIT: [t('Navigation bloquante'), t('Cet Écran accessible ne permet aucune sortie, même par la molette.')],
+  ENTRY_STAGE_AS_OPTION: [t('Navigation bloquante'), t('Un choix de cette liste mène à l’Écran d’entrée.')],
 });
 
 function blockingCopy(row) {
   return BLOCKING_COPY[row.code]
-    ?? [row.source === 'decode' ? 'Erreur de document' : 'Erreur de structure',
+    ?? [row.source === 'decode' ? t('Erreur de document') : t('Erreur de structure'),
       row.source === 'decode'
-        ? 'Le document contient une donnée invalide.'
-        : 'La structure du pack doit être corrigée avant la génération.'];
+        ? t('Le document contient une donnée invalide.')
+        : t('La structure du pack doit être corrigée avant la génération.')];
 }
 
 function fallbackNodePath(row, index) {
@@ -70,8 +71,8 @@ function affectedNodeLabel(nodePath, index) {
   const entry = nodePath ? index?.byPath?.get(nodePath) : null;
   const label = entry?.label?.label;
   if (!label) return null;
-  const kind = entry.kind === STAGE_KIND ? 'Écran'
-    : entry.kind === ACTION_KIND ? 'Liste de choix' : 'Nœud';
+  const kind = entry.kind === STAGE_KIND ? t('Écran')
+    : entry.kind === ACTION_KIND ? t('Liste de choix') : t('Nœud');
   return `${kind} « ${label} »`;
 }
 
@@ -95,7 +96,7 @@ export function buildAdvancedBlockingIssues({
       // Le chemin de secours sert à guider la réparation d'une erreur du
       // document ; il ne désigne pas un nœud fautif.
       nodeLabel: affectedNodeLabel(diagnostic?.nodePath, index),
-      // L'absence d'Écran d'entrée concerne le document entier. On conduit
+      // L'absence dt('Écran d')entrée concerne le document entier. On conduit
       // tout de même l'auteur vers un Écran existant pour qu'il puisse agir.
       nodePath: diagnostic?.nodePath ?? fallbackNodePath(row, index),
       diagnostic,
@@ -105,8 +106,8 @@ export function buildAdvancedBlockingIssues({
   if (readinessError) {
     issues.push({
       id: 'readiness:failed',
-      category: 'Erreur de document',
-      message: 'Le document ne peut pas être vérifié avant la génération.',
+      category: t('Erreur de document'),
+      message: t('Le document ne peut pas être vérifié avant la génération.'),
       nodeLabel: null,
       nodePath: null,
       diagnostic: null,
@@ -121,7 +122,7 @@ export function buildAdvancedBlockingIssues({
     const field = firstUsage?.field === 'image' ? 'image' : 'audio';
     issues.push({
       id: `media:${entry.assetRef}`,
-      category: 'Média manquant',
+      category: t('Média manquant'),
       nodeLabel: affectedNodeLabel(nodePath, index),
       message: label
         ? `Ajoutez le fichier ${field} de « ${label} ».`
@@ -136,30 +137,30 @@ export function buildAdvancedBlockingIssues({
 const POSITION_DISPOSITIONS = Object.freeze({
   'scale-position-to-short-range': {
     disposition: 'scale-to-short-range',
-    label: 'Mettre à l’échelle dans [-32768, 32767]',
+    label: t('Mettre à l’échelle dans [-32768, 32767]'),
   },
   'omit-position': {
     disposition: 'omit-explicitly',
-    label: 'Omettre cette position à l’export',
+    label: t('Omettre cette position à l’export'),
   },
   'preserve-raw-accept-dantsu-loss': {
     disposition: 'preserve-raw-accept-dantsu-loss',
-    label: 'Préserver la valeur brute et accepter la perte d’affichage STUdio',
+    label: t('Préserver la valeur brute et accepter la perte d’affichage STUdio'),
   },
 });
 
 const OPAQUE_DISPOSITIONS = Object.freeze({
   'preserve-opaque-untested': {
     disposition: 'preserve-untested',
-    label: 'Préserver la valeur, dimension UNTESTED',
+    label: t('Préserver la valeur, dimension UNTESTED'),
   },
   'remove-opaque-explicitly': {
     disposition: 'remove-explicitly',
-    label: 'Supprimer explicitement à l’export',
+    label: t('Supprimer explicitement à l’export'),
   },
   'promote-opaque-after-proof': {
     disposition: 'promote-after-proof',
-    label: 'Promouvoir après preuve',
+    label: t('Promouvoir après preuve'),
   },
 });
 
@@ -211,7 +212,7 @@ export function resolutionsForDiagnostic({ diagnostic, view, index }) {
       offered.push({
         id: 'choose-square-one',
         nature: RESOLUTION_FORM,
-        label: 'Choisir l’Écran racine…',
+        label: t('Choisir l’Écran racine…'),
         form: 'square-one',
         path: null,
       });
@@ -268,7 +269,7 @@ export function resolutionsForDiagnostic({ diagnostic, view, index }) {
         // Réparer un groupe, c'est en rétablir la forme avec les gestes
         // ordinaires : aucun geste ne le fait d'un coup, et prétendre
         // le contraire serait inventer une commande.
-        label: 'Montrer les nœuds du groupe à réparer',
+        label: t('Montrer les nœuds du groupe à réparer'),
         paths: group ? [...group.stagePaths, ...group.actionPaths] : [diagnostic.nodePath],
       });
       continue;
@@ -282,7 +283,7 @@ export function resolutionsForDiagnostic({ diagnostic, view, index }) {
         nature: RESOLUTION_FORM,
         // Compléter est un choix explicite des cinq valeurs. Les déduire ici
         // reviendrait à écrire `false` à la place de l'auteur.
-        label: 'Compléter les cinq contrôles',
+        label: t('Compléter les cinq contrôles'),
         form: 'controls',
         path: diagnostic.nodePath,
       });
@@ -298,13 +299,13 @@ export function resolutionsForDiagnostic({ diagnostic, view, index }) {
           nature: RESOLUTION_GESTURE,
           // Sans destination, Accueil revient au début du pack : le retour
           // Lunii par défaut.
-          label: 'Retirer la destination Accueil (retour au début du pack)',
+          label: t('Retirer la destination Accueil (retour au début du pack)'),
           gesture: advancedGestures.setStageTransition(entry.node.uuid, 'home', presence.null()),
         }
         : {
           id: resolution,
           nature: RESOLUTION_GESTURE,
-          label: 'Désactiver le bouton Accueil sur l’Écran d’entrée',
+          label: t('Désactiver le bouton Accueil sur l’Écran d’entrée'),
           gesture: advancedGestures.setStageControls(entry.node.uuid, { home: presence.value(false) }),
         });
       continue;
@@ -329,7 +330,7 @@ export function resolutionsForDiagnostic({ diagnostic, view, index }) {
         : {
           id: resolution,
           nature: RESOLUTION_GESTURE,
-          label: 'Activer Accueil',
+          label: t('Activer Accueil'),
           gesture: advancedGestures.setStageControls(entry.node.uuid, { home: presence.value(true) }),
         });
       continue;
@@ -341,7 +342,7 @@ export function resolutionsForDiagnostic({ diagnostic, view, index }) {
       offered.push({
         id: resolution,
         nature: RESOLUTION_FORM,
-        label: 'Relier un Écran à cette liste de choix, ou la retirer',
+        label: t('Relier un Écran à cette liste de choix, ou la retirer'),
         form: 'orphan-action',
         path: diagnostic.nodePath,
       });

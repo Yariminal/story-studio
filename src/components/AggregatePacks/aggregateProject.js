@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // Le projet Libre que l'assistant « Assembler des packs » fait générer.
 //
 // Pur : aucun React, aucun Tauri. L'identité du pack est fournie par l'appelant,
@@ -16,7 +17,7 @@ export function defaultMetadataForPacks(packs, uuid) {
     .filter((age) => Number.isFinite(age) && age > 0);
   return {
     ...DEFAULT_PACK_METADATA,
-    title: 'Mes histoires du soir',
+    title: t('Mes histoires du soir'),
     minAge: ages.length ? String(Math.min(...ages)) : '3',
     version: 1,
     uuid,
@@ -26,8 +27,8 @@ export function defaultMetadataForPacks(packs, uuid) {
 export function buildAggregateProject({ packs, rootAudio, rootImage, metadata }) {
   return normalizeProjectData({
     version: 1,
-    projectName: metadata.title || 'Pack agrégé',
-    rootName: metadata.title || 'Menu racine',
+    projectName: metadata.title || t('Pack agrégé'),
+    rootName: metadata.title || t('Menu racine'),
     packMetadata: metadata,
     projectType: 'pack',
     rootAudio,

@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // Enveloppe du projet avancé : le seul endroit qui la fabrique et la modifie.
 //
 // Le payload d'auteur est une chaîne opaque. Aucune fonction de ce
@@ -228,7 +229,7 @@ export async function assessAdvancedProjectReadiness(project, {
 // le projet rendu, où elle est recalculée et jamais mémorisée.
 export async function applyAdvancedGesture(project, gesture, { invokeCommand = invokeTauri } = {}) {
   if (gesture?.gesture === 'create-construction' && !DERIVED_CONSTRUCTION_CREATION_ENABLED) {
-    throw new Error('La création de constructions dérivées est indisponible.');
+    throw new Error(t('La création de constructions dérivées est indisponible.'));
   }
   const payload = readAuthoringPayload(project);
   if (payload === null) {
@@ -236,7 +237,7 @@ export async function applyAdvancedGesture(project, gesture, { invokeCommand = i
       'ADVANCED_CODEC_REQUIRED',
       '/authoring/payload',
       'absent',
-      "un projet avancé porteur d'un payload d'auteur",
+      t("un projet avancé porteur d'un payload d'auteur"),
     );
   }
   const outcome = await invokeCommand('apply_advanced_gesture', {

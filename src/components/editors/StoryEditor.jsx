@@ -27,6 +27,7 @@ import {
 } from '../../store/storyTitleStage';
 import './EditorPanel.css';
 
+import { t } from '../../i18n/index.js';
 // ─── Navigation helpers (used for computed props only) ────────────────────────
 
 function resolveNavigationTargetId(target, currentMenuId = null) {
@@ -39,9 +40,9 @@ function resolveNavigationTargetId(target, currentMenuId = null) {
   return decodeNavigationMenuId(normalized);
 }
 
-function targetNameById(allMenus, allStories, targetId, fallback = 'destination introuvable') {
+function targetNameById(allMenus, allStories, targetId, fallback = t('destination introuvable')) {
   if (targetId === 'root') return NAV_ROOT_LABEL;
-  if (targetId === NAV_TARGET_NEXT_STORY) return 'Histoire suivante';
+  if (targetId === NAV_TARGET_NEXT_STORY) return t('Histoire suivante');
   if (!targetId) return fallback;
   if (isStoryNavigationTarget(targetId)) {
     const storyId = decodeNavigationStoryId(targetId);
@@ -57,10 +58,10 @@ function targetNameById(allMenus, allStories, targetId, fallback = 'destination 
 
 function buildInheritedReturnLabel(parentMenu, allMenus, allStories, autoNextEffective) {
   if (!parentMenu) return null;
-  if (autoNextEffective) return 'Lecture de l’histoire suivante';
+  if (autoNextEffective) return t('Lecture de l’histoire suivante');
   const inheritedTargetId = parentMenu.returnAfterPlay ?? null;
   if (!inheritedTargetId || isCurrentMenuNavigationTarget(inheritedTargetId)) {
-    return `Revient à ${parentMenu.name || 'ce dossier'}`;
+    return `Revient à ${parentMenu.name || t('ce dossier')}`;
   }
   if (isRootNavigationTarget(inheritedTargetId)) return `Revient à ${NAV_ROOT_LABEL}`;
   const name = targetNameById(allMenus, allStories, resolveNavigationTargetId(inheritedTargetId, parentMenu.id));
@@ -113,7 +114,7 @@ export const StoryEditor = memo(function StoryEditor({
     const embeddedImage = await onExtractAudioEmbeddedImage?.(path);
     onUpdate({
       audio: path,
-      ...((!node.name || node.name === 'Nouvelle histoire') ? { name: autoName } : {}),
+      ...((!node.name || node.name === t('Nouvelle histoire')) ? { name: autoName } : {}),
       ...(!node.itemImage && embeddedImage ? { itemImage: embeddedImage } : {}),
     });
   }
@@ -133,7 +134,7 @@ export const StoryEditor = memo(function StoryEditor({
             className="field-input"
             value={node.name || ''}
             onChange={(e) => onUpdate({ name: e.target.value })}
-            placeholder="Nom de l'histoire"
+            placeholder={t("Nom de l'histoire")}
           />
         </div>
         <div className="card-sep" />
@@ -150,9 +151,9 @@ export const StoryEditor = memo(function StoryEditor({
               extraActions={[
                 {
                   key: 'generate-text',
-                  label: 'Générer une image-titre',
+                  label: t('Générer une image-titre'),
                   onClick: handleRegenerate,
-                  title: "Créer une image-titre à partir du nom de l'histoire",
+                  title: t("Créer une image-titre à partir du nom de l'histoire"),
                 },
               ]}
               onPick={(f) => onUpdate({ itemImage: f, autoGenerateImage: false })}
@@ -167,13 +168,13 @@ export const StoryEditor = memo(function StoryEditor({
             </div>
             <div className="media-col-stack">
               <AudioField
-                label="Audio de sélection"
+                label={t("Audio de sélection")}
                 description={explicitSilentSelection
-                  ? 'Optionnel — ce titre de sélection peut rester silencieux'
-                  : "Énoncé quand l'enfant parcourt les histoires"}
+                  ? t('Optionnel — ce titre de sélection peut rester silencieux')
+                  : t("Énoncé quand l'enfant parcourt les histoires")}
                 file={node.itemAudio}
                 required={selectionAudioRequired}
-                emptyBadge={explicitSilentSelection ? 'Écran silencieux' : null}
+                emptyBadge={explicitSilentSelection ? t('Écran silencieux') : null}
                 ttsTextSuggestion={node.name || ''}
                 ttsFilenameHint={`selection-${node.name || 'histoire'}`}
                 xttsTarget={{ kind: 'story', entryId: node.id, field: 'itemAudio' }}
@@ -181,8 +182,8 @@ export const StoryEditor = memo(function StoryEditor({
                 onClear={() => onUpdate(createStorySelectionAudioUpdate(null))}
               />
               <AudioField
-                label="Histoire complète"
-                description="Écoutée quand l'enfant valide son choix"
+                label={t("Histoire complète")}
+                description={t("Écoutée quand l'enfant valide son choix")}
                 file={node.audio}
                 ttsFilenameHint={`histoire-complete-${node.name || 'histoire'}`}
                 xttsTarget={{ kind: 'story', entryId: node.id, field: 'audio' }}
@@ -224,7 +225,7 @@ export const StoryEditor = memo(function StoryEditor({
             className="card-danger-trash"
             type="button"
             onClick={onDelete}
-            aria-label="Supprimer cette histoire"
+            aria-label={t("Supprimer cette histoire")}
           >
             <Trash2 className="card-danger-icon" />
           </button>

@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // Badges de navigation affiches dans le TreePanel (retour/Home modifies ou
 // par defaut, continuations importees, graphe natif preserve).
 //
@@ -36,11 +37,11 @@ function statusWithDefault(status, isDefault) {
 }
 
 function returnStatusFromIssues(entryIssues) {
-  return getStrongestStatus(entryIssues.filter((issue) => issue.text.includes('destination de retour')));
+  return getStrongestStatus(entryIssues.filter((issue) => issue.text.includes(t('destination de retour'))));
 }
 
 function homeStatusFromIssues(entryIssues) {
-  return getStrongestStatus(entryIssues.filter((issue) => issue.text.includes('destination bouton Accueil') || issue.text.includes('destination Home spécifique inutile')));
+  return getStrongestStatus(entryIssues.filter((issue) => issue.text.includes(t('destination bouton Accueil')) || issue.text.includes(t('destination Home spécifique inutile'))));
 }
 
 function sequenceReturnTarget(entry, parentMenu, rootEntries, fallbackTarget) {
@@ -198,14 +199,14 @@ export function formatBadgeTitle(data, projectIndex) {
         key: 'native-graph',
         kind: 'graph',
         label: '◇',
-        title: 'Graphe interactif natif préservé pour le round-trip.',
+        title: t('Graphe interactif natif préservé pour le round-trip.'),
       };
     case 'continuation':
       return {
         key: 'continuation',
         kind: 'continuation',
         label: '⇒',
-        title: `Continuation native importée depuis ${data.sourceStoryName || 'une histoire'}.`,
+        title: `Continuation native importée depuis ${data.sourceStoryName || t('une histoire')}.`,
       };
     case 'return': {
       const returnName = getGeneratedNavigationTargetName(data.targetId, projectIndex);
@@ -229,7 +230,7 @@ export function formatBadgeTitle(data, projectIndex) {
     }
     case 'prompt-return': {
       const returnName = getGeneratedNavigationTargetName(data.targetId, projectIndex);
-      const suffix = data.isInactive ? ', mais OK et autoplay sont désactivés sur le message de fin' : '';
+      const suffix = data.isInactive ? t(', mais OK et autoplay sont désactivés sur le message de fin') : '';
       return {
         key: `prompt-return:${data.targetId}:${returnName}`,
         kind: 'prompt-return',
@@ -244,7 +245,7 @@ export function formatBadgeTitle(data, projectIndex) {
         kind: 'home-none',
         status: data.status,
         label: '⌂',
-        title: 'Bouton Accueil désactivé pendant la lecture',
+        title: t('Bouton Accueil désactivé pendant la lecture'),
       };
     case 'home-implicit': {
       if (!data.targetId) {
@@ -254,7 +255,7 @@ export function formatBadgeTitle(data, projectIndex) {
           kind: 'home-implicit',
           status: data.status,
           label: '⌂',
-          title: 'Appuie sur le bouton Accueil pendant la lecture → retour à la couverture du pack (retour par défaut de la Lunii)',
+          title: t('Appuie sur le bouton Accueil pendant la lecture → retour à la couverture du pack (retour par défaut de la Lunii)'),
         };
       }
       const homeName = getGeneratedNavigationTargetName(data.targetId, projectIndex);
@@ -274,7 +275,7 @@ export function formatBadgeTitle(data, projectIndex) {
           kind: 'home',
           status: data.status,
           label: '⌂',
-          title: 'Appuie sur le bouton Accueil pendant la lecture → réaction Accueil de fin de cette histoire',
+          title: t('Appuie sur le bouton Accueil pendant la lecture → réaction Accueil de fin de cette histoire'),
         };
       }
       const homeName = getGeneratedNavigationTargetName(data.targetId, projectIndex);

@@ -9,6 +9,7 @@ import { getExportPackName, parseConventionName } from '../../utils/packConventi
 import { basenameNoExt, normalizeWindowsPath, pathKey } from '../../utils/fileUtils.js';
 import { assertProjectMenuDepth } from './menuDepth.js';
 
+import { t } from '../../i18n/index.js';
 // Forme canonique du projet :
 // - `rootEntries` porte l'arbre principal sauvegardé et manipulé à l'exécution.
 // - Les enfants d'un menu vivent dans `children`.
@@ -97,14 +98,14 @@ function normalizeImportWarnings(value) {
   if (!Array.isArray(value)) return [];
   return value
     .filter((warning) => warning && typeof warning === 'object')
-    .filter((warning) => !(warning.field === 'returnOnHome' && warning.targetStageName === 'Cloche retour'))
+    .filter((warning) => !(warning.field === 'returnOnHome' && warning.targetStageName === t('Cloche retour')))
     .map((warning) => ({
       entryId: typeof warning.entryId === 'string' ? warning.entryId : null,
       entryName: typeof warning.entryName === 'string' ? warning.entryName : '',
       field: typeof warning.field === 'string' ? warning.field : '',
       targetStageId: typeof warning.targetStageId === 'string' ? warning.targetStageId : null,
       targetStageName: typeof warning.targetStageName === 'string' ? warning.targetStageName : '',
-      message: typeof warning.message === 'string' ? warning.message : 'Transition importee non modelisee.',
+      message: typeof warning.message === 'string' ? warning.message : t('Transition importee non modelisee.'),
       sourceRootId: typeof warning.sourceRootId === 'string' ? warning.sourceRootId : null,
       sourceName: typeof warning.sourceName === 'string' ? warning.sourceName : '',
   }));
@@ -419,7 +420,7 @@ function normalizeNativeGraph(graph, rootEntries, importWarnings) {
   };
 }
 
-function cleanProjectName(value, fallback = 'Nouveau projet') {
+function cleanProjectName(value, fallback = t('Nouveau projet')) {
   const cleaned = String(value || '')
     .normalize('NFKC')
     .replace(/[\u0000-\u001f\u007f]/g, ' ')
@@ -578,7 +579,7 @@ export function normalizeBaseProject(project = {}) {
     packMetadata: packMetadata.title
       ? packMetadata
       : normalizePackMetadata({ ...packMetadata, title: typeof nativeTitle === 'string' ? nativeTitle : '' }),
-    rootName: project.rootName ?? (projectType === 'pack' ? 'Menu racine' : ''),
+    rootName: project.rootName ?? (projectType === 'pack' ? t('Menu racine') : ''),
     endNodeName,
     projectType,
     rootAudio: normalizeLocalFilePath(project.rootAudio),

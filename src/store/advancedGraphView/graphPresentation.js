@@ -1,6 +1,7 @@
 import { defaultHomeReturnOf } from './defaultHomeReturns.js';
 import { ACTION_KIND } from './graphViewModel.js';
 
+import { t } from '../../i18n/index.js';
 export const PRESENTATION_CONNECTIONS = 'connections';
 const PRESENTATION_PLAYBACK = 'playback';
 
@@ -131,8 +132,8 @@ export function describeEdgeEnds(index, edgeId) {
     return {
       from: labelOf(derived.from),
       to: labelOf(derived.to),
-      via: 'Bouton Accueil',
-      term: 'retour par défaut de la Lunii, hors du pack',
+      via: t('Bouton Accueil'),
+      term: t('retour par défaut de la Lunii, hors du pack'),
     };
   }
   for (const edges of index.outgoing.values()) {
@@ -148,16 +149,16 @@ export function describeEdgeEnds(index, edgeId) {
       // lesquels l'activent, quand l'Écran le sait.
       const controls = index.byPath.get(edge.from)?.node?.controls;
       const on = (key) => controls?.[key]?.presence === 'value' && controls[key].value === true;
-      const triggers = [on('ok') && 'OK', on('autoplay') && 'fin du son'].filter(Boolean);
+      const triggers = [on('ok') && t('OK'), on('autoplay') && 'fin du son'].filter(Boolean);
       via = triggers.length > 0 ? `Suite du parcours, par ${triggers.join(' ou ')}` : 'Suite du parcours';
       term = 'okTransition';
     } else if (isHome(edge)) {
-      via = 'Bouton Accueil';
+      via = t('Bouton Accueil');
       term = 'homeTransition';
     } else via = Number.isInteger(edge.ordinal) ? `choix ${edge.ordinal + 1}` : 'choix';
     return {
       from: labelOf(edge.from),
-      to: labelOf(edge.to) ?? 'destination à choisir',
+      to: labelOf(edge.to) ?? t('destination à choisir'),
       via,
       term,
     };

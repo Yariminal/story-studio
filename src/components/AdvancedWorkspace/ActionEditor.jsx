@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // L'éditeur d'une Liste de choix — une Action du modèle : les choix que la
 // molette fait défiler, dans l'ordre qui la définit, puis qui ouvre la liste.
 //
@@ -152,8 +153,8 @@ function WireForm({ initialSlot, index, action, disabled, onGesture, onClose }) 
     <div className="advanced-field__form">
       <p className="advanced-field__note">
         {slot === 'home'
-          ? 'L’Écran choisi ouvrira cette liste par son bouton Accueil.'
-          : 'L’Écran choisi ouvrira cette liste comme suite de son parcours : par OK, ou à la fin de son son.'}
+          ? t('L’Écran choisi ouvrira cette liste par son bouton Accueil.')
+          : t('L’Écran choisi ouvrira cette liste comme suite de son parcours : par OK, ou à la fin de son son.')}
       </p>
       <label htmlFor="advanced-wire-slot">Par</label>
       <select
@@ -192,9 +193,9 @@ function WireForm({ initialSlot, index, action, disabled, onGesture, onClose }) 
   );
 }
 
-const ORDER_HELP = 'La molette parcourt les choix dans cet ordre, en boucle. Chaque Écran qui ouvre la liste choisit seulement le choix sur lequel on commence.';
+const ORDER_HELP = t('La molette parcourt les choix dans cet ordre, en boucle. Chaque Écran qui ouvre la liste choisit seulement le choix sur lequel on commence.');
 
-const ecrans = (count) => (count === 0 ? 'aucun Écran' : `${count} Écran${count > 1 ? 's' : ''}`);
+const ecrans = (count) => (count === 0 ? t('aucun Écran') : `${count} Écran${count > 1 ? 's' : ''}`);
 
 // Le choix sur lequel un groupe d'Écrans ouvre la liste : « commencent sur
 // 2/3 » puis l'Écran de ce choix, avec sa vignette et son lien. L'encadré
@@ -267,7 +268,7 @@ function HomeGroup({ group, total, thumbnails, onFocusPath }) {
           type="button"
           className="advanced-options__lead advanced-options__toggle"
           aria-expanded={open}
-          aria-label={open ? 'Replier ce groupe' : 'Déplier ce groupe'}
+          aria-label={open ? 'Replier ce groupe' : t('Déplier ce groupe')}
           onClick={() => setOpen((value) => !value)}
         >
           {open ? <ChevronDown /> : <ChevronRight />}
@@ -432,21 +433,21 @@ export function ActionEditor({
   // Tous les gestes d'une ligne, dans le menu « ⋯ ». Monter et Descendre y
   // restent : c'est la voie du clavier, et celle de qui ne glisse pas.
   const menuActions = (rank) => [
-    { label: 'Modifier…', fn: () => { closeForms(); setRetargeting(rank); } },
-    { label: 'Insérer avant…', fn: () => { closeForms(); setInsertAt(rank); } },
+    { label: t('Modifier…'), fn: () => { closeForms(); setRetargeting(rank); } },
+    { label: t('Insérer avant…'), fn: () => { closeForms(); setInsertAt(rank); } },
     'sep',
     {
       label: 'Monter',
       fn: () => move(rank, rank - 1),
-      disabledReason: rank === 0 ? 'Déjà le premier choix.' : undefined,
+      disabledReason: rank === 0 ? t('Déjà le premier choix.') : undefined,
     },
     {
       label: 'Descendre',
       fn: () => move(rank, rank + 1),
-      disabledReason: rank === options.length - 1 ? 'Déjà le dernier choix.' : undefined,
+      disabledReason: rank === options.length - 1 ? t('Déjà le dernier choix.') : undefined,
     },
     'sep',
-    { label: 'Retirer…', danger: true, fn: () => onRemoveOption(rank) },
+    { label: t('Retirer…'), danger: true, fn: () => onRemoveOption(rank) },
   ];
 
 
@@ -459,7 +460,7 @@ export function ActionEditor({
         <h2 className="advanced-editor__title">
           {inspected.label.isFallback
             ? (
-              <Tooltip text="Repli d'affichage, pas un nom d'auteur" asChild>
+              <Tooltip text={t("Repli d'affichage, pas un nom d'auteur")} asChild>
                 <em className="advanced-editor__fallback">{inspected.label.label}</em>
               </Tooltip>
             )
@@ -553,7 +554,7 @@ export function ActionEditor({
               value={insertTarget}
               onChange={setInsertTarget}
               disabled={disabled}
-              emptyLabel="— aucun Écran —"
+              emptyLabel={t("— aucun Écran —")}
             />
             <div className="advanced-field__actions">
               <Button size="sm" onClick={closeForms}>Annuler</Button>
@@ -579,7 +580,7 @@ export function ActionEditor({
               value={retargetTo}
               onChange={setRetargetTo}
               disabled={disabled}
-              emptyLabel="— aucun Écran —"
+              emptyLabel={t("— aucun Écran —")}
             />
             <div className="advanced-field__actions">
               <Button size="sm" onClick={closeForms}>Annuler</Button>
@@ -703,7 +704,7 @@ export function ActionEditor({
             type="button"
             disabled={disabled}
             onClick={onDelete}
-            aria-label="Supprimer cette liste de choix"
+            aria-label={t("Supprimer cette liste de choix")}
           >
             <Trash2 className="card-danger-icon" />
           </button>

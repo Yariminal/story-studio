@@ -1,6 +1,7 @@
 import { Button } from '../../components/common/Button';
 import { PIPER_LANGUAGE_OPTIONS } from '../../store/xttsSettings';
 
+import { t } from '../../i18n/index.js';
 export function PiperVoiceSettings({
   piperVoices,
   piperProvision,
@@ -73,7 +74,7 @@ export function PiperVoiceSettings({
           onClick={preparePiperVoice}
           disabled={piperProvision.state === 'loading' || piperVoices.length === 0}
         >
-          {piperProvision.state === 'loading' ? 'Téléchargement…' : 'Préparer la voix maintenant'}
+          {piperProvision.state === 'loading' ? t('Téléchargement…') : t('Préparer la voix maintenant')}
         </Button>
         <span className="opts-row-sub">
           Optionnel : prépare la voix sélectionnée à l’avance pour éviter l’attente au 1er usage.

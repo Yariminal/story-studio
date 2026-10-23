@@ -12,6 +12,7 @@ import {
   preserveViewportCenter,
 } from './viewportGeometry.js';
 
+import { t } from '../../../i18n/index.js';
 const DIAGRAM_PERF_KEY = 'storyStudio.diagramPerf';
 
 function isDiagramPerfEnabled() {
@@ -332,7 +333,7 @@ export function useDiagramViewport({
     const node = containerRef.current;
     if (!node) return;
     node.focus({ preventScroll: true });
-    if (event.target.closest?.('.fd-complete-node, .fd-complete-zoom, .structure-actions-bar--canvas, .fd-diagram-search')) return;
+    if (event.target.closest?.(t('.fd-complete-node, .fd-complete-zoom, .structure-actions-bar--canvas, .fd-diagram-search'))) return;
     onStagePanStart?.();
     panStateRef.current = {
       active: true,

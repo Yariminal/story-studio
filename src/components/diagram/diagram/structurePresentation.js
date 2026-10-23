@@ -1,3 +1,4 @@
+import { t } from '../../../i18n/index.js';
 const STORY_GROUP_PREFIX = 'story-group:';
 
 export function getStoryGroupId(parentId) {
@@ -73,8 +74,8 @@ export function buildStructureProjection(project, options = {}) {
     id: 'root',
     type: 'root',
     name: project.projectType === 'simple'
-      ? (project.projectName || 'Mon histoire')
-      : (project.rootName || 'Menu racine'),
+      ? (project.projectName || t('Mon histoire'))
+      : (project.rootName || t('Menu racine')),
     treeColor: project.treeColor ?? null,
     children: project.rootEntries ?? [],
   }, 0, {

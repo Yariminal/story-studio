@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // Filtres d'image portables, appliqués directement aux pixels du canvas.
 //
 // CanvasRenderingContext2D.filter n'est pas disponible de façon homogène dans
@@ -203,7 +204,7 @@ export function applyPortableImageFilters(imageData, filters = {}, width, height
   if (!Number.isInteger(resolvedWidth) || !Number.isInteger(resolvedHeight)
     || resolvedWidth <= 0 || resolvedHeight <= 0
     || imageData.data.length !== resolvedWidth * resolvedHeight * 4) {
-    throw new Error('Dimensions de filtre image invalides.');
+    throw new Error(t('Dimensions de filtre image invalides.'));
   }
 
   const thickness = numberInRange(filters.thickness, 0, 0, 5);

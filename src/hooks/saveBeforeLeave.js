@@ -1,5 +1,6 @@
 import { hasUnsavedWork } from '../store/projectHelpers';
 
+import { t } from '../i18n/index.js';
 // Garde commune de départ : fermeture de fenêtre, nouveau projet ou funnel,
 // ouverture, récents, copie vers graphe. Rend true si on peut jeter la mémoire
 // (tout est dans le fichier, ou l'auteur a choisi de ne pas enregistrer), false
@@ -16,20 +17,20 @@ import { hasUnsavedWork } from '../store/projectHelpers';
 // et `projectName` (le nom que montre la barre de titre) sont lus avec le reste
 // de l'état ; `hasUnsavedWork` les ignore.
 const NEVER_SAVED_DIALOG = {
-  title: 'Projet non enregistré',
-  message: "Ton travail n'est pas enregistré et sera définitivement perdu.",
-  discardLabel: 'Quitter sans enregistrer',
-  saveLabel: 'Enregistrer comme projet',
+  title: t('Projet non enregistré'),
+  message: t("Ton travail n'est pas enregistré et sera définitivement perdu."),
+  discardLabel: t('Quitter sans enregistrer'),
+  saveLabel: t('Enregistrer comme projet'),
 };
 
 function leaveDialog(work) {
   if (!work.savePath) return NEVER_SAVED_DIALOG;
-  const name = String(work.projectName ?? '').trim() || 'Nouveau projet';
+  const name = String(work.projectName ?? '').trim() || t('Nouveau projet');
   return {
-    title: 'Modifications non enregistrées',
+    title: t('Modifications non enregistrées'),
     message: `Les modifications de « ${name} » depuis le dernier enregistrement seront perdues.`,
-    discardLabel: 'Ne pas enregistrer',
-    saveLabel: 'Enregistrer',
+    discardLabel: t('Ne pas enregistrer'),
+    saveLabel: t('Enregistrer'),
   };
 }
 
@@ -43,7 +44,7 @@ export async function askSaveBeforeLeave(readWork, onSave, showChoiceDialog) {
     variant: 'warning',
     cancelValue: 'cancel',
     actions: [
-      { value: 'cancel', label: 'Annuler', autoFocus: true },
+      { value: 'cancel', label: t('Annuler'), autoFocus: true },
       { value: 'discard', label: dialog.discardLabel, kind: 'danger-outline' },
       { value: 'save', label: dialog.saveLabel, kind: 'primary' },
     ],

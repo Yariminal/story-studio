@@ -2,6 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import { runSettingsMigrations } from "./store/persistentSettings";
+import { LocaleProvider } from "./i18n/LocaleContext.jsx";
+import { applyUiLocalePreference } from "./store/uiLocalePreference.js";
 
 // Banc d'essai des moteurs de graphe, monté à la place de
 // l'application sous `VITE_BENCH=graph npm run tauri:dev`.
@@ -30,6 +32,7 @@ if (import.meta.env.DEV && import.meta.env.VITE_BENCH === "graph") {
 } else {
 
 runSettingsMigrations();
+applyUiLocalePreference();
 
 // Chromium peut faire passer l'élément encore focus après un clic en
 // `:focus-visible` dès la première touche pressée. Le contour apparaît alors
@@ -59,7 +62,9 @@ document.addEventListener('contextmenu', e => {
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <App />
+    <LocaleProvider>
+      <App />
+    </LocaleProvider>
   </React.StrictMode>,
 );
 

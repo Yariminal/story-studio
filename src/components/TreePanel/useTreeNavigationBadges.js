@@ -8,6 +8,7 @@ import {
 } from '../../store/generatedNavigation';
 import { EMPTY_BADGES } from './treePanelConstants';
 
+import { t } from '../../i18n/index.js';
 // Badges de navigation de l'arbre : calcul par entry (avec cache par référence)
 // et badges du message de fin.
 export function useTreeNavigationBadges({
@@ -126,7 +127,7 @@ export function useTreeNavigationBadges({
       const isNightMode = !!project.globalOptions?.nightMode;
       const returnName = returnNavigation.targetId
         ? getGeneratedNavigationTargetName(returnNavigation.targetId, projectIndex)
-        : "destination de fin de l'histoire source";
+        : t("destination de fin de l'histoire source");
       badges.push({
         key: `end-node-return:${returnNavigation.targetId || 'contextual'}:${returnName}`,
         kind: isNightMode ? 'end-night' : 'end-node',

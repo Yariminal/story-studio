@@ -5,6 +5,7 @@ import { Toggle } from '../common/Toggle';
 import { basename } from '../../utils/fileUtils';
 import { optionSelectionCandidates, parseOptionSelection } from '../../store/optionSelection.js';
 
+import { t } from '../../i18n/index.js';
 function cloneGraph(graph) {
   return structuredClone(graph);
 }
@@ -15,7 +16,7 @@ function stageId(stage) {
 
 function stageKind(stage) {
   const controls = stage?.controlSettings ?? {};
-  if (stage?.squareOne) return 'Départ';
+  if (stage?.squareOne) return t('Départ');
   if (controls.wheel && !controls.autoplay) return 'Choix';
   if (controls.autoplay) return 'Lecture';
   return 'Stage';
@@ -144,7 +145,7 @@ export const NativeGraphEditor = memo(function NativeGraphEditor({ graph, onChan
       </div>
 
       <div className="native-graph-layout">
-        <div className="native-graph-list" role="listbox" aria-label="Stages du graphe importé">
+        <div className="native-graph-list" role="listbox" aria-label={t("Stages du graphe importé")}>
           {visibleStages.map(({ stage, index, id, label }) => (
             <button
               key={id}
@@ -204,7 +205,7 @@ export const NativeGraphEditor = memo(function NativeGraphEditor({ graph, onChan
                   <span className="media-col-subtitle">Audio du stage</span>
                 </div>
                 <AudioField
-                  label="Audio du stage"
+                  label={t("Audio du stage")}
                   file={selectedStage.audio}
                   required={false}
                   ttsTextSuggestion={selectedStage.name || selectedLabel}

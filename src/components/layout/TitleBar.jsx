@@ -6,6 +6,7 @@ import { useLocalFile } from '../../hooks/useLocalFile';
 import { Tooltip } from '../common/Tooltip';
 import './TitleBar.css';
 
+import { t } from '../../i18n/index.js';
 function AppMark() {
   return (
     <span className="chrome-app-mark" aria-hidden="true">
@@ -64,21 +65,21 @@ export function TitleBar({ projectName, packRecap = null, packCoverImage = null,
   const currentWindow = useMemo(() => (isTauriRuntime() ? getCurrentWindow() : null), []);
   const [isMaximizing, setIsMaximizing] = useState(false);
   const packCoverUrl = useLocalFile(packCoverImage);
-  const displayProjectName = hasSavePath ? (projectName || 'Nouveau projet') : 'Projet non enregistré';
+  const displayProjectName = hasSavePath ? (projectName || t('Nouveau projet')) : t('Projet non enregistré');
   const packStoryName = packRecap?.title || '';
-  const packDisplayName = packStoryName || 'Métadonnées du pack';
+  const packDisplayName = packStoryName || t('Métadonnées du pack');
   const packMetaLine = packRecap?.line ?? '';
   const projectTooltip = `Nom du projet : « ${displayProjectName} »`;
   const packTooltip = packStoryName
     ? `« ${packStoryName} » — Modifier le nom et les métadonnées du pack`
-    : 'Renseigner le nom et les métadonnées du pack';
+    : t('Renseigner le nom et les métadonnées du pack');
   const showSaveIndicator = isDirty || hasSavePath || saveState === 'ok';
   const saveIndicatorClass = (isDirty && saveState !== 'ok')
     ? 'chrome-titlebar-status is-dirty'
     : 'chrome-titlebar-status is-saved';
   const saveIndicatorTitle = !hasSavePath
-    ? 'Projet pas encore enregistré'
-    : (isDirty && saveState !== 'ok') ? 'Modifications non enregistrées' : 'Projet enregistré';
+    ? t('Projet pas encore enregistré')
+    : (isDirty && saveState !== 'ok') ? t('Modifications non enregistrées') : t('Projet enregistré');
 
   async function handleToggleMaximize() {
     if (!currentWindow || isMaximizing) return;
@@ -124,7 +125,7 @@ export function TitleBar({ projectName, packRecap = null, packCoverImage = null,
                 aria-label={packTooltip}
               >
               <span className="chrome-titlebar-pack-thumb">
-                {packCoverUrl ? <img src={packCoverUrl} alt="" /> : <ImageIcon className="chrome-icon" strokeWidth={1.8} absoluteStrokeWidth />}
+                {packCoverUrl ? <img src={packCoverUrl} alt="t(" /> : <ImageIcon className=")chrome-icon" strokeWidth={1.8} absoluteStrokeWidth />}
               </span>
               <span className="chrome-titlebar-pack-text">
                 <span className="chrome-titlebar-pack-title">{packDisplayName}</span>
@@ -140,19 +141,19 @@ export function TitleBar({ projectName, packRecap = null, packCoverImage = null,
 
       <div className="chrome-window-controls">
         {onOpenCredits ? (
-          <button type="button" className="chrome-window-btn" onClick={onOpenCredits} title="Aide et à propos" aria-label="Aide et à propos">
+          <button type="button" className="chrome-window-btn" onClick={onOpenCredits} title={t("Aide et à propos")} aria-label={t("Aide et à propos")}>
             <HelpIcon />
           </button>
         ) : null}
         {currentWindow ? (
           <>
-            <button type="button" className="chrome-window-btn" onClick={() => currentWindow.minimize()} title="Réduire">
+            <button type="button" className="chrome-window-btn" onClick={() => currentWindow.minimize()} title={t("Réduire")}>
               <MinimizeIcon />
             </button>
             <button type="button" className="chrome-window-btn" onClick={handleToggleMaximize} title="Agrandir ou restaurer" disabled={isMaximizing}>
               <MaximizeIcon />
             </button>
-            <button type="button" className="chrome-window-btn chrome-window-btn-close" onClick={() => currentWindow.close()} title="Fermer">
+            <button type="button" className="chrome-window-btn chrome-window-btn-close" onClick={() => currentWindow.close()} title={t("Fermer")}>
               <CloseIcon />
             </button>
           </>

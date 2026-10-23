@@ -10,13 +10,14 @@ import { youtubeBlockedNotice, youtubeImportFailure } from '../utils/youtubeErro
 import { useImportSession } from './useImportSession';
 import { useOsFileDrop } from './useOsFileDrop';
 
+import { t } from '../i18n/index.js';
 function isImportedPackPath(filePath) {
   return /\.(zip|7z)$/i.test(filePath || '');
 }
 
 function getImportDisplayName(filePath) {
   const fileName = basename(filePath);
-  return sanitizeImportedName(fileName, fileName || 'Import en cours');
+  return sanitizeImportedName(fileName, fileName || t('Import en cours'));
 }
 
 // Textes des funnels média d'accueil (podcast/YouTube) : flux identiques,
@@ -27,15 +28,15 @@ const MEDIA_FUNNEL_COPY = {
     defaultTitle: 'Podcast',
     coverFilePrefix: 'podcast',
     logPrefix: 'podcast-funnel',
-    allFailedMessage: "Aucun épisode n'a pu être importé. Vérifie ta connexion ou l'adresse du flux RSS.",
-    someFailedNotice: (failures, total) => `${formatFrenchCount(failures, 'épisode', 'épisodes')} sur ${total} n'ont pas pu être importés. Les autres ont bien été ajoutés.`,
+    allFailedMessage: t("Aucun épisode nt('a pu être importé. Vérifie ta connexion ou l')adresse du flux RSS."),
+    someFailedNotice: (failures, total) => `${formatFrenchCount(failures, t('épisode'), t('épisodes'))} sur ${total} n'ont pas pu être importés. Les autres ont bien été ajoutés.`,
   },
   youtube: {
     defaultTitle: 'YouTube',
     coverFilePrefix: 'youtube',
     logPrefix: 'youtube-funnel',
-    allFailedMessage: "Aucune vidéo n'a pu être importée.",
-    someFailedNotice: (failures, total) => `${formatFrenchCount(failures, 'vidéo', 'vidéos')} sur ${total} n'ont pas pu être importées. Les autres ont bien été ajoutées.`,
+    allFailedMessage: t("Aucune vidéo n'a pu être importée."),
+    someFailedNotice: (failures, total) => `${formatFrenchCount(failures, t('vidéo'), t('vidéos'))} sur ${total} n'ont pas pu être importées. Les autres ont bien été ajoutées.`,
   },
 };
 
@@ -105,7 +106,7 @@ export function useMediaImport({
     const copy = MEDIA_FUNNEL_COPY[source];
     await runFunnelLanding('pack', async () => {
       const listTitle = String(list?.title || '').trim();
-      onProgress?.({ name: listTitle || copy.defaultTitle, index: 0, total: items.length, phase: 'Préparation de la session…' });
+      onProgress?.({ name: listTitle || copy.defaultTitle, index: 0, total: items.length, phase: t('Préparation de la session…') });
       let listCover = null;
       if (list?.imageUrl) {
         try {

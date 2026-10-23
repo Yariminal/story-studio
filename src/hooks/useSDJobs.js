@@ -6,6 +6,7 @@ import { logger } from '../utils/logger';
 import { isTauriRuntime } from '../utils/tauriRuntime';
 import { releaseTauriListener } from '../utils/tauriListener';
 
+import { t } from '../i18n/index.js';
 const MAX_CONCURRENT_SD_JOBS = 1;
 
 export function useSDJobs(sdStore, workspaceDir = null, onMediaCreated = null) {
@@ -108,7 +109,7 @@ export function useSDJobs(sdStore, workspaceDir = null, onMediaCreated = null) {
             sdStore.updateJob(job.id, { status: 'done', resultPaths: paths, progress: 1, progressLabel: '100%' });
             for (const p of paths) onMediaCreated?.(p);
           } else if (result.status === 'error') {
-            sdStore.updateJob(job.id, { status: 'error', errorMessage: result.error || 'Erreur ComfyUI', progress: null, progressLabel: null });
+            sdStore.updateJob(job.id, { status: 'error', errorMessage: result.error || t('Erreur ComfyUI'), progress: null, progressLabel: null });
           }
         } catch (e) {
           sdStore.updateJob(job.id, { status: 'error', errorMessage: String(e) });

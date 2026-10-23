@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // Traduction d'un dépôt de média vers le geste d'auteur qui lui correspond.
 //
 // Côté Libre, déposer un son sur une histoire écrit directement le champ de
@@ -95,13 +96,13 @@ export function freeAssetRef(project, path, reserved = []) {
 export function planStageMediaAssignment({ project, stageUuid, kind, path }) {
   const field = advancedMediaField(kind);
   if (!field) {
-    return { ok: false, code: 'unsupported-kind', reason: 'Un Écran ne porte qu’un audio et une image.' };
+    return { ok: false, code: 'unsupported-kind', reason: t('Un Écran ne porte qu’un audio et une image.') };
   }
   if (typeof stageUuid !== 'string' || stageUuid.length === 0) {
-    return { ok: false, code: 'no-stage', reason: 'Aucun Écran désigné.' };
+    return { ok: false, code: 'no-stage', reason: t('Aucun Écran désigné.') };
   }
   if (typeof path !== 'string' || path.trim().length === 0) {
-    return { ok: false, code: 'no-path', reason: 'Aucun fichier à déposer.' };
+    return { ok: false, code: 'no-path', reason: t('Aucun fichier à déposer.') };
   }
 
   const shared = boundAssetRefForPath(project, path);

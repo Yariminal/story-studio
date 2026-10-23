@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // Le travail graphe, préparé puis exécuté par la file de rendu.
 //
 // Ce module remplace la session d'export de l'Éditeur avancé. Il ne perd aucune
@@ -60,7 +61,7 @@ function localRefusal(fields) {
   return {
     kind: EXPORT_REFUSAL.REQUEST,
     preparationKind: null,
-    title: 'Export impossible',
+    title: t('Export impossible'),
     message: '',
     code: null,
     cancelled: false,
@@ -163,8 +164,8 @@ export async function runAdvancedWork({
     return {
       outcome: ADVANCED_WORK.REFUSED,
       refusal: localRefusal({
-        message: "Le poste de travail natif n'est pas tenu au nom de l'éditeur graphe :"
-          + " rien n'a été demandé au moteur.",
+        message: t("Le poste de travail natif n'est pas tenu au nom de l'éditeur graphe :")
+          + t(" rien n'a été demandé au moteur."),
       }),
     };
   }

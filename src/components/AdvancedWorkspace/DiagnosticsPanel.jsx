@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 // Les diagnostics, et ce qu'on peut réellement en faire.
 //
 // Les trois familles restent **distinctes** : intégrité du graphe, décision
@@ -30,7 +31,7 @@ export function DiagnosticsPanel({
   onOpenForm,
 }) {
   return (
-    <section className="advanced-diagnostics advanced-diagnostics--popover" aria-label="Éléments à corriger">
+    <section className="advanced-diagnostics advanced-diagnostics--popover" aria-label={t("Éléments à corriger")}>
       <ul className="advanced-diagnostics__list">
           {issues.map((issue) => {
             const diagnostic = issue.diagnostic;

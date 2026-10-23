@@ -1,3 +1,4 @@
+import { t } from '../i18n/index.js';
 // L'exécuteur de la file de rendu : il sert les travaux un par un, dans l'ordre.
 //
 // Il sert **deux natures** de travail. Un travail Libre part sur
@@ -125,7 +126,7 @@ export function useRenderQueueExecutor({
     const target = jobAwaitingCancelSignal(jobs, cancelSentForRef.current);
     if (!target) return;
     cancelSentForRef.current = target.id;
-    appendLog(target.id, '⏹ Demande d’annulation envoyée…');
+    appendLog(target.id, t('⏹ Demande d’annulation envoyée…'));
     // Le même geste pour les deux natures : côté Rust, `cancel_generate_pack`
     // bascule le drapeau que `generate_pack` **et** `export_advanced_pack`
     // relisent. Ce n'est pas une déduction de commentaire — les deux commandes
@@ -173,7 +174,7 @@ export function useRenderQueueExecutor({
 
     function markCancelled(jobId) {
       updateJob(jobId, { status: JOB_STATUS.CANCELED, cancelRequested: false, resultPath: null, errorMessage: null });
-      appendLog(jobId, '⏹ Fabrication annulée.');
+      appendLog(jobId, t('⏹ Fabrication annulée.'));
     }
 
     async function serveFree(job) {
@@ -230,7 +231,7 @@ export function useRenderQueueExecutor({
           refusal,
           errorMessage: null,
         });
-        appendLog(job.id, '⏹ Fabrication annulée.');
+        appendLog(job.id, t('⏹ Fabrication annulée.'));
         return;
       }
       updateJob(job.id, {
