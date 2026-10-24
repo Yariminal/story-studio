@@ -43,15 +43,14 @@ export function SessionMediaTriageModal({ items, onResolve }) {
       <div className="session-triage-backdrop" onClick={confirmKeepSelection}>
         <div className="modal-box session-triage-box" onClick={(e) => e.stopPropagation()}>
           <div className="modal-header">
-            <span>Médias non utilisés</span>
+            <span>{t('Médias non utilisés')}</span>
           </div>
           <div className="session-triage-body">
             <p className="session-triage-intro">
               {items.length === 1
                 ? t('1 média de ta session n’est utilisé par aucune histoire.')
-                : `${items.length} médias de ta session ne sont utilisés par aucune histoire.`}
-              {' '}Coche ceux à conserver avec le projet ; les autres seront supprimés avec la session.
-            </p>
+                : t("{length} médias de ta session ne sont utilisés par aucune histoire.", { length: items.length })}
+              {' '}{t("Coche ceux à conserver avec le projet ; les autres seront supprimés avec la session.")} </p>
             <ul className="session-triage-list">
               {items.map((item) => (
                 <li key={item.path}>
@@ -72,11 +71,9 @@ export function SessionMediaTriageModal({ items, onResolve }) {
           </div>
           <div className="session-triage-footer">
             <Button variant="danger-outline" onClick={() => onResolve({ keptPaths: [] })}>
-              Tout abandonner
+              {t("Tout abandonner")}
             </Button>
-            <Button variant="primary" onClick={confirmKeepSelection}>
-              Conserver la sélection
-            </Button>
+            <Button variant="primary" onClick={confirmKeepSelection}> {t("Conserver la sélection")} </Button>
           </div>
         </div>
       </div>

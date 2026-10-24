@@ -73,13 +73,13 @@ export function StageEditor({
     <div className="advanced-editor">
       <section className="card advanced-editor__identity-card">
       <header className="advanced-editor__header">
-        <span className="advanced-editor__kind advanced-editor__kind--stage">Écran</span>
+        <span className="advanced-editor__kind advanced-editor__kind--stage">{t('Écran')}</span>
         <h2 className="advanced-editor__title">
           {inspected.label.label}
           {inspected.label.isFallback && (
             <Tooltip text={t("Repli d'affichage, pas un nom d'auteur")} asChild>
               <em className="advanced-editor__fallback">
-                {' '}(sans nom)
+                {' '}{t("(sans nom)")}
               </em>
             </Tooltip>
           )}
@@ -100,7 +100,7 @@ export function StageEditor({
       </header>
 
       <div className="field-row advanced-editor__name-row">
-        <span className="field-label">Nom</span>
+        <span className="field-label">{t('Nom')}</span>
         <div className="advanced-editor__name-control">
           <NodeNameEditor
             kind="stage"
@@ -116,20 +116,20 @@ export function StageEditor({
 
       <section className="card advanced-editor__media-card">
         <div className="card-title-row">
-          <div className="card-title">Médias</div>
-          <div className="card-copy card-copy--inline">L’image et le son de cet Écran.</div>
+          <div className="card-title">{t('Médias')}</div>
+          <div className="card-copy card-copy--inline">{t('L’image et le son de cet Écran.')}</div>
         </div>
 
         {/* La vignette catalogue se choisit dans la fiche du pack : l'Écran
             d'entrée n'a que son image Lunii et son son. */}
         <div className="media-split">
           <div className="media-split-left">
-            <div className="media-col-header">Image</div>
+            <div className="media-col-header">{t('Image')}</div>
             <MediaSlotEditor stage={stage} field="image" usage={usage} disabled={disabled} onGesture={onGesture} onAssignMedia={onAssignMedia} projectEpoch={projectEpoch} />
           </div>
           <div className="media-split-divider" />
           <div className="media-split-right">
-            <div className="media-col-header">Son</div>
+            <div className="media-col-header">{t('Son')}</div>
             <MediaSlotEditor stage={stage} field="audio" usage={usage} disabled={disabled} onGesture={onGesture} onAssignMedia={onAssignMedia} projectEpoch={projectEpoch} />
           </div>
         </div>
@@ -170,13 +170,13 @@ export function StageEditor({
 
       <section className="card advanced-editor__section advanced-controls">
         <div className="card-title-row">
-          <div className="card-title">Pendant la lecture</div>
+          <div className="card-title">{t('Pendant la lecture')}</div>
         </div>
         <div className="sequence-controls advanced-controls__toggles">
           <ControlRow
             stage={stage}
             control="pause"
-            label={CONTROL_PHRASES.pause}
+            label={CONTROL_PHRASES().pause}
             disabled={disabled}
             onGesture={onGesture}
           />
@@ -198,7 +198,7 @@ export function StageEditor({
       />
 
       <details className="advanced-editor__technical">
-        <summary>Informations techniques</summary>
+        <summary>{t('Informations techniques')}</summary>
       <section className="advanced-editor__section">
         <h3>Disposition</h3>
         <dl className="advanced-editor__identity">
@@ -222,10 +222,8 @@ export function StageEditor({
             >
               <Trash2 className="card-danger-icon" />
             </button>
-            <span className="card-danger-title">Supprimer cet Écran</span>
-            <p className="card-danger-desc">
-              L’Écran est retiré du pack. Les listes de choix qui le proposaient gardent un choix à compléter ; les raccords depuis les autres Écrans restent en place.
-            </p>
+            <span className="card-danger-title">{t('Supprimer cet Écran')}</span>
+            <p className="card-danger-desc"> {t("L’Écran est retiré du pack. Les listes de choix qui le proposaient gardent un choix à compléter ; les raccords depuis les autres Écrans restent en place.")} </p>
           </div>
         </div>
       )}

@@ -15,7 +15,8 @@ import { releaseTauriListener } from '../../utils/tauriListener';
 import './GenerateVoiceModal.css';
 
 import { t } from '../../i18n/index.js';
-const LANGUAGE_OPTIONS = [
+function LANGUAGE_OPTIONS() {
+  return [
   { value: 'fr', label: t('Français') },
   { value: 'en', label: t('English') },
   { value: 'es', label: 'Español' },
@@ -23,6 +24,7 @@ const LANGUAGE_OPTIONS = [
   { value: 'it', label: 'Italiano' },
   { value: 'pt', label: t('Português') },
 ];
+}
 
 const PIPER_MAX_TEXT_CHARS = 5000;
 
@@ -53,7 +55,7 @@ function VoiceModalShell({
     <div className="modal-overlay">
       <div className="modal-box tts-modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <span>Générer une voix</span>
+          <span>{t('Générer une voix')}</span>
           <Button variant="icon" className="modal-close" onClick={onClose} disabled={submitting}>×</Button>
         </div>
 
@@ -67,7 +69,7 @@ function VoiceModalShell({
           </div>
 
           <label className="tts-field">
-            <span>Texte à lire</span>
+            <span>{t('Texte à lire')}</span>
             <textarea
               className="tts-textarea"
               value={text}
@@ -185,7 +187,7 @@ function PiperVoiceModal({
   async function handleGenerate() {
     if (!text.trim()) { setError(t('Le texte à générer est vide.')); return; }
     if (text.trim().length > PIPER_MAX_TEXT_CHARS) {
-      setError(`Le texte est trop long pour Piper (${text.trim().length} caractères, maximum ${PIPER_MAX_TEXT_CHARS}).`);
+      setError(t("Le texte est trop long pour Piper ({length} caractères, maximum {PIPER_MAX_TEXT_CHARS}).", { length: text.trim().length, PIPER_MAX_TEXT_CHARS: PIPER_MAX_TEXT_CHARS }));
       return;
     }
     if (!selectedVoice) { setError(t('Choisis une voix.')); return; }
@@ -218,7 +220,7 @@ function PiperVoiceModal({
       });
       onClose();
     } catch (e) {
-      setError(`${e}\nRéessaie, ou passe à XTTS dans les Préférences si le problème persiste.`);
+      setError(t("{e}\nRéessaie, ou passe à XTTS dans les Préférences si le problème persiste.", { e: e }));
       setStatusMessage('');
     } finally {
       setSubmitting(false);
@@ -237,7 +239,7 @@ function PiperVoiceModal({
       statusMessage={statusMessage}
       error={error}
       label={label}
-      contextSub={<>Le fichier sera stocké dans <strong>voix-générées/</strong> dans l’emplacement de travail.</>}
+      contextSub={<>{t('Le fichier sera stocké dans')} <strong>voix-générées/</strong> {t('dans l’emplacement de travail.')}</>}
       onClose={onClose}
       footerActions={(
         <Button variant="primary-violet" onClick={handleGenerate} disabled={submitting || voices.length === 0}>
@@ -247,7 +249,7 @@ function PiperVoiceModal({
     >
       <div className="tts-grid">
         <label className="tts-field">
-          <span>Langue</span>
+          <span>{t('Langue')}</span>
           <select
             className="tts-input"
             value={selectedLanguage}
@@ -261,14 +263,14 @@ function PiperVoiceModal({
             }}
             disabled={submitting || voices.length === 0}
           >
-            {PIPER_LANGUAGE_OPTIONS.map(({ value, label: optionLabel }) => (
+            {PIPER_LANGUAGE_OPTIONS().map(({ value, label: optionLabel }) => (
               <option key={value} value={value}>{optionLabel}</option>
             ))}
           </select>
         </label>
 
         <label className="tts-field">
-          <span>Voix</span>
+          <span>{t('Voix')}</span>
           <select
             className="tts-input"
             value={selectedVoice}
@@ -282,10 +284,10 @@ function PiperVoiceModal({
             }}
             disabled={submitting || visibleVoices.length === 0}
           >
-            {visibleVoices.length === 0 && <option value="">Chargement des voix…</option>}
+            {visibleVoices.length === 0 && <option value="">{t('Chargement des voix…')}</option>}
             {visibleVoices.map((voice) => (
               <option key={voice.id} value={voice.id}>
-                {voice.label}{voice.installed ? '' : ' — à télécharger'}
+                {voice.label}{voice.installed ? '' : t(" — à télécharger")}
               </option>
             ))}
           </select>
@@ -305,9 +307,7 @@ function PiperVoiceModal({
           />
         </label>
       </div>
-      <span className="tts-helper">
-        Piper fonctionne sans serveur ni configuration. La voix est téléchargée automatiquement au premier usage.
-      </span>
+      <span className="tts-helper"> {t("Piper fonctionne sans serveur ni configuration. La voix est téléchargée automatiquement au premier usage.")} </span>
     </VoiceModalShell>
   );
 }
@@ -411,7 +411,7 @@ function XttsVoiceModal({
       <span className={`tts-badge ${loading ? '' : device === 'cuda' ? 'gpu' : 'cpu'}`}>
         {loading ? 'Initialisation…' : device === 'cuda' ? 'GPU CUDA' : device === 'cpu' ? 'CPU' : 'XTTS'}
       </span>
-      <span className="tts-badge">Voix XTTS</span>
+      <span className="tts-badge">{t('Voix XTTS')}</span>
     </>
   );
 
@@ -425,7 +425,7 @@ function XttsVoiceModal({
       statusMessage={statusMessage}
       error={error}
       label={label}
-      contextSub={<>Le fichier sera stocké dans <strong>voix-générées/</strong> dans l’emplacement de travail.</>}
+      contextSub={<>{t('Le fichier sera stocké dans')} <strong>voix-générées/</strong> {t('dans l’emplacement de travail.')}</>}
       onClose={onClose}
       footerLeft={(
         <Button variant="secondary-violet" onClick={loadStatus} disabled={loading || submitting}>
@@ -444,27 +444,27 @@ function XttsVoiceModal({
     >
       <div className="tts-grid">
         <label className="tts-field">
-          <span>Langue</span>
+          <span>{t('Langue')}</span>
           <select
             className="tts-input"
             value={language}
             onChange={(e) => setLanguage(e.target.value)}
             disabled={submitting}
           >
-            {LANGUAGE_OPTIONS.map(({ value, label: optionLabel }) => (
+            {LANGUAGE_OPTIONS().map(({ value, label: optionLabel }) => (
               <option key={value} value={value}>{optionLabel}</option>
             ))}
           </select>
         </label>
 
         <div className="tts-field">
-          <span>Voix sélectionnée</span>
+          <span>{t('Voix sélectionnée')}</span>
           <div className="tts-device">{selectedVoiceLabel}</div>
         </div>
       </div>
 
       <label className="tts-field">
-        <span>Voix</span>
+        <span>{t('Voix')}</span>
         <select
           className="tts-input"
           value={selectedVoice}
@@ -475,7 +475,7 @@ function XttsVoiceModal({
           }}
           disabled={submitting || visibleVoices.length === 0}
         >
-          {visibleVoices.length === 0 && <option value="">Aucune voix détectée par XTTS</option>}
+          {visibleVoices.length === 0 && <option value="">{t('Aucune voix détectée par XTTS')}</option>}
           {visibleVoices.map((voiceName) => (
             <option key={voiceName} value={voiceName}>{voiceName}</option>
           ))}

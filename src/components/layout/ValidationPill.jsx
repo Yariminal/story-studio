@@ -158,12 +158,18 @@ export function ValidationPill({
 
   const tooltipText = state === 'verifying'
     ? t('Vérification en cours…')
-    : `${totalCount} élément${totalCount > 1 ? 's' : ''} à corriger${shortcutLabel ? ` (${shortcutLabel})` : ''}`;
+    : `${t(totalCount > 1 ? '{count} éléments à corriger' : '{count} élément à corriger', { count: totalCount })}${shortcutLabel ? ` (${shortcutLabel})` : ''}`;
   const popoverSubtitle = advanced
-    ? `${totalCount} élément${totalCount > 1 ? 's' : ''} empêche${totalCount > 1 ? 'nt' : ''} la génération.`
+    ? (totalCount > 1
+      ? t('{count} éléments empêchent la génération.', { count: totalCount })
+      : t('{count} élément empêche la génération.', { count: totalCount }))
     : severity === 'all'
-      ? `${totalCount} élément${totalCount > 1 ? 's' : ''} dans le projet courant.`
-      : `${shownIssues.length} affiché${shownIssues.length > 1 ? 's' : ''} sur ${totalCount}.`;
+      ? (totalCount > 1
+        ? t('{count} éléments dans le projet courant.', { count: totalCount })
+        : t('{count} élément dans le projet courant.', { count: totalCount }))
+      : (shownIssues.length > 1
+        ? t('{shown} affichés sur {count}.', { shown: shownIssues.length, count: totalCount })
+        : t('{shown} affiché sur {count}.', { shown: shownIssues.length, count: totalCount }));
 
   function selectIssue(issueId) {
     if (!issueId) return;
@@ -214,13 +220,13 @@ export function ValidationPill({
                   : <CircleCheck width={12} height={12} />}
               </span>
               <span className="validation-pill-count">{totalCount}</span>
-              <span className="validation-pill-label">à corriger</span>
+              <span className="validation-pill-label">{t('à corriger')}</span>
               <span className="validation-pill-caret"><Caret size={9} /></span>
             </>
           ) : (
             <>
               <span className="validation-pill-spinner"><Loader2 width={12} height={12} /></span>
-              <span className="validation-pill-label">Vérification…</span>
+              <span className="validation-pill-label">{t('Vérification…')}</span>
             </>
           )}
         </button>
@@ -236,12 +242,12 @@ export function ValidationPill({
             aria-label={t("Liste des éléments à corriger")}
           >
             <div className="validation-pill-dd-head">
-              <span className="validation-pill-dd-title">À corriger</span>
+              <span className="validation-pill-dd-title">{t('À corriger')}</span>
               <span className="validation-pill-dd-subtitle">{popoverSubtitle}</span>
             </div>
             <div className="validation-pill-dd-body">
               {advanced ? (
-                <Suspense fallback={<p className="validation-pill-empty">Chargement…</p>}>
+                <Suspense fallback={<p className="validation-pill-empty">{t('Chargement…')}</p>}>
                   <AdvancedIssuesPanel
                     context={advancedIssues}
                     onRequestClose={() => onOpenChange?.(false)}
@@ -251,13 +257,13 @@ export function ValidationPill({
                 <>
                   <div className="validation-pill-filters" role="group" aria-label={t("Filtrer par gravité")}>
                     <button type="button" aria-pressed={severity === 'all'} onClick={() => setSeverity('all')}>
-                      Tous ({totalCount})
+                      {t('Tous ({count})', { count: totalCount })}
                     </button>
                     <button type="button" aria-pressed={severity === 'error'} onClick={() => setSeverity('error')}>
-                      Erreurs ({severityCounts.error})
+                      {t('Erreurs ({count})', { count: severityCounts.error })}
                     </button>
                     <button type="button" aria-pressed={severity === 'warning'} onClick={() => setSeverity('warning')}>
-                      Avertissements ({severityCounts.warning})
+                      {t('Avertissements ({count})', { count: severityCounts.warning })}
                     </button>
                   </div>
                   {groups.map((group) => (
@@ -268,7 +274,7 @@ export function ValidationPill({
                       </div>
                       {group.items.map((item) => {
                         const isActive = item.flatIndex === activeIndex;
-                        const severityLabel = item.issue.status === 'error' ? 'Erreur' : 'Avertissement';
+                        const severityLabel = item.issue.status === 'error' ? t("Erreur") : t("Avertissement");
                         return (
                           <button
                             type="button"
@@ -289,7 +295,7 @@ export function ValidationPill({
                     </div>
                   ))}
                   {shownIssues.length === 0 && (
-                    <p className="validation-pill-empty">Aucun élément dans ce filtre.</p>
+                    <p className="validation-pill-empty">{t('Aucun élément dans ce filtre.')}</p>
                   )}
                 </>
               )}

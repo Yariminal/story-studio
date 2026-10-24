@@ -491,7 +491,7 @@ export function AudioEditorModal({ filePath, savePath, workspaceDir, onConfirm, 
     <div className="modal-overlay" onClick={isBlockingAction ? undefined : onCancel}>
       <div className="modal-box audio-editor-modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <span>Éditer l'audio — {filename}</span>
+          <span>{t("Éditer l'audio —")} {filename}</span>
           <Button variant="icon" className="modal-close" onClick={onCancel} disabled={isBlockingAction}>×</Button>
         </div>
 
@@ -510,7 +510,7 @@ export function AudioEditorModal({ filePath, savePath, workspaceDir, onConfirm, 
           >
             {isLoading && (
               <div className="audio-editor-loading">
-                {audioUrl ? "Analyse de la forme d'onde…" : t('Chargement du fichier…')}
+                {audioUrl ? t("Analyse de la forme d'onde…") : t('Chargement du fichier…')}
               </div>
             )}
             <div ref={containerRef} className="audio-editor-waveform" />
@@ -552,22 +552,20 @@ export function AudioEditorModal({ filePath, savePath, workspaceDir, onConfirm, 
               disabled={isLoading}
             />
             <span className="audio-editor-zoom-val">×{(zoom / 20).toFixed(1)}</span>
-            <span className="audio-editor-hint">Ctrl+molette / +/- · ← → 50ms · Début/Fin</span>
+            <span className="audio-editor-hint">{t('Ctrl+molette / +/- · ← → 50ms · Début/Fin')}</span>
           </div>
 
           <section className="audio-editor-selection">
             <div className="audio-editor-selection-stats">
-              <span>Entrée <strong>{formatTime(trimStart)}</strong></span>
+              <span>{t('Entrée')} <strong>{formatTime(trimStart)}</strong></span>
               <span>Sortie <strong>{formatTime(trimEnd)}</strong></span>
-              <span>Durée <strong>{formatTime(trimDuration)}</strong></span>
+              <span>{t('Durée')} <strong>{formatTime(trimDuration)}</strong></span>
             </div>
             <Button
               className="audio-editor-preview-btn"
               onClick={previewCurrentSelection}
               disabled={!canOperate || applyMode === 'preview'}
-            >
-              Prévisualiser l'extrait
-            </Button>
+            > {t("Prévisualiser l'extrait")} </Button>
           </section>
 
           {editInfo?.original_available && (
@@ -582,13 +580,13 @@ export function AudioEditorModal({ filePath, savePath, workspaceDir, onConfirm, 
           )}
 
           {isPreviewPending && (
-            <div className="audio-editor-preview-status">Génération de l'aperçu audio…</div>
+            <div className="audio-editor-preview-status">{t("Génération de l'aperçu audio…")}</div>
           )}
           {error && <div className="audio-editor-error">{error}</div>}
         </div>
 
         <div className="audio-editor-footer">
-          <Button onClick={onCancel} disabled={isBlockingAction}>Annuler</Button>
+          <Button onClick={onCancel} disabled={isBlockingAction}>{t('Annuler')}</Button>
           <Tooltip
             text={isPreviewPending
               ? t("L'aperçu du dernier réglage est en cours")

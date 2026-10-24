@@ -19,7 +19,8 @@ import { GRAPH_ZOOM_STEP, zoomedViewport } from '../../store/advancedGraphView/g
 import { WORKSPACE_MODE_ADVANCED } from '../../store/projectWorkState.js';
 import { StructureActionsBar, StructureSearchButton } from '../structure/StructureActionsBar.jsx';
 
-const EDGE_FILTERS = Object.freeze([
+function EDGE_FILTERS() {
+  return Object.freeze([
   {
     group: EDGE_VISIBILITY_GROUPS.STRUCTURE,
     label: 'Structure',
@@ -28,7 +29,7 @@ const EDGE_FILTERS = Object.freeze([
   },
   {
     group: EDGE_VISIBILITY_GROUPS.RETURNS,
-    label: 'Retour',
+    label: t("Retour"),
     className: 'is-return',
     ariaLabel: t('Afficher les retours'),
   },
@@ -47,6 +48,7 @@ const EDGE_FILTERS = Object.freeze([
     title: t('Choix tiré au sort à chaque ouverture de la liste'),
   },
 ]);
+}
 
 // La taille de la scène est **lue** au premier rendu et suivie ensuite : un
 // état initialisé à zéro laisserait la caméra de la miniature et le zoom
@@ -224,13 +226,13 @@ function LayoutControls({ arrangement, shortcut = '' }) {
       key: `bands-${parts}`,
       fold: { bands: parts },
       Icon: Rows2,
-      label: `Replier en ${parts} bandes empilées`,
+      label: t("Replier en {parts} bandes empilées", { parts: parts }),
     })),
     ...FOLD_PARTS.map((parts) => ({
       key: `lanes-${parts}`,
       fold: { lanes: parts },
       Icon: Columns2,
-      label: `Replier chaque rang en ${parts} colonnes`,
+      label: t("Replier chaque rang en {parts} colonnes", { parts: parts }),
     })),
   ];
 
@@ -239,7 +241,7 @@ function LayoutControls({ arrangement, shortcut = '' }) {
   // séparé.
   return (
     <div className="advanced-layout-control" role="group" aria-label={t("Ranger le graphe")}>
-      <Tooltip text={withShortcut('Ranger le graphe en suivant le parcours de l’histoire', shortcut)} asChild wrap>
+      <Tooltip text={withShortcut(t("Ranger le graphe en suivant le parcours de l’histoire"), shortcut)} asChild wrap>
         <button
           type="button"
           className="advanced-layout-control__trigger"
@@ -333,14 +335,14 @@ export function GraphSurfaceControls({
           juste au-dessus. */}
       <div className={`advanced-graph-camera${surfaceTools ? ' advanced-graph-camera--joined' : ''}`}>
         <div className="advanced-graph-zoom" role="group" aria-label={t("Zoom du graphe")}>
-          <Tooltip text={withShortcut('Agrandir', labels.graphZoomIn)} asChild>
-            <button type="button" onClick={() => zoomBy(GRAPH_ZOOM_STEP)} aria-label="Agrandir">+</button>
+          <Tooltip text={withShortcut(t("Agrandir"), labels.graphZoomIn)} asChild>
+            <button type="button" onClick={() => zoomBy(GRAPH_ZOOM_STEP)} aria-label={t("Agrandir")}>+</button>
           </Tooltip>
           <output aria-label={t("Niveau de zoom")}>{Math.round(zoom * 100)}%</output>
-          <Tooltip text={withShortcut('Réduire', labels.graphZoomOut)} asChild>
+          <Tooltip text={withShortcut(t("Réduire"), labels.graphZoomOut)} asChild>
             <button type="button" onClick={() => zoomBy(1 / GRAPH_ZOOM_STEP)} aria-label={t("Réduire")}>−</button>
           </Tooltip>
-          <Tooltip text={withShortcut('Cadrer tout le graphe', labels.graphFit)} asChild>
+          <Tooltip text={withShortcut(t("Cadrer tout le graphe"), labels.graphFit)} asChild>
             <button type="button" className="advanced-graph-zoom__fit" onClick={() => void engineRef.current?.fitContent()} aria-label={t("Cadrer tout le graphe")}>⌗</button>
           </Tooltip>
         </div>
@@ -352,7 +354,7 @@ export function GraphSurfaceControls({
           <div className="advanced-graph-steps" role="group" aria-label={t("Navigation dans les nœuds visités")}>
             <Tooltip
               text={history.canBack
-                ? withShortcut('Revenir au nœud visité juste avant. Ne défait aucune modification.', labels.graphVisitBack)
+                ? withShortcut(t("Revenir au nœud visité juste avant. Ne défait aucune modification."), labels.graphVisitBack)
                 : t('Aucun nœud visité avant celui-ci.')}
               wrap
             >
@@ -367,7 +369,7 @@ export function GraphSurfaceControls({
             </Tooltip>
             <Tooltip
               text={history.canForward
-                ? withShortcut('Repartir vers le nœud visité ensuite. Disponible après un retour en arrière.', labels.graphVisitForward)
+                ? withShortcut(t("Repartir vers le nœud visité ensuite. Disponible après un retour en arrière."), labels.graphVisitForward)
                 : t('Aucun nœud visité après celui-ci.')}
               wrap
             >
@@ -388,14 +390,14 @@ export function GraphSurfaceControls({
             parce que c'est un geste sur l'ensemble de la surface et qu'il
             libère le coin haut où il flottait seul. */}
         {(arrangement || onToggleOverview) && (
-          <div className="advanced-graph-tools" role="group" aria-label="Rangement et vue d’ensemble">
+          <div className="advanced-graph-tools" role="group" aria-label={t("Rangement et vue d’ensemble")}>
             {arrangement && (
               <LayoutControls arrangement={arrangement} shortcut={labels.graphArrange} />
             )}
             {onToggleOverview && (
               <Tooltip
                 text={withShortcut(
-                  overviewOpen ? 'Replier la vue d’ensemble' : t('Afficher la vue d’ensemble'),
+                  overviewOpen ? t("Replier la vue d’ensemble") : t('Afficher la vue d’ensemble'),
                   labels.graphToggleOverview,
                 )}
                 asChild
@@ -415,7 +417,7 @@ export function GraphSurfaceControls({
         )}
       </div>
       <div className="advanced-graph-legend" role="group" aria-label={t("Filtres des chemins du graphe")}>
-        {EDGE_FILTERS.map((filter) => {
+        {EDGE_FILTERS().map((filter) => {
           const isVisible = edgeVisibility[filter.group] !== false;
           return (
             <Tooltip key={filter.group} text={filter.title} asChild disabled={!filter.title}>
@@ -447,10 +449,10 @@ export function GraphSurfaceControls({
           <strong>
             {presentation.mode === 'connections'
               ? `Connexions · niveau ${presentation.levels}`
-              : `Parcours suivi · ${presentation.nodePaths?.length ?? 0} nœuds`}
+              : t("Parcours suivi · {value} nœuds", { value: presentation.nodePaths?.length ?? 0 })}
           </strong>
           {presentation.mode === 'connections' && presentationControls?.onExtend && (
-            <button type="button" onClick={presentationControls.onExtend}>Étendre d’un niveau</button>
+            <button type="button" onClick={presentationControls.onExtend}>{t('Étendre d’un niveau')}</button>
           )}
           {presentation.mode === 'playback' && presentationControls?.onToggleFollow && (
             <label>
@@ -459,11 +461,11 @@ export function GraphSurfaceControls({
                 checked={presentationControls.followCamera === true}
                 onChange={presentationControls.onToggleFollow}
               />
-              Suivre la lecture
+              {t("Suivre la lecture")}
             </label>
           )}
           {presentationControls?.onExit && (
-            <button type="button" onClick={presentationControls.onExit}>Vue complète</button>
+            <button type="button" onClick={presentationControls.onExit}>{t('Vue complète')}</button>
           )}
         </div>
       )}

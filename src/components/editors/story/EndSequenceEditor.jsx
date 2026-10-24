@@ -55,8 +55,8 @@ export function EndSequenceEditor({
     const step = steps[index];
     if (!step) return;
     const confirmed = await showConfirmDialog({
-      title: 'Confirmer la suppression',
-      message: `Supprimer l'étape "${step.name || `Étape ${index + 1}`}" ?`,
+      title: t("Confirmer la suppression"),
+      message: t("Supprimer l'étape \"{value}\" ?", { value: step.name || t('Étape {index}', { index: index + 1 }) }),
       okLabel: t('Supprimer'),
       okKind: 'danger',
     });
@@ -68,7 +68,7 @@ export function EndSequenceEditor({
     updateSequence([
       ...steps,
       normalizeSequenceStep({
-        name: `Étape ${steps.length + 1}`,
+        name: t("Étape {value}", { value: steps.length + 1 }),
         controlSettings: {
           ...SEQUENCE_CONTROL_DEFAULTS,
           autoplay: steps.length === 0,
@@ -120,10 +120,10 @@ export function EndSequenceEditor({
                   className="field-input sequence-step-name"
                   value={step.name || ''}
                   onChange={(e) => updateStep(index, { name: e.target.value })}
-                  placeholder={`Étape ${index + 1}`}
+                  placeholder={t("Étape {value}", { value: index + 1 })}
                 />
                 <div className="sequence-step-actions">
-                  <Tooltip text="Monter">
+                  <Tooltip text={t("Monter")}>
                     <Button
                       size="sm"
                       className="sequence-icon-btn"
@@ -133,7 +133,7 @@ export function EndSequenceEditor({
                       <MoveUp className="sequence-icon" />
                     </Button>
                   </Tooltip>
-                  <Tooltip text="Descendre">
+                  <Tooltip text={t("Descendre")}>
                     <Button
                       size="sm"
                       className="sequence-icon-btn"
@@ -156,7 +156,7 @@ export function EndSequenceEditor({
               </div>
 
               <AudioField
-                label={`Audio — étape ${index + 1}`}
+                label={t("Audio — étape {value}", { value: index + 1 })}
                 file={step.audio}
                 ttsTextSuggestion={step.name || node.name || ''}
                 ttsFilenameHint={`fin-${index + 1}-${node.name || 'histoire'}`}
@@ -166,7 +166,7 @@ export function EndSequenceEditor({
               />
 
               <div className="sequence-controls">
-                {CONTROL_DEFS.map(({ key, label, def }) => (
+                {CONTROL_DEFS().map(({ key, label, def }) => (
                   <label key={key} className="sequence-control sequence-control--toggle-left">
                     <Toggle
                       on={controls[key] ?? def}
@@ -182,7 +182,7 @@ export function EndSequenceEditor({
                   <>
                     <div className="sequence-destination-row">
                       <div className="sequence-destination-copy">
-                        <span className="sequence-destination-title">Destination après cette étape</span>
+                        <span className="sequence-destination-title">{t('Destination après cette étape')}</span>
                       </div>
                       <NavigationTargetSelect
                         value={step.okTarget ?? ''}
@@ -195,19 +195,21 @@ export function EndSequenceEditor({
                     </div>
                     {continuationMenu ? (
                       <div className="sequence-note">
-                        Cette étape mène vers la continuation importée t("{continuationMenu.name || 'Suite'}")
+                        {t('Cette étape mène vers la continuation importée "{name}"', {
+                          name: continuationMenu.name || t('Suite'),
+                        })}
                         {continuationMenu.importedContinuation?.sourceStoryName
-                          ? ` depuis ${continuationMenu.importedContinuation.sourceStoryName}`
+                          ? t(' depuis {source}', { source: continuationMenu.importedContinuation.sourceStoryName })
                           : ''}.
                       </div>
                     ) : null}
                   </>
                 ) : (
-                  <div className="sequence-next-note">Bouton OK enchaîne vers l'étape suivante.</div>
+                  <div className="sequence-next-note">{t("Bouton OK enchaîne vers l'étape suivante.")}</div>
                 )}
                 <div className="sequence-destination-row">
                   <div className="sequence-destination-copy">
-                    <span className="sequence-destination-title">Destination du bouton Accueil</span>
+                    <span className="sequence-destination-title">{t('Destination du bouton Accueil')}</span>
                   </div>
                   <NavigationTargetSelect
                     value={homeSelectValue}
@@ -236,7 +238,7 @@ export function EndSequenceEditor({
                       homeTarget: v ? null : step.homeTarget,
                     })}
                   />
-                  <span className="sequence-control-title">Même destination que OK</span>
+                  <span className="sequence-control-title">{t('Même destination que OK')}</span>
                 </label>
               </div>
             </div>
@@ -245,22 +247,16 @@ export function EndSequenceEditor({
       </div>
 
       <div className="sequence-footer">
-        <Button onClick={addStep}>
-          Ajouter une étape
-        </Button>
+        <Button onClick={addStep}> {t("Ajouter une étape")} </Button>
       </div>
 
       {/* Réaction au bouton Accueil (afterPlaybackHomeStep) */}
       <div className="end-summary" style={{ marginTop: 12 }}>
         <div>
-          <div className="end-summary-title">Réaction au bouton Accueil</div>
-          <div className="end-summary-copy">
-            Étape jouée si l'enfant appuie sur le bouton Accueil pendant l'histoire, avant qu'elle ne se termine.
-          </div>
+          <div className="end-summary-title">{t('Réaction au bouton Accueil')}</div>
+          <div className="end-summary-copy"> {t("Étape jouée si l'enfant appuie sur le bouton Accueil pendant l'histoire, avant qu'elle ne se termine.")} </div>
           {homeStep && node.controlSettings?.home === false && (
-            <div className="end-summary-copy">
-              Accueil est désactivé : cette réaction ne sera pas jouée.
-            </div>
+            <div className="end-summary-copy"> {t("Accueil est désactivé : cette réaction ne sera pas jouée.")} </div>
           )}
         </div>
         {homeStep ? (
@@ -276,7 +272,7 @@ export function EndSequenceEditor({
           </Tooltip>
         ) : (
           <Button size="sm" onClick={() => updateHomeStep({})}>
-            Ajouter
+            {t("Ajouter")}
           </Button>
         )}
       </div>
@@ -309,7 +305,7 @@ export function EndSequenceEditor({
             onClear={() => updateHomeStep({ image: null })}
           />
           <div className="sequence-controls">
-            {CONTROL_DEFS.map(({ key, label, def }) => (
+            {CONTROL_DEFS().map(({ key, label, def }) => (
               <label key={key} className="sequence-control sequence-control--toggle-left">
                 <Toggle
                   on={homeStep.controlSettings?.[key] ?? def}
@@ -321,7 +317,7 @@ export function EndSequenceEditor({
           </div>
           <div className="sequence-destination-row">
             <div className="sequence-destination-copy">
-              <span className="sequence-destination-title">Destination du bouton Accueil</span>
+              <span className="sequence-destination-title">{t('Destination du bouton Accueil')}</span>
             </div>
             <NavigationTargetSelect
               value={homeStep.homeNone ? '__none__' : (homeStep.homeTarget ?? '')}
@@ -350,7 +346,7 @@ export function EndSequenceEditor({
                 homeTarget: v ? null : homeStep.homeTarget,
               })}
             />
-            <span className="sequence-control-title">Même destination que OK</span>
+            <span className="sequence-control-title">{t('Même destination que OK')}</span>
           </label>
         </div>
       ) : null}

@@ -44,7 +44,7 @@ export const MEDIA_FROM_DISK = 'disk';
 // encore. Miroir de `native_pack::simulation::SIMULATION_MISSING_ASSET`.
 //
 // Le générateur exige que chaque média annoncé soit préparé ; un projet en
-// cours dt('écriture n')a pas franchi cette porte, et c'est son état normal. Ce
+// cours d'écriture n'a pas franchi cette porte, et c'est son état normal. Ce
 // nom tient la place, et l'Écran se joue en silence — exactement ce que fait
 // une référence sans liaison côté graphe.
 export const PROJECTED_MISSING_ASSET = '__simulation_absent__';

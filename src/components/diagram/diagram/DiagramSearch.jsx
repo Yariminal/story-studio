@@ -6,13 +6,15 @@ import { buildUsedNodeColors, toggleNodeColorFilter } from '../../tree/nodeColor
 import { END_NODE_ID } from '../flowDiagramLayout';
 import { filterDiagramSearchCandidates } from './diagramSearchFilter.js';
 
-import { t } from '../../../i18n/index.js';
-const TYPE_LABELS = {
+import { t, getLocale } from '../../../i18n/index.js';
+function TYPE_LABELS() {
+  return {
   menu: 'Dossier',
   story: 'Histoire',
   zip: t('Pack importé'),
   ref: 'Lien',
 };
+}
 
 export function DiagramSearch({ project, projectIndex, focusTrigger, onChoose, onFilterChange }) {
   const [active, setActive] = useState(false);
@@ -32,8 +34,8 @@ export function DiagramSearch({ project, projectIndex, focusTrigger, onChoose, o
     },
     ...(projectIndex.flatEntries ?? []).map(({ entry }) => ({
       id: entry.id,
-      label: entry.name || TYPE_LABELS[entry.type] || entry.id,
-      typeLabel: TYPE_LABELS[entry.type] || entry.type,
+      label: entry.name || TYPE_LABELS()[entry.type] || entry.id,
+      typeLabel: TYPE_LABELS()[entry.type] || entry.type,
       treeColor: entry.treeColor ?? null,
     })),
     ...(hasVisibleEndNode(project) ? [{
@@ -41,7 +43,7 @@ export function DiagramSearch({ project, projectIndex, focusTrigger, onChoose, o
       label: project.endNodeName || 'Message de fin',
       typeLabel: 'Fin',
     }] : []),
-  ], [project, projectIndex.flatEntries]);
+  ], [project, projectIndex.flatEntries, getLocale()]);
 
   const usedColors = useMemo(
     () => buildUsedNodeColors(candidates.map(({ treeColor }) => treeColor)),
@@ -199,7 +201,7 @@ export function DiagramSearch({ project, projectIndex, focusTrigger, onChoose, o
               <small>{candidate.typeLabel}</small>
             </button>
           )) : (
-            <div className="fd-diagram-search-empty">Aucun résultat</div>
+            <div className="fd-diagram-search-empty">{t('Aucun résultat')}</div>
           )}
         </div>
       ) : null}

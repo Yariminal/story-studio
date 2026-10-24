@@ -19,7 +19,7 @@ function DeleteStageBody({ index, stagePath, busy, onCancel, onConfirm }) {
   const incoming = stageRemovalImpact(index, stagePath).occurrences;
   const destinationNotice = incoming.length === 1
     ? t(' Un choix devra être remplacé dans la liste de choix concernée.')
-    : ` ${incoming.length} choix devront être remplacés dans les listes de choix concernées.`;
+    : t(" {length} choix devront être remplacés dans les listes de choix concernées.", { length: incoming.length });
 
   const confirm = () => {
     const plan = advancedGestures.stageRemovalPlan({
@@ -37,10 +37,10 @@ function DeleteStageBody({ index, stagePath, busy, onCancel, onConfirm }) {
 
   return (
     <AdvancedDialog
-      title={`Retirer l'Écran « ${entry.label.label} »`}
-      description={`Cet Écran sera retiré.${incoming.length > 0
+      title={t("Retirer l'Écran « {label} »", { label: entry.label.label })}
+      description={t("Cet Écran sera retiré.{value}", { value: incoming.length > 0
         ? `${destinationNotice} Les raccords depuis les autres Écrans resteront en place.`
-        : ''}`}
+        : '' })}
       onCancel={onCancel}
       onConfirm={confirm}
       confirmLabel={t("Retirer")}
@@ -59,9 +59,7 @@ function DeleteStageBody({ index, stagePath, busy, onCancel, onConfirm }) {
         </ul>
       )}
       {incoming.length > 0 && (
-        <p className="advanced-field__note">
-          Les destinations manquantes apparaîtront dans « À corriger ».
-        </p>
+        <p className="advanced-field__note"> {t("Les destinations manquantes apparaîtront dans « À corriger ».")} </p>
       )}
     </AdvancedDialog>
   );
@@ -85,11 +83,11 @@ function DeleteActionBody({ index, actionPath, busy, onCancel, onConfirm }) {
 
   return (
     <AdvancedDialog
-      title={`Retirer la liste de choix « ${entry.label.label} »`}
+      title={t("Retirer la liste de choix « {label} »", { label: entry.label.label })}
       description={
         impact.transitions.length === 0
           ? t("Cette liste de choix sera retirée.")
-          : `Cette liste de choix sera retirée. ${impact.transitions.length} raccord(s) vers elle seront coupés et signalés dans « À corriger ».`
+          : t("Cette liste de choix sera retirée. {length} raccord(s) vers elle seront coupés et signalés dans « À corriger ».", { length: impact.transitions.length })
       }
       onCancel={onCancel}
       onConfirm={confirm}
@@ -102,7 +100,7 @@ function DeleteActionBody({ index, actionPath, busy, onCancel, onConfirm }) {
           {impact.transitions.map((row) => (
             <li key={`${row.stagePath}#${row.slot}`} className="advanced-decision-list__row">
               <span className="advanced-decision-list__what">
-                <strong>{row.stageLabel}</strong> — {row.slot === 'ok' ? t('OK') : 'Accueil'}
+                <strong>{row.stageLabel}</strong> — {row.slot === 'ok' ? t('OK') : t("Accueil")}
               </span>
             </li>
           ))}

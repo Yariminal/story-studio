@@ -1,26 +1,28 @@
 import { t } from '../../i18n/index.js';
+
+// French msgids. Translate at render time so a language change is visible.
 const OPTION_GROUPS = [
   {
-    label: t('Général'),
+    label: 'Général',
     items: [
-      { id: 'save', label: t('Enregistrement') },
-      { id: 'interface', label: t('Interface') },
-      { id: 'projects-media', label: t('Projets et médias') },
+      { id: 'save', label: 'Enregistrement' },
+      { id: 'interface', label: 'Interface' },
+      { id: 'projects-media', label: 'Projets et médias' },
     ],
   },
   {
-    label: t('Intelligence artificielle'),
+    label: 'Intelligence artificielle',
     items: [
-      { id: 'xtts', label: t('Voix locale') },
-      { id: 'comfyui', label: t('Images IA') },
+      { id: 'xtts', label: 'Voix locale' },
+      { id: 'comfyui', label: 'Images IA' },
     ],
   },
   {
-    label: t('Avancé'),
+    label: 'Avancé',
     items: [
-      { id: 'advanced', label: t('Silences audio') },
-      { id: 'youtube', label: t('YouTube (yt-dlp)') },
-      { id: 'diagnostic', label: t('Diagnostic') },
+      { id: 'advanced', label: 'Silences audio' },
+      { id: 'youtube', label: 'YouTube (yt-dlp)' },
+      { id: 'diagnostic', label: 'Diagnostic' },
     ],
   },
 ];
@@ -32,7 +34,7 @@ export function OptionsSectionNav({ activeSectionId, onNavigate }) {
     <nav className="opts-nav" aria-label={t("Sections des préférences")}>
       {OPTION_GROUPS.map((group) => (
         <div className="opts-nav-group" key={group.label}>
-          <div className="opts-nav-group-title">{group.label}</div>
+          <div className="opts-nav-group-title">{t(group.label)}</div>
           <div className="opts-nav-items">
             {group.items.map((item) => (
               <button
@@ -41,7 +43,7 @@ export function OptionsSectionNav({ activeSectionId, onNavigate }) {
                 className={`opts-nav-item${activeSectionId === item.id ? ' is-active' : ''}`}
                 onClick={() => onNavigate(item.id)}
               >
-                {item.label}
+                {t(item.label)}
               </button>
             ))}
           </div>

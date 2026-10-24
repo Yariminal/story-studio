@@ -35,7 +35,7 @@ export function getImageJobTargetLabel(context = null, projectIndex = null) {
 
   if (fieldId.startsWith('stage:') && fieldId.endsWith(':image')) {
     const stageId = fieldId.slice('stage:'.length, -':image'.length);
-    return `Graphe natif - stage ${stageId || '?'}`;
+    return t("Graphe natif - stage {value}", { value: stageId || '?' });
   }
 
   const [entryId, field] = fieldId.split(':');
@@ -43,7 +43,7 @@ export function getImageJobTargetLabel(context = null, projectIndex = null) {
     return `${getEntryName(projectIndex, entryId, 'Histoire')} - image de selection`;
   }
   if (field === 'image') {
-    return `${getEntryName(projectIndex, entryId, 'Dossier')} - image du dossier`;
+    return t("{value} - image du dossier", { value: getEntryName(projectIndex, entryId, 'Dossier') });
   }
 
   return explicitLabel || fieldId;

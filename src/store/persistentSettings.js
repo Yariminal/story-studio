@@ -1,3 +1,4 @@
+import { t } from '../i18n/index.js';
 export const KEYS = Object.freeze({
   RELEASE_NOTES_SEEN: 'storyStudio.releaseNotesSeen',
   COPY_FILES: 'copyImportedFiles',
@@ -100,7 +101,7 @@ const EDITOR_LAYOUT_KEYS = Object.freeze({
 
 export function editorLayoutKeys(scope) {
   const keys = EDITOR_LAYOUT_KEYS[scope];
-  if (!keys) throw new Error(`Périmètre de disposition inconnu : ${scope}`);
+  if (!keys) throw new Error(t("Périmètre de disposition inconnu : {scope}", { scope: scope }));
   return keys;
 }
 

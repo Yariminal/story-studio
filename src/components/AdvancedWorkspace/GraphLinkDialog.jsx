@@ -29,10 +29,10 @@ const trimmedOrNull = value => value.trim() || null;
 function InsertionChoice({ id, count, value, onChange }) {
   return (
     <select id={id} value={String(value)} onChange={(event) => onChange(Number(event.target.value))}>
-      <option value={String(count)}>À la fin</option>
+      <option value={String(count)}>{t('À la fin')}</option>
       {Array.from({ length: count }, (unused, index) => (
         <option key={index} value={String(index)}>
-          {index === 0 ? t('Au début') : `Avant le choix ${index + 1}`}
+          {index === 0 ? t('Au début') : t("Avant le choix {value}", { value: index + 1 })}
         </option>
       ))}
     </select>
@@ -91,15 +91,15 @@ export function GraphLinkDialog({ index, intent, busy, onCancel, onConfirm }) {
   };
 
   const sourceName = source?.label.label ?? '';
-  const exitName = intent.slot === 'home' ? t('Le bouton Accueil') : 'La suite du parcours';
-  const buttonName = intent.slot === 'home' ? t('Le bouton Accueil') : 'Le bouton OK';
+  const exitName = intent.slot === 'home' ? t('Le bouton Accueil') : t("La suite du parcours");
+  const buttonName = intent.slot === 'home' ? t('Le bouton Accueil') : t("Le bouton OK");
 
   return (
     <AdvancedDialog
       title={sourceIsStage ? t('Créer une liste de choix') : t('Créer un Écran')}
       description={sourceIsStage
-        ? `${exitName} de « ${sourceName} » ouvrira cette nouvelle liste de choix.`
-        : `« ${sourceName} » proposera ce nouvel Écran parmi ses choix.`}
+        ? t("{exitName} de « {sourceName} » ouvrira cette nouvelle liste de choix.", { exitName: exitName, sourceName: sourceName })
+        : t("« {sourceName} » proposera ce nouvel Écran parmi ses choix.", { sourceName: sourceName })}
       onCancel={onCancel}
       onConfirm={confirm}
       confirmLabel={t("Créer")}
@@ -107,14 +107,12 @@ export function GraphLinkDialog({ index, intent, busy, onCancel, onConfirm }) {
       busy={busy}
     >
       {!source && (
-        <p className="advanced-field__warning" role="alert">
-          Le graphe a changé depuis le début du trait. Fermez cette fenêtre et recommencez.
-        </p>
+        <p className="advanced-field__warning" role="alert"> {t("Le graphe a changé depuis le début du trait. Fermez cette fenêtre et recommencez.")} </p>
       )}
 
       {source && (
         <>
-          <label className="advanced-field__label" htmlFor="graph-linked-name">Nom</label>
+          <label className="advanced-field__label" htmlFor="graph-linked-name">{t('Nom')}</label>
           <input id="graph-linked-name" value={name} onChange={(event) => setName(event.target.value)} />
         </>
       )}
@@ -122,9 +120,9 @@ export function GraphLinkDialog({ index, intent, busy, onCancel, onConfirm }) {
       {source && sourceIsStage && (
         <>
           {intent.activateControl && (
-            <p className="advanced-field__note">{buttonName} de « {sourceName} » sera aussi activé.</p>
+            <p className="advanced-field__note">{buttonName} {t("de «")} {sourceName} {t("» sera aussi activé.")}</p>
           )}
-          <label className="advanced-field__label" htmlFor="graph-linked-destination">Premier choix</label>
+          <label className="advanced-field__label" htmlFor="graph-linked-destination">{t('Premier choix')}</label>
           <NodePicker
             id="graph-linked-destination"
             forChoice
@@ -140,15 +138,15 @@ export function GraphLinkDialog({ index, intent, busy, onCancel, onConfirm }) {
       {source && !sourceIsStage && (
         <>
           {fillsMissing
-            ? <p className="advanced-field__note">Le nouvel Écran prendra la place du choix {intent.missingOptionIndex + 1}, resté vide.</p>
+            ? <p className="advanced-field__note">{t("Le nouvel Écran prendra la place du choix")} {intent.missingOptionIndex + 1}{t(", resté vide.")}</p>
             : (
               <>
-                <label className="advanced-field__label" htmlFor="graph-linked-rank">Place parmi les choix</label>
+                <label className="advanced-field__label" htmlFor="graph-linked-rank">{t('Place parmi les choix')}</label>
                 <InsertionChoice id="graph-linked-rank" count={optionCount} value={insertionIndex} onChange={setInsertionIndex} />
               </>
             )}
           <fieldset className="advanced-field advanced-link-dialog__controls">
-            <legend>Boutons du nouvel Écran</legend>
+            <legend>{t('Boutons du nouvel Écran')}</legend>
             <GroupedControls
               renderControl={(key, label) => (
                 <label key={key} className="sequence-control">
@@ -163,7 +161,7 @@ export function GraphLinkDialog({ index, intent, busy, onCancel, onConfirm }) {
             />
             <label className="advanced-link-dialog__remember">
               <input type="checkbox" checked={remember} onChange={(event) => setRemember(event.target.checked)} />
-              <span>En faire le modèle des nouveaux Écrans</span>
+              <span>{t('En faire le modèle des nouveaux Écrans')}</span>
             </label>
           </fieldset>
         </>

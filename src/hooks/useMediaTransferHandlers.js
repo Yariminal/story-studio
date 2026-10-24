@@ -16,7 +16,7 @@ import { getProjectFilePrefix } from '../utils/projectPrefix';
 import { formatFrenchCount } from '../utils/frenchText.js';
 import { logger } from '../utils/logger';
 
-import { t } from '../i18n/index.js';
+import { t, getLocale } from '../i18n/index.js';
 export function useMediaTransferHandlers({
   store,
   copyImportedFilesEnabled,
@@ -161,19 +161,23 @@ export function useMediaTransferHandlers({
 
     const sample = candidates.slice(0, 5).map((candidate) => `• ${candidate.filename}`).join('\n');
     const suffix = candidates.length > 5
-      ? `\n• …et ${formatFrenchCount(candidates.length - 5, 'autre', 'autres')}`
+      ? t("\n• …et {value}", { value: formatFrenchCount(candidates.length - 5, t('autre'), t('autres')) })
       : '';
     const confirmed = skipPrompt || (await ask(
-        `${formatFrenchCount(
-          candidates.length,
-          t('fichier déjà lié au projet est'),
-          t('fichiers déjà liés au projet sont'),
-        )} encore hors de l’emplacement de travail.\n\n${sample}${suffix}\n\nLes copier dans fichiers-importes/ et mettre à jour le projet ?`,
+        t('{files} encore hors de l’emplacement de travail.\n\n{sample}{suffix}\n\nLes copier dans fichiers-importes/ et mettre à jour le projet ?', {
+          files: formatFrenchCount(
+            candidates.length,
+            t('fichier déjà lié au projet est'),
+            t('fichiers déjà liés au projet sont'),
+          ),
+          sample,
+          suffix,
+        }),
         {
           title: t('Transférer les fichiers existants ?'),
           kind: 'warning',
           okLabel: t('Transférer'),
-          cancelLabel: 'Plus tard',
+          cancelLabel: t("Plus tard"),
         }
       ));
 
@@ -214,7 +218,7 @@ export function useMediaTransferHandlers({
         .join('\n');
       showErrorDialog({
         title: 'Transfert incomplet',
-        message: `Certains fichiers n'ont pas pu être transférés :\n\n${details}`,
+        message: t("Certains fichiers n'ont pas pu être transférés :\n\n{details}", { details: details }),
       });
     }
 
@@ -231,7 +235,7 @@ export function useMediaTransferHandlers({
     setWorkspaceDirState,
     showErrorDialog,
     workspaceDir,
-  ]);
+  , getLocale()]);
 
   const handleCopyImportedFilesChange = useCallback(async (enabled) => {
     setCopyImportedFilesEnabled(enabled);

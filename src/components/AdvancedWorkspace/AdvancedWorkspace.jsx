@@ -154,7 +154,7 @@ function AdvancedPanelHeader({ title, onClose = null, actions = null, dragHandle
         <button
           type="button"
           className="advanced-panel-header__close"
-          aria-label={`Fermer ${title.toLocaleLowerCase('fr')}`}
+          aria-label={t("Fermer {value}", { value: title.toLocaleLowerCase('fr') })}
           onClick={onClose}
         >
           <X aria-hidden="true" />
@@ -751,7 +751,7 @@ export function AdvancedWorkspace({
   // La même raison que celle que la barre du haut affichait pour ces commandes,
   // prise aux mêmes constantes : le bouton a bougé, pas le motif de son refus.
   const creationBlocked = editingDisabled
-    ? (authoring.locked === true ? SUSPENDED_BY_EXPORT : SUSPENDED_BY_GESTURE)
+    ? (authoring.locked === true ? SUSPENDED_BY_EXPORT() : SUSPENDED_BY_GESTURE())
     : null;
   // Appliquer un rangement, c'est écrire des positions d'auteur — comme le
   // fait déjà un glisser, et par la même porte.
@@ -1240,7 +1240,7 @@ export function AdvancedWorkspace({
   if (view.status === 'failed') {
     return (
       <div className="advanced-workspace advanced-workspace--error" role="alert">
-        <h2>Lecture impossible</h2>
+        <h2>{t('Lecture impossible')}</h2>
         {/* Les refus du codec ressortent tels quels : ils ne sont pas réécrits
             en codes de vue, et le projet reste ouvert et enregistrable. */}
         <p><code>{view.error?.code ?? 'ERREUR'}</code> {view.error?.path}</p>
@@ -1342,9 +1342,9 @@ export function AdvancedWorkspace({
   );
 
   const renderGraphPanel = (dragHandleProps) => (
-    <section className="advanced-panel advanced-panel--graph" aria-label="Graphe">
+    <section className="advanced-panel advanced-panel--graph" aria-label={t("Graphe")}>
       <AdvancedPanelHeader
-        title="Graphe"
+        title={t("Graphe")}
         dragHandleProps={dragHandleProps}
         actions={(
           <>
@@ -1395,9 +1395,7 @@ export function AdvancedWorkspace({
                       setStageDefaultsMenu(null);
                       setDialog({ kind: 'new-stage-defaults' });
                     }}
-                  >
-                    Écran par défaut…
-                  </button>
+                  > {t("Écran par défaut…")} </button>
                 </div>
               )}
             </div>
@@ -1512,9 +1510,7 @@ export function AdvancedWorkspace({
         )}
 
         {!inspected && selectedEntries.length <= 1 && (
-          <p className="advanced-inspector__empty">
-            Sélectionnez un Écran ou une liste de choix pour afficher ses réglages.
-          </p>
+          <p className="advanced-inspector__empty"> {t("Sélectionnez un Écran ou une liste de choix pour afficher ses réglages.")} </p>
         )}
 
         {/* La `key` sur le chemin — stable : bâti sur l'uuid ou l'id, jamais sur le

@@ -41,7 +41,7 @@ export function audioMeasureRows(item) {
     { key: 'sampleRate', label: t('Échantillonnage'), value: item?.sampleRate ? `${formatNumber(item.sampleRate / 1000, 1)} kHz` : t('Non mesuré') },
     { key: 'silenceStart', label: t('Silence début'), value: formatSeconds(item?.leadingSilenceSecs) },
     { key: 'silenceEnd', label: t('Silence fin'), value: formatSeconds(item?.trailingSilenceSecs) },
-    { key: 'volume', label: 'Volume', value: formatLufs(item?.integratedLufs) },
+    { key: 'volume', label: t("Volume"), value: formatLufs(item?.integratedLufs) },
     { key: 'peak', label: t('Crête vraie'), value: formatPeak(item?.truePeakDb) },
   ];
 }

@@ -14,6 +14,7 @@ import { useEffect, useRef } from 'react';
 import { Button } from '../common/Button';
 import { PRODUCTION_STATUS } from '../../store/production/productionReport.js';
 import './ProductionReport.css';
+import { t } from '../../i18n/index.js';
 
 // Les trois contrôles d'archive, et ce qu'ils ont répondu.
 //
@@ -28,9 +29,7 @@ function ProductionGates({ gates }) {
 
   return (
     <div className="production-report__gates">
-      <p className="production-report__gates-title">
-        Contrôles d'archive
-        {gates.observing ? <span className="production-report__gates-mode"> — en observation</span> : null}
+      <p className="production-report__gates-title"> {t("Contrôles d'archive")} {gates.observing ? <span className="production-report__gates-mode"> {t("— en observation")}</span> : null}
       </p>
       <ul className="production-report__gates-list">
         {gates.entries.map(gate => (
@@ -69,7 +68,7 @@ function warningMessage(warning) {
 function warningDetails(warning) {
   const measurements = [
     Number.isFinite(warning?.initialIntegratedLufs)
-      ? `départ ${warning.initialIntegratedLufs.toFixed(1)} LUFS`
+      ? t("départ {value} LUFS", { value: warning.initialIntegratedLufs.toFixed(1) })
       : null,
     Number.isFinite(warning?.finalIntegratedLufs)
       ? `sortie ${warning.finalIntegratedLufs.toFixed(1)} LUFS`
@@ -89,7 +88,9 @@ function ProductionWarnings({ warnings }) {
   return (
     <div className="production-report__warnings" role="status">
       <p className="production-report__warnings-title">
-        Pack produit avec {warnings.length} avertissement{warnings.length > 1 ? 's' : ''}
+        {warnings.length > 1
+          ? t('Pack produit avec {count} avertissements', { count: warnings.length })
+          : t('Pack produit avec {count} avertissement', { count: warnings.length })}
       </p>
       {warnings.map((warning, index) => (
         <p className="production-report__warning" key={`${warning?.code ?? 'warning'}-${warning?.role ?? index}`}>
@@ -97,9 +98,7 @@ function ProductionWarnings({ warnings }) {
           {warningDetails(warning) ? <small>{warningDetails(warning)}</small> : null}
         </p>
       ))}
-      <p className="production-report__warning-advice">
-        Le pack est utilisable ; ces points restent à vérifier.
-      </p>
+      <p className="production-report__warning-advice"> {t("Le pack est utilisable ; ces points restent à vérifier.")} </p>
     </div>
   );
 }
@@ -134,16 +133,18 @@ export function ProductionReport({
       {showHeading ? (
         <p className="production-report__status" role="status" aria-live="polite">
           <span className={`production-report__badge is-${status}`}>{report.statusLabel}</span>
-          {cancel.requested ? <span className="production-report__hint">Annulation demandée…</span> : null}
+          {cancel.requested ? <span className="production-report__hint">{t('Annulation demandée…')}</span> : null}
         </p>
       ) : null}
 
       {hasProgress ? (
         <div className="production-report__progress">
           <p className="production-report__count">
-            {progress.count} étape{progress.count > 1 ? 's' : 't('} journalisée{progress.count > 1 ? ')s' : ''}
+            {progress.count > 1
+              ? t('{count} étapes journalisées', { count: progress.count })
+              : t('{count} étape journalisée', { count: progress.count })}
           </p>
-          <pre ref={logRef} className="production-report__log" aria-label="Journal de la production">
+          <pre ref={logRef} className="production-report__log" aria-label={t('Journal de la production')}>
             {progress.lines.join('\n')}
           </pre>
           {progress.note ? <p className="production-report__note">{progress.note}</p> : null}
@@ -153,7 +154,7 @@ export function ProductionReport({
       {cancel.available && onCancel ? (
         <div className="production-report__actions">
           <Button size="sm" onClick={onCancel} disabled={cancel.requested}>
-            Annuler la production
+            {t("Annuler la production")}
           </Button>
         </div>
       ) : null}
@@ -176,7 +177,7 @@ export function ProductionReport({
       ) : null}
 
       {status === PRODUCTION_STATUS.IDLE && !hasProgress ? (
-        <p className="production-report__note">Aucune production lancée.</p>
+        <p className="production-report__note">{t('Aucune production lancée.')}</p>
       ) : null}
 
       {details}

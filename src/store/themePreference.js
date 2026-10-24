@@ -1,18 +1,20 @@
 import { KEYS, read as readSetting, write as writeSetting } from './persistentSettings';
 
 import { t } from '../i18n/index.js';
-export const THEME_OPTIONS = [
+export function THEME_OPTIONS() {
+  return [
   { value: 'system', label: t('Système') },
   { value: 'dark', label: t('Sombre') },
   { value: 'light', label: t('Clair') },
 ];
+}
 
 const DARK_QUERY = '(prefers-color-scheme: dark)';
 
 export function loadThemePreference() {
   try {
     const value = readSetting(KEYS.THEME);
-    return THEME_OPTIONS.some((option) => option.value === value) ? value : 'system';
+    return THEME_OPTIONS().some((option) => option.value === value) ? value : 'system';
   } catch {
     return 'system';
   }

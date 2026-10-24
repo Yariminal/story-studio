@@ -140,7 +140,7 @@ export function resolveAudioStoriesInProjectOrder(project, entryIds, statusByPat
     return {
       valid: false,
       code: 'missing-audio',
-      reason: `L’histoire « ${withoutAudio.name || 'sans nom'} » ne possède pas d’audio principal.`,
+      reason: t("L’histoire « {value} » ne possède pas d’audio principal.", { value: withoutAudio.name || 'sans nom' }),
       stories: [],
     };
   }
@@ -150,7 +150,7 @@ export function resolveAudioStoriesInProjectOrder(project, entryIds, statusByPat
     return {
       valid: false,
       code: 'inaccessible-audio',
-      reason: `Le fichier audio de « ${inaccessible.name || 'sans nom'} » est introuvable.`,
+      reason: t("Le fichier audio de « {value} » est introuvable.", { value: inaccessible.name || 'sans nom' }),
       stories: [],
     };
   }

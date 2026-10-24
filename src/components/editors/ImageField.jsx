@@ -27,7 +27,8 @@ import './ImageField.css';
 // **Table unique et volontairement isolée.** Changer une icône se fait ici, sur
 // une ligne, sans toucher au rendu ni au CSS, et le changement porte partout —
 // Libre et graphe, écran, dossier, histoire et menu racine.
-const IMAGE_ACTIONS = Object.freeze({
+function IMAGE_ACTIONS() {
+  return Object.freeze({
   replace: { Icon: ArrowRightLeft, label: t('Remplacer l’image') },
   edit: { Icon: Pencil, label: t('Éditer l’image') },
   // Les actions apportées par un consommateur sont retrouvées **par leur clé**,
@@ -36,9 +37,10 @@ const IMAGE_ACTIONS = Object.freeze({
   ai: { Icon: Sparkles, label: t('Générer avec l’IA (ComfyUI)') },
   clear: { Icon: Trash2, label: t('Supprimer l’image') },
 });
+}
 
 function ToolbarButton({ action, onClick, title = null, disabled = false, tone = null, busy = false }) {
-  const { Icon, label } = IMAGE_ACTIONS[action];
+  const { Icon, label } = IMAGE_ACTIONS()[action];
   const text = title || label;
   const button = (
     <button
@@ -347,14 +349,14 @@ export function ImageField({
           onClose={() => setCtxMenu(null)}
           actions={[
             ...(file ? [
-              { icon: <Copy />, label: 'Copier', fn: () => imageClipboard.set(file) },
-              { icon: <Scissors />, label: 'Couper', fn: () => imageClipboard.set(file, { mode: 'cut' }) },
-              { icon: <FolderOpen />, label: 'Afficher dans l\'explorateur', fn: () => revealItemInDir(file) },
+              { icon: <Copy />, label: t("Copier"), fn: () => imageClipboard.set(file) },
+              { icon: <Scissors />, label: t("Couper"), fn: () => imageClipboard.set(file, { mode: 'cut' }) },
+              { icon: <FolderOpen />, label: t("Afficher dans l'explorateur"), fn: () => revealItemInDir(file) },
             ] : []),
             ...(imageClipboard.get() && onPick ? [
               {
                 icon: <ClipboardPaste />,
-                label: imageClipboard.getEntry()?.mode === 'cut' ? t('Déplacer ici') : 'Coller',
+                label: imageClipboard.getEntry()?.mode === 'cut' ? t('Déplacer ici') : t("Coller"),
                 fn: pasteClipboardImage,
               },
             ] : []),

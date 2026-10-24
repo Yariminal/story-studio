@@ -43,7 +43,8 @@ import './CommunityPackChecker.css';
 import { t } from '../../i18n/index.js';
 const EDGE_SILENCE_LABEL = formatPackAudioEdgeSilence();
 
-const PROBLEM_SECTIONS = [
+function PROBLEM_SECTIONS() {
+  return [
   {
     id: 'quality',
     title: t('Audio de mauvaise qualité (source saturée)'),
@@ -75,7 +76,7 @@ const PROBLEM_SECTIONS = [
     bucket: 'fix',
     Icon: Scissors,
     explanation: t('Le blanc avant ou après la voix sort de la fenêtre attendue.'),
-    action: `On ajuste le silence vers ${EDGE_SILENCE_LABEL}.`,
+    action: t("On ajuste le silence vers {EDGE_SILENCE_LABEL}.", { EDGE_SILENCE_LABEL: EDGE_SILENCE_LABEL }),
     match: isAutomaticSilenceIssue,
   },
   {
@@ -85,7 +86,7 @@ const PROBLEM_SECTIONS = [
     bucket: 'optional',
     Icon: Scissors,
     explanation: t('Ces silences longs peuvent être volontaires. Le pack reste conforme.'),
-    action: `Chaque bord peut être ramené à ${EDGE_SILENCE_LABEL} si tu le souhaites.`,
+    action: t("Chaque bord peut être ramené à {EDGE_SILENCE_LABEL} si tu le souhaites.", { EDGE_SILENCE_LABEL: EDGE_SILENCE_LABEL }),
     match: isOptionalSilenceIssue,
   },
   {
@@ -144,6 +145,7 @@ const PROBLEM_SECTIONS = [
     match: (issue) => issue.category === 'structure',
   },
 ];
+}
 
 function IconFrame({ Icon }) {
   return <Icon className="checker-icon" aria-hidden="true" strokeWidth={2} absoluteStrokeWidth />;
@@ -152,9 +154,9 @@ function IconFrame({ Icon }) {
 function severityLabel(severity) {
   switch (severity) {
     case 'error':
-      return 'Erreur';
+      return t("Erreur");
     case 'warning':
-      return 'Avertissement';
+      return t("Avertissement");
     case 'info':
       return 'Info';
     case 'ok':
@@ -175,15 +177,15 @@ function measuredIssueSummary(issue, item, kind) {
     if (lower.includes('volume')) {
       const lufs = item?.integratedLufs;
       const direction = typeof lufs === 'number' && lufs > -10
-        ? 'trop haut'
-        : 'trop bas';
+        ? t("trop haut")
+        : t("trop bas");
       return `Niveau sonore ${direction} (${formatLufs(lufs)})`;
     }
     if (lower.includes(t('fréquence'))) {
-      return `Échantillonnage incorrect (${item?.sampleRate ? `${item.sampleRate} Hz` : t('non mesuré')})`;
+      return t("Échantillonnage incorrect ({value})", { value: item?.sampleRate ? `${item.sampleRate} Hz` : t('non mesuré') });
     }
     if (lower.includes('mono')) {
-      return `Audio non mono (${item?.channels || t('canaux non mesurés')})`;
+      return t("Audio non mono ({value})", { value: item?.channels || t('canaux non mesurés') });
     }
     if (lower.includes('format')) {
       return `Mauvais format audio (${item?.codec || t('format non mesuré')})`;
@@ -194,7 +196,7 @@ function measuredIssueSummary(issue, item, kind) {
     const format = item?.format || t('format non mesuré');
     if (lower.includes('format')) return `Mauvais format image (${format})`;
     if (lower.includes('dimension') || lower.includes('taille')) return `Dimensions incorrectes (${dimensions})`;
-    return `Image incorrecte (${dimensions} · ${format})`;
+    return t("Image incorrecte ({dimensions} · {format})", { dimensions: dimensions, format: format });
   }
   return message;
 }
@@ -210,8 +212,8 @@ function silenceSummaryParts(issues, item) {
     || (issue.message || '').toLowerCase().includes('fin')
   ));
   const parts = [];
-  if (hasStart) parts.push(`Silence début = ${formatSeconds(item?.leadingSilenceSecs)}`);
-  if (hasEnd) parts.push(`Silence fin = ${formatSeconds(item?.trailingSilenceSecs)}`);
+  if (hasStart) parts.push(t("Silence début = {value}", { value: formatSeconds(item?.leadingSilenceSecs) }));
+  if (hasEnd) parts.push(t("Silence fin = {value}", { value: formatSeconds(item?.trailingSilenceSecs) }));
   return parts;
 }
 
@@ -220,7 +222,7 @@ function recordProblemSummary(record) {
   if (record.kind === 'audio') {
     if (scopedIssues.some((issue) => (issue.message || '').toLowerCase().includes('satur'))) {
       const peak = record.item?.truePeakDb;
-      return typeof peak === 'number' ? `Saturé · crête ${formatPeak(peak)}` : t('Saturé (source)');
+      return typeof peak === 'number' ? t("Saturé · crête {value}", { value: formatPeak(peak) }) : t('Saturé (source)');
     }
     const silenceIssues = scopedIssues.filter((issue) => (issue.message || '').toLowerCase().includes('silence'));
     if (silenceIssues.length > 0) {
@@ -230,7 +232,7 @@ function recordProblemSummary(record) {
 
     if (scopedIssues.some((issue) => (issue.message || '').toLowerCase().includes('volume'))) {
       const lufs = record.item?.integratedLufs;
-      const direction = typeof lufs === 'number' && lufs > -10 ? 'trop haut' : 'trop bas';
+      const direction = typeof lufs === 'number' && lufs > -10 ? t("trop haut") : t("trop bas");
       return `Niveau sonore ${direction} (${formatLufs(lufs)})`;
     }
   }
@@ -281,8 +283,8 @@ function hasMeasureIssue(record, key) {
 
 function roleLabel(record) {
   const raw = record.item?.itemType || record.issue?.itemType || record.issue?.category || 'Fichier';
-  if (raw === 'image') return 'Image';
-  if (raw === 'audio') return 'Audio';
+  if (raw === 'image') return t("Image");
+  if (raw === 'audio') return t("Audio");
   return raw;
 }
 
@@ -319,7 +321,7 @@ function buildProblemGroups(report) {
     issue.severity === 'error' || issue.severity === 'warning' || isOptionalSilenceIssue(issue)
   ));
 
-  return PROBLEM_SECTIONS.map((section) => {
+  return PROBLEM_SECTIONS().map((section) => {
     const records = [];
     const seen = new Set();
     for (const issue of relevantIssues) {
@@ -418,7 +420,7 @@ function summarizeGroups(groups, report) {
       Icon: Info,
       title: listenCount === 1
         ? t('Pack corrigeable, avec un fichier à écouter')
-        : `Pack corrigeable, avec ${listenCount} fichiers à écouter`,
+        : t("Pack corrigeable, avec {listenCount} fichiers à écouter", { listenCount: listenCount }),
       subtitle: t('Le reste peut être corrigé automatiquement.'),
       listenCount,
       fixCount,
@@ -429,7 +431,9 @@ function summarizeGroups(groups, report) {
     return {
       tone: 'ok',
       Icon: CircleCheck,
-      title: `Pack conforme, avec ${optionalCount} ajustement${optionalCount > 1 ? 's' : ''} facultatif${optionalCount > 1 ? 's' : ''}`,
+      title: optionalCount > 1
+        ? t('Pack conforme, avec {count} ajustements facultatifs', { count: optionalCount })
+        : t('Pack conforme, avec {count} ajustement facultatif', { count: optionalCount }),
       subtitle: t('Les pauses longues peuvent être conservées telles quelles.'),
       listenCount,
       fixCount,
@@ -466,10 +470,9 @@ function SummaryTile({ title, Icon, tone = 'neutral', children }) {
 function SplitStat({ ok, needsFix }) {
   return (
     <div className="checker-split-stat">
-      <span className="checker-split-stat-ok"><strong>{ok}</strong> OK</span>
+      <span className="checker-split-stat-ok"><strong>{ok}</strong> {t('OK')}</span>
       <span className={`checker-split-stat-fix ${needsFix === 0 ? 'is-clean' : ''}`}>
-        <strong>{needsFix}</strong> à corriger
-      </span>
+        <strong>{needsFix}</strong> {t("à corriger")} </span>
     </div>
   );
 }
@@ -483,10 +486,10 @@ function SummaryTiles({ report, saturatedCount = 0 }) {
   const nightMode = Boolean(report.nightMode?.detected);
   return (
     <div className="checker-summary-tiles" aria-label={t("Résumé du pack")}>
-      <SummaryTile title="Audio" Icon={Music} tone={saturatedCount > 0 ? 'danger' : (audio.needsFix > 0 ? 'fix' : 'ok')}>
+      <SummaryTile title={t('Audio')} Icon={Music} tone={saturatedCount > 0 ? 'danger' : (audio.needsFix > 0 ? 'fix' : 'ok')}>
         <SplitStat ok={audio.ok} needsFix={audio.needsFix} />
       </SummaryTile>
-      <SummaryTile title="Images" Icon={Image} tone={images.needsFix ? 'fix' : 'ok'}>
+      <SummaryTile title={t("Images")} Icon={Image} tone={images.needsFix ? 'fix' : 'ok'}>
         <SplitStat ok={images.ok} needsFix={images.needsFix} />
       </SummaryTile>
       <SummaryTile title={t("Nom du pack")} Icon={FilePen} tone={titleOk ? 'ok' : 'fix'}>
@@ -498,7 +501,7 @@ function SummaryTiles({ report, saturatedCount = 0 }) {
       <SummaryTile title="Structure" Icon={Network} tone={structureOk ? 'ok' : 'listen'}>
         <div className="checker-single-stat">
           <strong>{structureOk ? 'Correcte' : t('Vérification manuelle')}</strong>
-          <span>{report.structureSummary?.stageCount ?? 0} étapes</span>
+          <span>{report.structureSummary?.stageCount ?? 0} {t("étapes")}</span>
         </div>
       </SummaryTile>
       <SummaryTile title="Mode nuit" Icon={Moon} tone={nightMode ? 'ok' : 'neutral'}>
@@ -545,7 +548,7 @@ function TechnicalDetail({ record }) {
         )}
       </div>
       <div>
-        <div className="checker-tech-title">Ce qu'on va faire</div>
+        <div className="checker-tech-title">{t("Ce qu'on va faire")}</div>
         {(record.sectionIssues?.length ? record.sectionIssues : record.issues).map((issue, index) => (
           <div className="checker-tech-action" key={`${issue.message}-${index}`}>
             <IconFrame Icon={issue.autoFixAvailable ? Wrench : Info} />
@@ -624,7 +627,7 @@ function ProblemGroupCard({
                       checked={selectedOptionalSilences.has(optionalSilenceSelectionKey(record.issue))}
                       onChange={() => onToggleOptionalSilence?.(record.issue)}
                     />
-                    <span>{record.issue.autoFixDescription || `Ramener ce silence à ${EDGE_SILENCE_LABEL}`}</span>
+                    <span>{record.issue.autoFixDescription || t("Ramener ce silence à {EDGE_SILENCE_LABEL}", { EDGE_SILENCE_LABEL: EDGE_SILENCE_LABEL })}</span>
                   </label>
                 ) : null}
                 <MiniFile
@@ -637,9 +640,7 @@ function ProblemGroupCard({
           </div>
           {group.bucket === 'listen' ? (
             <div className="checker-group-help">
-              <IconFrame Icon={Info} />
-              Ces fichiers ne sont pas corrigés automatiquement.
-            </div>
+              <IconFrame Icon={Info} /> {t("Ces fichiers ne sont pas corrigés automatiquement.")} </div>
           ) : null}
         </div>
       ) : null}
@@ -656,9 +657,7 @@ export function FixableCorrectionsList({ report, selectedOptionalSilences, onTog
   if (!groups.length) {
     return (
       <div className="checker-empty checker-empty--success">
-        <IconFrame Icon={Check} />
-        Aucune correction automatique à appliquer.
-      </div>
+        <IconFrame Icon={Check} /> {t("Aucune correction automatique à appliquer.")} </div>
     );
   }
 
@@ -720,7 +719,7 @@ export function ReportView({
         </div>
         <div className="checker-report-callout">
           <Info className="checker-icon" aria-hidden="true" />
-          <span><strong>{summary.listenCount}</strong> à écouter · <strong>{summary.fixCount}</strong> automatiques · <strong>{summary.optionalCount}</strong> facultatives</span>
+          <span><strong>{summary.listenCount}</strong> {t('à écouter ·')} <strong>{summary.fixCount}</strong> automatiques · <strong>{summary.optionalCount}</strong> facultatives</span>
         </div>
       </div>
 
@@ -729,7 +728,7 @@ export function ReportView({
       {groups.length === 0 ? (
         <div className="checker-empty checker-empty--success">
           <IconFrame Icon={Check} />
-          Tout est conforme dans ce rapport.
+          {t("Tout est conforme dans ce rapport.")}
         </div>
       ) : (
         <div className="checker-groups">
@@ -749,10 +748,10 @@ export function ReportView({
       <ConformingSection report={report} />
 
       <div className="checker-report-footer">
-        <span><strong>{summary.fixCount}</strong> corrections prêtes · <strong>{summary.optionalCount}</strong> suggestions.</span>
+        <span><strong>{summary.fixCount}</strong> {t('corrections prêtes ·')} <strong>{summary.optionalCount}</strong> suggestions.</span>
         <Button size="sm" onClick={() => onExportReport('report')}>
           <Download className="checker-button-icon" aria-hidden="true" />
-          Exporter le rapport
+          {t("Exporter le rapport")}
         </Button>
         {showFixButton ? (
           <button
@@ -785,11 +784,11 @@ export function TechnicalLog({ report, onCopyLog, onExportLog, onExportJson }) {
   if (!report) return null;
   return (
     <details className="checker-log">
-      <summary>Journal technique</summary>
+      <summary>{t("Journal technique")}</summary>
       <div className="checker-log-actions">
-        <Button size="sm" onClick={onCopyLog}>Copier le log</Button>
-        <Button size="sm" onClick={() => onExportLog('log')}>Exporter le log</Button>
-        <Button size="sm" onClick={() => onExportJson('json')}>Exporter JSON</Button>
+        <Button size="sm" onClick={onCopyLog}>{t('Copier le log')}</Button>
+        <Button size="sm" onClick={() => onExportLog('log')}>{t('Exporter le log')}</Button>
+        <Button size="sm" onClick={() => onExportJson('json')}>{t('Exporter JSON')}</Button>
       </div>
       <pre>{(report.technicalLog || []).join('\n')}</pre>
     </details>

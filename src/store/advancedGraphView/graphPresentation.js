@@ -150,7 +150,7 @@ export function describeEdgeEnds(index, edgeId) {
       const controls = index.byPath.get(edge.from)?.node?.controls;
       const on = (key) => controls?.[key]?.presence === 'value' && controls[key].value === true;
       const triggers = [on('ok') && t('OK'), on('autoplay') && 'fin du son'].filter(Boolean);
-      via = triggers.length > 0 ? `Suite du parcours, par ${triggers.join(' ou ')}` : 'Suite du parcours';
+      via = triggers.length > 0 ? t("Suite du parcours, par {value}", { value: triggers.join(' ou ') }) : t("Suite du parcours");
       term = 'okTransition';
     } else if (isHome(edge)) {
       via = t('Bouton Accueil');

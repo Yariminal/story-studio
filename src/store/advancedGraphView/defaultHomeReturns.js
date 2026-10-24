@@ -16,11 +16,11 @@
 // - quand le bouton Accueil est désactivé ou non défini : l'appui ne fait rien,
 //   ou on ne sait pas ce qu'il fait ;
 // - sur l'Écran d'entrée lui-même : Accueil y quitte le pack ;
-// - quand le document n'a pas dt('Écran d')entrée unique (« À corriger »).
+// - quand le document n'a pas d'Écran d'entrée unique (« À corriger »).
 
 const DEFAULT_HOME_EDGE_SUFFIX = '::home-default';
 
-// Lt('Écran d')entrée vers lequel la Lunii revient, ou `null` s'il n'est pas
+// L'Écran d'entrée vers lequel la Lunii revient, ou `null` s'il n'est pas
 // unique.
 export function defaultHomeTarget(index) {
   const entry = index?.view?.entry;

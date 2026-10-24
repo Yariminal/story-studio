@@ -37,16 +37,18 @@ const AudioSplitterModal = lazy(() => import('../AudioSplitterModal/AudioSplitte
 const ImageEditorModal = lazy(() => import('../ImageEditorModal/ImageEditorModal')
   .then((m) => ({ default: m.ImageEditorModal })));
 
-const FILTERS = [
-  { id: 'all', label: 'Tout' },
-  { id: 'image', label: 'Images' },
-  { id: 'audio', label: 'Audio' },
+function FILTERS() {
+  return [
+  { id: 'all', label: t("Tout") },
+  { id: 'image', label: t("Images") },
+  { id: 'audio', label: t("Audio") },
   { id: 'zip', label: 'ZIP' },
   { id: 'ai', label: 'IA' },
   { id: 'imported', label: t('Importés') },
   { id: 'recorded', label: 'Enreg.' },
   { id: 'unused', label: t('Non utilisés') },
 ];
+}
 
 
 export function MediaExplorer({
@@ -477,17 +479,17 @@ export function MediaExplorer({
     if (diskErrors.length > 0 || blockedItems.length > 0) {
       const sections = [];
       if (blockedItems.length > 0) {
-        sections.push(`Médias encore utilisés :\n${blockedItems.map((name) => `• ${name}`).join('\n')}`);
+        sections.push(t("Médias encore utilisés :\n{value}", { value: blockedItems.map((name) => `• ${name}`).join('\n') }));
       }
       if (diskErrors.length > 0) {
         const header = diskErrors.length === 1
           ? t('Suppression disque refusée pour ce fichier :')
-          : `Suppression disque refusée pour ${diskErrors.length} fichiers :`;
+          : t("Suppression disque refusée pour {length} fichiers :", { length: diskErrors.length });
         sections.push(`${header}\n${diskErrors.join('\n\n')}`);
       }
       showErrorDialog({
         title: 'Retrait incomplet',
-        message: `${sections.join('\n\n')}\n\nLes fichiers concernés sont restés intacts dans la médiathèque et sur le disque.`,
+        message: t("{value}\n\nLes fichiers concernés sont restés intacts dans la médiathèque et sur le disque.", { value: sections.join('\n\n') }),
         variant: 'warning',
       });
     }
@@ -611,7 +613,7 @@ export function MediaExplorer({
       inputPaths: metadata.inputPaths ?? [],
       logicalName: metadata.logicalName ?? '',
       failures: [],
-      message: `Audio assemblé créé : ${basename(cleanPath(path))}`,
+      message: t("Audio assemblé créé : {value}", { value: basename(cleanPath(path)) }),
     };
     if (request && metadata.projectAction) {
       const outcome = onApplyMediaToolProjectAction?.({
@@ -680,8 +682,8 @@ export function MediaExplorer({
       createdPaths,
       failures,
       message: createdPaths.length === 1
-        ? `Extrait audio créé : ${basename(cleanPath(createdPaths[0]))}`
-        : `${createdPaths.length} extraits audio créés`,
+        ? t("Extrait audio créé : {value}", { value: basename(cleanPath(createdPaths[0])) })
+        : t("{length} extraits audio créés", { length: createdPaths.length }),
     });
 
     if (failures.length > 0) {
@@ -690,7 +692,7 @@ export function MediaExplorer({
         .join('\n\n');
       showErrorDialog({
         title: t('Certaines découpes ont échoué'),
-        message: `${createdPaths.length} extrait${createdPaths.length > 1 ? t('s ont été créés') : t(' a été créé')}, mais ${failures.length} découpe${failures.length > 1 ? t('s ont échoué') : t(' a échoué')} :\n\n${details}`,
+        message: t("{length} extrait{value}, mais {length2} découpe{value2} :\n\n{details}", { length: createdPaths.length, value: createdPaths.length > 1 ? t('s ont été créés') : t(' a été créé'), length2: failures.length, value2: failures.length > 1 ? t('s ont échoué') : t(' a échoué'), details: details }),
         variant: 'warning',
       });
     }
@@ -734,7 +736,7 @@ export function MediaExplorer({
           </Tooltip>
           {colPickerOpen && (
             <div className="me-col-picker-panel">
-              {COLUMNS.map((col) => (
+              {COLUMNS().map((col) => (
                 <label key={col.id} className="me-col-picker-row">
                   <input
                     type="checkbox"
@@ -751,7 +753,7 @@ export function MediaExplorer({
     </div>
   );
 
-  const filterPills = FILTERS.filter((f) => f.id === 'all' || (counts[f.id] ?? 0) > 0).map((f) => (
+  const filterPills = FILTERS().filter((f) => f.id === 'all' || (counts[f.id] ?? 0) > 0).map((f) => (
     <button
       key={f.id}
       type="button"
@@ -976,13 +978,13 @@ export function MediaExplorer({
             ...(selectedCount > 0 ? [
               'sep',
               ...(selectedAudioItems.length > 0 ? [
-                { icon: <Copy />, label: `Copier ${selectedAudioItems.length} son${selectedAudioItems.length > 1 ? 's' : ''}`, fn: () => { setBgCtxMenu(null); copySelectedAudio('copy'); } },
-                { icon: <Scissors />, label: `Couper ${selectedAudioItems.length} son${selectedAudioItems.length > 1 ? 's' : ''}`, fn: () => { setBgCtxMenu(null); copySelectedAudio('cut'); } },
+                { icon: <Copy />, label: selectedAudioItems.length > 1 ? t('Copier {count} sons', { count: selectedAudioItems.length }) : t('Copier {count} son', { count: selectedAudioItems.length }), fn: () => { setBgCtxMenu(null); copySelectedAudio('copy'); } },
+                { icon: <Scissors />, label: selectedAudioItems.length > 1 ? t('Couper {count} sons', { count: selectedAudioItems.length }) : t('Couper {count} son', { count: selectedAudioItems.length }), fn: () => { setBgCtxMenu(null); copySelectedAudio('cut'); } },
               ] : []),
               ...(selectedAudioItems.length >= 2 ? [
-                { icon: <Link2 />, label: `Assembler ${selectedAudioItems.length} sons`, fn: () => { setBgCtxMenu(null); openAudioAssembly(); } },
+                { icon: <Link2 />, label: t("Assembler {length} sons", { length: selectedAudioItems.length }), fn: () => { setBgCtxMenu(null); openAudioAssembly(); } },
               ] : []),
-              ...(onDeleteMedia ? [{ icon: <Trash2 />, label: `Retirer ${selectedCount} fichier${selectedCount > 1 ? 's' : ''} de la médiathèque`, fn: () => { setBgCtxMenu(null); handleDeleteRequest(visibleSelectedItems); }, danger: true }] : []),
+              ...(onDeleteMedia ? [{ icon: <Trash2 />, label: selectedCount > 1 ? t('Retirer {count} fichiers de la médiathèque', { count: selectedCount }) : t('Retirer {count} fichier de la médiathèque', { count: selectedCount }), fn: () => { setBgCtxMenu(null); handleDeleteRequest(visibleSelectedItems); }, danger: true }] : []),
             ] : []),
           ]}
         />
@@ -1003,9 +1005,7 @@ export function MediaExplorer({
         </div>
       )}
       {osDropHover && (
-        <div className="media-os-drop-overlay">
-          Déposer pour importer dans les médias
-        </div>
+        <div className="media-os-drop-overlay"> {t("Déposer pour importer dans les médias")} </div>
       )}
     </div>
   );

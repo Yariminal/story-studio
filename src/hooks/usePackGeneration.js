@@ -79,7 +79,7 @@ export function usePackGeneration({
       logger.warn(`generate:blocked count=${validationErrors.length}`);
       showErrorDialog({
         title: t('Impossible de générer'),
-        message: `Impossible de générer le pack :\n\n• ${validationErrors.join('\n• ')}`,
+        message: t("Impossible de générer le pack :\n\n• {value}", { value: validationErrors.join('\n• ') }),
       });
       return;
     }

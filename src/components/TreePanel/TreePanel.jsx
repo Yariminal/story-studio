@@ -510,7 +510,7 @@ export function TreePanel({
               navigationBadges={showNavigationBadgeColumn && project?.nativeGraph?.preserveForRoundTrip === true ? [{
                 key: 'native-graph-root',
                 kind: 'graph',
-                label: 'Graphe',
+                label: t("Graphe"),
                 title: t('Graphe interactif natif actif pour le round-trip.'),
               }] : EMPTY_BADGES}
               showNavigationBadgeColumn={showNavigationBadgeColumn}
@@ -549,9 +549,7 @@ export function TreePanel({
           </div>
 
         {osDropHover && (
-          <div className="tree-os-drop-overlay">
-            Déposer pour ajouter au projet
-          </div>
+          <div className="tree-os-drop-overlay"> {t("Déposer pour ajouter au projet")} </div>
         )}
         </div>
 

@@ -5,9 +5,11 @@ import { refTargetEntryId } from '../../store/navigationTargets';
 import './EditorPanel.css';
 
 import { t } from '../../i18n/index.js';
+import { useLocale } from '../../i18n/LocaleContext.jsx';
 // Éditeur d'un nœud `ref` (« → nœud existant ») : change la cible, la présentation
 // (↪ continuer / ↩ revenir) ou supprime le lien. La cible n'est jamais affectée.
 export const RefEditor = memo(function RefEditor({ node, allMenus = [], allStories = [], onUpdate, onDelete }) {
+  useLocale();
   const targetId = refTargetEntryId(node.target);
   const targetEntry = allStories.find((s) => s.id === targetId)
     ?? allMenus.find((m) => m.id === targetId)
@@ -19,14 +21,11 @@ export const RefEditor = memo(function RefEditor({ node, allMenus = [], allStori
       <div className="card">
         <div className="card-title-row">
           <div className="card-title">Lien</div>
-          <div className="card-copy card-copy--inline">
-            Renvoie vers un nœud déjà présent au lieu d'en créer un nouveau — pour faire converger
-            plusieurs chemins vers la même histoire ou le même dossier.
-          </div>
+          <div className="card-copy card-copy--inline"> {t("Renvoie vers un nœud déjà présent au lieu d'en créer un nouveau — pour faire converger plusieurs chemins vers la même histoire ou le même dossier.")} </div>
         </div>
 
         <div className="field-row">
-          <span className="field-label" style={{ flex: 1 }}>Pointe vers</span>
+          <span className="field-label" style={{ flex: 1 }}>{t("Pointe vers")}</span>
           <NavigationTargetSelect
             value={node.target ?? ''}
             onChange={(target) => onUpdate({ target: target || null })}
@@ -40,15 +39,15 @@ export const RefEditor = memo(function RefEditor({ node, allMenus = [], allStori
         </div>
 
         <div className="field-row">
-          <span className="field-label" style={{ flex: 1 }}>Présentation</span>
+          <span className="field-label" style={{ flex: 1 }}>{t('Présentation')}</span>
           <select
             className="field-input"
             value={node.refKind === 'return' ? 'return' : 'continue'}
             onChange={(e) => onUpdate({ refKind: e.target.value })}
             style={{ maxWidth: 360 }}
           >
-            <option value="continue">↪ Continuer vers…</option>
-            <option value="return">↩ Revenir à…</option>
+            <option value="continue">{t('↪ Continuer vers…')}</option>
+            <option value="return">{t('↩ Revenir à…')}</option>
           </select>
         </div>
       </div>
@@ -63,10 +62,9 @@ export const RefEditor = memo(function RefEditor({ node, allMenus = [], allStori
           >
             <Trash2 className="card-danger-icon" />
           </button>
-          <span className="card-danger-title">Supprimer ce lien</span>
+          <span className="card-danger-title">{t('Supprimer ce lien')}</span>
           <p className="card-danger-desc">
-            Le lien vers « {targetName} » sera retiré. La cible n'est pas affectée.
-          </p>
+            {t("Le lien vers «")} {targetName} {t("» sera retiré. La cible n'est pas affectée.")} </p>
         </div>
       </div>
     </>

@@ -11,7 +11,7 @@ export function DiagramViewToggles({
   onCollapseAllStories,
 }) {
   return (
-    <div className="fd-complete-viewbar" aria-label="Modes du diagramme">
+    <div className="fd-complete-viewbar" aria-label={t('Modes du diagramme')}>
       <button
         type="button"
         className={`fd-diagram-option ${showReturns ? 'is-active' : ''}`}
@@ -21,7 +21,7 @@ export function DiagramViewToggles({
         onClick={() => onShowReturnsChange(!showReturns)}
       >
         <IterationCcw />
-        <span className="fd-ctrl-label">Retours</span>
+        <span className="fd-ctrl-label">{t("Retours")}</span>
       </button>
       <button
         type="button"
@@ -40,12 +40,12 @@ export function DiagramViewToggles({
         <button
           type="button"
           className="fd-diagram-option"
-          aria-label="Tout replier"
+          aria-label={t("Tout replier")}
           title={t("Replier tous les dossiers d’histoires")}
           onClick={onCollapseAllStories}
         >
           <SquareStack />
-          <span className="fd-ctrl-label fd-ctrl-label--full">Tout replier</span>
+          <span className="fd-ctrl-label fd-ctrl-label--full">{t("Tout replier")}</span>
           <span className="fd-ctrl-label fd-ctrl-label--short">Replier</span>
         </button>
       ) : null}

@@ -2,8 +2,9 @@ import { useRef, useState } from 'react';
 import { KEYS, read, write } from '../../store/persistentSettings';
 
 import { t } from '../../i18n/index.js';
-export const COLUMNS = [
-  { id: 'name',  label: 'Nom',        defaultWidth: 200 },
+export function COLUMNS() {
+  return [
+  { id: 'name',  label: t("Nom"),        defaultWidth: 200 },
   { id: 'usage', label: 'Usage',      defaultWidth: 120 },
   { id: 'size',  label: 'Taille',     defaultWidth: 60  },
   { id: 'dim',   label: 'Dimensions', defaultWidth: 80  },
@@ -13,8 +14,9 @@ export const COLUMNS = [
   { id: 'path',  label: 'Chemin',     defaultWidth: 260 },
   { id: 'tags',  label: 'Tags',       defaultWidth: 120 },
 ];
+}
 
-const DEFAULT_COL_WIDTHS = Object.fromEntries(COLUMNS.map((c) => [c.id, c.defaultWidth]));
+const DEFAULT_COL_WIDTHS = Object.fromEntries(COLUMNS().map((c) => [c.id, c.defaultWidth]));
 const OLD_COL_IDS = ['name', 'usage', 'size', 'dim', 'fmt', 'path', 'tags'];
 
 function loadColWidths() {
@@ -33,15 +35,15 @@ function loadColWidths() {
 function loadVisibleCols() {
   const saved = read(KEYS.MEDIA_EXPLORER_VISIBLE_COLS, { parse: JSON.parse });
   if (Array.isArray(saved)) {
-    const valid = new Set(COLUMNS.map((c) => c.id));
+    const valid = new Set(COLUMNS().map((c) => c.id));
     const filtered = saved.filter((id) => valid.has(id));
     if (filtered.length > 0) return new Set(filtered);
   }
-  return new Set(COLUMNS.map((c) => c.id));
+  return new Set(COLUMNS().map((c) => c.id));
 }
 
 export function colsToGrid(widths, visibleCols) {
-  return `56px ${COLUMNS.filter((c) => visibleCols.has(c.id)).map((c) => `${widths[c.id]}px`).join(' ')} 30px`;
+  return `56px ${COLUMNS().filter((c) => visibleCols.has(c.id)).map((c) => `${widths[c.id]}px`).join(' ')} 30px`;
 }
 
 export function useColumnWidths({ sortCol, onSortColReset } = {}) {

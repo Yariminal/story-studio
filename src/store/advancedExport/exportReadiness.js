@@ -38,25 +38,31 @@ const QUALIFICATION = Object.freeze({
   SUPPORTED: 'SUPPORTED',
 });
 
-const QUALIFICATION_LABELS = Object.freeze({
+function QUALIFICATION_LABELS() {
+  return Object.freeze({
   UNTESTED: t('non qualifié'),
   PREPARED: t('préparé'),
   SUPPORTED: t('supporté'),
 });
+}
 
-const SOURCE_LABELS = Object.freeze({
+function SOURCE_LABELS() {
+  return Object.freeze({
   decode: t('décodage'),
   'graph-integrity': t('intégrité du graphe'),
   authoring: t("décision d'auteur"),
   readiness: 'qualification',
 });
+}
 
-const LEVEL_LABELS = Object.freeze({
+function LEVEL_LABELS() {
+  return Object.freeze({
   INFO: 'information',
   WARNING: 'avertissement',
   ACTION_REQUIRED: t('décision requise'),
   ERROR: 'erreur',
 });
+}
 
 // Le niveau d'un diagnostic, tel que chaque source le sérialise. `graph-integrity`
 // n'en porte pas : Rust le fixe à `Error` dans `level()`, et cette absence est
@@ -76,7 +82,7 @@ export function readinessDiagnosticLevel(diagnostic) {
 }
 
 function readinessLevelLabel(level) {
-  return LEVEL_LABELS[level] ?? level;
+  return LEVEL_LABELS()[level] ?? level;
 }
 
 function blocksDisplay(level) {
@@ -96,7 +102,7 @@ export function summarizeReadiness(readiness) {
     const level = readinessDiagnosticLevel(diagnostic);
     return {
       source: diagnostic?.source ?? null,
-      sourceLabel: SOURCE_LABELS[diagnostic?.source] ?? diagnostic?.source ?? 'diagnostic',
+      sourceLabel: SOURCE_LABELS()[diagnostic?.source] ?? diagnostic?.source ?? 'diagnostic',
       code: codeOf(diagnostic),
       path: diagnostic?.path ?? '',
       message: diagnostic?.message ?? '',
@@ -113,9 +119,9 @@ export function summarizeReadiness(readiness) {
   return {
     blocked: readiness.blocked === true,
     interoperability: readiness.interoperability ?? QUALIFICATION.UNTESTED,
-    interoperabilityLabel: QUALIFICATION_LABELS[readiness.interoperability]
+    interoperabilityLabel: QUALIFICATION_LABELS()[readiness.interoperability]
       ?? readiness.interoperability
-      ?? QUALIFICATION_LABELS.UNTESTED,
+      ?? QUALIFICATION_LABELS().UNTESTED,
     // Les blocages d'abord, dans l'ordre où Rust les a rendus : l'ordre
     // rendu est une information, le réordonner par sévérité perdrait le lien
     // avec lui.
@@ -125,7 +131,7 @@ export function summarizeReadiness(readiness) {
     dimensions: dimensions.map((dimension) => ({
       id: dimension?.id ?? '',
       qualification: dimension?.qualification ?? QUALIFICATION.UNTESTED,
-      qualificationLabel: QUALIFICATION_LABELS[dimension?.qualification] ?? dimension?.qualification,
+      qualificationLabel: QUALIFICATION_LABELS()[dimension?.qualification] ?? dimension?.qualification,
       evidence: Array.isArray(dimension?.evidence) ? dimension.evidence : [],
     })),
     // `UNTESTED` est une limite de qualification, pas un document invalide :

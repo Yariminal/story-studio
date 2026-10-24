@@ -18,7 +18,7 @@ function SilenceDurationRow({ value, onChange, label }) {
       <div className="opts-row-info">
         <div className="opts-row-label">{label}</div>
         <div className="opts-row-sub">
-          Durée en secondes, à partir de {PACK_AUDIO_EDGE_SILENCE_MIN_SECONDS}.
+          {t('Durée en secondes, à partir de {min}.', { min: PACK_AUDIO_EDGE_SILENCE_MIN_SECONDS })}
         </div>
       </div>
       <input
@@ -47,7 +47,7 @@ export function AdvancedSection({ className, sectionRef }) {
 
   return (
     <section id="advanced" className={className} ref={sectionRef}>
-      <div className="opts-card-title">Silences audio</div>
+      <div className="opts-card-title">{t('Silences audio')}</div>
       <SilenceDurationRow
         label={t("Silence au début")}
         value={leadingSilenceSeconds}

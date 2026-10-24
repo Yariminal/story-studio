@@ -30,16 +30,14 @@ export function ZipReviewPanel({ review, onClose }) {
         role="status"
         data-current={review.isCurrentRevision ? 'true' : 'false'}
       >
-        <span className="advanced-review-banner__title">
-          Simulation de l'archive exportée
-        </span>
+        <span className="advanced-review-banner__title"> {t("Simulation de l'archive exportée")} </span>
         <code className="advanced-review-banner__path">{review.zipPath}</code>
         <span className="advanced-review-banner__state">
           {review.isCurrentRevision
-            ? "elle correspond au document actuellement ouvert"
+            ? t("elle correspond au document actuellement ouvert")
             : t("le document a changé depuis cet export : ce n'est plus ce que tu édites")}
         </span>
-        <Button size="sm" onClick={onClose}>Fermer la relecture</Button>
+        <Button size="sm" onClick={onClose}>{t('Fermer la relecture')}</Button>
       </div>
       <FloatingSimulator
         zipPath={review.zipPath}

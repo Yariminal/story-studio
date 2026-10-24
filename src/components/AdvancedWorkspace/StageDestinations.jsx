@@ -42,9 +42,10 @@ import {
   presence,
 } from '../../store/projectModel/advancedGestures.js';
 
-const EXITS = {
+function EXITS() {
+  return {
   ok: {
-    title: 'Suite du parcours',
+    title: t("Suite du parcours"),
     term: 'okTransition',
     copy: t('Où l’on va après cet Écran ?'),
     triggers: ['ok', 'autoplay'],
@@ -70,6 +71,7 @@ const EXITS = {
     formNote: t('La liste de choix que le bouton Accueil ouvre depuis cet Écran.'),
   },
 };
+}
 
 // Le choix sur lequel on commence dans la liste, réglable sur place : changer
 // la valeur l'applique aussitôt, comme les interrupteurs de l'encadré.
@@ -95,7 +97,7 @@ function directStage(row) {
 }
 
 function DestinationActions({ row, label, disabled, onEdit, onRemove }) {
-  const removeLabel = `Supprimer la transition ${row.slot === 'ok' ? t('OK') : 'Accueil'}`;
+  const removeLabel = t("Supprimer la transition {value}", { value: row.slot === 'ok' ? t('OK') : 'Accueil' });
   return (
     <div className="advanced-exit__actions">
       <Tooltip text={label} asChild>
@@ -135,9 +137,9 @@ function Destination({ stage, row, disabled, thumbnails, onGesture, onFocusPath,
           <DestinationActions row={row} label="Changer de destination" disabled={disabled} onEdit={onEdit} onRemove={onRemove} />
         </div>
         <div className="advanced-options__place advanced-options__place--flush">
-          <span>via la liste</span>
+          <span>{t('via la liste')}</span>
           <NodeLink path={row.actionPath} label={row.actionLabel} onFocusPath={onFocusPath} />
-          <span>(un seul choix)</span>
+          <span>{t('(un seul choix)')}</span>
         </div>
       </li>
     );
@@ -154,13 +156,15 @@ function Destination({ stage, row, disabled, thumbnails, onGesture, onFocusPath,
         <DestinationActions row={row} label="Changer de liste" disabled={disabled} onEdit={onEdit} onRemove={onRemove} />
       </div>
       {count === 0 || !row.action
-        ? <p className="advanced-field__absent">Liste vide : aucun Écran à lancer.</p>
+        ? <p className="advanced-field__absent">{t('Liste vide : aucun Écran à lancer.')}</p>
         : <ExitLanding stage={stage} row={row} disabled={disabled} onGesture={onGesture} />}
     </li>
   );
 }
 
-const DEVICE_RETURN_HELP = t('Ce retour n’est pas écrit dans le pack : sans destination Accueil, la Lunii revient d’elle-même à l’Écran d’entrée. Le graphe le dessine en pointillé estompé. « Choisir une autre destination » écrit un vrai raccord à la place.');
+function DEVICE_RETURN_HELP() {
+  return t('Ce retour n’est pas écrit dans le pack : sans destination Accueil, la Lunii revient d’elle-même à l’Écran d’entrée. Le graphe le dessine en pointillé estompé. « Choisir une autre destination » écrit un vrai raccord à la place.');
+}
 
 // Accueil sans destination enregistrée : la Lunii et le simulateur reviennent
 // à l'Écran d'entrée du pack (`defaultHomeReturns.js`, la même règle que le
@@ -172,16 +176,12 @@ function HomeFallback({ stage, index, thumbnails, onFocusPath }) {
     // Le retour par défaut ramènerait ici même : Accueil tournerait en rond,
     // ce que STUdio refuse. Seul un document importé peut arriver ici.
     return (
-      <p className="advanced-field__warning">
-        Sur l’Écran d’entrée, Accueil ramènerait ici même : désactivez le bouton Accueil.
-      </p>
+      <p className="advanced-field__warning"> {t("Sur l’Écran d’entrée, Accueil ramènerait ici même : désactivez le bouton Accueil.")} </p>
     );
   }
   if (!entryPath) {
     return (
-      <p className="advanced-field__warning">
-        Le pack n’a pas d’Écran d’entrée unique : la Lunii ne saurait pas où revenir. Voir « À corriger ».
-      </p>
+      <p className="advanced-field__warning"> {t("Le pack n’a pas d’Écran d’entrée unique : la Lunii ne saurait pas où revenir. Voir « À corriger ».")} </p>
     );
   }
   return (
@@ -190,8 +190,8 @@ function HomeFallback({ stage, index, thumbnails, onFocusPath }) {
         <NodeThumbnail path={entryPath} thumbnails={thumbnails} />
         <NodeLink path={entryPath} label={index.byPath.get(entryPath)?.label?.label} onFocusPath={onFocusPath} />
         <span className="advanced-exit__landing-label">
-          <HelpHint text={DEVICE_RETURN_HELP} />
-          <span className="advanced-options__verb">retour par défaut de la Lunii</span>
+          <HelpHint text={DEVICE_RETURN_HELP()} />
+          <span className="advanced-options__verb">{t('retour par défaut de la Lunii')}</span>
         </span>
       </span>
     </div>
@@ -208,7 +208,7 @@ function ExitForm({ stage, row, index, disabled, onGesture, onClose }) {
   const [selection, setSelection] = useState(initialSelection);
   const chosen = actionPath ? index?.byPath.get(actionPath) : null;
   const options = chosen?.node.options ?? [];
-  const exit = EXITS[row.slot];
+  const exit = EXITS()[row.slot];
 
   const apply = () => {
     if (!chosen) {
@@ -257,9 +257,9 @@ function ExitForm({ stage, row, index, disabled, onGesture, onClose }) {
         disabled={disabled}
       />
       <div className="advanced-field__actions">
-        <Button size="sm" onClick={onClose}>Annuler</Button>
+        <Button size="sm" onClick={onClose}>{t('Annuler')}</Button>
         <Button size="sm" variant="primary" disabled={disabled} onClick={apply}>
-          Appliquer
+          {t("Appliquer")}
         </Button>
       </div>
     </div>
@@ -275,7 +275,7 @@ function ExitForm({ stage, row, index, disabled, onGesture, onClose }) {
 function ExitCard({
   stage, row, index, disabled, thumbnails, highlight, editing, onGesture, onFocusPath, onEdit, onClose,
 }) {
-  const exit = EXITS[row.slot];
+  const exit = EXITS()[row.slot];
   // Sur l'Écran d'entrée, Accueil n'a rien à faire : l'enfant est déjà au
   // début du pack, et le retour par défaut tournerait en rond. L'encadré ne
   // propose donc pas de l'allumer. Il reste complet pour un document importé
@@ -292,9 +292,7 @@ function ExitCard({
             {exit.title} <em className="advanced-editor__term">{exit.term}</em>
           </div>
         </div>
-        <p className="advanced-field__note">
-          Sur l’Écran d’entrée, le bouton Accueil reste désactivé : on y est déjà au début du pack.
-        </p>
+        <p className="advanced-field__note"> {t("Sur l’Écran d’entrée, le bouton Accueil reste désactivé : on y est déjà au début du pack.")} </p>
       </section>
     );
   }
@@ -326,7 +324,7 @@ function ExitCard({
   } else if (row.slot === 'home') {
     destination = <HomeFallback stage={stage} index={index} thumbnails={thumbnails} onFocusPath={onFocusPath} />;
   } else {
-    destination = <p className="advanced-field__absent">Aucune destination pour l’instant.</p>;
+    destination = <p className="advanced-field__absent">{t('Aucune destination pour l’instant.')}</p>;
   }
 
   return (
@@ -350,7 +348,7 @@ function ExitCard({
             key={control}
             stage={stage}
             control={control}
-            label={CONTROL_PHRASES[control]}
+            label={CONTROL_PHRASES()[control]}
             disabled={disabled}
             onGesture={onGesture}
           />

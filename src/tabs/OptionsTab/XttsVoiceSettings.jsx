@@ -4,12 +4,12 @@ import { formatFrenchCount } from '../../utils/frenchText.js';
 
 import { t } from '../../i18n/index.js';
 const LANGUAGE_OPTIONS = [
-  { value: 'fr', label: t('Français') },
-  { value: 'en', label: t('English') },
+  { value: 'fr', label: 'Français' },
+  { value: 'en', label: 'English' },
   { value: 'es', label: 'Español' },
   { value: 'de', label: 'Deutsch' },
   { value: 'it', label: 'Italiano' },
-  { value: 'pt', label: t('Português') },
+  { value: 'pt', label: 'Português' },
 ];
 
 export function XttsVoiceSettings({
@@ -32,7 +32,7 @@ export function XttsVoiceSettings({
     <div className="xtts-settings">
       <div className="xtts-grid">
         <label className="xtts-label">
-          URL du serveur XTTS
+          {t('URL du serveur XTTS')}
           <input
             className="xtts-input"
             value={xttsSettings.serverUrl}
@@ -42,7 +42,7 @@ export function XttsVoiceSettings({
         </label>
 
         <label className="xtts-label">
-          Dossier XTTS
+          {t('Dossier XTTS')}
           <input
             className="xtts-input"
             value={xttsSettings.xttsDir}
@@ -52,14 +52,14 @@ export function XttsVoiceSettings({
         </label>
 
         <label className="xtts-label">
-          Langue par défaut
+          {t('Langue par défaut')}
           <select
             className="xtts-input"
             value={xttsSettings.language}
             onChange={(e) => updateLanguage(e.target.value)}
           >
             {LANGUAGE_OPTIONS.map(({ value, label }) => (
-              <option key={value} value={value}>{label}</option>
+              <option key={value} value={value}>{t(label)}</option>
             ))}
           </select>
         </label>
@@ -67,9 +67,9 @@ export function XttsVoiceSettings({
 
       <div className="opts-row opts-row--pt">
         <div className="opts-row-info">
-          <div className="opts-row-label">Démarrer XTTS automatiquement si le serveur est arrêté</div>
+          <div className="opts-row-label">{t('Démarrer XTTS automatiquement si le serveur est arrêté')}</div>
           <div className="opts-row-sub">
-            Story Studio lancera `server.py` depuis ton dossier XTTS si besoin.
+            {t('Story Studio lancera server.py depuis ton dossier XTTS si besoin.')}
           </div>
         </div>
         <Toggle on={xttsSettings.autoStart} onChange={updateAutoStart} />
@@ -77,9 +77,9 @@ export function XttsVoiceSettings({
 
       <div className="opts-row opts-row--pt">
         <div className="opts-row-info">
-          <div className="opts-row-label">Forcer le CPU (compatible ComfyUI simultané)</div>
+          <div className="opts-row-label">{t('Forcer le CPU (compatible ComfyUI simultané)')}</div>
           <div className="opts-row-sub">
-            XTTS s'exécute sur CPU — plus lent (~3×) mais libère le GPU pour ComfyUI.
+            {t("XTTS s'exécute sur CPU — plus lent (~3×) mais libère le GPU pour ComfyUI.")}
           </div>
         </div>
         <Toggle on={xttsSettings.forceCpu} onChange={updateForceCpu} />
@@ -107,7 +107,7 @@ export function XttsVoiceSettings({
       )}
 
       {xttsLogs.length > 0 && (
-        <div className="xtts-log-panel" aria-label="Journal XTTS">
+        <div className="xtts-log-panel" aria-label={t('Journal XTTS')}>
           {xttsLogs.map((line, index) => (
             <div key={`${index}-${line}`} className="xtts-log-line">{line}</div>
           ))}
@@ -117,23 +117,23 @@ export function XttsVoiceSettings({
       <div className="xtts-voices-panel">
         <div className="xtts-voices-header">
           <div>
-            <div className="opts-row-label">Voix favorites</div>
+            <div className="opts-row-label">{t('Voix favorites')}</div>
             <div className="opts-row-sub">
-              Coche uniquement les voix que tu veux voir dans la modale de génération.
+              {t('Coche uniquement les voix que tu veux voir dans la modale de génération.')}
             </div>
           </div>
           <Button onClick={clearXttsFavorites} disabled={favoriteVoices.length === 0}>
-            Tout afficher
+            {t('Tout afficher')}
           </Button>
         </div>
 
         {!xttsVoicesLoaded ? (
           <div className="xtts-voices-empty">
-            Actualise les voix XTTS pour choisir tes favorites.
+            {t('Actualise les voix XTTS pour choisir tes favorites.')}
           </div>
         ) : xttsVoices.length === 0 ? (
           <div className="xtts-voices-empty">
-            Aucune voix retournée par XTTS.
+            {t('Aucune voix retournée par XTTS.')}
           </div>
         ) : (
           <div className="xtts-voice-list">

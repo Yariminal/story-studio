@@ -46,7 +46,7 @@ export function useAdvancedProjectEntry({
   acquireCreated = acquireCreatedAdvancedProject,
   prepareImported = prepareImportedAdvancedProject,
 }) {
-  // Lt('époque du projet installé par « Modifier un pack ». C')est la seule
+  // L'époque du projet installé par « Modifier un pack ». C'est la seule
   // ouverture où l'Éditeur graphe peut ranger seul un pack sans disposition :
   // rouvrir un `.mbah`, même issu d'un pack, rend les positions telles que
   // l'auteur les a laissées — empilées comprises.
@@ -57,7 +57,7 @@ export function useAdvancedProjectEntry({
     // en vol du projet précédent sont périmées, et le premier geste de
     // l'auteur sera la première étape d'undo de ce document.
     store.loadProject(project);
-    // Une acquisition neuve nt('a jamais été enregistrée, mais elle n')a encore
+    // Une acquisition neuve n'a jamais été enregistrée, mais elle n'a encore
     // rien à perdre : tant que l'auteur n'y touche pas, la garde de sauvegarde
     // la laisse partir sans question.
     savedSnapshotRef.current = null;

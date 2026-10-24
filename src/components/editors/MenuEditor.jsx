@@ -10,7 +10,9 @@ import { getGeneratedMenuControls } from '../../store/generatedPlayback.js';
 import './EditorPanel.css';
 
 import { t } from '../../i18n/index.js';
-const MENU_BEHAVIOR_CONTROLS = [
+import { useLocale } from '../../i18n/LocaleContext.jsx';
+function MENU_BEHAVIOR_CONTROLS() {
+  return [
   {
     key: 'wheel',
     label: t('Molette de sélection'),
@@ -30,8 +32,10 @@ const MENU_BEHAVIOR_CONTROLS = [
     def: false,
   },
 ];
+}
 
 export const MenuEditor = memo(function MenuEditor({ node, project, parentMenu, onUpdate, onDelete }) {
+  useLocale();
   const isImportedContinuation = !!node.importedContinuation;
   const nativeGraph = node.nativeGraph ?? null;
   const nativeGraphStageCount = nativeGraph?.stageCount ?? nativeGraph?.document?.stageNodes?.length ?? 0;
@@ -51,12 +55,12 @@ export const MenuEditor = memo(function MenuEditor({ node, project, parentMenu, 
     <>
       <div className="card">
         <div className="card-title-row">
-          <div className="card-title">Dossier</div>
-          <div className="card-copy card-copy--inline">Page de choix où l'enfant sélectionne une histoire à la molette. Configure ici son nom, son visuel et l'audio d'invitation.</div>
+          <div className="card-title">{t("Dossier")}</div>
+          <div className="card-copy card-copy--inline">{t("Page de choix où l'enfant sélectionne une histoire à la molette. Configure ici son nom, son visuel et l'audio d'invitation.")}</div>
         </div>
 
         <div className="field-row field-row--flush">
-          <span className="field-label">Nom</span>
+          <span className="field-label">{t('Nom')}</span>
           <input
             className="field-input"
             value={node.name || ''}
@@ -74,21 +78,19 @@ export const MenuEditor = memo(function MenuEditor({ node, project, parentMenu, 
         <div className="card-sep" />
 
         {node.importedContinuation && (
-          <div className="sequence-note sequence-note--spaced">
-            Continuation native importée depuis {node.importedContinuation.sourceStoryName || t('une histoire')}
-            {node.importedContinuation.sourceStepName ? ` · étape ${node.importedContinuation.sourceStepName}` : ''}.
+          <div className="sequence-note sequence-note--spaced"> {t("Continuation native importée depuis")} {node.importedContinuation.sourceStoryName || t('une histoire')}
+            {node.importedContinuation.sourceStepName ? t(" · étape {sourceStepName}", { sourceStepName: node.importedContinuation.sourceStepName }) : ''}.
           </div>
         )}
         {nativeGraph ? (
-          <div className="sequence-note sequence-note--spaced">
-            Graphe interactif natif attaché à ce pack extrait : {nativeGraphStageCount} stages, {nativeGraphActionCount} actions.
+          <div className="sequence-note sequence-note--spaced"> {t("Graphe interactif natif attaché à ce pack extrait :")} {nativeGraphStageCount} stages, {nativeGraphActionCount} actions.
           </div>
         ) : null}
         {node.autoBlackImage ? (
           <>
             <AudioField
               label={t("Audio de sélection")}
-              description={isImportedContinuation ? 'Optionnel pour cette continuation' : t("Invite l'enfant à choisir une histoire")}
+              description={isImportedContinuation ? t("Optionnel pour cette continuation") : t("Invite l'enfant à choisir une histoire")}
               file={node.audio}
               required={!isImportedContinuation}
               ttsTextSuggestion={node.name || ''}
@@ -102,8 +104,8 @@ export const MenuEditor = memo(function MenuEditor({ node, project, parentMenu, 
           <div className="media-split">
             <div className="media-split-left">
               <div className="media-col-header">
-                Image
-                <span className="media-col-subtitle">Image de menu (320×240)</span>
+                {t("Image")}
+                <span className="media-col-subtitle">{t('Image de menu (320×240)')}</span>
               </div>
               <ImageField
                 fieldId={`${node.id}:image`}
@@ -130,7 +132,7 @@ export const MenuEditor = memo(function MenuEditor({ node, project, parentMenu, 
               </div>
                 <AudioField
                   label={t("Audio de sélection")}
-                description={isImportedContinuation ? 'Optionnel pour cette continuation' : t("Invite l'enfant à choisir une histoire")}
+                description={isImportedContinuation ? t("Optionnel pour cette continuation") : t("Invite l'enfant à choisir une histoire")}
                 file={node.audio}
                 required={!isImportedContinuation}
                 ttsTextSuggestion={node.name || ''}
@@ -147,7 +149,7 @@ export const MenuEditor = memo(function MenuEditor({ node, project, parentMenu, 
       {nativeGraph ? (
         <div className="card">
           <div className="card-title-row">
-            <div className="card-title">Graphe interactif importé</div>
+            <div className="card-title">{t('Graphe interactif importé')}</div>
             <div className="card-copy card-copy--inline">{nativeGraphStageCount} stages · {nativeGraphActionCount} actions</div>
           </div>
           <NativeGraphEditor
@@ -159,19 +161,12 @@ export const MenuEditor = memo(function MenuEditor({ node, project, parentMenu, 
 
       <div className="card menu-behavior-card">
         <div className="card-title-row">
-          <div className="card-title">Réglages du dossier</div>
-          <div className="card-copy card-copy--inline">
-            Règle ce que l'enfant peut faire sur cet écran de choix.
-          </div>
+          <div className="card-title">{t('Réglages du dossier')}</div>
+          <div className="card-copy card-copy--inline"> {t("Règle ce que l'enfant peut faire sur cet écran de choix.")} </div>
         </div>
 
         {hasForcedLinearRootControls ? (
-          <div className="info-box menu-behavior-info">
-            Tant que ce Dossier reste l’unique élément du Menu racine et ne contient pas plusieurs
-            éléments, le pack généré impose la Lecture automatique et désactive la Molette. Place
-            au moins deux éléments dans ce Dossier, ou ajoute un autre élément au Menu racine, pour
-            modifier ces deux réglages.
-          </div>
+          <div className="info-box menu-behavior-info"> {t("Tant que ce Dossier reste l’unique élément du Menu racine et ne contient pas plusieurs éléments, le pack généré impose la Lecture automatique et désactive la Molette. Place au moins deux éléments dans ce Dossier, ou ajoute un autre élément au Menu racine, pour modifier ces deux réglages.")} </div>
         ) : null}
 
         <div className="menu-behavior-stack">
@@ -182,13 +177,11 @@ export const MenuEditor = memo(function MenuEditor({ node, project, parentMenu, 
             ariaLabel={t("Écran sans image")}
           />
             <div className="menu-behavior-copy">
-              <span className="during-play-control-title">Écran transparent</span>
-              <span className="menu-behavior-desc">
-                Aucune image ne sera affichée pendant la lecture de l'audio de sélection.
-              </span>
+              <span className="during-play-control-title">{t('Écran transparent')}</span>
+              <span className="menu-behavior-desc"> {t("Aucune image ne sera affichée pendant la lecture de l'audio de sélection.")} </span>
             </div>
           </label>
-          {MENU_BEHAVIOR_CONTROLS.map(({ key, label, desc, def }) => {
+          {MENU_BEHAVIOR_CONTROLS().map(({ key, label, desc, def }) => {
             const isForced = hasForcedLinearRootControls && (key === 'wheel' || key === 'autoplay');
             return (
               <label
@@ -203,7 +196,7 @@ export const MenuEditor = memo(function MenuEditor({ node, project, parentMenu, 
                 />
                 <div className="menu-behavior-copy">
                   <span className="during-play-control-title">{label}</span>
-                  {isForced ? <span className="menu-behavior-state">Imposé</span> : null}
+                  {isForced ? <span className="menu-behavior-state">{t('Imposé')}</span> : null}
                   <span className="menu-behavior-desc">{desc}</span>
                 </div>
               </label>
@@ -222,12 +215,14 @@ export const MenuEditor = memo(function MenuEditor({ node, project, parentMenu, 
           >
             <Trash2 className="card-danger-icon" />
           </button>
-          <span className="card-danger-title">Supprimer ce dossier</span>
+          <span className="card-danger-title">{t('Supprimer ce dossier')}</span>
           <p className="card-danger-desc">
             {(() => {
               const count = node.children?.length ?? node.items?.length ?? 0;
               return count > 0
-                ? `Le dossier et les ${count} élément${count > 1 ? 's' : ''} qu'il contient seront retirés du projet. Leurs médias resteront dans la médiathèque.`
+                ? (count > 1
+                  ? t('Le dossier et les {count} éléments qu’il contient seront retirés du projet. Leurs médias resteront dans la médiathèque.', { count })
+                  : t('Le dossier et les {count} élément qu’il contient seront retirés du projet. Leurs médias resteront dans la médiathèque.', { count }))
                 : t('Le dossier sera retiré du projet.');
             })()}
           </p>

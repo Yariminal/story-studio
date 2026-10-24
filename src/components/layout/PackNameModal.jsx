@@ -369,7 +369,7 @@ export function PackNameModal({
       <header className="pack-meta-header">
         <span className="pack-meta-header-icon"><Package className="chrome-icon" strokeWidth={2} absoluteStrokeWidth /></span>
         <div className="pack-meta-heading">
-          <span className="pack-meta-eyebrow">Métadonnées du pack</span>
+          <span className="pack-meta-eyebrow">{t('Métadonnées du pack')}</span>
           <h2 title={(isAdvanced ? draft.title : exportName) || undefined}>
             {(isAdvanced ? draft.title : exportName) || t('Métadonnées du pack')}
           </h2>
@@ -411,14 +411,14 @@ export function PackNameModal({
             </div>
             <div className="pack-meta-cover-copy">
               <span>{coverUrl ? t('Définie dans la bibliothèque') : t('Aucune image racine définie')}</span>
-              <small>non éditable ici</small>
+              <small>{t('non éditable ici')}</small>
             </div>
           </aside>
         )}
 
         <section className="pack-meta-form">
           <div className="pack-meta-field-row">
-            <label>Titre du pack</label>
+            <label>{t('Titre du pack')}</label>
             <input className="pack-meta-input" value={draft.title || ''} onChange={(event) => updateField('title', event.target.value)} placeholder={t("Titre de mon pack")} />
           </div>
 
@@ -426,7 +426,7 @@ export function PackNameModal({
               qui rend les quatre combinaisons atteignables : nommer par
               convention ou librement, croisé avec versionner ou non. */}
           <div className="pack-meta-field-row">
-            <label>Nom du fichier</label>
+            <label>{t('Nom du fichier')}</label>
             <div className="pack-meta-naming-modes" role="group" aria-label={t("Mode de nommage du fichier exporté")}>
               <button
                 type="button"
@@ -440,25 +440,25 @@ export function PackNameModal({
                 className={`pack-meta-age-chip ${namingMode === ARCHIVE_NAMING_FREE ? 'is-active' : ''}`}
                 onClick={() => chooseNamingMode(ARCHIVE_NAMING_FREE)}
               >
-                Nom libre
+                {t("Nom libre")}
               </button>
             </div>
           </div>
 
           {namingMode === ARCHIVE_NAMING_FREE ? (
             <div className="pack-meta-field-row">
-              <label>Nom libre</label>
+              <label>{t("Nom libre")}</label>
               <input
                 className="pack-meta-input"
                 value={draft.legacyExportName || ''}
                 onChange={(event) => updateField('legacyExportName', event.target.value)}
-                placeholder={draft.title ? `${draft.title} (par défaut)` : t('Laisse vide pour utiliser le titre')}
+                placeholder={draft.title ? t("{title} (par défaut)", { title: draft.title }) : t('Laisse vide pour utiliser le titre')}
               />
             </div>
           ) : (
             <>
           <div className="pack-meta-field-row">
-            <label>Âge minimum</label>
+            <label>{t('Âge minimum')}</label>
             <div className="pack-meta-age-control">
               <div className="pack-meta-age-chips" role="group" aria-label={t("Âges minimum prédéfinis")}>
                 {AGE_CHIPS.map((age) => (
@@ -473,7 +473,7 @@ export function PackNameModal({
                 ))}
               </div>
               <div className={`pack-meta-age-custom ${customAgeValue ? 'is-active' : ''}`}>
-                <span>Autre :</span>
+                <span>{t("Autre :")}</span>
                 <div className="pack-meta-age-custom-value">
                   <input
                     className="pack-meta-input pack-meta-age-other"
@@ -540,7 +540,7 @@ export function PackNameModal({
           </div>
 
           <div className="pack-meta-field-row">
-            <label>UUID du pack</label>
+            <label>{t('UUID du pack')}</label>
             <div className="pack-meta-uuid-control">
               <input
                 className="pack-meta-input pack-meta-uuid-input"
@@ -562,7 +562,7 @@ export function PackNameModal({
           </div>
           <div className="pack-meta-field-row">
             <span />
-            <p className="pack-meta-uuid-hint">Un nouvel UUID permet de conserver ce pack et l'ancien comme deux packs distincts.</p>
+            <p className="pack-meta-uuid-hint">{t("Un nouvel UUID permet de conserver ce pack et l'ancien comme deux packs distincts.")}</p>
           </div>
           {isAdvanced && governance.uuid.reason ? (
             <div className="pack-meta-field-row">
@@ -573,7 +573,7 @@ export function PackNameModal({
           {showImportedUuidHint ? (
             <div className="pack-meta-field-row">
               <span />
-              <p className="pack-meta-uuid-hint">UUID importé du pack. Tu peux le régénérer si tu le souhaites.</p>
+              <p className="pack-meta-uuid-hint">{t('UUID importé du pack. Tu peux le régénérer si tu le souhaites.')}</p>
             </div>
           ) : null}
         </section>
@@ -581,7 +581,7 @@ export function PackNameModal({
 
       <div className="pack-meta-preview">
         <div className="pack-meta-preview-head">
-          <span className="pack-meta-preview-label">Nom exporté</span>
+          <span className="pack-meta-preview-label">{t('Nom exporté')}</span>
           <div className={`pack-meta-status is-${collision}`}>
             {collision === 'collision' ? <TriangleAlert className="chrome-icon" strokeWidth={2} absoluteStrokeWidth /> : <CircleCheck className="chrome-icon" strokeWidth={2} absoluteStrokeWidth />}
             <span>{collisionText}</span>
@@ -603,35 +603,47 @@ export function PackNameModal({
           <div className="pack-meta-summary">
             {advanced.counters ? (
               <>
-                <strong>{advanced.counters.stages}</strong> Écran{advanced.counters.stages > 1 ? 's' : ''}
+                <strong>{advanced.counters.stages > 1
+                  ? t('{count} Écrans', { count: advanced.counters.stages })
+                  : t('{count} Écran', { count: advanced.counters.stages })}</strong>
                 <span>
-                  {advanced.counters.actions} liste{advanced.counters.actions > 1 ? 's' : ''} de choix
+                  {advanced.counters.actions > 1
+                    ? t('{count} listes de choix', { count: advanced.counters.actions })
+                    : t('{count} liste de choix', { count: advanced.counters.actions })}
                   {' · '}
-                  {advanced.counters.options} option{advanced.counters.options > 1 ? 's' : ''}
+                  {advanced.counters.options > 1
+                    ? t('{count} options', { count: advanced.counters.options })
+                    : t('{count} option', { count: advanced.counters.options })}
                   {' · '}
-                  {advanced.counters.media} média{advanced.counters.media > 1 ? 's' : 't('} lié{advanced.counters.media > 1 ? ')s' : ''}
+                  {advanced.counters.media > 1
+                    ? t('{count} médias liés', { count: advanced.counters.media })
+                    : t('{count} média lié', { count: advanced.counters.media })}
                 </span>
               </>
             ) : (
-              <span>Structure en cours de lecture</span>
+              <span>{t('Structure en cours de lecture')}</span>
             )}
           </div>
         ) : (
           <div className="pack-meta-summary">
-            <strong>{stats.stories}</strong> histoire{stats.stories > 1 ? 's' : ''}
-            <span>{stats.media} média{stats.media > 1 ? 's' : 't('} lié{stats.media > 1 ? ')s' : ''}</span>
+            <strong>{stats.stories > 1
+              ? t('{count} histoires', { count: stats.stories })
+              : t('{count} histoire', { count: stats.stories })}</strong>
+            <span>{stats.media > 1
+              ? t('{count} médias liés', { count: stats.media })
+              : t('{count} média lié', { count: stats.media })}</span>
           </div>
         )}
         {notice ? (
           <p className="pack-meta-notice" role="status" aria-live="polite">{notice}</p>
         ) : null}
         <div className="pack-meta-actions">
-          <Button onClick={onClose} disabled={saving}>Annuler</Button>
+          <Button onClick={onClose} disabled={saving}>{t('Annuler')}</Button>
           <Button
             onClick={() => submit('save')}
             disabled={saving}
           >
-            {saving === 'save' ? 'Application...' : 'Appliquer'}
+            {saving === 'save' ? 'Application...' : t("Appliquer")}
           </Button>
           {/* Ce bouton est là **des deux côtés** : la fiche est la première
               étape du parcours de fabrication. Ce qui bloque est

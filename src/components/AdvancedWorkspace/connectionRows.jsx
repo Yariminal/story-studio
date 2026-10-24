@@ -57,7 +57,9 @@ export function positionText(rank, count) {
 // arrive-t-on sur cette liste ? » par une phrase, avec les mots des sorties
 // d'un Écran (`okTransition`, `homeTransition`). « OK » laisserait croire que
 // seule la touche compte ; une pastille « Suite » ne se lisait pas.
-export const OPENER_SLOT_LABELS = {
+export function OPENER_SLOT_LABELS() {
+  return {
   ok: 'Par la suite du parcours de',
   home: t('Par le bouton Accueil de'),
 };
+}

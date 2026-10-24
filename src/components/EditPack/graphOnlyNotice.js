@@ -5,12 +5,14 @@ import { t } from '../../i18n/index.js';
 // le choix de l'éditeur : il doit savoir pourquoi le graphe s'ouvre. Celui qui
 // ouvre depuis le graphe sait déjà où il est.
 
-export const GRAPH_ONLY_NOTICE = t('Ce pack s’ouvre uniquement dans l’éditeur graphe : l’éditeur par menus ne sait pas représenter sa structure.');
+export function GRAPH_ONLY_NOTICE() {
+  return t('Ce pack s’ouvre uniquement dans l’éditeur graphe : l’éditeur par menus ne sait pas représenter sa structure.');
+}
 
 /** Le texte à afficher après un atterrissage, ou `null` s'il n'y a rien à dire. */
 export function graphOnlyNoticeFor(result, { openedFromGraph = false } = {}) {
   if (openedFromGraph) return null;
   if (result?.status !== 'landed' || !result.advanced) return null;
   if (result.report?.authoringEditable) return null;
-  return GRAPH_ONLY_NOTICE;
+  return GRAPH_ONLY_NOTICE();
 }

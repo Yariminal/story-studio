@@ -7,7 +7,7 @@ const isObject = (value) => value !== null && typeof value === 'object' && !Arra
 
 export class ProjectFormatError extends Error {
   constructor(code, path, found, expected, fileName = t('<projet>')) {
-    super(`${fileName} — ${path} : trouvé ${found}, attendu ${expected} (${code})`);
+    super(t("{fileName} — {path} : trouvé {found}, attendu {expected} ({code})", { fileName: fileName, path: path, found: found, expected: expected, code: code }));
     this.name = 'ProjectFormatError';
     Object.assign(this, { code, path, found, expected, fileName });
   }

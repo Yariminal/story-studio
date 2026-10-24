@@ -27,9 +27,9 @@ const EDGE_SILENCE_LABEL = formatPackAudioEdgeSilence();
 function severityLabel(severity) {
   switch (severity) {
     case 'error':
-      return 'Erreur';
+      return t("Erreur");
     case 'warning':
-      return 'Avertissement';
+      return t("Avertissement");
     case 'info':
       return 'Info';
     case 'ok':
@@ -137,7 +137,8 @@ function uniqueIssueKey(issue) {
   return issue.filePath || `${issue.category}:${issue.label}:${issue.message}`;
 }
 
-const PROBLEM_SECTIONS = [
+function PROBLEM_SECTIONS() {
+  return [
   {
     id: 'quality',
     title: t('Audio de mauvaise qualité (source saturée)'),
@@ -166,7 +167,7 @@ const PROBLEM_SECTIONS = [
     badge: 'Auto',
     bucket: 'fix',
     icon: 'wrench',
-    action: `On ajuste le silence vers ${EDGE_SILENCE_LABEL}.`,
+    action: t("On ajuste le silence vers {EDGE_SILENCE_LABEL}.", { EDGE_SILENCE_LABEL: EDGE_SILENCE_LABEL }),
     match: isAutomaticSilenceIssue,
   },
   {
@@ -175,7 +176,7 @@ const PROBLEM_SECTIONS = [
     badge: 'Facultatif',
     bucket: 'optional',
     icon: 'info',
-    action: `Ces silences longs peuvent être volontaires. Le pack reste conforme ; ils peuvent être ramenés à ${EDGE_SILENCE_LABEL}.`,
+    action: t("Ces silences longs peuvent être volontaires. Le pack reste conforme ; ils peuvent être ramenés à {EDGE_SILENCE_LABEL}.", { EDGE_SILENCE_LABEL: EDGE_SILENCE_LABEL }),
     match: isOptionalSilenceIssue,
   },
   {
@@ -229,6 +230,7 @@ const PROBLEM_SECTIONS = [
     match: (issue) => issue.category === 'structure',
   },
 ];
+}
 
 function buildProblemGroups(report) {
   if (!report) return [];
@@ -239,7 +241,7 @@ function buildProblemGroups(report) {
     issue.severity === 'error' || issue.severity === 'warning' || isOptionalSilenceIssue(issue)
   ));
 
-  return PROBLEM_SECTIONS.map((section) => {
+  return PROBLEM_SECTIONS().map((section) => {
     const records = [];
     const seen = new Set();
     for (const issue of relevantIssues) {
@@ -284,8 +286,8 @@ function silenceSummaryParts(issues, item) {
     || (issue.message || '').toLowerCase().includes('fin')
   ));
   const parts = [];
-  if (hasStart) parts.push(`Silence début = ${formatSeconds(item?.leadingSilenceSecs)}`);
-  if (hasEnd) parts.push(`Silence fin = ${formatSeconds(item?.trailingSilenceSecs)}`);
+  if (hasStart) parts.push(t("Silence début = {value}", { value: formatSeconds(item?.leadingSilenceSecs) }));
+  if (hasEnd) parts.push(t("Silence fin = {value}", { value: formatSeconds(item?.trailingSilenceSecs) }));
   return parts;
 }
 
@@ -299,13 +301,13 @@ function measuredIssueSummary(issue, item, kind) {
     }
     if (lower.includes('volume')) {
       const lufs = item?.integratedLufs;
-      const direction = typeof lufs === 'number' && lufs > -10 ? 'trop haut' : 'trop bas';
+      const direction = typeof lufs === 'number' && lufs > -10 ? t("trop haut") : t("trop bas");
       return `Niveau sonore ${direction} (${formatLufs(lufs)})`;
     }
     if (lower.includes(t('fréquence'))) {
-      return `Échantillonnage incorrect (${item?.sampleRate ? `${item.sampleRate} Hz` : t('non mesuré')})`;
+      return t("Échantillonnage incorrect ({value})", { value: item?.sampleRate ? `${item.sampleRate} Hz` : t('non mesuré') });
     }
-    if (lower.includes('mono')) return `Audio non mono (${item?.channels || t('canaux non mesurés')})`;
+    if (lower.includes('mono')) return t("Audio non mono ({value})", { value: item?.channels || t('canaux non mesurés') });
     if (lower.includes('format')) return `Mauvais format audio (${item?.codec || t('format non mesuré')})`;
   }
   if (kind === 'image') {
@@ -313,7 +315,7 @@ function measuredIssueSummary(issue, item, kind) {
     const format = item?.format || t('format non mesuré');
     if (lower.includes('format')) return `Mauvais format image (${format})`;
     if (lower.includes('dimension') || lower.includes('taille')) return `Dimensions incorrectes (${dimensions})`;
-    return `Image incorrecte (${dimensions} · ${format})`;
+    return t("Image incorrecte ({dimensions} · {format})", { dimensions: dimensions, format: format });
   }
   return message;
 }
@@ -323,7 +325,7 @@ function recordProblemSummary(record) {
   if (record.kind === 'audio') {
     if (scopedIssues.some((issue) => (issue.message || '').toLowerCase().includes('satur'))) {
       const peak = record.item?.truePeakDb;
-      return typeof peak === 'number' ? `Saturé · crête ${formatPeak(peak)}` : t('Saturé (source)');
+      return typeof peak === 'number' ? t("Saturé · crête {value}", { value: formatPeak(peak) }) : t('Saturé (source)');
     }
     const silenceIssues = scopedIssues.filter((issue) => (issue.message || '').toLowerCase().includes('silence'));
     if (silenceIssues.length > 0) {
@@ -332,7 +334,7 @@ function recordProblemSummary(record) {
     }
     if (scopedIssues.some((issue) => (issue.message || '').toLowerCase().includes('volume'))) {
       const lufs = record.item?.integratedLufs;
-      const direction = typeof lufs === 'number' && lufs > -10 ? 'trop haut' : 'trop bas';
+      const direction = typeof lufs === 'number' && lufs > -10 ? t("trop haut") : t("trop bas");
       return `Niveau sonore ${direction} (${formatLufs(lufs)})`;
     }
   }
@@ -404,7 +406,7 @@ function summarizeGroups(groups, report) {
       icon: 'info',
       title: listenCount === 1
         ? t('Pack corrigeable, avec un fichier à écouter')
-        : `Pack corrigeable, avec ${listenCount} fichiers à écouter`,
+        : t("Pack corrigeable, avec {listenCount} fichiers à écouter", { listenCount: listenCount }),
       subtitle: t('Le reste peut être corrigé automatiquement.'),
       listenCount,
       fixCount,
@@ -415,7 +417,9 @@ function summarizeGroups(groups, report) {
     return {
       tone: 'ok',
       icon: 'check',
-      title: `Pack conforme, avec ${optionalCount} ajustement${optionalCount > 1 ? 's' : ''} facultatif${optionalCount > 1 ? 's' : ''}`,
+      title: optionalCount > 1
+        ? t('Pack conforme, avec {count} ajustements facultatifs', { count: optionalCount })
+        : t('Pack conforme, avec {count} ajustement facultatif', { count: optionalCount }),
       subtitle: t('Les pauses longues peuvent être conservées telles quelles.'),
       listenCount,
       fixCount,
@@ -442,9 +446,9 @@ function fileSummary(kind, item) {
 }
 
 function roleLabel(kind) {
-  if (kind === 'audio') return 'Audio';
-  if (kind === 'image') return 'Image';
-  return 'Fichier';
+  if (kind === 'audio') return t("Audio");
+  if (kind === 'image') return t("Image");
+  return t("Fichier");
 }
 
 function measureRowsHtml(rows, badKeys = new Set(), infoKeys = new Set()) {
@@ -540,7 +544,7 @@ function buildConformingGroups(report) {
     groups.push({
       id: 'image',
       title: t('Images conformes'),
-      subtitle: 'Dimensions et format conformes.',
+      subtitle: t("Dimensions et format conformes."),
       icon: 'image',
       mode: 'files',
       kind: 'image',
@@ -553,13 +557,13 @@ function buildConformingGroups(report) {
     groups.push({
       id: 'title',
       title: t('Nom du pack'),
-      subtitle: 'Nom et convention valides.',
+      subtitle: t("Nom et convention valides."),
       icon: 'file',
       mode: 'facts',
       metricStrong: 'Valide',
       metricSmall: 'Convention OK',
       facts: [
-        { key: 'name', label: 'Nom', value: report.packName || '—' },
+        { key: 'name', label: t("Nom"), value: report.packName || '—' },
         { key: 'title', label: 'Titre', value: report.packTitle || '—' },
         { key: 'version', label: 'Version', value: String(report.packVersion ?? '—') },
       ],
@@ -574,11 +578,11 @@ function buildConformingGroups(report) {
       icon: 'network',
       mode: 'facts',
       metricStrong: 'Correcte',
-      metricSmall: `${structure.stageCount ?? 0} étapes`,
+      metricSmall: t("{value} étapes", { value: structure.stageCount ?? 0 }),
       facts: [
         { key: 'lunii', label: 'Compatible Lunii', value: structure.luniiCompatible ? t('Oui') : t('Non') },
         { key: 'editable', label: t('Éditable Story Studio'), value: structure.storyStudioEditable ? t('Oui') : t('Non') },
-        { key: 'stories', label: 'Histoires', value: String(structure.storyCount ?? 0) },
+        { key: 'stories', label: t("Histoires"), value: String(structure.storyCount ?? 0) },
         { key: 'stages', label: t('Étapes'), value: String(structure.stageCount ?? 0) },
         { key: 'actions', label: t('Listes de choix'), value: String(structure.actionCount ?? 0) },
         { key: 'refAudio', label: t('Audios référencés'), value: String(structure.referencedAudioCount ?? 0) },
@@ -1206,13 +1210,13 @@ export function formatHtmlReport(report) {
       </div>
       <div class="summary-tiles" aria-label={t("Résumé du pack")}>
         ${summaryTileHtml({
-          title: 'Audio',
+          title: t("Audio"),
           iconName: 'audio',
           tone: saturatedCount > 0 ? 'danger' : (audio.needsFix > 0 ? 'fix' : 'ok'),
           split: audio,
         })}
         ${summaryTileHtml({
-          title: 'Images',
+          title: t("Images"),
           iconName: 'image',
           tone: images.needsFix ? 'fix' : 'ok',
           split: images,
@@ -1229,7 +1233,7 @@ export function formatHtmlReport(report) {
           iconName: 'network',
           tone: structureOk ? 'ok' : 'listen',
           strong: structureOk ? 'Correcte' : t('Vérification manuelle'),
-          small: `${report.structureSummary?.stageCount ?? 0} étapes`,
+          small: t("{value} étapes", { value: report.structureSummary?.stageCount ?? 0 }),
         })}
         ${summaryTileHtml({
           title: 'Mode nuit',
@@ -1259,30 +1263,30 @@ export function formatHtmlReport(report) {
 export function formatReadableReport(report) {
   if (!report) return '';
   const lines = [];
-  lines.push(`# Vérification du pack`);
+  lines.push(t("# Vérification du pack"));
   lines.push('');
-  lines.push(`Pack analysé : ${report.packName}`);
+  lines.push(t("Pack analysé : {packName}", { packName: report.packName }));
   lines.push(`Verdict : ${verdictLabel(report.verdict)}`);
   lines.push('');
   lines.push(`- Erreurs : ${report.summary?.errors ?? 0}`);
   lines.push(`- Avertissements : ${report.summary?.warnings ?? 0}`);
   lines.push(`- Informations : ${report.summary?.infos ?? 0}`);
-  lines.push(`- Éléments conformes : ${report.summary?.ok ?? 0}`);
+  lines.push(t("- Éléments conformes : {value}", { value: report.summary?.ok ?? 0 }));
   const correctionCounts = packCorrectionCounts(report);
   lines.push(`- Corrections automatiques disponibles : ${correctionCounts.automatic}`);
   lines.push(`- Suggestions facultatives : ${correctionCounts.optional}`);
   lines.push('');
-  lines.push(`## Résumé`);
+  lines.push(t("## Résumé"));
   lines.push('');
   const audio = categoryConformanceStats(report.audioSummary);
   const images = categoryConformanceStats(report.imageSummary);
   lines.push(`- Audio : ${audio.ok}/${audio.total} conformes`);
   lines.push(`- Images : ${images.ok}/${images.total} conformes`);
   lines.push(`- Structure Lunii : ${report.structureSummary?.luniiCompatible ? 'valide' : t('à corriger')}`);
-  lines.push(`- Édition Story Studio : ${report.structureSummary?.storyStudioEditable ? t('supportée') : t('non supportée ou à vérifier')}`);
+  lines.push(t("- Édition Story Studio : {value}", { value: report.structureSummary?.storyStudioEditable ? t('supportée') : t('non supportée ou à vérifier') }));
   lines.push(`- Mode nuit : ${report.nightMode?.detected ? t('détecté') : 'absent'}`);
   lines.push('');
-  lines.push(`## Problèmes et points à vérifier`);
+  lines.push(t("## Problèmes et points à vérifier"));
   lines.push('');
   const issues = report.issues || [];
   if (issues.length === 0) {
@@ -1290,8 +1294,8 @@ export function formatReadableReport(report) {
   } else {
     for (const issue of issues) {
       lines.push(`- ${severityLabel(issue.severity)} · ${issue.label} : ${issue.message}`);
-      if (issue.filePath) lines.push(`  Fichier : ${issue.filePath}`);
-      if (issue.technicalDetails) lines.push(`  Détail : ${issue.technicalDetails}`);
+      if (issue.filePath) lines.push(t("  Fichier : {filePath}", { filePath: issue.filePath }));
+      if (issue.technicalDetails) lines.push(t("  Détail : {technicalDetails}", { technicalDetails: issue.technicalDetails }));
       if (issue.autoFixDescription) {
         const prefix = isOptionalSilenceIssue(issue) ? 'Suggestion facultative' : 'Correction';
         lines.push(`  ${prefix} : ${issue.autoFixDescription}`);
@@ -1299,7 +1303,7 @@ export function formatReadableReport(report) {
     }
   }
   lines.push('');
-  lines.push(`## Ce qui est conforme`);
+  lines.push(t("## Ce qui est conforme"));
   lines.push('');
   const conformingAudio = (report.audioItems || []).filter((item) => isConforming(item.status));
   if (conformingAudio.length) {
@@ -1320,7 +1324,7 @@ export function formatReadableReport(report) {
     lines.push('');
   }
   if (titleConforming(report)) {
-    lines.push(`### Nom du pack`);
+    lines.push(t("### Nom du pack"));
     lines.push(`- Nom : ${report.packName || '—'}`);
     lines.push(`- Titre : ${report.packTitle || '—'}`);
     lines.push(`- Version : ${report.packVersion ?? '—'}`);
@@ -1330,12 +1334,12 @@ export function formatReadableReport(report) {
     const structure = report.structureSummary || {};
     lines.push(`### Structure`);
     lines.push(`- Compatible Lunii : ${structure.luniiCompatible ? 'oui' : 'non'}`);
-    lines.push(`- Éditable Story Studio : ${structure.storyStudioEditable ? 'oui' : 'non'}`);
+    lines.push(t("- Éditable Story Studio : {value}", { value: structure.storyStudioEditable ? 'oui' : 'non' }));
     lines.push(`- Histoires : ${structure.storyCount ?? 0}`);
-    lines.push(`- Étapes : ${structure.stageCount ?? 0}`);
+    lines.push(t("- Étapes : {value}", { value: structure.stageCount ?? 0 }));
     lines.push(`- Listes de choix : ${structure.actionCount ?? 0}`);
-    lines.push(`- Audios référencés : ${structure.referencedAudioCount ?? 0}`);
-    lines.push(`- Images référencées : ${structure.referencedImageCount ?? 0}`);
+    lines.push(t("- Audios référencés : {value}", { value: structure.referencedAudioCount ?? 0 }));
+    lines.push(t("- Images référencées : {value}", { value: structure.referencedImageCount ?? 0 }));
     lines.push('');
   }
   lines.push(`### Mode nuit`);

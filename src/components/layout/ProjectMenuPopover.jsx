@@ -107,8 +107,8 @@ export function ProjectMenuPopover({
             <div className="project-menu-head">
               {/* L'état d'enregistrement n'est plus dit ici : il est affiché à
                   un seul endroit, la barre de titre, commune aux deux éditeurs. */}
-              <strong>Projet</strong>
-              <span>Fichier et enregistrement</span>
+              <strong>{t('Projet')}</strong>
+              <span>{t('Fichier et enregistrement')}</span>
             </div>
             <ProjectMenuItem
               entry={find('newProject')}

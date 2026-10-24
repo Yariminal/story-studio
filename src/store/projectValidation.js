@@ -232,7 +232,7 @@ export function getProjectValidationIssues(project, fileAudit = {}, providedProj
         validateNavigationTarget(
           issues,
           entry?.id ?? null,
-          `${entryLabel} — référence`,
+          t("{entryLabel} — référence", { entryLabel: entryLabel }),
           entry?.target,
           projectIndex,
           navigation,
@@ -265,7 +265,7 @@ export function getProjectValidationIssues(project, fileAudit = {}, providedProj
         validateNavigationTarget(
           issues,
           menuId,
-          `${entryLabel} — destination des histoires`,
+          t("{entryLabel} — destination des histoires", { entryLabel: entryLabel }),
           entry?.returnAfterPlay,
           projectIndex,
           navigation,
@@ -274,7 +274,7 @@ export function getProjectValidationIssues(project, fileAudit = {}, providedProj
       validateNavigationTarget(
         issues,
         menuId,
-        `${entryLabel} — Accueil du dossier`,
+        t("{entryLabel} — Accueil du dossier", { entryLabel: entryLabel }),
         entry?.returnOnHome,
         projectIndex,
         navigation,
@@ -308,7 +308,7 @@ export function getProjectValidationIssues(project, fileAudit = {}, providedProj
       validateNavigationTarget(
         issues,
         entry?.id ?? null,
-        `${entryLabel} — Accueil du titre`,
+        t("{entryLabel} — Accueil du titre", { entryLabel: entryLabel }),
         entry?.titleReturnOnHome,
         projectIndex,
         navigation,
@@ -333,7 +333,7 @@ export function getProjectValidationIssues(project, fileAudit = {}, providedProj
         validateNavigationTarget(
           issues,
           entry?.id ?? null,
-          `${entryLabel} — OK du prompt final`,
+          t("{entryLabel} — OK du prompt final", { entryLabel: entryLabel }),
           entry?.afterPlaybackPromptOkTarget,
           projectIndex,
           navigation,
@@ -342,7 +342,7 @@ export function getProjectValidationIssues(project, fileAudit = {}, providedProj
           validateNavigationTarget(
             issues,
             entry?.id ?? null,
-            `${entryLabel} — Accueil du prompt final`,
+            t("{entryLabel} — Accueil du prompt final", { entryLabel: entryLabel }),
             entry?.afterPlaybackPromptHomeTarget,
             projectIndex,
             navigation,
@@ -389,7 +389,7 @@ export function getProjectValidationIssues(project, fileAudit = {}, providedProj
           validateNavigationTarget(
             issues,
             entry?.id ?? null,
-            `${entryLabel} — OK de la réaction Accueil`,
+            t("{entryLabel} — OK de la réaction Accueil", { entryLabel: entryLabel }),
             target,
             projectIndex,
             navigation,
@@ -399,7 +399,7 @@ export function getProjectValidationIssues(project, fileAudit = {}, providedProj
           validateNavigationTarget(
             issues,
             entry?.id ?? null,
-            `${entryLabel} — Accueil de la réaction Accueil`,
+            t("{entryLabel} — Accueil de la réaction Accueil", { entryLabel: entryLabel }),
             homeStep.homeTarget,
             projectIndex,
             navigation,

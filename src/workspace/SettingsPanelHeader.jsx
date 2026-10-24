@@ -20,7 +20,7 @@ function getHeaderData({ node, selectedId, selectedIds, project }) {
   if (selectedIds?.size > 1) {
     return {
       type: 'multi',
-      title: `${selectedIds.size} éléments sélectionnés`,
+      title: t("{size} éléments sélectionnés", { size: selectedIds.size }),
       badge: t('Modification groupée'),
       icon: null,
     };
@@ -48,7 +48,7 @@ function getHeaderData({ node, selectedId, selectedIds, project }) {
   // Badge du root : dépend du type de projet — « Histoire simple » en `simple`
   // (le header est visible dans l'éditeur simple même sans diagramme),
   // « Pack » sinon. « Histoire » seul serait ambigu avec TYPE_LABELS.story.
-  const rootBadge = project?.projectType === 'simple' ? t('Histoire simple') : 'Pack';
+  const rootBadge = project?.projectType === 'simple' ? t('Histoire simple') : t("Pack");
   return {
     type,
     title: type === 'root' ? rootTitle : (node.name || TYPE_LABELS[type] || t('Réglages')),

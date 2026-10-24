@@ -1,5 +1,6 @@
 import { t } from '../i18n/index.js';
-export const RELEASE_NOTES = Object.freeze({
+export function RELEASE_NOTES() {
+  return Object.freeze({
   version: '0.9.9',
   date: '2026-10-03',
   message: [
@@ -22,7 +23,8 @@ export const RELEASE_NOTES = Object.freeze({
   discordUrl: 'https://discord.gg/jztpQz5Ad',
   changelogUrl: 'https://github.com/Hugs11/story-studio/blob/main/CHANGELOG.md',
 });
+}
 
 export function shouldShowReleaseNotes(appVersion, seenVersion) {
-  return appVersion === RELEASE_NOTES.version && seenVersion !== appVersion;
+  return appVersion === RELEASE_NOTES().version && seenVersion !== appVersion;
 }

@@ -117,7 +117,7 @@ export function BottomWorkspacePanel({
           className={tabClassName('media')}
           onClick={() => onActiveTabChange('media')}
         >
-          Médias
+          {t('Médias')}
           <span>{mediaCount}</span>
         </button>
         <button
@@ -125,7 +125,7 @@ export function BottomWorkspacePanel({
           className={tabClassName('queue')}
           onClick={() => onActiveTabChange('queue')}
         >
-          File de rendu
+          {t('File de rendu')}
           {activeCount > 0 && <span>{activeCount}</span>}
         </button>
         <button
@@ -133,7 +133,7 @@ export function BottomWorkspacePanel({
           className={tabClassName('ai')}
           onClick={() => onActiveTabChange('ai')}
         >
-          File IA
+          {t('File IA')}
           {aiActiveCount > 0 ? <span>{aiActiveCount}</span> : aiDoneCount > 0 ? <span>✓</span> : null}
         </button>
         <div className="bottom-workspace-spacer" />

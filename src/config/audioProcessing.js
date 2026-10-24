@@ -1,3 +1,4 @@
+import { getLocale } from '../i18n/index.js';
 import { KEYS, read } from '../store/persistentSettings.js';
 
 export const PACK_AUDIO_EDGE_SILENCE_SECONDS = 0.4;
@@ -23,7 +24,8 @@ export function getPackAudioEdgeSilenceSettings() {
 export function formatPackAudioEdgeSilence(seconds = PACK_AUDIO_EDGE_SILENCE_SECONDS) {
   const value = Number(seconds);
   if (!Number.isFinite(value)) return '1 s';
-  return Number.isInteger(value) ? `${value} s` : `${value.toLocaleString('fr-FR')} s`;
+  const locale = getLocale() === 'en' ? 'en-US' : 'fr-FR';
+  return Number.isInteger(value) ? `${value} s` : `${value.toLocaleString(locale)} s`;
 }
 
 // ── Les réglages audio du pack, et leur source unique ───────────────────────

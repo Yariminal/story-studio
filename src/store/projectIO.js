@@ -314,7 +314,7 @@ function collectTransferTargets(project, savePath, statusByPath = null) {
 export function collectTransferableProjectFiles(project, savePath, statusByPath = null) {
   if (!hasPath(savePath)) return [];
   // Le mode Avancé passe par la même vue : une liaison média déclarée est une
-  // candidate au même titre qut('une référence d')arbre, et `assetRef` n'est jamais
+  // candidate au même titre qu'une référence d'arbre, et `assetRef` n'est jamais
   // proposé au transfert — seul son `path` l'est.
   const seen = new Set();
   const candidates = [];
@@ -390,7 +390,7 @@ async function uniquePathInDir(dir, fileName) {
     candidate = joinPath(dir, `${stem}--${Date.now()}-${index}${ext}`);
     if (!(await exists(candidate))) return candidate;
   }
-  throw new Error(`Impossible de créer un nom unique pour ${fileName}`);
+  throw new Error(t("Impossible de créer un nom unique pour {fileName}", { fileName: fileName }));
 }
 
 async function backupProjectFile(path, limit = 0, backupDirOverride = null) {
@@ -568,7 +568,7 @@ export async function saveProject(project, existingPath = null, onProgress = nul
  */
 export async function writeNewProjectFile(project, path) {
   if (await exists(path)) {
-    throw new Error(`Un fichier porte déjà ce nom : ${basename(path)}.`);
+    throw new Error(t("Un fichier porte déjà ce nom : {value}.", { value: basename(path) }));
   }
   const contents = encodeProjectFile(
     relativizeProjectMediaPaths(projectFileBody(project), getProjectDir(path)),
@@ -610,9 +610,9 @@ export async function saveProjectAs(project, currentSavePath, onProgress = null,
   const projectForPath = withLocalProjectNameForPath(project, newPath, { force: true });
   const catalogPathsForSave = mediaLibraryPaths.filter((mediaPath) => !isTempImage(mediaPath));
   // `deferWrite` : le chemin est choisi et le projet préparé, mais rien n'est
-  // écrit. Lt('appelant écrit lui-même une fois ses médias à l')abri — un fichier
+  // écrit. L'appelant écrit lui-même une fois ses médias à l'abri — un fichier
   // posé avant eux désignerait des médias qui peuvent disparaître, et un
-  // fichier existant qut('on écrase ne doit pas être perdu si l')opération
+  // fichier existant qu'on écrase ne doit pas être perdu si l'opération
   // échoue ensuite. Les images temporaires restent en place : l'écriture de
   // l'appelant les copie, et une opération abandonnée avant n'en laisse aucune
   // copie orpheline.
@@ -696,11 +696,11 @@ export async function loadProjectFromPath(path, { preserveEmptyProjectName = fal
   };
 }
 
-// Aperçu dt('un fichier projet pour une liste, sans l')ouvrir. Le codec ne lit que
+// Aperçu d'un fichier projet pour une liste, sans l'ouvrir. Le codec ne lit que
 // l'enveloppe : ni migration, ni normalisation, ni validation Rust du payload,
 // et aucune écriture — énumérer des reprises de session ne peut donc pas générer
 // une identité ni modifier un snapshot. Seul le chemin de la vignette est résolu,
-// parce qut('il doit être affichable ; le reste du fichier n')est pas touché.
+// parce qu'il doit être affichable ; le reste du fichier n'est pas touché.
 export async function previewProjectFromPath(path) {
   const text = await readTextFile(path);
   const preview = readProjectFilePreview(text, { fileName: basename(path) || path });
@@ -802,9 +802,9 @@ export async function consolidateProject(project, savePath, destinationDir, onPr
 
 // Dépendances du projet qui vivent encore dans le dossier de session **et**
 // existent sur le disque. Ce sont exactement les fichiers qu'un nettoyage de
-// session détruirait : tant qut('il en reste un, le projet enregistré n')est pas
+// session détruirait : tant qu'il en reste un, le projet enregistré n'est pas
 // autonome et la promotion ne doit pas supprimer la session. Une référence dont
-// le fichier a déjà disparu nt('en est pas une — un média manquant n')a jamais
+// le fichier a déjà disparu n'en est pas une — un média manquant n'a jamais
 // empêché un enregistrement, et le nettoyage ne lui retire rien.
 export async function collectLiveSessionDependencies(project, sessionDir) {
   const bound = collectSessionBoundReferences({ project, sessionDir });

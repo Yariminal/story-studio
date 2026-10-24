@@ -8,6 +8,7 @@ import { Histogram } from './Histogram';
 import { drawFilteredImage, CANVAS_W, CANVAS_H } from './useImageEditor';
 import { computeLuminanceHistogram } from './imageHistogram';
 import { LEVELS_GAMMA_MIN, LEVELS_GAMMA_MAX } from './imageLevels';
+import { t } from '../../i18n/index.js';
 
 export function LevelsControl({ filters, setFilter, image, transform, imgLoaded }) {
   const [histogram, setHistogram] = useState(null);
@@ -59,7 +60,7 @@ export function LevelsControl({ filters, setFilter, image, transform, imgLoaded 
   return (
     <div className="filter-group">
       <div className="filter-group-title">Niveaux</div>
-      <div className="filter-group-help">Écrase les noirs et les blancs, ajuste les tons moyens.</div>
+      <div className="filter-group-help">{t('Écrase les noirs et les blancs, ajuste les tons moyens.')}</div>
 
       <Histogram bins={histogram} black={levelsBlack} white={levelsWhite} gamma={levelsGamma} />
 

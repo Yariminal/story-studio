@@ -33,9 +33,13 @@ import { advancedGestures, optionTarget } from '../../store/projectModel/advance
 // 170 Écrans.
 const SHOWN_ARRIVALS = 3;
 
-const HOW = { ok: 'par sa suite du parcours', home: t('par son bouton Accueil') };
+function HOW() {
+  return { ok: 'par sa suite du parcours', home: t('par son bouton Accueil') };
+}
 
-const WHEEL_HELP = t('C’est la molette des choix voisins qui amène ici : sur l’un d’eux, tourner la molette passe à ce choix. La molette de cet Écran-ci règle où l’on va en partant, dans l’encadré « Molette ».');
+function WHEEL_HELP() {
+  return t('C’est la molette des choix voisins qui amène ici : sur l’un d’eux, tourner la molette passe à ce choix. La molette de cet Écran-ci règle où l’on va en partant, dans l’encadré « Molette ».');
+}
 
 function ArrivalLine({ label, help = null, children }) {
   return (
@@ -60,14 +64,16 @@ function DirectArrivals({ row, thumbnails, onFocusPath }) {
           <NodeThumbnail path={opener.sourcePath} thumbnails={thumbnails} />
           <NodeLink path={opener.sourcePath} label={opener.source.label.label} onFocusPath={onFocusPath} />
           <span className="advanced-arrival__how">
-            {HOW[opener.slot]}{opener.random ? t(', au hasard parmi les choix') : ''}
+            {HOW()[opener.slot]}{opener.random ? t(', au hasard parmi les choix') : ''}
           </span>
         </li>
       ))}
       {hidden > 0 && (
         <li>
           <button type="button" className="advanced-link" onClick={() => setOpen(true)}>
-            et {hidden} autre{hidden > 1 ? 's' : ''}
+            {hidden > 1
+            ? t('et {count} autres', { count: hidden })
+            : t('et {count} autre', { count: hidden })}
           </button>
         </li>
       )}
@@ -115,7 +121,7 @@ function ListArrival({ row, disabled, thumbnails, onFocusPath, onRemove }) {
           disabled={disabled}
           onClick={onRemove}
         >
-          Retirer de la liste
+          {t("Retirer de la liste")}
         </Button>
       </div>
       {row.direct.length > 0 && (
@@ -124,14 +130,12 @@ function ListArrival({ row, disabled, thumbnails, onFocusPath, onRemove }) {
         </ArrivalLine>
       )}
       {byWheel.length > 0 && (
-        <ArrivalLine label={t("À la molette")} help={WHEEL_HELP}>
+        <ArrivalLine label={t("À la molette")} help={WHEEL_HELP()}>
           <WheelArrivals active={byWheel} thumbnails={thumbnails} onFocusPath={onFocusPath} />
         </ArrivalLine>
       )}
       {unreachable && (
-        <p className="advanced-field__warning advanced-arrival__warning">
-          Rien ne mène ici par cette liste.
-        </p>
+        <p className="advanced-field__warning advanced-arrival__warning"> {t("Rien ne mène ici par cette liste.")} </p>
       )}
     </li>
   );
@@ -152,10 +156,8 @@ function AddToListForm({ stage, index, disabled, onGesture, onClose }) {
   };
   return (
     <div className="advanced-field__form">
-      <p className="advanced-field__note">
-        Cet Écran devient le dernier choix de la liste choisie.
-      </p>
-      <label htmlFor="advanced-arrival-action">Liste de choix</label>
+      <p className="advanced-field__note"> {t("Cet Écran devient le dernier choix de la liste choisie.")} </p>
+      <label htmlFor="advanced-arrival-action">{t('Liste de choix')}</label>
       <NodePicker
         id="advanced-arrival-action"
         index={index}
@@ -165,10 +167,8 @@ function AddToListForm({ stage, index, disabled, onGesture, onClose }) {
         disabled={disabled}
       />
       <div className="advanced-field__actions">
-        <Button size="sm" onClick={onClose}>Annuler</Button>
-        <Button size="sm" variant="primary" disabled={disabled || !chosen} onClick={apply}>
-          Ajouter à la liste
-        </Button>
+        <Button size="sm" onClick={onClose}>{t('Annuler')}</Button>
+        <Button size="sm" variant="primary" disabled={disabled || !chosen} onClick={apply}> {t("Ajouter à la liste")} </Button>
       </div>
     </div>
   );
@@ -188,21 +188,21 @@ export function StageArrivals({
   return (
     <section className="card advanced-editor__section">
       <div className="advanced-editor__section-heading advanced-editor__section-heading--list">
-        <div className="card-title">Comment on arrive sur cet Écran</div>
+        <div className="card-title">{t('Comment on arrive sur cet Écran')}</div>
         {onViewConnections && (
           <button type="button" className="advanced-link" onClick={() => onViewConnections(stage.path)}>
-            Voir dans le graphe
+            {t("Voir dans le graphe")}
           </button>
         )}
       </div>
 
       {isEntry && (
-        <p className="advanced-field__note">C’est l’Écran d’entrée : le pack commence ici.</p>
+        <p className="advanced-field__note">{t('C’est l’Écran d’entrée : le pack commence ici.')}</p>
       )}
 
       {memberships.length === 0
         ? !isEntry && (
-          <p className="advanced-field__warning">Cet Écran n’est dans aucune liste de choix : rien n’y mène.</p>
+          <p className="advanced-field__warning">{t('Cet Écran n’est dans aucune liste de choix : rien n’y mène.')}</p>
         )
         : (
           <ol className="advanced-arrivals">
@@ -219,12 +219,11 @@ export function StageArrivals({
           </ol>
         )}
 
-      {/* Lt('Écran d')entrée n'est jamais le choix d'une liste. */}
+      {/* L'Écran d'entrée n'est jamais le choix d'une liste. */}
       {!isEntry && (
         <div className="advanced-field__actions">
           <Button size="sm" disabled={disabled} onClick={() => setAdding(true)}>
-            <Plus /> Ajouter à une liste
-          </Button>
+            <Plus /> {t("Ajouter à une liste")} </Button>
         </div>
       )}
       {adding && !isEntry && (

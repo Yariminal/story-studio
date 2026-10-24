@@ -17,12 +17,14 @@ export const BUNDLE_CHILD_STATUS = {
   error: 'error',
 };
 
-const VERDICT_LABELS = {
+function VERDICT_LABELS() {
+  return {
   [BUNDLE_CHILD_STATUS.editable]: 'Modifiable',
   [BUNDLE_CHILD_STATUS.readOnly]: t('Lecture seule'),
   [BUNDLE_CHILD_STATUS.unsupported]: t('Non supporté'),
   [BUNDLE_CHILD_STATUS.error]: 'Illisible',
 };
+}
 
 export function isChildSelectable(child) {
   return !!child && child.selectable === true;
@@ -58,7 +60,7 @@ export function describeChildVerdict(child) {
     : { message: '', technicalDetail: '' };
   return {
     status,
-    label: VERDICT_LABELS[status] ?? VERDICT_LABELS[BUNDLE_CHILD_STATUS.error],
+    label: VERDICT_LABELS()[status] ?? VERDICT_LABELS()[BUNDLE_CHILD_STATUS.error],
     reason: presented.message,
     technicalDetail: presented.technicalDetail,
   };

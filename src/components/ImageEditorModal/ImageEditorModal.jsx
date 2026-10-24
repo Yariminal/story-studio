@@ -261,10 +261,10 @@ export function ImageEditorModal({
               onMouseLeave={handleMouseUp}
               style={{ cursor: 'grab' }}
             />
-            <div className="image-editor-canvas-hint">Glisser pour repositionner · Molette pour zoomer</div>
+            <div className="image-editor-canvas-hint">{t('Glisser pour repositionner · Molette pour zoomer')}</div>
             <div className="image-editor-fit-btns">
               <Tooltip text={t("Remplir le cadre (rogné)")}>
-                <Button size="sm" onClick={handleCoverFit}>Ajuster</Button>
+                <Button size="sm" onClick={handleCoverFit}>{t('Ajuster')}</Button>
               </Tooltip>
               <Tooltip text={t("Image entière visible")}>
                 <Button size="sm" onClick={handleContainFit}>Centrer</Button>
@@ -289,7 +289,7 @@ export function ImageEditorModal({
 
             <div className="filter-group">
               <div className="filter-group-title">Vignettage</div>
-              <div className="filter-group-help">Assombrit les bords de l’image.</div>
+              <div className="filter-group-help">{t('Assombrit les bords de l’image.')}</div>
               <FilterSlider label={t("Intensité")} value={filters.vignette} min={0} max={100} unit="%" signed={false}
                 onChange={v => setFilter('vignette', v)} />
               <FilterSlider label="Taille" value={filters.vignetteSize} min={30} max={100} unit="%" signed={false}
@@ -307,7 +307,7 @@ export function ImageEditorModal({
             />
 
             <div className="filter-row filter-toggle">
-              <span className="filter-label">Niveaux de gris</span>
+              <span className="filter-label">{t('Niveaux de gris')}</span>
               <input type="checkbox" checked={filters.grayscale}
                 onChange={e => setFilter('grayscale', e.target.checked)} />
             </div>
@@ -330,14 +330,14 @@ export function ImageEditorModal({
               </>
             )}
 
-            <Button size="sm" className="filter-reset" onClick={resetFilters}>Réinitialiser les filtres</Button>
+            <Button size="sm" className="filter-reset" onClick={resetFilters}>{t('Réinitialiser les filtres')}</Button>
           </div>
         </div>
 
         <div className="modal-footer">
-          <Button onClick={onCancel}>Annuler</Button>
+          <Button onClick={onCancel}>{t('Annuler')}</Button>
           <Button variant="primary" onClick={handleConfirm} disabled={!imgLoaded || saving}>
-            {saving ? 'Enregistrement…' : confirmLabel}
+            {saving ? t("Enregistrement…") : confirmLabel}
           </Button>
         </div>
       </div>

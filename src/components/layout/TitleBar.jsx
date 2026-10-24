@@ -69,9 +69,9 @@ export function TitleBar({ projectName, packRecap = null, packCoverImage = null,
   const packStoryName = packRecap?.title || '';
   const packDisplayName = packStoryName || t('Métadonnées du pack');
   const packMetaLine = packRecap?.line ?? '';
-  const projectTooltip = `Nom du projet : « ${displayProjectName} »`;
+  const projectTooltip = t("Nom du projet : « {displayProjectName} »", { displayProjectName: displayProjectName });
   const packTooltip = packStoryName
-    ? `« ${packStoryName} » — Modifier le nom et les métadonnées du pack`
+    ? t("« {packStoryName} » — Modifier le nom et les métadonnées du pack", { packStoryName: packStoryName })
     : t('Renseigner le nom et les métadonnées du pack');
   const showSaveIndicator = isDirty || hasSavePath || saveState === 'ok';
   const saveIndicatorClass = (isDirty && saveState !== 'ok')
@@ -150,7 +150,7 @@ export function TitleBar({ projectName, packRecap = null, packCoverImage = null,
             <button type="button" className="chrome-window-btn" onClick={() => currentWindow.minimize()} title={t("Réduire")}>
               <MinimizeIcon />
             </button>
-            <button type="button" className="chrome-window-btn" onClick={handleToggleMaximize} title="Agrandir ou restaurer" disabled={isMaximizing}>
+            <button type="button" className="chrome-window-btn" onClick={handleToggleMaximize} title={t("Agrandir ou restaurer")} disabled={isMaximizing}>
               <MaximizeIcon />
             </button>
             <button type="button" className="chrome-window-btn chrome-window-btn-close" onClick={() => currentWindow.close()} title={t("Fermer")}>

@@ -28,7 +28,7 @@ export function readMediaBindings(project) {
 
 export function mediaBindingLabel(binding) {
   const reference = hasPath(binding?.assetRef) ? binding.assetRef : t('référence inconnue');
-  return `Média avancé: ${reference}`;
+  return t("Média avancé: {reference}", { reference: reference });
 }
 
 // Index par `assetRef`, l'unique identité d'une liaison. La comparaison est
@@ -104,7 +104,7 @@ export function mediaBindingViolations(bindings) {
     if (!hasPath(binding.assetRef)) {
       push('INVALID_MEDIA_BINDING', at(index, 'assetRef'), String(binding.assetRef), t('référence de dialecte non vide'));
     } else if (seenAssetRefs.has(binding.assetRef)) {
-      push('DUPLICATE_MEDIA_BINDING', at(index, 'assetRef'), `déjà lié en ${at(seenAssetRefs.get(binding.assetRef))}`, t('une liaison par référence'));
+      push('DUPLICATE_MEDIA_BINDING', at(index, 'assetRef'), t("déjà lié en {value}", { value: at(seenAssetRefs.get(binding.assetRef)) }), t('une liaison par référence'));
     } else {
       seenAssetRefs.set(binding.assetRef, index);
     }

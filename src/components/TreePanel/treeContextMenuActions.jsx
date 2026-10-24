@@ -112,7 +112,7 @@ export function buildTreeContextActions({
       actions.push('sep');
       actions.push({
         icon: <ArrowUpRight />,
-        label: 'Sortir de la racine',
+        label: t("Sortir de la racine"),
         fn: onDemoteRootToMenu,
         disabledReason: demoteDepth.allowed ? null : MENU_DEPTH_LIMIT_REACHED_MESSAGE,
       });
@@ -134,7 +134,7 @@ export function buildTreeContextActions({
 
     if (onSimulateNode && (nodeType === 'root' || nodeType === 'menu' || nodeType === 'story')) {
       actions.push('sep');
-      actions.push({ icon: <Play />, label: 'Simuler depuis ici', fn: () => onSimulateNode(nodeId) });
+      actions.push({ icon: <Play />, label: t("Simuler depuis ici"), fn: () => onSimulateNode(nodeId) });
     }
 
     if ((nodeType === 'zip' || nodeType === 'story' || nodeType === 'menu') && parentMenuId != null) {
@@ -146,9 +146,9 @@ export function buildTreeContextActions({
       actions.push('sep');
       // Trois gestes, trois dessins : deux gestes distincts ne doivent pas se
       // ressembler.
-      actions.push({ icon: <SquareStack />, label: 'Dupliquer', fn: () => onDuplicate(nodeId), shortcut: shortcutLabels.selectionDuplicate ?? null });
-      actions.push({ icon: <Copy />, label: 'Copier', fn: () => handleCopy(nodeId), shortcut: shortcutLabels.selectionCopy ?? null });
-      actions.push({ icon: <Scissors />, label: 'Couper', fn: () => handleCut(nodeId), shortcut: shortcutLabels.selectionCut ?? null });
+      actions.push({ icon: <SquareStack />, label: t("Dupliquer"), fn: () => onDuplicate(nodeId), shortcut: shortcutLabels.selectionDuplicate ?? null });
+      actions.push({ icon: <Copy />, label: t("Copier"), fn: () => handleCopy(nodeId), shortcut: shortcutLabels.selectionCopy ?? null });
+      actions.push({ icon: <Scissors />, label: t("Couper"), fn: () => handleCut(nodeId), shortcut: shortcutLabels.selectionCut ?? null });
     }
 
     if (clipboardRef.current?.entries?.length) {
@@ -187,8 +187,8 @@ export function buildTreeContextActions({
       actions.push({
         icon: <Music />,
         label: audioClip?.mode === 'cut'
-          ? (audioCount > 1 ? `Déplacer ${audioCount} sons ici` : t("Déplacer l'audio ici"))
-          : (audioCount > 1 ? `Coller ${audioCount} sons ici` : t("Coller l'audio ici")),
+          ? (audioCount > 1 ? t("Déplacer {audioCount} sons ici", { audioCount: audioCount }) : t("Déplacer l'audio ici"))
+          : (audioCount > 1 ? t("Coller {audioCount} sons ici", { audioCount: audioCount }) : t("Coller l'audio ici")),
         fn: () => handlePasteMedia(nodeId, nodeType, 'audio'),
       });
     }
@@ -226,7 +226,7 @@ export function buildTreeContextActions({
           icon: <Music />,
           label: replacementEligibility.valid
             ? t('Assembler et remplacer les histoires…')
-            : `Assembler ${audioContext.stories.length} audios…`,
+            : t("Assembler {length} audios…", { length: audioContext.stories.length }),
           fn: () => {
             closeContextMenu();
             onOpenMediaAudioTool({
@@ -256,7 +256,7 @@ export function buildTreeContextActions({
           : () => onDeleteItem(nodeId);
       actions.push({
         icon: <Trash2 />,
-        label: selectedForDelete.length > 1 ? `Supprimer ${selectedForDelete.length} éléments` : t('Supprimer'),
+        label: selectedForDelete.length > 1 ? t("Supprimer {length} éléments", { length: selectedForDelete.length }) : t('Supprimer'),
         shortcut: shortcutLabels.selectionDelete ?? null,
         fn: deleteFn,
         danger: true,
@@ -296,7 +296,7 @@ export function buildTreeContextActions({
       };
 
       const headerLabel = isMultiTarget
-        ? `Couleur (${colorTargetIds.length + (includesRoot ? 1 : 0)} éléments)`
+        ? t("Couleur ({value} éléments)", { value: colorTargetIds.length + (includesRoot ? 1 : 0) })
         : 'Couleur';
 
       actions.push('sep');
@@ -329,7 +329,7 @@ export function buildTreeContextActions({
       actions.push({ icon: <FolderOpen />, label: t("Afficher dans l'explorateur"), fn: () => revealItemInDir(revealFiles[0].path) });
     } else {
       revealFiles.forEach(rf => {
-        actions.push({ icon: <FolderOpen />, label: `Afficher ${rf.label} dans l'explorateur`, fn: () => revealItemInDir(rf.path) });
+        actions.push({ icon: <FolderOpen />, label: t("Afficher {label} dans l'explorateur", { label: rf.label }), fn: () => revealItemInDir(rf.path) });
       });
     }
   }

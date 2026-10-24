@@ -206,7 +206,7 @@ export function formatBadgeTitle(data, projectIndex) {
         key: 'continuation',
         kind: 'continuation',
         label: '⇒',
-        title: `Continuation native importée depuis ${data.sourceStoryName || t('une histoire')}.`,
+        title: t("Continuation native importée depuis {value}.", { value: data.sourceStoryName || t('une histoire') }),
       };
     case 'return': {
       const returnName = getGeneratedNavigationTargetName(data.targetId, projectIndex);
@@ -215,7 +215,7 @@ export function formatBadgeTitle(data, projectIndex) {
         kind: 'return',
         status: data.status,
         label: '↩',
-        title: `À la fin de l'histoire → « ${returnName} »`,
+        title: t("À la fin de l'histoire → « {returnName} »", { returnName: returnName }),
       };
     }
     case 'sequence-return': {
@@ -225,7 +225,7 @@ export function formatBadgeTitle(data, projectIndex) {
         kind: 'sequence-return',
         status: data.status,
         label: '▤',
-        title: `À la fin de l'histoire : passage par le scénario de fin personnalisé → « ${returnName} »`,
+        title: t("À la fin de l'histoire : passage par le scénario de fin personnalisé → « {returnName} »", { returnName: returnName }),
       };
     }
     case 'prompt-return': {
@@ -236,7 +236,7 @@ export function formatBadgeTitle(data, projectIndex) {
         kind: 'prompt-return',
         status: data.status,
         label: '↩',
-        title: `À la fin de l'histoire : passage par le message de fin personnalisé → « ${returnName} »${suffix}`,
+        title: t("À la fin de l'histoire : passage par le message de fin personnalisé → « {returnName} »{suffix}", { returnName: returnName, suffix: suffix }),
       };
     }
     case 'home-none':
@@ -264,7 +264,7 @@ export function formatBadgeTitle(data, projectIndex) {
         kind: 'home-implicit',
         status: data.status,
         label: '⌂',
-        title: `Appuie sur le bouton Accueil pendant la lecture → « ${homeName} »`,
+        title: t("Appuie sur le bouton Accueil pendant la lecture → « {homeName} »", { homeName: homeName }),
       };
     }
     case 'home': {
@@ -285,8 +285,8 @@ export function formatBadgeTitle(data, projectIndex) {
         status: data.status,
         label: '⌂',
         title: data.isInactive
-          ? `Appuie sur le bouton Accueil pendant la lecture → « ${homeName} », mais le bouton Accueil est désactivé pendant la lecture`
-          : `Appuie sur le bouton Accueil pendant la lecture → « ${homeName} »`,
+          ? t("Appuie sur le bouton Accueil pendant la lecture → « {homeName} », mais le bouton Accueil est désactivé pendant la lecture", { homeName: homeName })
+          : t("Appuie sur le bouton Accueil pendant la lecture → « {homeName} »", { homeName: homeName }),
       };
     }
     case 'end-node':
@@ -298,7 +298,7 @@ export function formatBadgeTitle(data, projectIndex) {
         kind: data.kind,
         status: data.status,
         label: data.kind === 'end-night' ? '☾' : '■',
-        title: `À la fin de l'histoire : passage par le message de fin${suffix} → « ${returnName} »`,
+        title: t("À la fin de l'histoire : passage par le message de fin{suffix} → « {returnName} »", { suffix: suffix, returnName: returnName }),
       };
     }
     default:

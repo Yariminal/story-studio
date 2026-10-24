@@ -87,8 +87,10 @@ import './styles/layout.css';
 import './components/layout/AppChrome.css';
 import './components/RenderQueuePanel/RenderQueuePanel.css';
 
-import { t } from './i18n/index.js';
+import { t, getLocale } from './i18n/index.js';
+import { useLocale } from './i18n/LocaleContext.jsx';
 function AppContent() {
+  useLocale();
   const store = useProjectStore();
   const advancedAuthoring = useAdvancedAuthoring({ store });
   const { showErrorDialog, showConfirmDialog, showChoiceDialog } = useErrorDialog();
@@ -386,7 +388,7 @@ function AppContent() {
       ],
     });
     return choice === 'quit';
-  }, [showChoiceDialog]);
+  }, [showChoiceDialog, getLocale()]);
 
   useWindowCloseGuard({
     askSaveBeforeLeave: confirmSaveBeforeLeaveCurrent,
@@ -730,7 +732,7 @@ function AppContent() {
     } catch (error) {
       showErrorDialog({
         title: t('Éditeur graphe'),
-        message: `Impossible de créer le projet : ${error?.message ?? error}`,
+        message: t("Impossible de créer le projet : {value}", { value: error?.message ?? error }),
       });
     }
   }
@@ -1138,8 +1140,8 @@ function AppContent() {
   // La raison de la suspension est dite **à côté** des commandes tenues, jamais
   // à leur place : l'auteur doit comprendre pourquoi une commande ne répond pas.
   const suspensionNotice = advancedAuthoring.locked
-    ? SUSPENDED_BY_EXPORT
-    : advancedAuthoring.busy ? SUSPENDED_BY_GESTURE : null;
+    ? SUSPENDED_BY_EXPORT()
+    : advancedAuthoring.busy ? SUSPENDED_BY_GESTURE() : null;
 
   // Table d'actions des raccourcis : écrit shortcutActionsRef pendant le rendu,
   // lue par les listeners de useAppShortcuts.

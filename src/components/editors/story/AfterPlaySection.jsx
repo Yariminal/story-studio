@@ -91,7 +91,7 @@ function routeDestinationFromTarget(targetId, project, allMenus, allStories) {
   if (!targetId) return null;
   if (targetId === 'root') {
     const defaultDest = getDefaultPackEntryDestination(project);
-    if (!defaultDest) return { name: NAV_ROOT_LABEL, type: 'menu' };
+    if (!defaultDest) return { name: NAV_ROOT_LABEL(), type: 'menu' };
     return { name: defaultDest.name, type: defaultDest.type };
   }
   if (isStoryNavigationTarget(targetId)) {
@@ -266,7 +266,7 @@ export function AfterPlaySection({
   async function clearEndAfterPlayback() {
     if (rawHasPrompt || rawHasSequence) {
       const confirmed = await showConfirmDialog({
-        title: 'Confirmer la suppression',
+        title: t("Confirmer la suppression"),
         message: t('Supprimer le message de fin de cette histoire ?'),
         okLabel: t('Supprimer'),
         okKind: 'danger',
@@ -377,14 +377,14 @@ export function AfterPlaySection({
   if (endMessage.presentationKind === 'global') {
     endContent = localDraft ? (
       <div className="end-simple-settings">
-        <div className="sequence-note sequence-note--spaced">Brouillon de fin locale — il ne modifie pas encore cette histoire.</div>
+        <div className="sequence-note sequence-note--spaced">{t('Brouillon de fin locale — il ne modifie pas encore cette histoire.')}</div>
         <div className="field-row end-local-audio-row">
           <div style={{ flex: 1 }}>
-            <span className="field-label">Audio de la fin locale</span>
+            <span className="field-label">{t('Audio de la fin locale')}</span>
             <div className="after-play-muted">{localDraft.audio ? basename(localDraft.audio) : t('Aucun audio choisi')}</div>
           </div>
-          <Button size="sm" onClick={() => void pickLocalDraftAudio()}>Choisir un audio</Button>
-          {localDraft.audio ? <Button size="sm" onClick={() => setLocalDraft((draft) => ({ ...draft, audio: null, audioSource: null }))}>Retirer</Button> : null}
+          <Button size="sm" onClick={() => void pickLocalDraftAudio()}>{t('Choisir un audio')}</Button>
+          {localDraft.audio ? <Button size="sm" onClick={() => setLocalDraft((draft) => ({ ...draft, audio: null, audioSource: null }))}>{t('Retirer')}</Button> : null}
         </div>
         <div className="sequence-targets">
           <div className="field-row field-row--flush">
@@ -399,7 +399,7 @@ export function AfterPlaySection({
             />
           </div>
           <div className="field-row field-row--flush">
-            <span className="field-label">Bouton Accueil</span>
+            <span className="field-label">{t('Bouton Accueil')}</span>
             <NavigationTargetSelect
               value={localDraft.homeNone ? '__none__' : (localDraft.homeTarget ?? '')}
               onChange={(value) => setLocalDraft((draft) => value === '__none__'
@@ -411,23 +411,21 @@ export function AfterPlaySection({
               includeNone
               noneLabel={packStartReturnLabel}
               includeStoryPlay={false}
-              emptyLabel="Identique au bouton OK"
+              emptyLabel={t("Identique au bouton OK")}
             />
           </div>
         </div>
         {!localDraftApplicability?.applicable ? (
-          <div className="after-play-muted" role="status">
-            Choisissez un audio ou une destination différente de la fin globale.
-          </div>
+          <div className="after-play-muted" role="status"> {t("Choisissez un audio ou une destination différente de la fin globale.")} </div>
         ) : null}
         <div className="end-actions-end">
-          <Button size="sm" onClick={() => setLocalDraft(null)}>Annuler</Button>
+          <Button size="sm" onClick={() => setLocalDraft(null)}>{t('Annuler')}</Button>
           <Button
             size="sm"
             onClick={applyLocalDraft}
             disabled={!localDraftApplicability?.applicable}
           >
-            Appliquer la fin locale
+            {t("Appliquer la fin locale")}
           </Button>
         </div>
       </div>
@@ -435,13 +433,11 @@ export function AfterPlaySection({
       <div className="end-add-actions">
         <Tooltip text={addPromptTooltip} placement="above">
           <Button size="sm" onClick={startLocalDraft}>
-            Ajouter un audio de fin
+            {t("Ajouter un audio de fin")}
           </Button>
         </Tooltip>
         <Tooltip text={addSequenceTooltip} placement="above">
-          <Button size="sm" onClick={startSequence}>
-            Ajouter un scénario de fin
-          </Button>
+          <Button size="sm" onClick={startSequence}> {t("Ajouter un scénario de fin")} </Button>
         </Tooltip>
       </div>
     );
@@ -451,19 +447,19 @@ export function AfterPlaySection({
         <div className="end-summary">
           <div>
             <div className="end-summary-title">
-              <span>Scénario de fin</span>
+              <span>{t('Scénario de fin')}</span>
               <span className="end-summary-badge">
-                {afterPlaybackSequence.length} étape{afterPlaybackSequence.length > 1 ? 's' : ''}
+                {afterPlaybackSequence.length > 1
+                  ? t('{count} étapes', { count: afterPlaybackSequence.length })
+                  : t('{count} étape', { count: afterPlaybackSequence.length })}
               </span>
             </div>
-            <div className="end-summary-copy">
-              Séquence jouée après la fin de l'histoire, avant la destination suivante.
-            </div>
+            <div className="end-summary-copy"> {t("Séquence jouée après la fin de l'histoire, avant la destination suivante.")} </div>
           </div>
           <div className="end-summary-actions">
             {hasEndNode && (
               <Button size="sm" onClick={() => onAttachStoryEndToGlobal?.(node.id)}>
-                Rattacher au message du pack
+                {t("Rattacher au message du pack")}
               </Button>
             )}
             <Tooltip text={showSequenceEditor ? t('Masquer le scénario') : t('Afficher le scénario')}>
@@ -524,7 +520,7 @@ export function AfterPlaySection({
         </div>
         {hasEndNode && !usesGlobalEndNodeAudio && (
           <div className="sequence-note sequence-note--spaced">
-            Cette histoire jouera ce message <strong>à la place</strong> du message de fin du pack.
+            {t("Cette histoire jouera ce message")} <strong>{t('à la place')}</strong> {t("du message de fin du pack.")}
           </div>
         )}
         <AudioField
@@ -545,12 +541,10 @@ export function AfterPlaySection({
         {hasPrompt && (
           <div className="end-simple-settings">
             {hasEndNode && (
-              <div className="sequence-note sequence-note--spaced">
-                Cette histoire utilise une fin locale à la place du message du pack.
-              </div>
+              <div className="sequence-note sequence-note--spaced"> {t("Cette histoire utilise une fin locale à la place du message du pack.")} </div>
             )}
             <div className="sequence-controls">
-              {CONTROL_DEFS.map(({ key, label, def }) => (
+              {CONTROL_DEFS().map(({ key, label, def }) => (
                 <label key={key} className="sequence-control">
                   <span>{label}</span>
                   <Toggle
@@ -585,7 +579,7 @@ export function AfterPlaySection({
               </div>
               <div className="field-row field-row--flush">
                 <div style={{ flex: 1 }}>
-                  <span className="field-label">Bouton Accueil</span>
+                  <span className="field-label">{t('Bouton Accueil')}</span>
                 </div>
                 <NavigationTargetSelect
                   value={promptHomeSelectValue}
@@ -601,7 +595,7 @@ export function AfterPlaySection({
                   currentStoryId={node.id}
                   includeNone
                   noneLabel={packStartReturnLabel}
-                  emptyLabel="Identique au bouton OK"
+                  emptyLabel={t("Identique au bouton OK")}
                   includeStoryPlay={false}
                 />
               </div>
@@ -609,12 +603,10 @@ export function AfterPlaySection({
             <div className="end-actions-end">
               {hasEndNode && (
                 <Button size="sm" onClick={() => onAttachStoryEndToGlobal?.(node.id)}>
-                  Rattacher au message du pack
+                  {t("Rattacher au message du pack")}
                 </Button>
               )}
-              <Button size="sm" onClick={startSequence}>
-                Convertir en scénario de fin
-              </Button>
+              <Button size="sm" onClick={startSequence}> {t("Convertir en scénario de fin")} </Button>
             </div>
           </div>
         )}
@@ -625,13 +617,11 @@ export function AfterPlaySection({
       <div className="end-add-actions">
         <Tooltip text={addPromptTooltip} placement="above">
           <Button size="sm" onClick={() => setShowPromptField(true)}>
-            Ajouter un audio de fin
+            {t("Ajouter un audio de fin")}
           </Button>
         </Tooltip>
         <Tooltip text={addSequenceTooltip} placement="above">
-          <Button size="sm" onClick={startSequence}>
-            Ajouter un scénario de fin
-          </Button>
+          <Button size="sm" onClick={startSequence}> {t("Ajouter un scénario de fin")} </Button>
         </Tooltip>
       </div>
     );
@@ -642,9 +632,9 @@ export function AfterPlaySection({
   return (
     <div className="card">
       <div className="card-title-row">
-        <div className="card-title">Après la lecture</div>
+        <div className="card-title">{t('Après la lecture')}</div>
         <div className="card-copy card-copy--inline">
-          Que se passe-t-il quand cette histoire se termine.
+          {t("Que se passe-t-il quand cette histoire se termine.")}
         </div>
       </div>
 
@@ -660,24 +650,20 @@ export function AfterPlaySection({
 
           {showEndModeControls && (
             <div className="after-play-end-row">
-              <span className="after-play-end-label">À la fin</span>
+              <span className="after-play-end-label">{t('À la fin')}</span>
               <div className="story-end-mode" role="group" aria-label={t("Comportement à la fin de l'histoire")}>
                 <button
                   type="button"
                   className={`story-end-mode-btn ${playbackEndMode === 'stay' ? 'is-active' : ''}`}
                   aria-pressed={playbackEndMode === 'stay'}
                   onClick={() => updateAutoContinuation(false)}
-                >
-                  Rester sur l'écran
-                </button>
+                > {t("Rester sur l'écran")} </button>
                 <button
                   type="button"
                   className={`story-end-mode-btn ${playbackEndMode === 'auto' ? 'is-active' : ''}`}
                   aria-pressed={playbackEndMode === 'auto'}
                   onClick={() => updateAutoContinuation(true)}
-                >
-                  Enchaîner
-                </button>
+                > {t("Enchaîner")} </button>
               </div>
             </div>
           )}
@@ -722,13 +708,13 @@ export function AfterPlaySection({
 
       <div className="after-play-route" ref={afterPlayRef}>
         <div className="after-play-route-head">
-          <div className="after-play-route-title">Résumé du parcours</div>
+          <div className="after-play-route-title">{t('Résumé du parcours')}</div>
           {routeContextText ? (
             <div className="after-play-route-context">{routeContextText}</div>
           ) : null}
         </div>
         <div className="after-play-route-list">
-          <RouteChip icon={<CircleStop />}>Histoire terminée</RouteChip>
+          <RouteChip icon={<CircleStop />}>{t('Histoire terminée')}</RouteChip>
           <RouteArrow />
           {routeUsesEndStep ? (
             <>
@@ -745,7 +731,7 @@ export function AfterPlaySection({
           ) : autoContinuationEnabled ? (
             <RouteChip icon={<RouteTargetIcon type={returnDestinationType} />} destination>{returnDestinationLabel}</RouteChip>
           ) : (
-            <RouteChip icon={<Pause />}>Attente sur l'écran</RouteChip>
+            <RouteChip icon={<Pause />}>{t("Attente sur l'écran")}</RouteChip>
           )}
         </div>
       </div>

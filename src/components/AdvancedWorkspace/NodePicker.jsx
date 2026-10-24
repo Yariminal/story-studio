@@ -15,7 +15,9 @@ import { useMemo, useState } from 'react';
 import { searchGraph } from '../../store/advancedGraphView/graphSearch.js';
 import { isEntryStage } from '../../store/advancedGraphView/graphViewModel.js';
 
-const PLACEHOLDER = t('— choisir —');
+function PLACEHOLDER() {
+  return t('— choisir —');
+}
 
 export function NodePicker({
   index,
@@ -24,7 +26,7 @@ export function NodePicker({
   onChange,
   id,
   disabled = false,
-  emptyLabel = PLACEHOLDER,
+  emptyLabel = PLACEHOLDER(),
   excludePaths = [],
   // Le sélecteur choisit le **choix d'une liste** : l'Écran d'entrée n'y
   // figure pas, il n'est jamais une destination.
@@ -52,7 +54,7 @@ export function NodePicker({
         type="search"
         className="advanced-picker__query"
         value={query}
-        placeholder="Filtrer par nom ou identifiant"
+        placeholder={t("Filtrer par nom ou identifiant")}
         aria-label={t("Filtrer les nœuds proposés")}
         disabled={disabled}
         onChange={(event) => setQuery(event.target.value)}
@@ -68,7 +70,7 @@ export function NodePicker({
         {options.map((entry) => (
           <option key={entry.path} value={entry.path}>
             {entry.label.label}
-            {entry.label.isFallback ? ' (sans nom)' : ''}
+            {entry.label.isFallback ? t(" (sans nom)") : ''}
             {entry.node.uniqueId === false ? t(' — identifiant dupliqué') : ''}
           </option>
         ))}
@@ -76,10 +78,7 @@ export function NodePicker({
       {selected?.node.uniqueId === false && (
         // Le refus est expliqué **avant** le geste : un identifiant dupliqué
         // n'est pas adressable, et le dire après coup serait l'essuyer.
-        <p className="advanced-field__warning">
-          Ce nœud porte un identifiant dupliqué : le geste le refusera tant que le doublon
-          n'est pas résolu.
-        </p>
+        <p className="advanced-field__warning"> {t("Ce nœud porte un identifiant dupliqué : le geste le refusera tant que le doublon n'est pas résolu.")} </p>
       )}
     </div>
   );

@@ -42,7 +42,9 @@ export function BundleChildStep({
       <FunnelSectionHeader
         icon={<Layers />}
         title={t("Cette archive contient plusieurs packs")}
-        description={`${containerLabel} — ${count} pack${count > 1 ? 's' : 't('}. Choisis celui à ouvrir ; la suite se passe comme pour n')importe quel pack.`}
+        description={count > 1
+          ? t('{name} — {count} packs. Choisis celui à ouvrir ; la suite se passe comme pour n’importe quel pack.', { name: containerLabel, count })
+          : t('{name} — {count} pack. Choisis celui à ouvrir ; la suite se passe comme pour n’importe quel pack.', { name: containerLabel, count })}
       />
 
       <ul className="bundle-child-list" role="radiogroup" aria-label={t("Packs de l'archive")}>
@@ -82,10 +84,10 @@ export function BundleChildStep({
           disabled={!canContinue}
           onClick={onContinue}
         >
-          Continuer
+          {t("Continuer")}
         </FunnelToolButton>
         <FunnelToolButton icon={<Undo2 />} accent="neutral" onClick={onBack}>
-          Choisir une autre archive
+          {t("Choisir une autre archive")}
         </FunnelToolButton>
       </div>
     </div>

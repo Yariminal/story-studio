@@ -25,10 +25,10 @@ export function RemoveOptionDialog({ index, actionPath, ordinal, busy, onCancel,
 
   return (
     <AdvancedDialog
-      title={`Retirer le choix ${ordinal}`}
+      title={t("Retirer le choix {ordinal}", { ordinal: ordinal })}
       description={impact.decisions.length === 0
         ? t("Ce choix sera retiré de la liste.")
-        : `Ce choix sera retiré. ${impact.decisions.length} raccord(s) vers lui seront coupés et signalés dans « À corriger ».`}
+        : t("Ce choix sera retiré. {length} raccord(s) vers lui seront coupés et signalés dans « À corriger ».", { length: impact.decisions.length })}
       onCancel={onCancel}
       onConfirm={confirm}
       confirmLabel={t("Retirer")}
@@ -40,7 +40,7 @@ export function RemoveOptionDialog({ index, actionPath, ordinal, busy, onCancel,
           {impact.decisions.map((row) => (
             <li key={`${row.stagePath}#${row.slot}`} className="advanced-decision-list__row">
               <span className="advanced-decision-list__what">
-                <strong>{row.stageLabel}</strong> — {row.slot === 'ok' ? t('OK') : 'Accueil'}
+                <strong>{row.stageLabel}</strong> — {row.slot === 'ok' ? t('OK') : t("Accueil")}
               </span>
             </li>
           ))}

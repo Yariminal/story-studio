@@ -58,7 +58,7 @@ import {
   updateGlobalEndPlaybackProject,
 } from './endMessageMutations';
 
-import { t } from '../i18n/index.js';
+import { t, getLocale } from '../i18n/index.js';
 export { sanitizeImportedEntries, sanitizeImportedName };
 
 const ENTRY_NAVIGATION_FIELDS = [
@@ -262,7 +262,7 @@ export function useProjectStore() {
     setSelectedId('root');
     setSavePath(null);
     setMediaTagsRaw({});
-  }, []);
+  }, [getLocale()]);
 
   // Installation d'un projet acquis ou relu. L'historique est vidé : une identité
   // générée à l'initialisation ne peut donc pas disparaître au premier undo, et
@@ -566,7 +566,7 @@ export function useProjectStore() {
     setProject(p => appendEntry(p, menuId, newStory));
     setSelectedId(newStory.id);
     return newStory.id;
-  }, [setProject]);
+  }, [setProject, getLocale()]);
 
   const addZip = useCallback((menuId, zipPath, preferredName = null, coverImage = null, coverAudio = null) => {
     if (projectMutationRef.current.projectType === 'simple') {
@@ -585,7 +585,7 @@ export function useProjectStore() {
     setProject(p => appendEntry(p, menuId, newZip));
     setSelectedId(newZip.id);
     return newZip.id;
-  }, [setProject]);
+  }, [setProject, getLocale()]);
 
   const updateItem = useCallback((itemId, fields) => {
     setProject(p => updateEntry(p, itemId, fields));

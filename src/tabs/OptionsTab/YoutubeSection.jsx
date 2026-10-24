@@ -44,19 +44,15 @@ export function YoutubeSection({ className, sectionRef }) {
 
   return (
     <section id="youtube" className={className} ref={sectionRef}>
-      <div className="opts-card-title">YouTube (yt-dlp)</div>
+      <div className="opts-card-title">{t('YouTube (yt-dlp)')}</div>
       <div className="opts-help">
-        Le funnel « Pack depuis YouTube » télécharge automatiquement yt-dlp au premier usage et le
-        garde à jour, ainsi que le moteur JavaScript Deno (environ 40 Mo) dont yt-dlp a besoin pour
-        lire YouTube de façon fiable. YouTube bloquant les versions périmées, ces réglages ne servent
-        qu'en cas de souci.
+        {t("Le funnel « Pack depuis YouTube » télécharge automatiquement yt-dlp au premier usage et le garde à jour, ainsi que le moteur JavaScript Deno (environ 40 Mo) dont yt-dlp a besoin pour lire YouTube de façon fiable. YouTube bloquant les versions périmées, ces réglages ne servent qu'en cas de souci.")}
       </div>
       <div className="opts-row">
         <div className="opts-row-info">
-          <div className="opts-row-label">Mettre à jour yt-dlp maintenant</div>
+          <div className="opts-row-label">{t('Mettre à jour yt-dlp maintenant')}</div>
           <div className="opts-row-sub">
-            Force le téléchargement de la dernière version de yt-dlp et installe le moteur JavaScript
-            s'il manque. Utile si un import échoue avec un message de version obsolète.
+            {t("Force le téléchargement de la dernière version de yt-dlp et installe le moteur JavaScript s'il manque. Utile si un import échoue avec un message de version obsolète.")}
           </div>
         </div>
         <Button onClick={handleUpdateYtDlp} disabled={ytDlpUpdate.state === 'loading'} style={{ flexShrink: 0 }}>
@@ -70,18 +66,16 @@ export function YoutubeSection({ className, sectionRef }) {
       )}
       <div className="opts-row">
         <div className="opts-row-info">
-          <div className="opts-row-label">Chemin yt-dlp personnalisé</div>
+          <div className="opts-row-label">{t('Chemin yt-dlp personnalisé')}</div>
           <div className="opts-row-sub">
-            Laisse vide pour utiliser la version gérée automatiquement. Renseigne le chemin complet
-            d'un exécutable <code>yt-dlp.exe</code> sous Windows ou <code>yt-dlp</code> sous
-            Linux/macOS pour l'utiliser à la place (le téléchargement auto est alors ignoré).
+            {t("Laisse vide pour utiliser la version gérée automatiquement. Renseigne le chemin complet d'un exécutable yt-dlp.exe sous Windows ou yt-dlp sous Linux/macOS pour l'utiliser à la place (le téléchargement auto est alors ignoré).")}
           </div>
         </div>
         <input
           className="xtts-input"
           type="text"
           spellCheck={false}
-          placeholder="Chemin complet vers yt-dlp"
+          placeholder={t('Chemin complet vers yt-dlp')}
           value={ytDlpPath}
           onChange={(event) => handleYtDlpPathChange(event.target.value)}
           style={{ flex: 1, minWidth: 0 }}

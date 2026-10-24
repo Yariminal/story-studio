@@ -121,7 +121,7 @@ export function CommunityPackMetadataModal({
             + t("l'identifier comme un pack distinct."),
           variant: 'warning',
           okLabel: t('Générer un nouvel UUID'),
-          cancelLabel: "Conserver l'UUID actuel",
+          cancelLabel: t("Conserver l'UUID actuel"),
         }),
       };
       uuidPromptRequestRef.current = request;
@@ -179,9 +179,9 @@ export function CommunityPackMetadataModal({
         <header className="checker-meta-header">
           <span className="checker-meta-header-icon"><FilePen className="checker-icon" aria-hidden="true" /></span>
           <div className="checker-meta-heading">
-            <span>Correction des métadonnées</span>
+            <span>{t('Correction des métadonnées')}</span>
             <h2 title={exportName || undefined}>{exportName || t('Nom du pack')}</h2>
-            <p>Chaque correction crée une nouvelle révision : la version est proposée à +1.</p>
+            <p>{t('Chaque correction crée une nouvelle révision : la version est proposée à +1.')}</p>
           </div>
           <button type="button" className="checker-meta-close" onClick={onCancel} aria-label={t("Fermer")}>
             <X className="checker-icon" aria-hidden="true" />
@@ -209,14 +209,14 @@ export function CommunityPackMetadataModal({
             ) : (
               <div className="checker-meta-ok">
                 <CircleCheck className="checker-icon" aria-hidden="true" />
-                <span>Le nom semble déjà valide.</span>
+                <span>{t('Le nom semble déjà valide.')}</span>
               </div>
             )}
           </aside>
 
           <section className="checker-meta-form">
             <label>
-              <span>Titre du pack</span>
+              <span>{t('Titre du pack')}</span>
               <input
                 autoFocus
                 value={draft.title || ''}
@@ -226,7 +226,7 @@ export function CommunityPackMetadataModal({
             </label>
 
             <label>
-              <span>Âge minimum</span>
+              <span>{t('Âge minimum')}</span>
               <div className="checker-meta-age">
                 {AGE_CHIPS.map((age) => (
                   <button
@@ -278,7 +278,7 @@ export function CommunityPackMetadataModal({
               <span>UUID</span>
               <div className="checker-meta-uuid">
                 <input value={draft.uuid || ''} onChange={(event) => updateField('uuid', event.target.value)} placeholder={t("UUID du pack")} />
-                <button type="button" onClick={regenerateUuid}>Générer</button>
+                <button type="button" onClick={regenerateUuid}>{t('Générer')}</button>
               </div>
               {identityRefusal ? <p className="funnel-error" role="alert">{identityRefusal}</p> : null}
             </label>
@@ -286,7 +286,7 @@ export function CommunityPackMetadataModal({
         </div>
 
         <div className="checker-meta-preview">
-          <span>Aperçu convention communautaire</span>
+          <span>{t('Aperçu convention communautaire')}</span>
           <div title={exportName ? `${exportName}.zip` : undefined}>
             {tokens.map((token, index) => (
               <em key={`${token.kind}-${index}-${token.text}`} className={`is-${token.kind}`}>{token.text}</em>
@@ -296,7 +296,7 @@ export function CommunityPackMetadataModal({
         </div>
 
         <footer className="checker-meta-footer">
-          <Button onClick={onCancel} disabled={busy}>Annuler</Button>
+          <Button onClick={onCancel} disabled={busy}>{t('Annuler')}</Button>
           <button type="button" className="chrome-toolbar-cta checker-correction-cta" onClick={submit} disabled={!canSubmit}>
             {busy ? 'Correction...' : t('Corriger le pack')}
           </button>

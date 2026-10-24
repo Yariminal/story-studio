@@ -49,21 +49,21 @@ export function ReleaseNotesModal({ appVersion }) {
       >
         <header className="release-notes-header">
           <span className="release-notes-eyebrow">
-            STORY STUDIO · {appVersion} · <time dateTime={RELEASE_NOTES.date}>
-              {new Date(RELEASE_NOTES.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })}
+            STORY STUDIO · {appVersion} · <time dateTime={RELEASE_NOTES().date}>
+              {new Date(RELEASE_NOTES().date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })}
             </time>
           </span>
-          <h2 id="release-notes-title">Bienvenue dans la {appVersion}</h2>
-          <p>De nouvelles façons de donner vie à tes histoires.</p>
+          <h2 id="release-notes-title">{t("Bienvenue dans la")} {appVersion}</h2>
+          <p>{t('De nouvelles façons de donner vie à tes histoires.')}</p>
         </header>
         <div className="release-notes-body">
           <section aria-label={t("Les nouveautés")}>
-            <h3>Ce qui change</h3>
+            <h3>{t('Ce qui change')}</h3>
             <ul className="release-notes-highlights">
               {[
-                ...RELEASE_NOTES.highlights.map((entry) => ['new', ...entry]),
-                ...RELEASE_NOTES.fixes.map((entry) => ['fix', ...entry]),
-                ...RELEASE_NOTES.chores.map((entry) => ['chore', ...entry]),
+                ...RELEASE_NOTES().highlights.map((entry) => ['new', ...entry]),
+                ...RELEASE_NOTES().fixes.map((entry) => ['fix', ...entry]),
+                ...RELEASE_NOTES().chores.map((entry) => ['chore', ...entry]),
               ].map(([kind, title, detail]) => (
                 <li key={title}>
                   <span className={`release-notes-badge release-notes-badge--${kind}`}>{kind.toUpperCase()}</span>
@@ -73,19 +73,19 @@ export function ReleaseNotesModal({ appVersion }) {
             </ul>
           </section>
           <section className="release-notes-letter" aria-label={t("Un mot du créateur")}>
-            <h3>Un mot de ma part</h3>
-            {RELEASE_NOTES.message.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+            <h3>{t('Un mot de ma part')}</h3>
+            {RELEASE_NOTES().message.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
             <span className="release-notes-signature">— hugs11</span>
           </section>
           <div className="release-notes-links">
-            <a href={RELEASE_NOTES.discordUrl} target="_blank" rel="noopener noreferrer" onClick={(event) => openLink(event, RELEASE_NOTES.discordUrl)}>Rejoindre le Discord ↗</a>
-            <a href={RELEASE_NOTES.changelogUrl} target="_blank" rel="noopener noreferrer" onClick={(event) => openLink(event, RELEASE_NOTES.changelogUrl)}>Voir le changelog complet ↗</a>
+            <a href={RELEASE_NOTES().discordUrl} target="_blank" rel="noopener noreferrer" onClick={(event) => openLink(event, RELEASE_NOTES().discordUrl)}>{t('Rejoindre le Discord ↗')}</a>
+            <a href={RELEASE_NOTES().changelogUrl} target="_blank" rel="noopener noreferrer" onClick={(event) => openLink(event, RELEASE_NOTES().changelogUrl)}>{t('Voir le changelog complet ↗')}</a>
           </div>
           {linkError && <p role="alert">{linkError}</p>}
         </div>
         <footer className="release-notes-footer">
-          <span>Merci pour ton aide et tes retours.</span>
-          <Button variant="primary" className="release-notes-start" onClick={close}>C’est parti !</Button>
+          <span>{t('Merci pour ton aide et tes retours.')}</span>
+          <Button variant="primary" className="release-notes-start" onClick={close}>{t('C’est parti !')}</Button>
         </footer>
       </section>
     </AppModalPortal>

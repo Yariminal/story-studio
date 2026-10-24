@@ -105,7 +105,7 @@ export function GraphNodeOverlays({
           // regroupée, le nombre de nœuds qu'elle couvre.
           <Tooltip
             key={node.path}
-            text={grouped ? `${count} nœuds dans cette zone` : title}
+            text={grouped ? t("{count} nœuds dans cette zone", { count: count }) : title}
             asChild
             disabled={!grouped && !title}
           >
@@ -172,7 +172,7 @@ export function GraphNodeOverlays({
             }}
           >
             {full && node.kind === 'action' && (
-              <Tooltip text={`${node.outgoingCount} choix dans cette liste`} asChild>
+              <Tooltip text={t("{outgoingCount} choix dans cette liste", { outgoingCount: node.outgoingCount })} asChild>
                 <span className="advanced-node-overlay__action-count">
                   {node.outgoingCount}
                 </span>
@@ -188,12 +188,12 @@ export function GraphNodeOverlays({
             {node.ports && onLinkPortPointerDown && (
               <div className={`advanced-node-overlay__ports is-${node.kind}`}>
                 {(node.linkPorts ?? []).map((port) => [port, portAnchor(node, port)]).map(([port, anchor]) => anchor && (
-                  <Tooltip key={port.id} text={port.active ? portHint(port) : `${port.label} — ouvrir les contrôles`} asChild wrap>
+                  <Tooltip key={port.id} text={port.active ? portHint(port) : t("{label} — ouvrir les contrôles", { label: port.label })} asChild wrap>
                     <button
                       type="button"
                       style={handlePlacement(node, anchor)}
                       className={`${port.active ? 'is-active' : 'is-inactive'} is-${port.id}${port.active && port.activateControl ? ' is-activation-required' : ''}${anchor.revealed ? ' is-revealed' : ''}${isAddPort(node, port, anchor) ? ' is-add' : ''}`}
-                      aria-label={port.active ? portHint(port) : `${port.label} — contrôle désactivé`}
+                      aria-label={port.active ? portHint(port) : t("{label} — contrôle désactivé", { label: port.label })}
                       onPointerDown={port.active ? (event) => {
                         event.preventDefault();
                         event.stopPropagation();
@@ -237,7 +237,7 @@ function isAddPort(node, port, anchor) {
 // allume le bouton. L'infobulle le dit avant le geste.
 function portHint(port) {
   if (!port.activateControl) return port.label;
-  return `${port.label} — allume aussi le bouton ${port.slot === 'home' ? 'Accueil' : t('OK')}`;
+  return t("{label} — allume aussi le bouton {value}", { label: port.label, value: port.slot === 'home' ? 'Accueil' : t('OK') });
 }
 
 function groupTone(id) {

@@ -51,16 +51,30 @@ export const TOOLBAR_GROUPS = Object.freeze({
 // commande, jamais à la place.
 // La fabrication d'un pack graphe commence au clic et se termine à l'archive,
 // attente dans la file comprise : la raison le dit dans ces mots-là.
-export const SUSPENDED_BY_EXPORT = t('Fabrication du pack en cours — édition suspendue.');
-export const SUSPENDED_BY_GESTURE = t('Geste en cours…');
-const NO_HISTORY_BACK = t('Rien à annuler.');
-const NO_HISTORY_FORWARD = t('Rien à rétablir.');
-const ISSUES_BEFORE_GENERATE = t('Passe par « à corriger » avant de générer.');
-const CHECKING_BEFORE_GENERATE = t('Vérification du pack en cours…');
+export function SUSPENDED_BY_EXPORT() {
+  return t('Fabrication du pack en cours — édition suspendue.');
+}
+export function SUSPENDED_BY_GESTURE() {
+  return t('Geste en cours…');
+}
+function NO_HISTORY_BACK() {
+  return t('Rien à annuler.');
+}
+function NO_HISTORY_FORWARD() {
+  return t('Rien à rétablir.');
+}
+function ISSUES_BEFORE_GENERATE() {
+  return t('Passe par « à corriger » avant de générer.');
+}
+function CHECKING_BEFORE_GENERATE() {
+  return t('Vérification du pack en cours…');
+}
 // Côté graphe, la fiche du pack et la qualification lisent toutes deux le
 // document, qui est chargé paresseusement. Tant qu'il n'a pas été lu une fois,
 // la production n'aurait ni fiche à remplir ni qualification à interroger.
-const DOCUMENT_NOT_READ = t('Lecture du document en cours…');
+function DOCUMENT_NOT_READ() {
+  return t('Lecture du document en cours…');
+}
 
 function command(id, label, scope, group, { shortcut = null, available = true, reason = null } = {}) {
   return Object.freeze({
@@ -110,7 +124,7 @@ export function buildToolbarInventory({
   // Un geste dure un aller-retour, un export dure une archive : les deux
   // suspendent l'édition, et l'interface ne les confond pas dans son message.
   const editingSuspended = gestureBusy || editingLocked;
-  const suspensionReason = editingLocked ? SUSPENDED_BY_EXPORT : SUSPENDED_BY_GESTURE;
+  const suspensionReason = editingLocked ? SUSPENDED_BY_EXPORT() : SUSPENDED_BY_GESTURE();
 
   const commands = [];
   const universal = (id, label, group, options) => {
@@ -127,34 +141,34 @@ export function buildToolbarInventory({
   universal('newProject', t('Retour à l’accueil'), TOOLBAR_GROUPS.FILE, {
     shortcut: shortcutLabels.newProject ?? null,
     available: fileAvailable,
-    reason: SUSPENDED_BY_EXPORT,
+    reason: SUSPENDED_BY_EXPORT(),
   });
   universal('openProject', t('Ouvrir un projet'), TOOLBAR_GROUPS.FILE, {
     shortcut: shortcutLabels.openProject ?? null,
     available: fileAvailable,
-    reason: SUSPENDED_BY_EXPORT,
+    reason: SUSPENDED_BY_EXPORT(),
   });
   universal('openPack', t('Ouvrir un pack'), TOOLBAR_GROUPS.FILE, {
     shortcut: shortcutLabels.openPack ?? null,
     available: fileAvailable,
-    reason: SUSPENDED_BY_EXPORT,
+    reason: SUSPENDED_BY_EXPORT(),
   });
   universal('saveProject', t('Enregistrer'), TOOLBAR_GROUPS.FILE, {
     shortcut: shortcutLabels.saveProject ?? null,
     available: fileAvailable,
-    reason: SUSPENDED_BY_EXPORT,
+    reason: SUSPENDED_BY_EXPORT(),
   });
   universal('saveProjectAs', t('Enregistrer sous…'), TOOLBAR_GROUPS.FILE, {
     shortcut: shortcutLabels.saveAs ?? null,
     available: fileAvailable,
-    reason: SUSPENDED_BY_EXPORT,
+    reason: SUSPENDED_BY_EXPORT(),
   });
   // La passerelle vers le graphe part de l'arbre seulement : elle crée une
   // copie graphe du projet, et il n'existe pas de chemin inverse.
   if (hierarchical) {
     structural('continueInGraph', t('Continuer dans l’éditeur graphe…'), TOOLBAR_GROUPS.FILE, {
       available: fileAvailable,
-      reason: SUSPENDED_BY_EXPORT,
+      reason: SUSPENDED_BY_EXPORT(),
     });
   }
 
@@ -162,12 +176,12 @@ export function buildToolbarInventory({
   universal('undo', t('Annuler'), TOOLBAR_GROUPS.HISTORY, {
     shortcut: shortcutLabels.undo ?? null,
     available: canUndo && !editingSuspended,
-    reason: editingSuspended ? suspensionReason : NO_HISTORY_BACK,
+    reason: editingSuspended ? suspensionReason : NO_HISTORY_BACK(),
   });
   universal('redo', t('Rétablir'), TOOLBAR_GROUPS.HISTORY, {
     shortcut: shortcutLabels.redo ?? null,
     available: canRedo && !editingSuspended,
-    reason: editingSuspended ? suspensionReason : NO_HISTORY_FORWARD,
+    reason: editingSuspended ? suspensionReason : NO_HISTORY_FORWARD(),
   });
 
   // ── Structure ─────────────────────────────────────────────────────────────
@@ -213,7 +227,7 @@ export function buildToolbarInventory({
   universal('openPackOptions', t('Options'), TOOLBAR_GROUPS.PACK_OPTIONS, {
     shortcut: shortcutLabels.storySettings ?? null,
     available: !editingLocked,
-    reason: SUSPENDED_BY_EXPORT,
+    reason: SUSPENDED_BY_EXPORT(),
   });
 
   // Une seule liste « à corriger », au même rang et sous le même
@@ -251,10 +265,10 @@ export function buildToolbarInventory({
       ? !generateDisabled
       : (!documentUnread && !editingLocked && !generatePending && !generateDisabled),
     reason: hierarchical
-      ? ISSUES_BEFORE_GENERATE
-      : (editingLocked ? SUSPENDED_BY_EXPORT
-        : documentUnread ? DOCUMENT_NOT_READ
-          : generatePending ? CHECKING_BEFORE_GENERATE : ISSUES_BEFORE_GENERATE),
+      ? ISSUES_BEFORE_GENERATE()
+      : (editingLocked ? SUSPENDED_BY_EXPORT()
+        : documentUnread ? DOCUMENT_NOT_READ()
+          : generatePending ? CHECKING_BEFORE_GENERATE() : ISSUES_BEFORE_GENERATE()),
   });
 
   // ── Préférences ───────────────────────────────────────────────────────────

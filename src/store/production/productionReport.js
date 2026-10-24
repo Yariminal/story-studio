@@ -54,7 +54,8 @@ export const PRODUCTION_STATUS = Object.freeze({
   FAILED: 'failed',
 });
 
-export const PRODUCTION_STATUS_LABELS = Object.freeze({
+export function PRODUCTION_STATUS_LABELS() {
+  return Object.freeze({
   [PRODUCTION_STATUS.IDLE]: t('Aucune production'),
   [PRODUCTION_STATUS.PENDING]: 'En attente',
   [PRODUCTION_STATUS.RUNNING]: t('Production en cours'),
@@ -62,16 +63,20 @@ export const PRODUCTION_STATUS_LABELS = Object.freeze({
   [PRODUCTION_STATUS.CANCELLED]: t('Production annulée'),
   [PRODUCTION_STATUS.FAILED]: 'Production interrompue',
 });
+}
 
 // Une attente utile, dite avec les mots de l'auteur. Une fois le travail fini,
 // il n'y a plus rien à annoncer : le résultat ou le problème est déjà visible.
-const PROGRESS_IN_PROGRESS = t("Le pack apparaîtra ici dès qu'il sera prêt.");
+function PROGRESS_IN_PROGRESS() {
+  return t("Le pack apparaîtra ici dès qu'il sera prêt.");
+}
 
 // Une production antérieure au branchement des portes, ou un travail qui n'est
 // pas allé jusqu'à l'archive, n'a rien à en dire. Le dire est le seul moyen de
 // ne pas présenter comme exécuté un contrôle qui ne l'a pas été.
-export const GATES_NOT_REPORTED =
-  t("Contrôles d'archive : cette production n'en rapporte aucun.");
+export function GATES_NOT_REPORTED() {
+  return t("Contrôles d'archive : cette production n'en rapporte aucun.");
+}
 
 function asList(value) {
   return Array.isArray(value) ? value : [];
@@ -91,7 +96,7 @@ function report({
   return Object.freeze({
     source,
     status,
-    statusLabel: PRODUCTION_STATUS_LABELS[status],
+    statusLabel: PRODUCTION_STATUS_LABELS()[status],
     // « Préparation » n'est pas un état de production : la capture
     // du document a lieu avant que le travail entre dans la file, et n'a donc
     // pas de ligne à décrire.
@@ -103,7 +108,7 @@ function report({
       // coupé.
       count: shown.length,
       note: status === PRODUCTION_STATUS.PENDING || status === PRODUCTION_STATUS.RUNNING
-        ? PROGRESS_IN_PROGRESS
+        ? PROGRESS_IN_PROGRESS()
         : null,
     }),
     cancel: Object.freeze({ available: cancelAvailable, requested: cancelRequested }),
@@ -116,8 +121,8 @@ function report({
       entries: Object.freeze(gates),
       observing: gates.some(gate => !gate.blocking),
       observedRefusal: hasObservedRefusal(gates),
-      notice: gates.some(gate => !gate.blocking) ? OBSERVATION_NOTICE : null,
-      note: gates.length === 0 ? GATES_NOT_REPORTED : null,
+      notice: gates.some(gate => !gate.blocking) ? OBSERVATION_NOTICE() : null,
+      note: gates.length === 0 ? GATES_NOT_REPORTED() : null,
     }),
   });
 }
@@ -177,7 +182,7 @@ export function renderJobReport(job) {
     problem: status === PRODUCTION_STATUS.CANCELLED ? null : advanced
       ? (refusal && !succeeded ? { title: refusal.title, message: refusal.message } : null)
       : (status === PRODUCTION_STATUS.FAILED && job.errorMessage
-        ? { title: PRODUCTION_STATUS_LABELS[PRODUCTION_STATUS.FAILED], message: String(job.errorMessage) }
+        ? { title: PRODUCTION_STATUS_LABELS()[PRODUCTION_STATUS.FAILED], message: String(job.errorMessage) }
         : null),
     gates: advanced
       ? advancedProductionGates(succeeded && !!job.resultPath)

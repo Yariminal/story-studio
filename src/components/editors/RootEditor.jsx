@@ -11,7 +11,9 @@ import './EditorPanel.css';
 import './RootEditor.css';
 
 import { t } from '../../i18n/index.js';
+import { useLocale } from '../../i18n/LocaleContext.jsx';
 export const RootEditor = memo(function RootEditor({ node, projectType, onUpdateRoot, onUpdateMedia, onUpdateStoryAudio }) {
+  useLocale();
   const sameImage = !!node.sameImage;
   const nativeGraph = node.nativeGraph ?? null;
   const nativeGraphStageCount = nativeGraph?.stageCount ?? nativeGraph?.document?.stageNodes?.length ?? 0;
@@ -70,8 +72,8 @@ export const RootEditor = memo(function RootEditor({ node, projectType, onUpdate
     return (
       <div className="root-audio-section">
         <div className="media-col-header">
-          Son
-          <span className="media-col-subtitle">Titre audio — entendu dans le menu principal</span>
+          {t('Son')}
+          <span className="media-col-subtitle">{t('Titre audio — entendu dans le menu principal')}</span>
         </div>
         <AudioField
           label={t("Titre audio")}
@@ -92,12 +94,10 @@ export const RootEditor = memo(function RootEditor({ node, projectType, onUpdate
       {nativeGraph ? (
         <div className="card">
           <div className="card-title-row">
-            <div className="card-title">Graphe interactif importé</div>
+            <div className="card-title">{t('Graphe interactif importé')}</div>
             <div className="card-copy card-copy--inline">{nativeGraphStageCount} stages · {nativeGraphActionCount} actions</div>
           </div>
-          <div className="sequence-note" style={{ margin: '0 16px 12px' }}>
-            Ce pack utilise une structure interactive avec convergences et retours Accueil explicites. Les stages ci-dessous sont ceux qui seront utilisés pour le round-trip fidèle.
-          </div>
+          <div className="sequence-note" style={{ margin: '0 16px 12px' }}> {t("Ce pack utilise une structure interactive avec convergences et retours Accueil explicites. Les stages ci-dessous sont ceux qui seront utilisés pour le round-trip fidèle.")} </div>
           <NativeGraphEditor
             graph={nativeGraph}
             onChange={(nextGraph) => onUpdateMedia('nativeGraph', nextGraph)}
@@ -111,11 +111,8 @@ export const RootEditor = memo(function RootEditor({ node, projectType, onUpdate
             <Info className="chrome-icon" strokeWidth={1.9} absoluteStrokeWidth />
           </span>
           <div className="simple-mode-info-text">
-            <strong>Mode histoire simple</strong>
-            <span>
-              Tu crées un pack contenant une seule histoire. Pour des menus, plusieurs histoires ou
-              une navigation personnalisée, utilise plutôt l'« Éditeur par menus ».
-            </span>
+            <strong>{t('Mode histoire simple')}</strong>
+            <span> {t("Tu crées un pack contenant une seule histoire. Pour des menus, plusieurs histoires ou une navigation personnalisée, utilise plutôt l'« Éditeur par menus ».")} </span>
           </div>
           <button
             type="button"
@@ -142,7 +139,7 @@ export const RootEditor = memo(function RootEditor({ node, projectType, onUpdate
         {projectType === 'pack' ? (
           <div className="root-card-name-row root-card-name-row--identity">
             <div className="field-row" style={{ marginBottom: 0, flex: 1 }}>
-              <span className="field-label">Nom</span>
+              <span className="field-label">{t('Nom')}</span>
               <input
                 className="field-input"
                 value={node.rootName ?? ''}
@@ -159,7 +156,7 @@ export const RootEditor = memo(function RootEditor({ node, projectType, onUpdate
         {isSimple ? (
           <div className="root-card-name-row root-card-name-row--simple root-card-name-row--identity">
             <div className="simple-name-field">
-              <label className="simple-name-label" htmlFor="root-simple-name">Nom de l'histoire</label>
+              <label className="simple-name-label" htmlFor="root-simple-name">{t("Nom de l'histoire")}</label>
               <input
                 id="root-simple-name"
                 className="field-input simple-name-input"
@@ -167,9 +164,9 @@ export const RootEditor = memo(function RootEditor({ node, projectType, onUpdate
                 onFocus={() => { isEditingSimpleNameRef.current = true; }}
                 onChange={(e) => handleSimpleNameChange(e.target.value)}
                 onBlur={handleSimpleNameBlur}
-                placeholder="Le loup et l'agneau"
+                placeholder={t("Le loup et l'agneau")}
               />
-              <span className="simple-name-hint">Apparaît dans le catalogue Lunii et donne son nom au fichier ZIP exporté.</span>
+              <span className="simple-name-hint">{t('Apparaît dans le catalogue Lunii et donne son nom au fichier ZIP exporté.')}</span>
             </div>
           </div>
         ) : null}
@@ -180,7 +177,7 @@ export const RootEditor = memo(function RootEditor({ node, projectType, onUpdate
           <div className="media-split root-cover-media-split">
             <div className="media-split-left">
               <div className="media-col-header">
-                Image
+                {t('Image')}
                 <span className="media-col-subtitle">
                   {isSimple
                     ? t("Visuel utilisé pour présenter l'histoire")
@@ -225,8 +222,8 @@ export const RootEditor = memo(function RootEditor({ node, projectType, onUpdate
       {isSimple && (
         <div className="card">
           <div className="card-title-row">
-            <div className="card-title">Récit complet</div>
-            <div className="card-copy card-copy--inline">Le fichier audio joué quand l'enfant valide son choix sur la Lunii — c'est l'histoire en elle-même.</div>
+            <div className="card-title">{t('Récit complet')}</div>
+            <div className="card-copy card-copy--inline">{t("Le fichier audio joué quand l'enfant valide son choix sur la Lunii — c'est l'histoire en elle-même.")}</div>
           </div>
           <AudioField
             label={t("Audio du récit")}

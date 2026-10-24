@@ -29,7 +29,7 @@ export function NewStageDefaultsForm({ draft, onChange, selectedStage = null }) 
   return (
     <>
       <fieldset className="advanced-field advanced-link-dialog__controls">
-        <legend>Boutons du modèle</legend>
+        <legend>{t('Boutons du modèle')}</legend>
         <GroupedControls
           renderControl={(key, label) => (
             <label key={key} className="sequence-control">
@@ -46,12 +46,11 @@ export function NewStageDefaultsForm({ draft, onChange, selectedStage = null }) 
       <div className="advanced-field__actions">
         {fromSelection && !sameControls(fromSelection, draft) && (
           <button type="button" className="advanced-link" onClick={() => onChange({ ...fromSelection })}>
-            Reprendre les boutons de « {selectionName} »
+            {t("Reprendre les boutons de «")} {selectionName} »
           </button>
         )}
         {!sameControls(DEFAULT_NEW_STAGE_CONTROLS, draft) && (
-          <button type="button" className="advanced-link" onClick={() => onChange({ ...DEFAULT_NEW_STAGE_CONTROLS })}>
-            Revenir au réglage d’origine ({describeControls(DEFAULT_NEW_STAGE_CONTROLS)})
+          <button type="button" className="advanced-link" onClick={() => onChange({ ...DEFAULT_NEW_STAGE_CONTROLS })}> {t("Revenir au réglage d’origine (")}{describeControls(DEFAULT_NEW_STAGE_CONTROLS)})
           </button>
         )}
       </div>

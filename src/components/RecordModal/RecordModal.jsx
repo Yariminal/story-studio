@@ -89,7 +89,7 @@ export function RecordModal({ workspaceDir, projectName = '', onSaved, onClose }
         stream.getTracks().forEach(track => track.stop());
         return;
       }
-      const mr = new MediaRecorder(stream, { mimeType: t('audio/webm;codecs=opus') });
+      const mr = new MediaRecorder(stream, { mimeType: 'audio/webm;codecs=opus' });
       chunksRef.current = [];
       mr.ondataavailable = e => { if (e.data.size > 0) chunksRef.current.push(e.data); };
       mr.onstop = () => {
@@ -105,7 +105,7 @@ export function RecordModal({ workspaceDir, projectName = '', onSaved, onClose }
     } catch (e) {
       stream?.getTracks().forEach(track => track.stop());
       if (closedRef.current) return;
-      setError(`Impossible d'accéder au micro : ${e.message}`);
+      setError(t("Impossible d'accéder au micro : {message}", { message: e.message }));
       setPhase('error');
     }
   }
@@ -143,12 +143,12 @@ export function RecordModal({ workspaceDir, projectName = '', onSaved, onClose }
         if (audioRef.current !== a) return;
         stopPreview();
         setPreviewStatus('error');
-        setPreviewError(`Lecture impossible : ${e.message}`);
+        setPreviewError(t("Lecture impossible : {message}", { message: e.message }));
       });
     } catch (e) {
       stopPreview();
       setPreviewStatus('error');
-      setPreviewError(`Lecture impossible : ${e.message}`);
+      setPreviewError(t("Lecture impossible : {message}", { message: e.message }));
     }
   }
 
@@ -183,7 +183,7 @@ export function RecordModal({ workspaceDir, projectName = '', onSaved, onClose }
       const path = await invoke('save_recording', { workspaceDir, filename, data });
       onSaved?.(path);
     } catch (e) {
-      setError(`Écriture du fichier impossible : ${e}`);
+      setError(t("Écriture du fichier impossible : {e}", { e: e }));
       setPhase('error');
     }
   }
@@ -196,7 +196,7 @@ export function RecordModal({ workspaceDir, projectName = '', onSaved, onClose }
     <div className="modal-overlay">
       <div className="modal-box record-modal" onClick={e => e.stopPropagation()}>
         <div className="modal-header">
-          <span>Enregistrement audio</span>
+          <span>{t('Enregistrement audio')}</span>
           <Button variant="icon" className="modal-close" onClick={handleClose} disabled={phase === 'saving'}>×</Button>
         </div>
 
@@ -204,7 +204,7 @@ export function RecordModal({ workspaceDir, projectName = '', onSaved, onClose }
           {phase === 'countdown' && (
             <>
               <div className="record-countdown">{countdown}</div>
-              <div className="record-hint">Prépare-toi…</div>
+              <div className="record-hint">{t('Prépare-toi…')}</div>
             </>
           )}
 
@@ -212,7 +212,7 @@ export function RecordModal({ workspaceDir, projectName = '', onSaved, onClose }
             <>
               <div className="record-pulse" />
               <div className="record-timer">{formatDuration(duration)}</div>
-              <Button variant="danger" onClick={stopRecording}>⏹ Arrêter</Button>
+              <Button variant="danger" onClick={stopRecording}>{t('⏹ Arrêter')}</Button>
             </>
           )}
 
@@ -221,12 +221,12 @@ export function RecordModal({ workspaceDir, projectName = '', onSaved, onClose }
               <div className="record-preview-icon">
                 <Mic className="record-preview-icon-svg" strokeWidth={2} absoluteStrokeWidth />
               </div>
-              <div className="record-hint">Durée : {formatDuration(duration)}</div>
+              <div className="record-hint">{t("Durée :")} {formatDuration(duration)}</div>
               {previewStatus !== 'idle' && previewStatus !== 'error' && (
                 <div className="record-hint" role="status">
                   {previewStatus === 'loading' && t('Chargement de l’aperçu…')}
                   {previewStatus === 'playing' && `Lecture : ${formatDuration(Math.floor(previewPosition))} / ${formatDuration(duration)}`}
-                  {previewStatus === 'paused' && `En pause à ${formatDuration(Math.floor(previewPosition))}`}
+                  {previewStatus === 'paused' && t("En pause à {value}", { value: formatDuration(Math.floor(previewPosition)) })}
                   {previewStatus === 'ended' && t('Lecture terminée')}
                 </div>
               )}
@@ -245,7 +245,7 @@ export function RecordModal({ workspaceDir, projectName = '', onSaved, onClose }
                 <Button onClick={playPreview} disabled={previewStatus === 'loading' || previewStatus === 'playing'}>
                   {previewStatus === 'paused' ? t('▶ Reprendre') : t('▶ Écouter')}
                 </Button>
-                <Button onClick={pausePreview} disabled={previewStatus !== 'playing'}>⏸ Pause</Button>
+                <Button onClick={pausePreview} disabled={previewStatus !== 'playing'}>{t('⏸ Pause')}</Button>
                 <Button onClick={retry}>↺ Recommencer</Button>
                 <Button variant="primary" onClick={confirm}>✓ Utiliser</Button>
               </div>
@@ -253,13 +253,13 @@ export function RecordModal({ workspaceDir, projectName = '', onSaved, onClose }
           )}
 
           {phase === 'saving' && (
-            <div className="record-hint">Écriture du fichier…</div>
+            <div className="record-hint">{t('Écriture du fichier…')}</div>
           )}
 
           {phase === 'error' && (
             <>
               <div className="record-hint" style={{ color: '#E24B4A' }}>{error}</div>
-              <Button onClick={handleClose}>Fermer</Button>
+              <Button onClick={handleClose}>{t('Fermer')}</Button>
             </>
           )}
         </div>

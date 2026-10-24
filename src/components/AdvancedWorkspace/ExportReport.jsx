@@ -59,9 +59,7 @@ function RefusalBody({ refusal, embedded, stagePaths, onFocusPath, onOpenDiagnos
     case EXPORT_REFUSAL.PAYLOAD_DECODE:
       return (
         <div>
-          <p className="advanced-export__row-message">
-            Le projet nt('a pas pu être relu, le pack n')a pas été produit.
-          </p>
+          <p className="advanced-export__row-message"> {t("Le projet n'a pas pu être relu, le pack n'a pas été produit.")} </p>
           {refusal.codecError && (
             <p className="advanced-export__row-path">
               <code>{refusal.codecError.code}</code> {refusal.codecError.path}
@@ -102,7 +100,7 @@ function RefusalBody({ refusal, embedded, stagePaths, onFocusPath, onOpenDiagnos
                 <p className="advanced-export__actions">
                   {/* La résolution existe déjà, dans le panneau de diagnostics :
                       ce refus y conduit au lieu d'en fabriquer une seconde. */}
-                  <Button size="sm" onClick={onOpenDiagnostics}>Ouvrir les résolutions</Button>
+                  <Button size="sm" onClick={onOpenDiagnostics}>{t('Ouvrir les résolutions')}</Button>
                 </p>
               )}
             </>
@@ -121,10 +119,9 @@ function RefusalBody({ refusal, embedded, stagePaths, onFocusPath, onOpenDiagnos
       const groups = groupUnavailableMedia(refusal.entries);
       return (
         <div>
-          <p className="advanced-export__row-message">
-            Le pack nt('a pas été produit : {groups.length} média{groups.length > 1 ? ')s sont' : ' est'} introuvable{groups.length > 1 ? 's' : ''}.
-            Pour chacun, les écrans qui l'utilisent sont listés.
-          </p>
+          <p className="advanced-export__row-message"> {groups.length > 1
+            ? t("{count} médias sont introuvables. Pour chacun, les écrans qui l'utilisent sont listés.", { count: groups.length })
+            : t("{count} média est introuvable. Pour chacun, les écrans qui l'utilisent sont listés.", { count: groups.length })} </p>
           <ul className="advanced-export__rows">
             {groups.map((group) => (
               <li key={group.assetRef} className="advanced-export__row">
@@ -135,10 +132,7 @@ function RefusalBody({ refusal, embedded, stagePaths, onFocusPath, onOpenDiagnos
                 </p>
                 <p className="advanced-export__row-message">{group.causeLabel}</p>
                 {group.byReferenceOnly ? (
-                  <p className="advanced-export__row-message">
-                    Aucun ancien emplacement n'est connu : choisis le fichier depuis l'écran
-                    concerné.
-                  </p>
+                  <p className="advanced-export__row-message"> {t("Aucun ancien emplacement n'est connu : choisis le fichier depuis l'écran concerné.")} </p>
                 ) : group.lastKnownPath && (
                   <p className="advanced-export__row-path">
                     dernier emplacement connu : <code>{group.lastKnownPath}</code>
@@ -156,10 +150,7 @@ function RefusalBody({ refusal, embedded, stagePaths, onFocusPath, onOpenDiagnos
     case EXPORT_REFUSAL.ARCHIVE_NAME_COLLISION:
       return (
         <div>
-          <p className="advanced-export__row-message">
-            Deux médias portent le même nom dans le pack. C'est un défaut de Story Studio,
-            pas du projet : le pack n'a pas été produit.
-          </p>
+          <p className="advanced-export__row-message"> {t("Deux médias portent le même nom dans le pack. C'est un défaut de Story Studio, pas du projet : le pack n'a pas été produit.")} </p>
           <ul className="advanced-export__rows">
             {refusal.conflicts.map((conflict) => (
               <li key={`${conflict.assetRef}-${conflict.archiveName}`} className="advanced-export__row">
@@ -173,20 +164,17 @@ function RefusalBody({ refusal, embedded, stagePaths, onFocusPath, onOpenDiagnos
     case EXPORT_REFUSAL.MEDIA_ORACLE:
       return (
         <div>
-          <p className="advanced-export__row-message">
-            Les médias préparés ne correspondent pas à ceux du projet. Tes fichiers ne sont pas
-            en cause ; le pack n'a pas été produit.
-          </p>
+          <p className="advanced-export__row-message"> {t("Les médias préparés ne correspondent pas à ceux du projet. Tes fichiers ne sont pas en cause ; le pack n'a pas été produit.")} </p>
           <ul className="advanced-export__rows">
             {refusal.disagreements.map((disagreement, position) => (
               <li key={`${disagreement.assetRef}-${position}`} className="advanced-export__row">
                 <p className="advanced-export__row-head">
                   <code>{disagreement.assetRef}</code>
-                  {disagreement.stageUuid && <> — écran <code>{disagreement.stageUuid}</code></>}
+                  {disagreement.stageUuid && <> {t('— écran')} <code>{disagreement.stageUuid}</code></>}
                   {disagreement.kind && <> — {mediaFieldLabel(disagreement.kind)}</>}
                 </p>
                 <p className="advanced-export__row-message">
-                  attendu <code>{disagreement.expected}</code>, observé <code>{disagreement.observed}</code>
+                  attendu <code>{disagreement.expected}</code>{t(', observé')} <code>{disagreement.observed}</code>
                 </p>
               </li>
             ))}
@@ -196,17 +184,13 @@ function RefusalBody({ refusal, embedded, stagePaths, onFocusPath, onOpenDiagnos
 
     case EXPORT_REFUSAL.CANCELLED:
       return (
-        <p className="advanced-export__row-message">
-          Génération annulée : aucun pack n'a été produit et le projet est inchangé.
-        </p>
+        <p className="advanced-export__row-message"> {t("Génération annulée : aucun pack n'a été produit et le projet est inchangé.")} </p>
       );
 
     case EXPORT_REFUSAL.OUTPUT_WRITE:
       return (
         <div>
-          <p className="advanced-export__row-message">
-            Lt('écriture du pack a échoué. Le projet et tes fichiers d')origine restent intacts.
-          </p>
+          <p className="advanced-export__row-message"> {t("L'écriture du pack a échoué. Le projet et tes fichiers d'origine restent intacts.")} </p>
           {refusal.path && <p className="advanced-export__row-path"><code>{refusal.path}</code></p>}
           {message && <p className="advanced-export__row-message">{message}</p>}
           <p className="advanced-export__row-message">
@@ -214,8 +198,7 @@ function RefusalBody({ refusal, embedded, stagePaths, onFocusPath, onOpenDiagnos
                 annulation, le refus **devient** `output-write` pour ne pas
                 masquer le résidu. Le dire est le seul moyen que l'auteur aille
                 voir. */}
-            Un fichier temporaire <code>.partial</code> a pu rester dans le dossier de sortie :
-            tu peux le supprimer.
+            {t("Un fichier temporaire")} <code>.partial</code> {t("a pu rester dans le dossier de sortie : tu peux le supprimer.")}
           </p>
         </div>
       );
@@ -225,16 +208,13 @@ function RefusalBody({ refusal, embedded, stagePaths, onFocusPath, onOpenDiagnos
         <p className="advanced-export__row-message">
           {/* Rien n'a été demandé au moteur : la garde est locale, et le dire
               évite de laisser croire qu'il a refusé. */}
-          {message ? `${message} ` : 't('}La génération n')a pas été lancée.
-        </p>
+          {message ? `${message} ` : ''}{t("La génération n'a pas été lancée.")} </p>
       );
 
     case EXPORT_REFUSAL.UNTYPED:
     default:
       return (
-        <p className="advanced-export__row-message">
-          La génération s'est interrompue sans explication précise.
-          {message && <> <code>{message}</code></>}
+        <p className="advanced-export__row-message"> {t("La génération s'est interrompue sans explication précise.")} {message && <> <code>{message}</code></>}
         </p>
       );
   }
@@ -260,7 +240,7 @@ export function ExportRefusalReport({ refusal, embedded = false, stagePaths = nu
       />
       {onDismiss && (
         <p className="advanced-export__actions">
-          <Button size="sm" onClick={onDismiss}>Fermer</Button>
+          <Button size="sm" onClick={onDismiss}>{t('Fermer')}</Button>
         </p>
       )}
     </section>

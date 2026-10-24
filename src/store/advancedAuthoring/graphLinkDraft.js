@@ -46,7 +46,7 @@ export function graphLinkPorts(entry) {
         slot: 'ok',
         active: settable,
         activateControl: !enabled(controls.ok) && !enabled(controls.autoplay),
-        label: 'Raccorder la suite du parcours (okTransition)',
+        label: t("Raccorder la suite du parcours (okTransition)"),
         control: enabled(controls.autoplay) ? 'autoplay' : 'ok',
       },
       {
@@ -145,7 +145,7 @@ export function resolveGraphLinkDrop(index, draft, targetPath, graphPoint) {
         : t('Une liste de choix se raccorde à un Écran.'),
     };
   }
-  // Lt('Écran d')entrée n'est jamais le choix d'une liste : le moteur refuserait
+  // L'Écran d'entrée n'est jamais le choix d'une liste : le moteur refuserait
   // le geste, le trait le dit avant.
   if (draft.sourceKind === ACTION_KIND && isEntryStage(target)) {
     return {
@@ -262,7 +262,7 @@ export function buildExistingGraphLinkGesture(intent, decision) {
 export function layoutEntriesFromPositions(index, positions) {
   return positions.map(({ path, x, y }) => {
     const entry = index?.byPath.get(path);
-    if (!entry) throw new TypeError(`Nœud absent de la disposition : ${path}`);
+    if (!entry) throw new TypeError(t("Nœud absent de la disposition : {path}", { path: path }));
     return {
       node: entry.kind === STAGE_KIND
         ? { kind: STAGE_KIND, id: entry.node.uuid }

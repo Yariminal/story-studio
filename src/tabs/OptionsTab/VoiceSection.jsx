@@ -1,5 +1,6 @@
 import { PiperVoiceSettings } from './PiperVoiceSettings';
 import { XttsVoiceSettings } from './XttsVoiceSettings';
+import { t } from '../../i18n/index.js';
 import { usePiperVoiceOptions } from './usePiperVoiceOptions';
 import { useXttsVoiceOptions } from './useXttsVoiceOptions';
 
@@ -15,13 +16,12 @@ export function VoiceSection({ className, sectionRef, xttsSettings, onUpdateXtts
 
   return (
     <section id="xtts" className={className} ref={sectionRef}>
-      <div className="opts-card-title">Génération de voix locale</div>
+      <div className="opts-card-title">{t('Génération de voix locale')}</div>
       <div className="opts-row">
         <div className="opts-row-info">
-          <div className="opts-row-label">Moteur de voix</div>
+          <div className="opts-row-label">{t('Moteur de voix')}</div>
           <div className="opts-row-sub">
-            <strong>Piper</strong> fonctionne sans configuration (recommandé). <strong>XTTS</strong> est destiné
-            aux utilisateurs avancés (clonage de voix, serveur local).
+            <strong>Piper</strong> {t('fonctionne sans configuration (recommandé).')} <strong>XTTS</strong> {t('est destiné aux utilisateurs avancés (clonage de voix, serveur local).')}
           </div>
         </div>
         <select
@@ -29,8 +29,8 @@ export function VoiceSection({ className, sectionRef, xttsSettings, onUpdateXtts
           value={ttsBackend}
           onChange={(e) => handleTtsBackendChange(e.target.value)}
         >
-          <option value="piper">Piper (défaut)</option>
-          <option value="xtts">XTTS (avancé)</option>
+          <option value="piper">{t('Piper (défaut)')}</option>
+          <option value="xtts">{t('XTTS (avancé)')}</option>
         </select>
       </div>
 

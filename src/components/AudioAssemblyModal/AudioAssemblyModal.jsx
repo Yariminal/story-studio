@@ -141,7 +141,7 @@ export function AudioAssemblyModal({
     if (!text) return t("L'assemblage audio a échoué.");
     const firstLine = text.split(/\r?\n/).find((line) => line.trim()) || text;
     if (/ffmpeg|invalid data|error/i.test(text)) {
-      return `FFmpeg n'a pas pu assembler ces fichiers. ${firstLine}`;
+      return t("FFmpeg n'a pas pu assembler ces fichiers. {firstLine}", { firstLine: firstLine });
     }
     return firstLine;
   }
@@ -198,26 +198,28 @@ export function AudioAssemblyModal({
         <div className="audio-assembly-body">
           <div className="audio-assembly-intro">
             {contextRequest ? (
-              <strong>Depuis {contextRequest.storyNames.length} histoires sélectionnées</strong>
+              <strong>{t("Depuis")} {contextRequest.storyNames.length} {t("histoires sélectionnées")}</strong>
             ) : null}
-            <span>Crée une piste audio unique à partir des fichiers sélectionnés.</span>
-            <span>Les fichiers audio originaux resteront disponibles dans Médias.</span>
+            <span>{t('Crée une piste audio unique à partir des fichiers sélectionnés.')}</span>
+            <span>{t('Les fichiers audio originaux resteront disponibles dans Médias.')}</span>
             {willReplaceStories ? (
-              <span>Le résultat remplacera les histoires sélectionnées en une seule opération annulable.</span>
+              <span>{t('Le résultat remplacera les histoires sélectionnées en une seule opération annulable.')}</span>
             ) : null}
             {contextRequest && !willReplaceStories ? (
-              <span>Le projet restera inchangé{projectActionUnavailableReason ? ` : ${projectActionUnavailableReason}` : '.'}</span>
+              <span>{t("Le projet restera inchangé")}{projectActionUnavailableReason ? ` : ${projectActionUnavailableReason}` : '.'}</span>
             ) : null}
           </div>
 
           {ignoredCount > 0 && (
-            <div className="audio-assembly-note">
-              Seuls les fichiers audio peuvent être assemblés. {ignoredCount} média{ignoredCount > 1 ? 's' : 't('} non audio ignoré{ignoredCount > 1 ? ')s' : ''}.
+            <div className="audio-assembly-note"> {t("Seuls les fichiers audio peuvent être assemblés.")}{' '}
+              {ignoredCount > 1
+                ? t('{count} médias non audio ignorés.', { count: ignoredCount })
+                : t('{count} média non audio ignoré.', { count: ignoredCount })}
             </div>
           )}
 
           <section className="audio-assembly-section">
-            <h3>Audios à assembler</h3>
+            <h3>{t('Audios à assembler')}</h3>
             <div className="audio-assembly-list">
               {orderedItems.map((item, index) => (
                 <div
@@ -232,8 +234,8 @@ export function AudioAssemblyModal({
                   >≡</span>
                   <span className="audio-assembly-name" title={item.name}>{index + 1}. {item.name}</span>
                   <span className="audio-assembly-duration">{formatDuration(item.durationSecs)}</span>
-                  <Button variant="icon" className="audio-assembly-icon-btn" onClick={() => moveItem(index, -1)} disabled={submitting || index === 0} title="Monter">↑</Button>
-                  <Button variant="icon" className="audio-assembly-icon-btn" onClick={() => moveItem(index, 1)} disabled={submitting || index === orderedItems.length - 1} title="Descendre">↓</Button>
+                  <Button variant="icon" className="audio-assembly-icon-btn" onClick={() => moveItem(index, -1)} disabled={submitting || index === 0} title={t("Monter")}>↑</Button>
+                  <Button variant="icon" className="audio-assembly-icon-btn" onClick={() => moveItem(index, 1)} disabled={submitting || index === orderedItems.length - 1} title={t("Descendre")}>↓</Button>
                   <Button variant="icon" className="audio-assembly-icon-btn is-danger" onClick={() => removeItem(index)} disabled={submitting || orderedItems.length <= 2} title={t("Retirer")}>×</Button>
                 </div>
               ))}
@@ -241,7 +243,7 @@ export function AudioAssemblyModal({
           </section>
 
           <section className="audio-assembly-section">
-            <h3>Options</h3>
+            <h3>{t('Options')}</h3>
             <label className="audio-assembly-check">
               <input
                 type="checkbox"
@@ -249,11 +251,11 @@ export function AudioAssemblyModal({
                 onChange={(e) => { setAddSilence(e.target.checked); saveOpts({ addSilence: e.target.checked }); }}
                 disabled={submitting}
               />
-              <span>Ajouter un silence entre les fichiers</span>
+              <span>{t('Ajouter un silence entre les fichiers')}</span>
             </label>
             {addSilence && (
               <label className="audio-assembly-field is-inline">
-                <span>Durée</span>
+                <span>{t('Durée')}</span>
                 <input
                   type="number"
                   min="0"
@@ -266,14 +268,12 @@ export function AudioAssemblyModal({
                 <span>secondes</span>
               </label>
             )}
-            <div className="audio-assembly-note">
-              Les fichiers sources restent dans la médiathèque. Ils pourront ensuite être retirés ou supprimés depuis l’onglet Médias.
-            </div>
+            <div className="audio-assembly-note"> {t("Les fichiers sources restent dans la médiathèque. Ils pourront ensuite être retirés ou supprimés depuis l’onglet Médias.")} </div>
           </section>
 
           <section className="audio-assembly-section">
             <label className="audio-assembly-field">
-              <span>Nom du fichier final</span>
+              <span>{t('Nom du fichier final')}</span>
               <input
                 value={outputFileName}
                 onChange={(e) => setOutputFileName(e.target.value)}
@@ -282,7 +282,7 @@ export function AudioAssemblyModal({
               />
             </label>
             <div className="audio-assembly-destination">
-              <span>Fichier créé</span>
+              <span>{t('Fichier créé')}</span>
               <strong title={`fichiers-importes/${storageFileName}`}>fichiers-importes/{storageFileName}</strong>
             </div>
           </section>
@@ -291,10 +291,10 @@ export function AudioAssemblyModal({
         </div>
 
         <div className="audio-assembly-footer">
-          <Button onClick={onClose} disabled={submitting}>Annuler</Button>
+          <Button onClick={onClose} disabled={submitting}>{t('Annuler')}</Button>
           <Button variant="primary" className="audio-assembly-submit" onClick={handleSubmit} disabled={!canSubmit}>
             {submitting && <span className="audio-assembly-spinner" />}
-            {submitting ? 'Assemblage…' : (willReplaceStories ? t('Assembler et remplacer') : 'Assembler')}
+            {submitting ? 'Assemblage…' : (willReplaceStories ? t('Assembler et remplacer') : t("Assembler"))}
           </Button>
         </div>
       </div>

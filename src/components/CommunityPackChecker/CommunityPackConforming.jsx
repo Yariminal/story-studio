@@ -61,7 +61,7 @@ function buildConformingGroups(report) {
     groups.push({
       id: 'image',
       title: t('Images conformes'),
-      subtitle: 'Dimensions et format conformes.',
+      subtitle: t("Dimensions et format conformes."),
       Icon: Image,
       mode: 'files',
       kind: 'image',
@@ -75,13 +75,13 @@ function buildConformingGroups(report) {
     groups.push({
       id: 'title',
       title: t('Nom du pack'),
-      subtitle: 'Nom et convention valides.',
+      subtitle: t("Nom et convention valides."),
       Icon: FilePen,
       mode: 'facts',
       metricStrong: 'Valide',
       metricSmall: 'Convention OK',
       facts: [
-        { key: 'name', label: 'Nom', value: report.packName || '—' },
+        { key: 'name', label: t("Nom"), value: report.packName || '—' },
         { key: 'title', label: 'Titre', value: report.packTitle || '—' },
         { key: 'version', label: 'Version', value: String(report.packVersion ?? '—') },
       ],
@@ -97,11 +97,11 @@ function buildConformingGroups(report) {
       Icon: Network,
       mode: 'facts',
       metricStrong: 'Correcte',
-      metricSmall: `${structure.stageCount ?? 0} étapes`,
+      metricSmall: t("{value} étapes", { value: structure.stageCount ?? 0 }),
       facts: [
         { key: 'lunii', label: 'Compatible Lunii', value: structure.luniiCompatible ? t('Oui') : t('Non') },
         { key: 'editable', label: t('Éditable Story Studio'), value: structure.storyStudioEditable ? t('Oui') : t('Non') },
-        { key: 'stories', label: 'Histoires', value: String(structure.storyCount ?? 0) },
+        { key: 'stories', label: t("Histoires"), value: String(structure.storyCount ?? 0) },
         { key: 'stages', label: t('Étapes'), value: String(structure.stageCount ?? 0) },
         { key: 'actions', label: t('Listes de choix'), value: String(structure.actionCount ?? 0) },
         { key: 'refAudio', label: t('Audios référencés'), value: String(structure.referencedAudioCount ?? 0) },
@@ -149,10 +149,10 @@ function ConformingFile({ kind, item, open, onToggle }) {
   return (
     <div className="checker-mini-file">
       <button type="button" className="checker-mini-file-button" onClick={onToggle}>
-        <span className="checker-role">{kind === 'audio' ? 'Audio' : 'Image'}</span>
+        <span className="checker-role">{kind === 'audio' ? t("Audio") : t("Image")}</span>
         <span className="checker-mini-name" title={item.filePath || item.label}>{cleanLabel(item.label)}</span>
         <span className="checker-mini-problem" title={summary}>{summary}</span>
-        <span className="checker-mini-severity checker-mini-severity--ok">OK</span>
+        <span className="checker-mini-severity checker-mini-severity--ok">{t('OK')}</span>
         <ChevronDown className={`checker-mini-chevron ${open ? 'is-open' : ''}`} aria-hidden="true" />
       </button>
       {open ? <ConformingMeasures rows={rows} /> : null}
@@ -214,7 +214,7 @@ export function ConformingSection({ report }) {
     <div className="checker-conform">
       <div className="checker-conform-head">
         <IconFrame Icon={Check} />
-        Ce qui est conforme
+        {t("Ce qui est conforme")}
       </div>
       <div className="checker-groups">
         {groups.map((group) => (

@@ -1,4 +1,5 @@
 import { memo, useMemo } from 'react';
+import { useLocale } from '../../i18n/LocaleContext.jsx';
 import { RootEditor } from './RootEditor';
 import { MenuEditor } from './MenuEditor';
 import { StoryEditor } from './StoryEditor';
@@ -26,6 +27,7 @@ export const NodeEditorContent = memo(function NodeEditorContent({
   afterPlayFocus = null,
   onAfterPlayFocusConsumed,
 }) {
+  useLocale();
   const isMultiSelect = selectedIds && selectedIds.size > 1;
   const parentMenuId = !isMultiSelect && (node?.type === 'story' || node?.type === 'menu') ? findParentMenuId(project, node.id, projectIndex) : null;
   const parentMenu = useMemo(

@@ -91,7 +91,7 @@ export function ModeSelector({
     } catch (error) {
       showErrorDialog({
         title: t('Documentation inaccessible'),
-        message: `Impossible d’ouvrir la documentation dans le navigateur : ${error}`,
+        message: t("Impossible d’ouvrir la documentation dans le navigateur : {error}", { error: error }),
       });
     }
   }
@@ -203,9 +203,7 @@ export function ModeSelector({
           </Tooltip>
           <div className="mode-home-brand">
             <div className="mode-home-wordmark">Story Studio</div>
-            <div className="mode-home-tagline">
-              Crée, organise et génère des histoires audio pour ta Boîte à Histoires Lunii.
-            </div>
+            <div className="mode-home-tagline"> {t("Crée, organise et génère des histoires audio pour ta Boîte à Histoires Lunii.")} </div>
           </div>
         </header>
 
@@ -247,7 +245,7 @@ export function ModeSelector({
             <div className="mode-home-links">
               <button type="button" className="mode-ghost-button" onClick={onOpenPreferences}>
                 <SlidersHorizontal className="mode-ghost-icon" strokeWidth={1.9} />
-                <span>Préférences</span>
+                <span>{t('Préférences')}</span>
               </button>
               <a
                 className="mode-ghost-button"
@@ -257,14 +255,14 @@ export function ModeSelector({
                 onClick={handleDocumentationClick}
               >
                 <BookOpenText className="mode-ghost-icon" strokeWidth={1.9} />
-                <span>Documentation</span>
+                <span>{t('Documentation')}</span>
               </a>
             </div>
           </div>
 
           {hasProjects && (
             <aside className="mode-projects-pane">
-              <div className="mode-projects-eyebrow">Projets récents</div>
+              <div className="mode-projects-eyebrow">{t('Projets récents')}</div>
               <div className="mode-projects-list">
                 {visibleRecoveries.map((recovery, index) => (
                   <div

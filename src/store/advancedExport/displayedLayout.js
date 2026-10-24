@@ -12,6 +12,7 @@
 // `apply-layout-to-authoring` —, la seule porte admise vers les positions
 // d'auteur.
 
+import { t } from '../../i18n/index.js';
 import { SHORT_MAX, SHORT_MIN } from '../advancedGraphView/graphGeometry.js';
 import { advancedGestures } from '../projectModel/advancedGestures.js';
 
@@ -68,7 +69,7 @@ export async function promoteDisplayedLayout({
   try {
     gestures = displayedLayoutGestures(await readGraphView(readProject()));
   } catch (error) {
-    warn(`lecture de la disposition impossible : ${String(error?.message ?? error)}`);
+    warn(t("lecture de la disposition impossible : {value}", { value: String(error?.message ?? error) }));
     return null;
   }
   let project = null;
@@ -77,7 +78,7 @@ export async function promoteDisplayedLayout({
     // montrer.
     const outcome = await runGesture(gesture, { history: false });
     if (outcome?.status !== applied) {
-      warn(`${gesture.gesture} non appliqué (${outcome?.status ?? 'inconnu'})`);
+      warn(t("{gesture} non appliqué ({value})", { gesture: gesture.gesture, value: outcome?.status ?? 'inconnu' }));
       return null;
     }
     project = outcome.project ?? project;

@@ -11,13 +11,15 @@ import { QUEUE_COLUMNS, resolveQueueGrid, useQueueColumnWidths } from './useQueu
 import './SDQueuePanel.css';
 
 import { t } from '../../i18n/index.js';
-const STATUS_LABEL = {
+function STATUS_LABEL() {
+  return {
   pending: 'En attente',
   submitting: 'Envoi...',
   running: t('Génération...'),
   done: t('Terminé'),
   error: 'Erreur',
 };
+}
 
 let activeQueueAudioStopper = null;
 
@@ -41,7 +43,7 @@ function isActiveJob(job) {
 
 function startQueueMediaDrag(event, { kind, path, label, onDragStart = null }) {
   if (!path || (kind !== 'audio' && kind !== 'image') || event.button !== 0) return;
-  if (event.target?.closest?.(t('input, textarea, [role="slider"], .sd-queue-row-actions, .sd-result-play'))) return;
+  if (event.target?.closest?.('input, textarea, [role="slider"], .sd-queue-row-actions, .sd-result-play')) return;
 
   const startX = event.clientX;
   const startY = event.clientY;
@@ -131,7 +133,7 @@ function UsageBadge({ usage }) {
 function StatusBadge({ job }) {
   const percent = progressPercent(job.progress);
   const active = isActiveJob(job);
-  const label = active && percent != null ? `${percent}%` : (STATUS_LABEL[job.status] ?? job.status);
+  const label = active && percent != null ? `${percent}%` : (STATUS_LABEL()[job.status] ?? job.status);
 
   return (
     <span className={`sd-job-badge sd-badge-${job.status}`}>
@@ -146,7 +148,7 @@ function JobKind({ isImageJob }) {
   return (
     <span className={`sd-kind-pill${isImageJob ? ' is-image' : ' is-audio'}`}>
       <Icon className="sd-kind-icon" strokeWidth={2} absoluteStrokeWidth />
-      {isImageJob ? 'Image' : 'Audio'}
+      {isImageJob ? t("Image") : t("Audio")}
     </span>
   );
 }
@@ -175,7 +177,7 @@ function JobResultThumb({ path, onPreview }) {
           onDragStart: () => { draggedRef.current = true; },
         })}
         onClick={handleClick}
-        aria-label={`Prévisualiser ${basename(path)}`}
+        aria-label={t("Prévisualiser {value}", { value: basename(path) })}
       >
         {url ? (
           <img src={url} alt="" className="sd-result-img" />
@@ -296,7 +298,7 @@ function ResultCell({ job, isImageJob, onPreviewImage }) {
 
   if (isImageJob) {
     const paths = job.resultPaths ?? [];
-    if (paths.length === 0) return <span className="sd-cell-muted">Aucun fichier</span>;
+    if (paths.length === 0) return <span className="sd-cell-muted">{t('Aucun fichier')}</span>;
     const visiblePaths = paths.slice(0, 2);
     return (
       <div className="sd-image-result-cell">
@@ -315,7 +317,7 @@ function ResultCell({ job, isImageJob, onPreviewImage }) {
     );
   }
 
-  if (!job.resultPath) return <span className="sd-cell-muted">Aucun fichier</span>;
+  if (!job.resultPath) return <span className="sd-cell-muted">{t('Aucun fichier')}</span>;
   const filename = basename(job.resultPath);
   return (
     <div
@@ -497,12 +499,10 @@ export function SDQueuePanel({
   const content = (
     <>
       <div className={embedded ? 'sd-queue-embedded-header' : 'modal-header'}>
-        <span>Générations IA</span>
+        <span>{t('Générations IA')}</span>
         <div className="sd-queue-header-actions">
           {hasDone && (
-            <Button size="sm" onClick={onClearDone}>
-              Effacer terminées
-            </Button>
+            <Button size="sm" onClick={onClearDone}> {t("Effacer terminées")} </Button>
           )}
           {!embedded && (
             <Button variant="icon" className="modal-close" onClick={onClose} aria-label={t("Fermer")}>
@@ -514,11 +514,11 @@ export function SDQueuePanel({
 
       <div className="sd-queue-body">
         {jobs.length === 0 ? (
-          <div className="sd-queue-empty">Aucune génération en cours.</div>
+          <div className="sd-queue-empty">{t('Aucune génération en cours.')}</div>
         ) : (
           <div className="sd-queue-table" ref={tableRef} style={tableStyle}>
             <div className="sd-queue-table-header" ref={headerRef}>
-              {QUEUE_COLUMNS.map((col) => (
+              {QUEUE_COLUMNS().map((col) => (
                 <div key={col.id} className="sd-col-head">
                   <span className="sd-col-label">{col.label}</span>
                   {col.id !== 'actions' && (

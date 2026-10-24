@@ -36,8 +36,8 @@ export function LandingSelect({ id, landing, choices, disabled, onChange }) {
       {/* Le « ? » avant le libellé : entre « commence sur » et le choix, il
           couperait la lecture du réglage. */}
       <span className="advanced-exit__landing-label">
-        <HelpHint text={LANDING_HELP} />
-        <label htmlFor={id} className="advanced-options__verb">commence sur</label>
+        <HelpHint text={LANDING_HELP()} />
+        <label htmlFor={id} className="advanced-options__verb">{t('commence sur')}</label>
       </span>
       <select id={id} value={value} disabled={disabled} onChange={(event) => onChange(event.target.value)}>
         {value === '' && (
@@ -50,7 +50,7 @@ export function LandingSelect({ id, landing, choices, disabled, onChange }) {
             {positionText(choice.rank, count)} · {choice.label ?? t('Écran à choisir')}
           </option>
         ))}
-        {offersRandom && <option value="random">Au hasard, à chaque fois</option>}
+        {offersRandom && <option value="random">{t('Au hasard, à chaque fois')}</option>}
       </select>
     </div>
   );

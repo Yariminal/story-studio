@@ -5,7 +5,7 @@ import { TriangleAlert } from '../icons/LucideLocal';
 import { useEscapeKey } from '../../hooks/useEscapeKey';
 import './Dialog.css';
 
-import { t } from '../../i18n/index.js';
+import { t, getLocale } from '../../i18n/index.js';
 const ErrorDialogContext = createContext(null);
 
 function actionVariant(kind) {
@@ -139,7 +139,7 @@ export function ErrorDialogProvider({ children }) {
       onConfirm: () => resolve(true),
       onClose: () => resolve(false),
     });
-  }), [rememberFocus]);
+  }), [rememberFocus, getLocale()]);
 
   const showChoiceDialog = useCallback((nextDialog) => new Promise((resolve) => {
     rememberFocus();

@@ -28,17 +28,20 @@ import { ADVANCED_CONTROL_KEYS, advancedGestures, presence } from '../../store/p
 // Les noms courts des cinq boutons, pour les résumés en une ligne
 // (« Molette · Bouton OK »). Partout où on les règle, ils sont rangés et
 // formulés par `CONTROL_GROUPS` et `CONTROL_PHRASES`.
-const CONTROL_LABELS = {
+function CONTROL_LABELS() {
+  return {
   wheel: 'Molette',
   ok: 'Bouton OK',
   home: t('Bouton Accueil'),
   pause: t('Bouton Pause'),
   autoplay: t('Lecture automatique'),
 };
+}
 
 // Chaque bouton formulé par ce qu'il fait, le même texte partout : panneau
 // d'un Écran, sélection multiple, fenêtres de création.
-export const CONTROL_PHRASES = {
+export function CONTROL_PHRASES() {
+  return {
   ok: 'Quand on appuie sur OK',
   // « Automatiquement » est implicite sous « Se déclenche », et ce mot seul
   // déborde d'une colonne de 200 px.
@@ -49,6 +52,7 @@ export const CONTROL_PHRASES = {
   pause: t('Bouton Pause'),
   wheel: 'Molette',
 };
+}
 
 // Les contrôles dont la ligne dit son état en toutes lettres, « activé » ou
 // « désactivé » : un bouton nommé seul ne dirait pas s'il marche. Les
@@ -58,40 +62,44 @@ const STATE_WORDED = new Set(['home', 'pause', 'wheel']);
 // Les boutons rangés par ce qu'ils déclenchent, dans l'ordre du panneau d'un
 // Écran : la suite du parcours et ses deux déclencheurs, le bouton Accueil,
 // la molette, qui fait passer aux autres choix de la liste, puis la pause.
-const CONTROL_GROUPS = [
-  { id: 'ok', title: 'Suite du parcours', term: 'okTransition', controls: ['ok', 'autoplay'] },
+function CONTROL_GROUPS() {
+  return [
+  { id: 'ok', title: t("Suite du parcours"), term: 'okTransition', controls: ['ok', 'autoplay'] },
   { id: 'home', title: t('Bouton Accueil'), term: 'homeTransition', controls: ['home'] },
   { id: 'wheel', title: t('Passer aux autres choix de la liste'), term: null, controls: ['wheel'] },
   { id: 'pause', title: t('Pendant la lecture'), term: null, controls: ['pause'] },
 ];
+}
 
 // Les cinq boutons regroupés, là où on les règle ensemble sans leurs
 // destinations : chaque appelant fournit sa ligne (interrupteur simple,
 // mixte, ou valeur d'un brouillon).
 export function GroupedControls({ renderControl }) {
-  return CONTROL_GROUPS.map((group) => (
+  return CONTROL_GROUPS().map((group) => (
     <div key={group.id} className="advanced-control-group">
       <div className="advanced-exit__label">
         {group.title}
         {group.term && <em className="advanced-editor__term">{group.term}</em>}
       </div>
       <div className="sequence-controls advanced-controls__toggles">
-        {group.controls.map((control) => renderControl(control, CONTROL_PHRASES[control]))}
+        {group.controls.map((control) => renderControl(control, CONTROL_PHRASES()[control]))}
       </div>
     </div>
   ));
 }
 
-const PRESENCE_CHOICES = [
+function PRESENCE_CHOICES() {
+  return [
   ['true', t('Activé')],
   ['false', t('Désactivé')],
   ['null', t('Non défini (null)')],
   ['absent', t('Non défini (absent)')],
 ];
+}
 
 // « Molette · Bouton OK · Bouton Accueil » : les boutons allumés, dans l’ordre.
 export function describeControls(controls) {
-  const on = ADVANCED_CONTROL_KEYS.filter((key) => controls?.[key] === true).map((key) => CONTROL_LABELS[key]);
+  const on = ADVANCED_CONTROL_KEYS.filter((key) => controls?.[key] === true).map((key) => CONTROL_LABELS()[key]);
   return on.length > 0 ? on.join(' · ') : t('aucun bouton');
 }
 
@@ -148,7 +156,7 @@ export function ControlRow({ stage, control, label, disabled, onGesture }) {
         aria-label={label}
         onChange={(event) => set(event.target.value)}
       >
-        {PRESENCE_CHOICES.map(([value, text]) => (
+        {PRESENCE_CHOICES().map(([value, text]) => (
           <option key={value} value={value}>{text}</option>
         ))}
       </select>
@@ -179,41 +187,38 @@ export function ControlsCompletion({ stage, disabled, onGesture, highlight = fal
     <section className="card advanced-editor__section advanced-controls" data-highlight={highlight ? 'true' : undefined}>
       <div className="card-title-row">
         <div className="card-title">
-          Boutons <span className="advanced-field__flag">— à définir</span>
+          Boutons <span className="advanced-field__flag">{t('— à définir')}</span>
         </div>
       </div>
       <p className="advanced-field__note">
         {controls.presence !== 'value'
           ? t('Les boutons de cet Écran n’ont pas encore été définis dans le document.')
           : t('Certains boutons de cet Écran ne sont pas définis.')}
-        {' '}Choisissez le comportement de chacun pour pouvoir générer le pack.
-      </p>
+        {' '}{t("Choisissez le comportement de chacun pour pouvoir générer le pack.")} </p>
 
       {completion === null ? (
-        <Button size="sm" onClick={startCompletion} disabled={disabled}>
-          Définir les cinq réglages…
-        </Button>
+        <Button size="sm" onClick={startCompletion} disabled={disabled}> {t("Définir les cinq réglages…")} </Button>
       ) : (
         <div className="advanced-controls__completion">
           {ADVANCED_CONTROL_KEYS.map((control) => (
             <label key={control} className="advanced-controls__row">
-              <span className="advanced-controls__name">{CONTROL_LABELS[control]}</span>
+              <span className="advanced-controls__name">{CONTROL_LABELS()[control]}</span>
               <select
                 value={completion[control] === null ? '' : String(completion[control])}
-                aria-label={`Compléter ${CONTROL_LABELS[control]}`}
+                aria-label={t("Compléter {value}", { value: CONTROL_LABELS()[control] })}
                 onChange={(event) => setCompletion((current) => ({
                   ...current,
                   [control]: event.target.value === '' ? null : event.target.value === 'true',
                 }))}
               >
-                <option value="">— à définir —</option>
-                <option value="true">Activé</option>
-                <option value="false">Désactivé</option>
+                <option value="">{t('— à définir —')}</option>
+                <option value="true">{t('Activé')}</option>
+                <option value="false">{t('Désactivé')}</option>
               </select>
             </label>
           ))}
           <div className="advanced-controls__completion-actions">
-            <Button size="sm" onClick={() => setCompletion(null)}>Annuler</Button>
+            <Button size="sm" onClick={() => setCompletion(null)}>{t('Annuler')}</Button>
             <Button
               size="sm"
               variant="primary"
@@ -223,7 +228,7 @@ export function ControlsCompletion({ stage, disabled, onGesture, highlight = fal
                 setCompletion(null);
               }}
             >
-              Appliquer
+              {t("Appliquer")}
             </Button>
           </div>
         </div>

@@ -5,7 +5,7 @@ import {
   validateMediaAudioToolRequest,
 } from '../store/mediaToolContext.js';
 
-import { t } from '../i18n/index.js';
+import { t, getLocale } from '../i18n/index.js';
 let requestSequence = 0;
 
 function nextRequestId() {
@@ -65,7 +65,7 @@ export function useMediaToolBridge({
     setActiveRequest(request);
     openMediaTab?.();
     return { valid: true, request };
-  }, [openMediaTab, showErrorDialog]);
+  }, [openMediaTab, showErrorDialog, getLocale()]);
 
   const acknowledgeRequest = useCallback((requestId) => {
     setActiveRequest((current) => {
@@ -92,7 +92,7 @@ export function useMediaToolBridge({
       return { valid: false, code: 'project-changed', reason: t('Le projet a changé pendant le traitement.') };
     }
     return validateMediaAudioToolRequest(projectRef.current, request, statusByPathRef.current);
-  }, []);
+  }, [getLocale()]);
 
   const applyProjectAction = useCallback(({ request, action, result }) => {
     const validation = validateRequest(request);
@@ -118,7 +118,7 @@ export function useMediaToolBridge({
     if (!outcome?.ok) return invalidResult(outcome?.code ?? 'mutation-refused', outcome?.reason ?? t('La modification du projet a été refusée.'));
     invalidateRequest(request.requestId);
     return outcome;
-  }, [invalidateRequest, mutations, validateRequest]);
+  }, [invalidateRequest, mutations, validateRequest, getLocale()]);
 
   return {
     activeRequest,

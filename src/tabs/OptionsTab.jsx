@@ -1,4 +1,6 @@
 import { useState, useRef } from 'react';
+import { t } from '../i18n/index.js';
+import { useLocale } from '../i18n/LocaleContext.jsx';
 import { Button } from '../components/common/Button';
 import { KeyboardShortcutsModal } from '../components/StorySettingsModal/KeyboardShortcutsModal';
 import { useEscapeKey } from '../hooks/useEscapeKey';
@@ -45,6 +47,8 @@ export function OptionsTab({
   onClose = null,
 }) {
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
+  // Subscribe so every preferences section redraws when the language changes.
+  useLocale();
 
   // En modale : Escape ferme les Préférences. La modale des raccourcis, montée
   // par-dessus, s'enregistre après et prend donc le dessus dans la pile Escape.
@@ -63,7 +67,7 @@ export function OptionsTab({
       {onBackToHome && (
         <div className="opts-back-row">
           <Button onClick={onBackToHome}>
-            Retour à l'accueil
+            {t("Retour à l'accueil")}
           </Button>
         </div>
       )}
@@ -136,7 +140,7 @@ export function OptionsTab({
         <div className="modal-overlay" onClick={onClose}>
           <div className="modal-box opts-modal-box" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <span>Préférences</span>
+              <span>{t('Préférences')}</span>
               <Button variant="icon" className="modal-close" onClick={onClose}>×</Button>
             </div>
             {content}

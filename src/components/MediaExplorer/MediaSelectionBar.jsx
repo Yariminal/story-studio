@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 import { tagStyle } from './helpers';
 import { Button } from '../common/Button';
 
@@ -33,23 +34,29 @@ export function MediaSelectionBar({
 
   return (
     <div className="media-selection-bar">
-      <span className="media-selection-count">{selectedCount} sélectionné{selectedCount > 1 ? 's' : ''}</span>
+      <span className="media-selection-count">{selectedCount > 1
+        ? t('{count} sélectionnés', { count: selectedCount })
+        : t('{count} sélectionné', { count: selectedCount })}</span>
       {graphMediaTarget && (
         <Button variant="primary" className="media-selection-btn" onClick={onAssignToGraph}>
-          Utiliser sur « {graphMediaTarget.label} »
+          {t('Utiliser sur « {name} »', { name: graphMediaTarget.label })}
         </Button>
       )}
       {multiple && selectedAudioItems.length > 0 ? (
         <>
           <Button className="media-selection-btn" onClick={onCopyAudio}>
-            Copier {selectedAudioItems.length} son{selectedAudioItems.length > 1 ? 's' : ''}
+            {selectedAudioItems.length > 1
+              ? t('Copier {count} sons', { count: selectedAudioItems.length })
+              : t('Copier {count} son', { count: selectedAudioItems.length })}
           </Button>
           <Button className="media-selection-btn" onClick={onCutAudio}>
-            Couper {selectedAudioItems.length} son{selectedAudioItems.length > 1 ? 's' : ''}
+            {selectedAudioItems.length > 1
+              ? t('Couper {count} sons', { count: selectedAudioItems.length })
+              : t('Couper {count} son', { count: selectedAudioItems.length })}
           </Button>
           {selectedAudioItems.length >= 2 && (
             <Button variant="primary" className="media-selection-btn" onClick={onOpenAssembly}>
-              Assembler les audios
+              {t("Assembler les audios")}
             </Button>
           )}
         </>
@@ -66,7 +73,7 @@ export function MediaSelectionBar({
               placeholder="+ Tag commun"
             />
             <Button type="submit" className="media-selection-btn" disabled={!bulkTag.trim()}>
-              Appliquer
+              {t("Appliquer")}
             </Button>
           </form>
           {bulkTagOpen && allTags.length > 0 && (
@@ -92,7 +99,7 @@ export function MediaSelectionBar({
           )}
         </div>
       ) : null}
-      {multiple && <Button className="media-selection-btn" onClick={onClear}>Effacer</Button>}
+      {multiple && <Button className="media-selection-btn" onClick={onClear}>{t("Effacer")}</Button>}
     </div>
   );
 }

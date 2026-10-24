@@ -34,7 +34,7 @@ export function youtubeImportFailure(result, fallback) {
 export function youtubeBlockedNotice(result) {
   const { total, imported, skipped = 0, blocked = false } = result ?? {};
   if (!blocked || skipped <= 0) return null;
-  return `${formatFrenchCount(imported, t('vidéo importée'), t('vidéos importées'))} sur ${total}. `
-    + `YouTube a ensuite bloqué cette connexion : ${formatFrenchCount(skipped, t('vidéo restante n’a'), t('vidéos restantes n’ont'))} pas été ${skipped === 1 ? t('tentée') : t('tentées')}. `
+  return t("{value} sur {total}. ", { value: formatFrenchCount(imported, t('vidéo importée'), t('vidéos importées')), total: total })
+    + t("YouTube a ensuite bloqué cette connexion : {value} pas été {value2}. ", { value: formatFrenchCount(skipped, t('vidéo restante n’a'), t('vidéos restantes n’ont')), value2: skipped === 1 ? t('tentée') : t('tentées') })
     + t('Réessaie dans quelques heures.');
 }

@@ -66,7 +66,7 @@ export function MediaTile({
 
   const ctxActions = [
     ...(mediaClipboard ? [
-      { icon: <Copy />, label: clipboardPaths.length > 1 ? `Copier ${clipboardPaths.length} sons` : t('Copier le média'), fn: () => mediaClipboard.set(clipboardPaths) },
+      { icon: <Copy />, label: clipboardPaths.length > 1 ? t("Copier {length} sons", { length: clipboardPaths.length }) : t('Copier le média'), fn: () => mediaClipboard.set(clipboardPaths) },
       'sep',
     ] : []),
     { icon: <FolderOpen />, label: t("Révéler dans l'explorateur"), fn: () => revealItemInDir(item.path) },
@@ -76,7 +76,7 @@ export function MediaTile({
     ] : []),
     ...(onAssemble && contextAudioItems.length >= 2 ? [
       'sep',
-      { icon: <Link2 />, label: `Assembler ${contextAudioItems.length} sons`, fn: () => onAssemble() },
+      { icon: <Link2 />, label: t("Assembler {length} sons", { length: contextAudioItems.length }), fn: () => onAssemble() },
     ] : []),
     ...(onSplit && item.kind === 'audio' && item.exists ? [
       'sep',
@@ -91,7 +91,7 @@ export function MediaTile({
       {
         icon: <Trash2 />,
         label: contextItems.length > 1
-          ? `Retirer ${contextItems.length} fichiers de la médiathèque`
+          ? t("Retirer {length} fichiers de la médiathèque", { length: contextItems.length })
           : t('Retirer de la médiathèque'),
         fn: () => onDeleteRequest(contextItems),
         danger: true,
@@ -280,7 +280,7 @@ export function MediaTile({
           {!item.exists && (
             <span
               className="media-missing-badge"
-              title={`Fichier introuvable :\n${cleanPath(item.path)}`}
+              title={t("Fichier introuvable :\n{value}", { value: cleanPath(item.path) })}
             >!</span>
           )}
           {duration && view !== 'list' && (

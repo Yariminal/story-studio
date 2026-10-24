@@ -18,15 +18,19 @@ export const MENU_DEPTH_LIMIT_TITLE = 'Limite d’imbrication';
 // propre sous-arbre. Le glisser la montre au survol, le couper-coller la dit
 // au collage ; les deux emploient la même phrase.
 export const MENU_CYCLE_CODE = 'menu_cycle';
-export const MENU_CYCLE_MESSAGE =
-  t('Un Dossier ne peut pas être déplacé dans lui-même ni dans l’un de ses sous-dossiers.');
-export const MENU_CYCLE_PASTE_TITLE = t('Collage impossible');
-export const MENU_CYCLE_PASTE_MESSAGE =
-  t('Un Dossier ne peut pas être collé dans lui-même ni dans l’un de ses sous-dossiers. ')
+export function MENU_CYCLE_MESSAGE() {
+  return t('Un Dossier ne peut pas être déplacé dans lui-même ni dans l’un de ses sous-dossiers.');
+}
+export function MENU_CYCLE_PASTE_TITLE() {
+  return t('Collage impossible');
+}
+export function MENU_CYCLE_PASTE_MESSAGE() {
+  return t('Un Dossier ne peut pas être collé dans lui-même ni dans l’un de ses sous-dossiers. ')
   + t('Il est toujours coupé : choisissez un autre emplacement.');
+}
 
 function formatProjectMenuDepthError(observedDepth) {
-  return `Ce projet contient ${observedDepth} Dossiers imbriqués. Story Studio en prend en charge au maximum ${MAX_MENU_DEPTH}.`;
+  return t("Ce projet contient {observedDepth} Dossiers imbriqués. Story Studio en prend en charge au maximum {MAX_MENU_DEPTH}.", { observedDepth: observedDepth, MAX_MENU_DEPTH: MAX_MENU_DEPTH });
 }
 
 function entryChildren(entry) {
