@@ -23,22 +23,24 @@ function getImportDisplayName(filePath) {
 // Textes des funnels média d'accueil (podcast/YouTube) : flux identiques,
 // seul le vocabulaire change. Consommé par landMediaFunnel (et l'import éditeur
 // YouTube pour les mêmes messages d'échec).
-const MEDIA_FUNNEL_COPY = {
+function MEDIA_FUNNEL_COPY() {
+  return {
   podcast: {
     defaultTitle: 'Podcast',
     coverFilePrefix: 'podcast',
     logPrefix: 'podcast-funnel',
-    allFailedMessage: t("Aucun épisode nt('a pu être importé. Vérifie ta connexion ou l')adresse du flux RSS."),
-    someFailedNotice: (failures, total) => `${formatFrenchCount(failures, t('épisode'), t('épisodes'))} sur ${total} n'ont pas pu être importés. Les autres ont bien été ajoutés.`,
+    allFailedMessage: t("Aucun épisode n'a pu être importé. Vérifie ta connexion ou l'adresse du flux RSS."),
+    someFailedNotice: (failures, total) => t("{value} sur {total} n'ont pas pu être importés. Les autres ont bien été ajoutés.", { value: formatFrenchCount(failures, t('épisode'), t('épisodes')), total: total }),
   },
   youtube: {
     defaultTitle: 'YouTube',
     coverFilePrefix: 'youtube',
     logPrefix: 'youtube-funnel',
     allFailedMessage: t("Aucune vidéo n'a pu être importée."),
-    someFailedNotice: (failures, total) => `${formatFrenchCount(failures, t('vidéo'), t('vidéos'))} sur ${total} n'ont pas pu être importées. Les autres ont bien été ajoutées.`,
+    someFailedNotice: (failures, total) => t("{value} sur {total} n'ont pas pu être importées. Les autres ont bien été ajoutées.", { value: formatFrenchCount(failures, t('vidéo'), t('vidéos')), total: total }),
   },
 };
+}
 
 function partialFailureNotice(source, copy, result) {
   return (source === 'youtube' && youtubeBlockedNotice(result))
@@ -103,7 +105,7 @@ export function useMediaImport({
   // liste yt-dlp), puis importe les épisodes/vidéos en histoires avant
   // l'atterrissage éditeur. Vocabulaire par source dans MEDIA_FUNNEL_COPY.
   async function landMediaFunnel(source, items, list, onProgress) {
-    const copy = MEDIA_FUNNEL_COPY[source];
+    const copy = MEDIA_FUNNEL_COPY()[source];
     await runFunnelLanding('pack', async () => {
       const listTitle = String(list?.title || '').trim();
       onProgress?.({ name: listTitle || copy.defaultTitle, index: 0, total: items.length, phase: t('Préparation de la session…') });
@@ -161,7 +163,7 @@ export function useMediaImport({
   // Dans l'éditeur, podcast et YouTube partagent la même arrivée : histoires
   // côté Libre, audio et jaquettes sélectionnés dans Médias côté graphe.
   async function importIntoEditor(source, items, list, onProgress = null) {
-    const copy = MEDIA_FUNNEL_COPY[source];
+    const copy = MEDIA_FUNNEL_COPY()[source];
     const projectEpoch = store.workEpochRef.current;
     const result = await handleImportMediaEpisodes(items, list, {
       source,

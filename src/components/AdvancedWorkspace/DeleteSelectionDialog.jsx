@@ -14,7 +14,9 @@ import { selectionRemovalImpact } from '../../store/advancedAuthoring/authoringP
 import { STAGE_KIND } from '../../store/advancedGraphView/graphViewModel.js';
 import { useShortcutLabels } from '../../store/ShortcutLabelsContext.js';
 
-const ENTRY_NOT_REMOVABLE = t('L’Écran racine ne se retire pas : désignez d’abord un autre Écran racine.');
+function ENTRY_NOT_REMOVABLE() {
+  return t('L’Écran racine ne se retire pas : désignez d’abord un autre Écran racine.');
+}
 
 export function DeleteSelectionDialog({ index, paths, busy, onCancel, onConfirm }) {
   const labels = useShortcutLabels();
@@ -28,10 +30,10 @@ export function DeleteSelectionDialog({ index, paths, busy, onCancel, onConfirm 
 
   return (
     <AdvancedDialog
-      title={`Retirer ${entries.length} éléments`}
-      description={`${counted} seront retirés ensemble. ${labels.undo
+      title={t("Retirer {length} éléments", { length: entries.length })}
+      description={t("{counted} seront retirés ensemble. {value}", { counted: counted, value: labels.undo
         ? `${labels.undo} les rétablit en une fois.`
-        : t('Annuler les rétablit en une fois.')}`}
+        : t('Annuler les rétablit en une fois.') })}
       onCancel={onCancel}
       onConfirm={confirm}
       confirmLabel={t("Retirer")}
@@ -49,13 +51,13 @@ export function DeleteSelectionDialog({ index, paths, busy, onCancel, onConfirm 
         ))}
       </ul>
       {entryIncluded && (
-        <p className="advanced-field__warning" role="alert">{ENTRY_NOT_REMOVABLE}</p>
+        <p className="advanced-field__warning" role="alert">{ENTRY_NOT_REMOVABLE()}</p>
       )}
       {!entryIncluded && loose > 0 && (
         <p className="advanced-field__note">
           {loose === 1
             ? t('Un raccord venu du reste du graphe visait cette sélection : il restera à raccorder, dans « À corriger ».')
-            : `${loose} raccords venus du reste du graphe visaient cette sélection : ils resteront à raccorder, dans « À corriger ».`}
+            : t("{loose} raccords venus du reste du graphe visaient cette sélection : ils resteront à raccorder, dans « À corriger ».", { loose: loose })}
         </p>
       )}
     </AdvancedDialog>

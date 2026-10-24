@@ -42,7 +42,7 @@ function readableError(value) {
   if (!text) return t("Le découpage audio a échoué.");
   const firstLine = text.split(/\r?\n/).find((line) => line.trim()) || text;
   if (/ffmpeg|invalid data|error/i.test(text)) {
-    return `FFmpeg n'a pas pu découper cet audio. ${firstLine}`;
+    return t("FFmpeg n'a pas pu découper cet audio. {firstLine}", { firstLine: firstLine });
   }
   return firstLine;
 }
@@ -438,7 +438,7 @@ export function AudioSplitterModal({
     <div className="modal-overlay">
       <div className="modal-box audio-splitter-modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <span>Découper un audio</span>
+          <span>{t('Découper un audio')}</span>
           <Button variant="icon" className="modal-close" onClick={onClose} disabled={submitting}>×</Button>
         </div>
 
@@ -450,14 +450,12 @@ export function AudioSplitterModal({
 
           {contextRequest ? (
             <div className="audio-splitter-context">
-              <strong>Depuis l’histoire « {contextRequest.storyNames?.[0] || 'sans nom'} »</strong>
-              <span>L’histoire ne sera pas modifiée automatiquement.</span>
+              <strong>{t("Depuis l’histoire «")} {contextRequest.storyNames?.[0] || 'sans nom'} »</strong>
+              <span>{t('L’histoire ne sera pas modifiée automatiquement.')}</span>
             </div>
           ) : null}
 
-          <div className="audio-splitter-help">
-            Sélectionnez une plage, puis ajoutez-la aux extraits à générer.
-          </div>
+          <div className="audio-splitter-help"> {t("Sélectionnez une plage, puis ajoutez-la aux extraits à générer.")} </div>
 
           <section className="audio-splitter-wave-section">
             <div className="audio-splitter-wave-header">
@@ -468,7 +466,7 @@ export function AudioSplitterModal({
               </div>
             </div>
             <div className="audio-splitter-waveform-wrap">
-              {loading && <div className="audio-splitter-loading">Chargement…</div>}
+              {loading && <div className="audio-splitter-loading">{t('Chargement…')}</div>}
               <div ref={containerRef} className="audio-splitter-waveform" />
             </div>
             <div className="audio-splitter-toolbar">
@@ -490,10 +488,10 @@ export function AudioSplitterModal({
                 <Tooltip text="Stop">
                   <Button variant="icon" className="audio-tb-btn" onClick={stopPlayback} disabled={loading}><Square /></Button>
                 </Tooltip>
-                <Tooltip text="Reculer de 5s">
+                <Tooltip text={t("Reculer de 5s")}>
                   <Button variant="icon" className="audio-tb-btn" onClick={() => { stopShuttle(); wsRef.current?.skip(-SKIP_STEP); }} disabled={loading}><SkipBack /></Button>
                 </Tooltip>
-                <Tooltip text="Avancer de 5s">
+                <Tooltip text={t("Avancer de 5s")}>
                   <Button variant="icon" className="audio-tb-btn" onClick={() => { stopShuttle(); wsRef.current?.skip(SKIP_STEP); }} disabled={loading}><SkipForward /></Button>
                 </Tooltip>
 
@@ -502,7 +500,7 @@ export function AudioSplitterModal({
                 <Tooltip text={t("Aller au point d'entrée (Shift+I)")}>
                   <Button variant="icon" className="audio-tb-btn audio-tb-btn-text" onClick={goToSelectionStart} disabled={loading}>|▶</Button>
                 </Tooltip>
-                <Tooltip text="Aller au point de sortie (Shift+O)">
+                <Tooltip text={t("Aller au point de sortie (Shift+O)")}>
                   <Button variant="icon" className="audio-tb-btn audio-tb-btn-text" onClick={goToSelectionEnd} disabled={loading}>▶|</Button>
                 </Tooltip>
               </div>
@@ -520,31 +518,29 @@ export function AudioSplitterModal({
                 disabled={loading}
               />
               <span className="audio-editor-zoom-val">×{(zoom / 20).toFixed(1)}</span>
-              <span className="audio-editor-hint">Ctrl+molette / +/- · ← → 50ms · J/K/L · Début/Fin</span>
+              <span className="audio-editor-hint">{t('Ctrl+molette / +/- · ← → 50ms · J/K/L · Début/Fin')}</span>
             </div>
           </section>
 
           <section className="audio-splitter-selection">
             <div className="audio-splitter-selection-stats">
-              <span>Entrée <strong>{formatTime(selection.start)}</strong></span>
+              <span>{t('Entrée')} <strong>{formatTime(selection.start)}</strong></span>
               <span>Sortie <strong>{formatTime(selection.end)}</strong></span>
-              <span>Durée <strong>{formatTime(selectionDuration)}</strong></span>
+              <span>{t('Durée')} <strong>{formatTime(selectionDuration)}</strong></span>
             </div>
             <div className="audio-splitter-selection-actions">
-              <Button onClick={() => previewRange({ start: selection.start, end: selection.end }, 'active')} disabled={!canUseSelection}>
-                Prévisualiser
-              </Button>
+              <Button onClick={() => previewRange({ start: selection.start, end: selection.end }, 'active')} disabled={!canUseSelection}> {t("Prévisualiser")} </Button>
               <Button variant="primary" onClick={addSegment} disabled={!canUseSelection}>
                 <Scissors className="audio-splitter-btn-icon" strokeWidth={2} absoluteStrokeWidth />
-                Ajouter l'extrait
+                {t("Ajouter l'extrait")}
               </Button>
             </div>
           </section>
 
           <section className="audio-splitter-section">
-            <h3>Extraits à générer</h3>
+            <h3>{t('Extraits à générer')}</h3>
             {segments.length === 0 ? (
-              <div className="audio-splitter-empty">Aucun extrait ajouté.</div>
+              <div className="audio-splitter-empty">{t('Aucun extrait ajouté.')}</div>
             ) : (
               <div className="audio-splitter-list">
                 {segments.map((segment, index) => (
@@ -584,7 +580,7 @@ export function AudioSplitterModal({
           </section>
 
           <div className="audio-splitter-destination">
-            <span>Destination</span>
+            <span>{t("Destination")}</span>
             <strong>fichiers-importes/</strong>
           </div>
 
@@ -592,7 +588,7 @@ export function AudioSplitterModal({
         </div>
 
         <div className="audio-splitter-footer">
-          <Button onClick={onClose} disabled={submitting}>Annuler</Button>
+          <Button onClick={onClose} disabled={submitting}>{t('Annuler')}</Button>
           <Button variant="primary" className="audio-splitter-submit" onClick={handleSubmit} disabled={!canSubmit}>
             {submitting && <span className="audio-splitter-spinner" />}
             {submitting ? t('Génération…') : t('Générer')}

@@ -29,7 +29,7 @@ import { logger } from '../utils/logger';
 import { errorMessage, isYoutubeBlocked, youtubeErrorCode } from '../utils/youtubeErrors.js';
 import { FREE_EDITOR_REFUSAL_MESSAGE, isFreeEditorRefusal } from '../components/EditPack/importErrorPresentation';
 
-import { t } from '../i18n/index.js';
+import { t, getLocale } from '../i18n/index.js';
 /**
  * Construit le projet résultant d'une extraction de ZIP à partir du résultat
  * Rust (`unpack_zip_to_entries`). Pur (aucune I/O, aucun store) : applique la
@@ -168,7 +168,7 @@ export function useImportSession({
         } catch (e) {
           showErrorDialog({
             title: t('Archive invalide'),
-            message: `Archive importée invalide ou inaccessible : ${file}\n\n${e}`,
+            message: t("Archive importée invalide ou inaccessible : {file}\n\n{e}", { file: file, e: e }),
           });
           continue;
         }
@@ -185,7 +185,7 @@ export function useImportSession({
         if (embeddedImage && storyId) store.updateItem(storyId, { itemImage: embeddedImage });
       }
     }
-  }, [extractAudioEmbeddedImage, getImportDisplayName, isImportedPackPath, maybeCopyToProject, setImporting, showErrorDialog, store]);
+  }, [extractAudioEmbeddedImage, getImportDisplayName, isImportedPackPath, maybeCopyToProject, setImporting, showErrorDialog, store, getLocale()]);
 
   const handleAddStory = useCallback(async () => {
     const files = await pickMultipleAudioOrZip();
@@ -202,7 +202,7 @@ export function useImportSession({
     } finally {
       setImporting(null);
     }
-  }, [dispatchFiles, getImportDisplayName, setImporting]);
+  }, [dispatchFiles, getImportDisplayName, setImporting, getLocale()]);
 
   const handleAddStoryToMenu = useCallback(async (menuId) => {
     const files = await pickMultipleAudioOrZip();
@@ -218,7 +218,7 @@ export function useImportSession({
     } finally {
       setImporting(null);
     }
-  }, [dispatchFiles, getImportDisplayName, setImporting]);
+  }, [dispatchFiles, getImportDisplayName, setImporting, getLocale()]);
 
   function countFolderFiles(node) {
     if (node.type === 'folder') return (node.children ?? []).reduce((s, c) => s + countFolderFiles(c), 0);
@@ -276,7 +276,7 @@ export function useImportSession({
       logger.error(`import-folder:scan-error path='${folderPath}' error=${e}`);
       showErrorDialog({
         title: t('Import dossier'),
-        message: `Impossible de lire le dossier : ${e}`,
+        message: t("Impossible de lire le dossier : {e}", { e: e }),
       });
       return;
     }
@@ -394,7 +394,7 @@ export function useImportSession({
       if (isFreeEditorRefusal(e)) {
         showErrorDialog({
           title: t('Extraction du pack'),
-          message: FREE_EDITOR_REFUSAL_MESSAGE,
+          message: FREE_EDITOR_REFUSAL_MESSAGE(),
           variant: 'warning',
         });
         return;
@@ -403,7 +403,7 @@ export function useImportSession({
         title: e?.code === 'menu_depth_limit' ? 'Limite d’imbrication' : t('Extraction du pack'),
         message: e?.code === 'menu_depth_limit'
           ? e.message
-          : `Erreur lors de l'extraction : ${e}`,
+          : t("Erreur lors de l'extraction : {e}", { e: e }),
       });
     } finally {
       setUnpacking(null);
@@ -572,7 +572,7 @@ export function useImportSession({
         const episode = episodes[index];
         const displayName = episode.title || `${isYoutube ? t('Vidéo') : t('Épisode')} ${index + 1}`;
         try {
-          report({ name: displayName, index: index + 1, total, phase: `Téléchargement de la ${itemLabel}...` });
+          report({ name: displayName, index: index + 1, total, phase: t("Téléchargement de la {itemLabel}...", { itemLabel: itemLabel }) });
           const tmpAudio = await downloadEntryAudio(source, episode, displayName);
           const audio = await copyGeneratedMediaToProject(tmpAudio);
 
@@ -632,10 +632,13 @@ export function useImportSession({
 
     if (failures > 0 && !suppressDialog) {
       showErrorDialog({
-        title: isYoutube ? 'Import YouTube' : 'Import du podcast',
+        title: isYoutube ? t('Import YouTube') : t("Import du podcast"),
         message: failures === total
-          ? `Aucune ${itemLabel} nt('a pu être importée. Vérifie ta connexion ou l')adresse ${isYoutube ? 'YouTube' : 'du flux'}.`
-          : `${formatFrenchCount(failures, itemLabel, `${itemLabel}s`)} sur ${total} n'ont pas pu être ${isYoutube ? 'importées' : 'importés'}. Les autres ont bien été ${isYoutube ? 'ajoutées' : 'ajoutés'}.`,
+          ? t("Aucune {itemLabel} n'a pu être importée. Vérifie ta connexion ou l'adresse {value}.", { itemLabel: itemLabel, value: isYoutube ? 'YouTube' : t('du flux') })
+          : t('{count} sur {total} n’ont pas pu être importés. Les autres ont bien été ajoutés.', {
+            count: formatFrenchCount(failures, itemLabel, `${itemLabel}s`),
+            total,
+          }),
         variant: failures === total ? 'warning' : 'info',
       });
     }

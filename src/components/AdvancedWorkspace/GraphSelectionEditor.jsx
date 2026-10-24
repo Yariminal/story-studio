@@ -101,7 +101,7 @@ export function GraphSelectionEditor({
           onMediaCreated?.(imagePath);
           await onAssignMedia(entry.node.uuid, 'image', imagePath);
         } catch {
-          errors.push(`${title} : image-titre impossible à générer`);
+          errors.push(t("{title} : image-titre impossible à générer", { title: title }));
         }
       }
     } finally {
@@ -145,7 +145,7 @@ export function GraphSelectionEditor({
             },
           });
         } catch {
-          errors.push(`${title} : job de voix non ajouté`);
+          errors.push(t("{title} : job de voix non ajouté", { title: title }));
         }
       }
     } finally {
@@ -159,20 +159,20 @@ export function GraphSelectionEditor({
   return (
     <div className="advanced-selection-editor">
       <div className="advanced-selection-editor__banner">
-        {entries.length} nœuds sélectionnés : {parts.join(', ')}.
+        {entries.length} {t("nœuds sélectionnés :")} {parts.join(', ')}.
       </div>
 
       {stages.length > 0 && (
         <div className="card">
           <div className="card-title-row">
-            <div className="card-title">Génération groupée</div>
+            <div className="card-title">{t('Génération groupée')}</div>
           </div>
           <div className="editor-setting-row is-action-row">
             <div className="editor-setting-copy">
-              <div className="editor-setting-title">Générer à partir des noms</div>
+              <div className="editor-setting-title">{t('Générer à partir des noms')}</div>
               <div className="editor-setting-desc">
                 {titled.length > 0
-                  ? `Crée d'un coup une image-titre ou un audio (le nom prononcé) pour ${plural(titled.length, t('Écran nommé'), t('Écrans nommés'))}. Chacun remplace le média de son Écran.`
+                  ? t("Crée d'un coup une image-titre ou un audio (le nom prononcé) pour {value}. Chacun remplace le média de son Écran.", { value: plural(titled.length, t('Écran nommé'), t('Écrans nommés')) })
                   : t('Aucun Écran sélectionné ne porte de nom : il n’y a pas de titre à générer.')}
                 {untitledCount > 0 && titled.length > 0
                   && ` ${plural(untitledCount, t('Écran sans nom est ignoré'), t('Écrans sans nom sont ignorés'))}.`}
@@ -186,7 +186,7 @@ export function GraphSelectionEditor({
                 disabled={disabled || batchBusy || titled.length === 0}
               >
                 <Sparkles className="batch-generate-btn-icon" strokeWidth={2} absoluteStrokeWidth />
-                {imagesBusy ? t('Images…') : 'Images-titres'}
+                {imagesBusy ? t('Images…') : t("Images-titres")}
               </button>
               {canGenerateAudio && (
                 <button
@@ -210,19 +210,16 @@ export function GraphSelectionEditor({
       {stages.length > 0 && (
         <section className="card advanced-editor__section advanced-controls">
           <div className="card-title-row">
-            <div className="card-title">Boutons des Écrans</div>
+            <div className="card-title">{t('Boutons des Écrans')}</div>
             <div className="card-copy card-copy--inline">
               {withControls.length > 0
-                ? `Réglés d’un coup sur ${plural(withControls.length, t('Écran'), t('Écrans'))}. Les destinations se règlent Écran par Écran.`
+                ? t("Réglés d’un coup sur {value}. Les destinations se règlent Écran par Écran.", { value: plural(withControls.length, t('Écran'), t('Écrans')) })
                 : t('Aucun Écran sélectionné n’a de boutons définis.')}
             </div>
           </div>
           {withoutControlsCount > 0 && (
             <p className="advanced-field__note">
-              {plural(withoutControlsCount, t('Écran n’a'), t('Écrans n’ont'))} pas encore de boutons
-              définis : {withoutControlsCount > 1 ? t('ils sont laissés') : t('il est laissé')} de côté.
-              Définissez-les Écran par Écran, depuis son propre panneau.
-            </p>
+              {plural(withoutControlsCount, t('Écran n’a'), t('Écrans n’ont'))} {t("pas encore de boutons définis :")} {withoutControlsCount > 1 ? t('ils sont laissés') : t('il est laissé')} {t("de côté. Définissez-les Écran par Écran, depuis son propre panneau.")} </p>
           )}
           {withControls.length > 0 && (
             <GroupedControls
@@ -243,7 +240,7 @@ export function GraphSelectionEditor({
                         control,
                         value,
                       )}
-                      ariaLabel={`${label} — sur la sélection`}
+                      ariaLabel={t("{label} — sur la sélection", { label: label })}
                       disabled={disabled}
                     />
                   </label>
@@ -257,8 +254,8 @@ export function GraphSelectionEditor({
       <div className="card">
         <NodeColorPicker
           label={currentColor === '__mixed__'
-            ? `Couleur — différente sur ${entries.length} nœuds, choisir pour uniformiser`
-            : `Couleur des ${entries.length} nœuds`}
+            ? t("Couleur — différente sur {length} nœuds, choisir pour uniformiser", { length: entries.length })
+            : t("Couleur des {length} nœuds", { length: entries.length })}
           currentColor={currentColor}
           disabled={disabled}
           onChange={(color) => onSetColor(paths, color)}
@@ -276,10 +273,9 @@ export function GraphSelectionEditor({
           >
             <Trash2 className="card-danger-icon" />
           </button>
-          <span className="card-danger-title">Retirer la sélection</span>
+          <span className="card-danger-title">{t('Retirer la sélection')}</span>
           <p className="card-danger-desc">
-            Retire {parts.join(' et ')} du graphe, après confirmation.
-          </p>
+            Retire {parts.join(' et ')} {t("du graphe, après confirmation.")} </p>
         </div>
       </div>
     </div>

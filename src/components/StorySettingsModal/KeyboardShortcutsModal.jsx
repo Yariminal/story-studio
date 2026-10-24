@@ -14,7 +14,7 @@ import {
 import { normalizeFrenchSearchText } from '../../utils/frenchText.js';
 import './KeyboardShortcutsModal.css';
 
-import { t } from '../../i18n/index.js';
+import { t, getLocale } from '../../i18n/index.js';
 function matchesQuery(definition, shortcut, query) {
   if (!query) return true;
   const haystack = [
@@ -39,11 +39,11 @@ export function KeyboardShortcutsModal({
     [query],
   );
 
-  const sections = useMemo(() => SHORTCUT_SCOPES.map((scope) => {
-    const items = SHORTCUT_DEFINITIONS.filter((d) => d.scope === scope.id)
+  const sections = useMemo(() => SHORTCUT_SCOPES().map((scope) => {
+    const items = SHORTCUT_DEFINITIONS().filter((d) => d.scope === scope.id)
       .filter((d) => matchesQuery(d, shortcuts?.[d.id] ?? d.defaultShortcut, normalizedQuery));
     return { scope, items };
-  }).filter((section) => section.items.length > 0), [shortcuts, normalizedQuery]);
+  }).filter((section) => section.items.length > 0), [shortcuts, normalizedQuery, getLocale()]);
 
   function handleKeyDown(event, definition) {
     if (event.key === 'Escape') {
@@ -61,8 +61,8 @@ export function KeyboardShortcutsModal({
 
     const conflict = findShortcutConflict(shortcuts, definition.id, nextShortcut);
     if (conflict) {
-      const scopeLabel = SHORTCUT_SCOPES.find((s) => s.id === conflict.scope)?.label || conflict.scope;
-      setMessage(`Déjà utilisé par « ${conflict.label} » dans ${scopeLabel}.`);
+      const scopeLabel = SHORTCUT_SCOPES().find((s) => s.id === conflict.scope)?.label || conflict.scope;
+      setMessage(t("Déjà utilisé par « {label} » dans {scopeLabel}.", { label: conflict.label, scopeLabel: scopeLabel }));
       return;
     }
 
@@ -109,14 +109,12 @@ export function KeyboardShortcutsModal({
         onClick={(event) => event.stopPropagation()}
       >
         <div className="modal-header">
-          <span>Raccourcis clavier</span>
+          <span>{t('Raccourcis clavier')}</span>
           <Button variant="icon" className="modal-close" onClick={onClose}>✕</Button>
         </div>
 
         <div className="keyboard-shortcuts-body">
-          <div className="keyboard-shortcuts-lead">
-            Clique sur un raccourci puis presse la nouvelle combinaison. Échap annule la capture.
-          </div>
+          <div className="keyboard-shortcuts-lead"> {t("Clique sur un raccourci puis presse la nouvelle combinaison. Échap annule la capture.")} </div>
 
           <input
             type="search"
@@ -127,7 +125,7 @@ export function KeyboardShortcutsModal({
           />
 
           {sections.length === 0 ? (
-            <div className="keyboard-shortcuts-empty">Aucun raccourci ne correspond à « {query} ».</div>
+            <div className="keyboard-shortcuts-empty">{t("Aucun raccourci ne correspond à «")} {query} {t("».")}</div>
           ) : null}
 
           {sections.map(({ scope, items }) => {
@@ -138,7 +136,7 @@ export function KeyboardShortcutsModal({
                   <div className="keyboard-shortcuts-section-title">
                     {scope.label}
                     {scope.id === 'a11y' ? (
-                      <span className="keyboard-shortcuts-fixed-badge">lecture seule</span>
+                      <span className="keyboard-shortcuts-fixed-badge">{t('lecture seule')}</span>
                     ) : null}
                   </div>
                   {editableInScope ? (
@@ -146,10 +144,8 @@ export function KeyboardShortcutsModal({
                       type="button"
                       className="keyboard-shortcuts-section-reset"
                       onClick={() => handleResetScope(scope.id)}
-                      title={`Restaurer les valeurs par défaut pour « ${scope.label} »`}
-                    >
-                      Réinitialiser
-                    </button>
+                      title={t("Restaurer les valeurs par défaut pour « {label} »", { label: scope.label })}
+                    > {t("Réinitialiser")} </button>
                   ) : null}
                 </div>
                 {scope.description ? (
@@ -180,8 +176,7 @@ export function KeyboardShortcutsModal({
                       <div key={definition.id} className="keyboard-shortcut-row">
                         <div className="keyboard-shortcut-info">
                           <div className="opts-row-label">{definition.label}</div>
-                          <div className="opts-row-sub">
-                            Défaut : {formatShortcut(DEFAULT_SHORTCUTS[definition.id] ?? definition.defaultShortcut)}
+                          <div className="opts-row-sub"> {t("Défaut :")} {formatShortcut(DEFAULT_SHORTCUTS[definition.id] ?? definition.defaultShortcut)}
                           </div>
                         </div>
                         <button
@@ -206,8 +201,8 @@ export function KeyboardShortcutsModal({
           {message ? <div className="keyboard-shortcuts-message">{message}</div> : null}
 
           <div className="keyboard-shortcuts-actions">
-            <Button onClick={handleResetAll}>Tout réinitialiser</Button>
-            <Button variant="primary-violet" onClick={onClose}>Fermer</Button>
+            <Button onClick={handleResetAll}>{t('Tout réinitialiser')}</Button>
+            <Button variant="primary-violet" onClick={onClose}>{t('Fermer')}</Button>
           </div>
         </div>
       </div>

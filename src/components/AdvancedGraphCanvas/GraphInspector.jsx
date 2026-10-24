@@ -47,7 +47,7 @@ function Transition({ label, transition }) {
       <span className="advanced-inspector__value">
         {transition.actionId}
         {transition.selection?.kind === 'random'
-          ? <em> — choix tiré au sort à chaque ouverture</em>
+          ? <em> {t('— choix tiré au sort à chaque ouverture')}</em>
           : <em> — choix {transition.selection?.index}</em>}
       </span>
     </Row>
@@ -58,7 +58,7 @@ function LinkSummary({ inspected, onFocusPath }) {
   const rows = [
     ...inspected.outgoing.map((edge) => ({
       ...edge,
-      direction: 'Sortant',
+      direction: t('Sortant'),
       path: edge.to,
       description: edge.kind === 'stage-ok'
         ? t('OK')
@@ -68,20 +68,24 @@ function LinkSummary({ inspected, onFocusPath }) {
     })),
     ...inspected.incoming.map((edge) => ({
       ...edge,
-      direction: 'Entrant',
+      direction: t('Entrant'),
       path: edge.from,
       description: edge.kind === 'action-option' ? `choix ${edge.ordinal ?? '—'}` : edge.kind,
     })),
   ].filter((edge) => edge.path);
 
   return (
-    <Section title="Liens" count={rows.length} className="advanced-inspector__links">
+    <Section title={t('Liens')} count={rows.length} className="advanced-inspector__links">
       <div className="advanced-inspector__link-counts">
-        <span>{inspected.incoming.length} entrant{inspected.incoming.length > 1 ? 's' : ''}</span>
-        <span>{inspected.outgoing.length} sortant{inspected.outgoing.length > 1 ? 's' : ''}</span>
+        <span>{inspected.incoming.length === 1
+          ? t('{count} entrant', { count: inspected.incoming.length })
+          : t('{count} entrants', { count: inspected.incoming.length })}</span>
+        <span>{inspected.outgoing.length === 1
+          ? t('{count} sortant', { count: inspected.outgoing.length })
+          : t('{count} sortants', { count: inspected.outgoing.length })}</span>
       </div>
       {rows.length === 0 ? (
-        <p className="advanced-inspector__muted">Nœud détaché : aucun lien entrant ni sortant.</p>
+        <p className="advanced-inspector__muted">{t('Nœud détaché : aucun lien entrant ni sortant.')}</p>
       ) : (
         <ul className="advanced-inspector__link-list">
           {rows.map((edge) => (
@@ -108,8 +112,8 @@ export default function GraphInspector({ inspected, onFocusPath }) {
     return (
       <aside className="advanced-inspector advanced-inspector--readonly" aria-label="Inspecteur">
         <div className="advanced-inspector__empty">
-          <strong>Aucun nœud sélectionné</strong>
-          <span>Choisissez un nœud dans la liste pour consulter tous ses détails.</span>
+          <strong>{t('Aucun nœud sélectionné')}</strong>
+          <span>{t('Choisissez un nœud dans la liste pour consulter tous ses détails.')}</span>
         </div>
       </aside>
     );
@@ -130,7 +134,7 @@ export default function GraphInspector({ inspected, onFocusPath }) {
           {inspected.label.label}
           {inspected.label.isFallback && (
             <em className="advanced-inspector__fallback" title={t("Repli d'affichage, pas un nom d'auteur")}>
-              {' '}(sans nom)
+              {' '}{t("(sans nom)")}
             </em>
           )}
         </h2>
@@ -142,7 +146,7 @@ export default function GraphInspector({ inspected, onFocusPath }) {
           <code>{inspected.identifier}</code>
           {node.occurrence > 0 && <em> — occurrence {node.occurrence}</em>}
         </Row>
-        <Row label="Nom"><PresenceValue field={node.name} /></Row>
+        <Row label={t('Nom')}><PresenceValue field={node.name} /></Row>
         {isStage && (
           <Row label="Racine">
             <PresenceValue field={node.squareOne} render={(value) => (value ? 'oui' : 'non')} />
@@ -153,16 +157,16 @@ export default function GraphInspector({ inspected, onFocusPath }) {
       {isStage && (
         <>
           <Section title={t("Médias")} count={inspected.media.length}>
-            <Row label="Audio">
+            <Row label={t('Audio')}>
               <PresenceValue field={{ presence: node.audio.presence, value: node.audio.assetRef }} />
             </Row>
-            <Row label="Image">
+            <Row label={t('Image')}>
               <PresenceValue field={{ presence: node.image.presence, value: node.image.assetRef }} />
             </Row>
             {inspected.media.map((media) => (
               <Row key={`${media.field}-${media.assetRef}`} label={`${media.field} · usage`}>
                 <code>{media.assetRef}</code>
-                {media.usageCount > 1 && <em> — utilisé par {media.usageCount} écrans</em>}
+                {media.usageCount > 1 && <em> {t("— utilisé par")} {media.usageCount} {t("écrans")}</em>}
               </Row>
             ))}
           </Section>

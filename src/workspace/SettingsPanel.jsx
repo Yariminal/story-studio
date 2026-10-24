@@ -1,3 +1,4 @@
+import { t } from '../i18n/index.js';
 import { useMemo } from 'react';
 import { NodeEditorContent } from '../components/editors/NodeEditorContent';
 import { EndNodeEditor } from '../components/editors/EndNodeEditor';
@@ -73,7 +74,7 @@ export function SettingsPanel({
     const count = selectedIds.size;
     content = (
       <>
-        <div className="multiselect-hint">{count} éléments sélectionnés — modification groupée</div>
+        <div className="multiselect-hint">{count} {t("éléments sélectionnés — modification groupée")}</div>
         <NodeEditorContent
           node={node}
           selectedIds={selectedIds}

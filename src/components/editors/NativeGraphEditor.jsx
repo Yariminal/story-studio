@@ -6,6 +6,7 @@ import { basename } from '../../utils/fileUtils';
 import { optionSelectionCandidates, parseOptionSelection } from '../../store/optionSelection.js';
 
 import { t } from '../../i18n/index.js';
+import { useLocale } from '../../i18n/LocaleContext.jsx';
 function cloneGraph(graph) {
   return structuredClone(graph);
 }
@@ -18,7 +19,7 @@ function stageKind(stage) {
   const controls = stage?.controlSettings ?? {};
   if (stage?.squareOne) return t('Départ');
   if (controls.wheel && !controls.autoplay) return 'Choix';
-  if (controls.autoplay) return 'Lecture';
+  if (controls.autoplay) return t("Lecture");
   return 'Stage';
 }
 
@@ -60,6 +61,7 @@ function updateStageInGraph(graph, selectedStageId, updater) {
 }
 
 export const NativeGraphEditor = memo(function NativeGraphEditor({ graph, onChange }) {
+  useLocale();
   const stages = graph?.document?.stageNodes ?? [];
   const actions = graph?.document?.actionNodes ?? [];
   const [filter, setFilter] = useState('');
@@ -140,7 +142,7 @@ export const NativeGraphEditor = memo(function NativeGraphEditor({ graph, onChan
           className="field-input native-graph-filter"
           value={filter}
           onChange={(event) => setFilter(event.target.value)}
-          placeholder="Filtrer les stages"
+          placeholder={t('Filtrer les stages')}
         />
       </div>
 
@@ -163,7 +165,7 @@ export const NativeGraphEditor = memo(function NativeGraphEditor({ graph, onChan
         {selectedStage ? (
           <div className="native-graph-detail">
             <div className="field-row">
-              <span className="field-label">Nom</span>
+              <span className="field-label">{t('Nom')}</span>
               <input
                 className="field-input"
                 value={selectedStage.name || ''}
@@ -188,8 +190,8 @@ export const NativeGraphEditor = memo(function NativeGraphEditor({ graph, onChan
             <div className="native-graph-media">
               <div>
                 <div className="media-col-header">
-                  Image
-                  <span className="media-col-subtitle">Image du stage</span>
+                  {t("Image")}
+                  <span className="media-col-subtitle">{t('Image du stage')}</span>
                 </div>
                 <ImageField
                   compact
@@ -202,7 +204,7 @@ export const NativeGraphEditor = memo(function NativeGraphEditor({ graph, onChan
               <div>
                 <div className="media-col-header">
                   Son
-                  <span className="media-col-subtitle">Audio du stage</span>
+                  <span className="media-col-subtitle">{t('Audio du stage')}</span>
                 </div>
                 <AudioField
                   label={t("Audio du stage")}
@@ -218,16 +220,16 @@ export const NativeGraphEditor = memo(function NativeGraphEditor({ graph, onChan
 
             <div className="native-graph-targets">
               <div className="native-graph-target-group">
-                <span className="native-graph-target-title">OK</span>
+                <span className="native-graph-target-title">{t('OK')}</span>
                 {okTargets.length > 0
                   ? okTargets.map((target) => <span className="native-graph-target" key={target}>{targetName(target)}</span>)
-                  : <span className="native-graph-target is-empty">Aucune destination</span>}
+                  : <span className="native-graph-target is-empty">{t('Aucune destination')}</span>}
               </div>
               <div className="native-graph-target-group">
-                <span className="native-graph-target-title">Accueil</span>
+                <span className="native-graph-target-title">{t("Accueil")}</span>
                 {homeTargets.length > 0
                   ? homeTargets.map((target) => <span className="native-graph-target" key={target}>{targetName(target)}</span>)
-                  : <span className="native-graph-target is-empty">Aucune destination</span>}
+                  : <span className="native-graph-target is-empty">{t('Aucune destination')}</span>}
               </div>
             </div>
           </div>

@@ -56,8 +56,8 @@ export function AudioEditorFadeOverlays({
               <span className="audio-editor-zoom-val">{formatTime(config.value)}</span>
             </div>
             <div className="audio-editor-fade-popover-actions">
-              <Button size="sm" onClick={() => onSetFadeValue(fadePopover.target, 0)}>Retirer</Button>
-              <Button size="sm" variant="primary" onClick={onPopoverOk}>OK</Button>
+              <Button size="sm" onClick={() => onSetFadeValue(fadePopover.target, 0)}>{t('Retirer')}</Button>
+              <Button size="sm" variant="primary" onClick={onPopoverOk}>{t('OK')}</Button>
             </div>
           </div>
         );

@@ -9,6 +9,7 @@
 
 import { Button } from '../common/Button';
 import { describeReferences } from '../../store/advancedAuthoring/authoringPlans.js';
+import { t } from '../../i18n/index.js';
 
 function ReferenceList({ index, references }) {
   const rows = describeReferences(index, references);
@@ -32,16 +33,14 @@ export function RefusalNotice({ refusal, index, onDismiss }) {
   return (
     <div className="advanced-feedback advanced-feedback--refusal" role="alert">
       <p className="advanced-feedback__head">
-        <strong>Geste refusé</strong>
+        <strong>{t('Geste refusé')}</strong>
         {' — '}
         <code>{error.code ?? 'ERREUR'}</code>
-        {' '}
-        Le projet est inchangé.
-      </p>
+        {' '} {t("Le projet est inchangé.")} </p>
       <p className="advanced-feedback__message">{error.message ?? String(refusal.error)}</p>
       {error.path && <p className="advanced-feedback__path"><code>{error.path}</code></p>}
       <ReferenceList index={index} references={error.references ?? []} />
-      <Button size="sm" onClick={onDismiss}>Fermer</Button>
+      <Button size="sm" onClick={onDismiss}>{t('Fermer')}</Button>
     </div>
   );
 }
@@ -72,38 +71,30 @@ export function ReportNotice({ entry, onDismiss }) {
     <div className="advanced-feedback advanced-feedback--report" role="status">
       {maintained.length > 0 && (
         <p className="advanced-feedback__message">
-          {maintained.length} transition(s) ont conservé leur destination.
-        </p>
+          {maintained.length} {t("transition(s) ont conservé leur destination.")} </p>
       )}
       {removedLinks.length > 0 && (
         <p className="advanced-feedback__message">
-          {removedLinks.length} raccord(s) ont été retirés.
-        </p>
+          {removedLinks.length} {t("raccord(s) ont été retirés.")} </p>
       )}
       {redirected.length > 0 && (
         <p className="advanced-feedback__message">
-          {redirected.length} raccord(s) ont changé de destination.
-        </p>
+          {redirected.length} {t("raccord(s) ont changé de destination.")} </p>
       )}
       {stale.length > 0 && (
         <p className="advanced-feedback__message">
-          {stale.length} décision(s) d'export deviennent périmées : elles restent enregistrées
-          comme trace, elles ne s'appliquent plus à la valeur courante.
-        </p>
+          {stale.length} {t("décision(s) d'export deviennent périmées : elles restent enregistrées comme trace, elles ne s'appliquent plus à la valeur courante.")} </p>
       )}
       {released.length > 0 && (
         <p className="advanced-feedback__message">
-          {released.length} référence(s) média ne sont plus utilisées par cet écran. Leur
-          liaison reste enregistrée ; aucun fichier n'a été effacé.
-        </p>
+          {released.length} {t("référence(s) média ne sont plus utilisées par cet écran. Leur liaison reste enregistrée ; aucun fichier n'a été effacé.")} </p>
       )}
       {missing.length > 0 && (
         <p className="advanced-feedback__message">
-          {missing.length} référence(s) média restent sans fichier résolu.
-        </p>
+          {missing.length} {t("référence(s) média restent sans fichier résolu.")} </p>
       )}
       <div className="advanced-feedback__actions">
-        <Button size="sm" onClick={onDismiss}>Fermer</Button>
+        <Button size="sm" onClick={onDismiss}>{t('Fermer')}</Button>
       </div>
     </div>
   );

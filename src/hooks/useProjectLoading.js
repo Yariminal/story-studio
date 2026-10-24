@@ -11,7 +11,7 @@ import { visitProjectEntries } from '../store/projectModel';
 import { createWorkSnapshot } from '../store/projectHelpers';
 import { logger } from '../utils/logger';
 
-import { t } from '../i18n/index.js';
+import { t, getLocale } from '../i18n/index.js';
 export function useProjectLoading({
   store,
   sdStore,
@@ -110,7 +110,7 @@ export function useProjectLoading({
     onBeforeProjectReplaced,
     routeLoadedProject,
     showErrorDialog,
-  ]);
+  , getLocale()]);
 
   const handleLoadRecent = useCallback(async (path) => {
     const canContinue = await confirmSaveBeforeLeaveCurrent(handleSaveProject);
@@ -124,7 +124,7 @@ export function useProjectLoading({
       setRecentProjects(forgetRecentProject(path));
       showErrorDialog({
         title: t('Projet récent'),
-        message: `Impossible d'ouvrir ce projet récent :\n${e}`,
+        message: t("Impossible d'ouvrir ce projet récent :\n{e}", { e: e }),
       });
     }
   }, [
@@ -134,7 +134,7 @@ export function useProjectLoading({
     onBeforeProjectReplaced,
     setRecentProjects,
     showErrorDialog,
-  ]);
+  , getLocale()]);
 
   return { applyLoadedProject, handleLoad, handleLoadRecent };
 }

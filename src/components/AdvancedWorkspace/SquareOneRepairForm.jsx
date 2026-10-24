@@ -34,11 +34,8 @@ export function SquareOneRepairForm({ index, disabled, onGesture, onClose }) {
 
   return (
     <div className="advanced-field__form" role="group" aria-label={t("Choisir l’Écran racine")}>
-      <p className="advanced-field__note">
-        Le pack doit avoir un seul Écran racine : c’est par lui que l’écoute commence.
-        L’Écran choisi le devient, et les autres cessent de l’être.
-      </p>
-      <label htmlFor={PICKER_ID}>Écran racine</label>
+      <p className="advanced-field__note"> {t("Le pack doit avoir un seul Écran racine : c’est par lui que l’écoute commence. L’Écran choisi le devient, et les autres cessent de l’être.")} </p>
+      <label htmlFor={PICKER_ID}>{t('Écran racine')}</label>
       <NodePicker
         id={PICKER_ID}
         index={index}
@@ -48,10 +45,8 @@ export function SquareOneRepairForm({ index, disabled, onGesture, onClose }) {
         disabled={disabled}
       />
       <div className="advanced-field__actions">
-        <Button size="sm" variant="primary" disabled={!chosen || disabled} onClick={apply}>
-          Définir comme racine
-        </Button>
-        <Button size="sm" onClick={onClose}>Annuler</Button>
+        <Button size="sm" variant="primary" disabled={!chosen || disabled} onClick={apply}> {t("Définir comme racine")} </Button>
+        <Button size="sm" onClick={onClose}>{t('Annuler')}</Button>
       </div>
     </div>
   );

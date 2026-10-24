@@ -64,7 +64,7 @@ export function TextImagePromptModal({ defaultText, workspaceDir: workspaceOverr
     // raccourcis globaux (utils/modalSurfaces.js).
     <div style={OVERLAY_STYLE} data-modal-surface="" onClick={onCancel}>
       <div className="text-img-box" onClick={e => e.stopPropagation()}>
-        <div className="text-img-header">Générer une image-titre</div>
+        <div className="text-img-header">{t('Générer une image-titre')}</div>
         <div className="text-img-body">
           <input
             ref={inputRef}
@@ -83,7 +83,7 @@ export function TextImagePromptModal({ defaultText, workspaceDir: workspaceOverr
           />
         </div>
         <div className="text-img-footer">
-          <Button variant="ghost" onClick={onCancel}>Annuler</Button>
+          <Button variant="ghost" onClick={onCancel}>{t('Annuler')}</Button>
           <Button variant="primary-violet" onClick={handleGenerate} disabled={generating}>
             {generating ? t('Génération…') : t('Générer')}
           </Button>

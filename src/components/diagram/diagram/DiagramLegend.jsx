@@ -9,19 +9,19 @@ export function DiagramLegend({ returnEdges, homeEdges, afterEndEdges, reference
       {returnEdges.length > 0 ? (
         <div className="fd-complete-legend-item">
           <span className="fd-complete-legend-line fd-complete-legend-line--return" />
-          <span>Retours</span>
+          <span>{t("Retours")}</span>
         </div>
       ) : null}
       {homeEdges.length > 0 ? (
         <div className="fd-complete-legend-item">
           <span className="fd-complete-legend-line fd-complete-legend-line--home" />
-          <span>Retours modifiés</span>
+          <span>{t('Retours modifiés')}</span>
         </div>
       ) : null}
       {afterEndEdges.length > 0 ? (
         <div className="fd-complete-legend-item">
           <span className="fd-complete-legend-line fd-complete-legend-line--after-end" />
-          <span>Retours</span>
+          <span>{t("Retours")}</span>
         </div>
       ) : null}
       {referenceEdges.length > 0 ? (

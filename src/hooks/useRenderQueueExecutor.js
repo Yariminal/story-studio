@@ -155,8 +155,8 @@ export function useRenderQueueExecutor({
     executingRef.current = true;
     runningJobIdRef.current = nextJob.id;
     updateJob(nextJob.id, { status: JOB_STATUS.RUNNING });
-    appendLog(nextJob.id, `▶ Démarrage de la fabrication : ${nextJob.projectName}`);
-    appendLog(nextJob.id, `  Dossier de sortie : ${nextJob.outputFolder}`);
+    appendLog(nextJob.id, t("▶ Démarrage de la fabrication : {projectName}", { projectName: nextJob.projectName }));
+    appendLog(nextJob.id, t("  Dossier de sortie : {outputFolder}", { outputFolder: nextJob.outputFolder }));
 
     (async () => {
       try {

@@ -11,6 +11,7 @@
 // sont comparés à l'octet et recopiés tels quels, jamais découpés pour en tirer
 // un identifiant. Les identifiants viennent du DTO, où Rust les a mis.
 
+import { t } from '../../i18n/index.js';
 import { ACTION_KIND, STAGE_KIND } from '../advancedGraphView/graphViewModel.js';
 import { advancedGestures, optionResolution, presence } from '../projectModel/advancedGestures.js';
 
@@ -217,8 +218,12 @@ export function selectionRemovalImpact(index, paths) {
     entryIncluded,
     loose: plan ? plan.options.length + plan.transitions.length : 0,
     counted: [
-      stages > 0 ? `${stages} Écran${stages > 1 ? 's' : ''}` : null,
-      actions > 0 ? `${actions} liste${actions > 1 ? 's' : ''} de choix` : null,
+      stages > 0
+        ? (stages > 1 ? t('{count} Écrans', { count: stages }) : t('{count} Écran', { count: stages }))
+        : null,
+      actions > 0
+        ? (actions > 1 ? t('{count} listes de choix', { count: actions }) : t('{count} liste de choix', { count: actions }))
+        : null,
     ].filter(Boolean).join(' et '),
     gesture: plan && !entryIncluded ? advancedGestures.deleteSubgraph(plan) : null,
   };

@@ -78,7 +78,7 @@ export function documentBlockage(summary) {
     preparationKind: PREPARATION_REFUSAL.READINESS_BLOCKED,
     title: t("Fabrication impossible — qualification d'export bloquée"),
     message: t("Rien n'a été fabriqué et aucun dossier n'a été demandé : le document porte ")
-      + `${blocking.length} point(s) à corriger avant de produire le pack.`,
+      + t("{length} point(s) à corriger avant de produire le pack.", { length: blocking.length }),
     // Le rapport rend ces lignes telles quelles : chacune porte son niveau, son
     // code, son message et l'emplacement concerné — « ce qui bloque, et où ».
     diagnostics: blocking.map((row) => (
@@ -195,7 +195,7 @@ export async function runAdvancedProduction({
     const stopped = refusal({
       kind: EXPORT_REFUSAL.REQUEST,
       title: t('Fabrication impossible'),
-      message: t("La qualification du document nt('a pas pu être calculée, et rien n')a été fabriqué : ")
+      message: t("La qualification du document n'a pas pu être calculée, et rien n'a été fabriqué : ")
         + String(error?.message ?? error),
       code: error?.code ?? null,
     });

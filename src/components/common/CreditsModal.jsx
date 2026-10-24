@@ -21,7 +21,7 @@ export function CreditsModal({ appVersion, onClose }) {
     } catch (error) {
       showErrorDialog({
         title: t('Documentation inaccessible'),
-        message: `Impossible d’ouvrir la documentation dans le navigateur : ${error}`,
+        message: t("Impossible d’ouvrir la documentation dans le navigateur : {error}", { error: error }),
       });
     }
   }
@@ -36,7 +36,7 @@ export function CreditsModal({ appVersion, onClose }) {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="modal-header">
-          <span id="credits-modal-title">À propos de Story Studio</span>
+          <span id="credits-modal-title">{t('À propos de Story Studio')}</span>
           <Button variant="icon" className="modal-close" onClick={onClose} aria-label={t("Fermer")}>✕</Button>
         </div>
         <div className="credits-body">
@@ -44,14 +44,10 @@ export function CreditsModal({ appVersion, onClose }) {
             <span className="credits-name">Story Studio</span>
             {appVersion && <span className="credits-version">v{appVersion}</span>}
           </div>
-          <div className="credits-line">
-            Né d'une envie simple : créer des histoires pour Armand.
-          </div>
-          <div className="credits-line">
-            Créé par hugs11, assisté par l'IA
-          </div>
+          <div className="credits-line"> {t("Né d'une envie simple : créer des histoires pour Armand.")} </div>
+          <div className="credits-line"> {t("Créé par hugs11, assisté par l'IA")} </div>
           <section className="credits-help" aria-labelledby="credits-help-title">
-            <span id="credits-help-title" className="credits-help-title">Aide</span>
+            <span id="credits-help-title" className="credits-help-title">{t('Aide')}</span>
             <a
               className="credits-documentation-link"
               href={DOCUMENTATION_URL}
@@ -64,8 +60,8 @@ export function CreditsModal({ appVersion, onClose }) {
           </section>
           <div className="credits-line credits-thanks">
             Remerciements<br />
-            <strong>marian-m12l</strong> (créateur de STUdio), <strong>Jersou</strong>,{' '}
-            <strong>Dantsu</strong>, <strong>o.Daneel</strong> (créateur de Lunii.QT) et{' '}
+            <strong>marian-m12l</strong> {t('(créateur de STUdio),')} <strong>Jersou</strong>,{' '}
+            <strong>Dantsu</strong>, <strong>o.Daneel</strong> {t("(créateur de Lunii.QT) et")}{' '}
             <strong>LuckyTheCookie</strong>
           </div>
         </div>

@@ -13,18 +13,20 @@ import { ChevronLeft, ChevronRight } from '../icons/LucideLocal.jsx';
 import { NodeLink, NodeThumbnail } from './connectionRows.jsx';
 import { CONTROL_PHRASES, ControlRow, controlValue } from './ControlsEditor.jsx';
 
-const SIDES = {
+function SIDES() {
+  return {
   previous: { text: t('à gauche'), icons: <ChevronLeft /> },
   next: { text: t('à droite'), icons: <ChevronRight /> },
   both: { text: t('des deux côtés'), icons: <><ChevronLeft /><ChevronRight /></> },
 };
+}
 
 function Neighbour({ neighbour, thumbnails, onFocusPath }) {
   return (
     <li className="advanced-arrival__item">
-      <Tooltip text={SIDES[neighbour.side].text}>
-        <span className="advanced-wheel__side" role="img" aria-label={SIDES[neighbour.side].text}>
-          {SIDES[neighbour.side].icons}
+      <Tooltip text={SIDES()[neighbour.side].text}>
+        <span className="advanced-wheel__side" role="img" aria-label={SIDES()[neighbour.side].text}>
+          {SIDES()[neighbour.side].icons}
         </span>
       </Tooltip>
       {neighbour.stagePath ? (
@@ -32,7 +34,7 @@ function Neighbour({ neighbour, thumbnails, onFocusPath }) {
           <NodeThumbnail path={neighbour.stagePath} thumbnails={thumbnails} />
           <NodeLink path={neighbour.stagePath} label={neighbour.label} onFocusPath={onFocusPath} />
         </>
-      ) : <em className="advanced-field__absent">choix vide, sauté</em>}
+      ) : <em className="advanced-field__absent">{t('choix vide, sauté')}</em>}
       <span className="advanced-arrival__how">
         choix {neighbour.rank + 1}{neighbour.wraps ? ', on reboucle' : ''}
       </span>
@@ -46,15 +48,15 @@ export function StageWheel({ stage, memberships, disabled, thumbnails, onGesture
 
   let body = null;
   if (memberships.length === 0) {
-    body = <p className="advanced-field__note">Cet Écran n’est dans aucune liste : la molette n’a rien à faire défiler.</p>;
+    body = <p className="advanced-field__note">{t('Cet Écran n’est dans aucune liste : la molette n’a rien à faire défiler.')}</p>;
   } else if (wheel === false) {
     body = scrollable
-      ? <p className="advanced-field__note">Sur cet Écran, on ne peut pas passer aux autres choix de la liste.</p>
+      ? <p className="advanced-field__note">{t('Sur cet Écran, on ne peut pas passer aux autres choix de la liste.')}</p>
       : null;
   } else {
     body = (
       <>
-        <div className="advanced-exit__label">Fait défiler</div>
+        <div className="advanced-exit__label">{t('Fait défiler')}</div>
         <ol className="advanced-arrivals">
           {memberships.map((row) => (
             <li key={row.key} className="advanced-arrival">
@@ -63,7 +65,7 @@ export function StageWheel({ stage, memberships, disabled, thumbnails, onGesture
                 <NodeLink path={row.actionPath} label={row.action.label.label} onFocusPath={onFocusPath} />
               </div>
               {row.count < 2
-                ? <p className="advanced-field__absent">Un seul choix : rien à faire défiler.</p>
+                ? <p className="advanced-field__absent">{t('Un seul choix : rien à faire défiler.')}</p>
                 : (
                   <ul className="advanced-arrival__list">
                     {row.neighbours.map((neighbour) => (
@@ -75,7 +77,7 @@ export function StageWheel({ stage, memberships, disabled, thumbnails, onGesture
           ))}
         </ol>
         {memberships.length > 1 && (
-          <p className="advanced-field__note">La molette fait défiler la liste par laquelle on est arrivé sur cet Écran.</p>
+          <p className="advanced-field__note">{t('La molette fait défiler la liste par laquelle on est arrivé sur cet Écran.')}</p>
         )}
       </>
     );
@@ -84,14 +86,14 @@ export function StageWheel({ stage, memberships, disabled, thumbnails, onGesture
   return (
     <section className="card advanced-editor__section advanced-controls advanced-exit">
       <div className="card-title-row">
-        <div className="card-title">Molette</div>
-        <div className="card-copy card-copy--inline">Où mène la molette ?</div>
+        <div className="card-title">{t("Molette")}</div>
+        <div className="card-copy card-copy--inline">{t('Où mène la molette ?')}</div>
       </div>
       <div className="sequence-controls advanced-controls__toggles">
         <ControlRow
           stage={stage}
           control="wheel"
-          label={CONTROL_PHRASES.wheel}
+          label={CONTROL_PHRASES().wheel}
           disabled={disabled}
           onGesture={onGesture}
         />

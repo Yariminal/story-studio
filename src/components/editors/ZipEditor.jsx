@@ -45,7 +45,7 @@ export function ZipEditor({ node, onUpdate, onDelete }) {
       <div className="card">
         <div className="card-title">Informations</div>
         <div className="field-row">
-          <span className="field-label">Nom</span>
+          <span className="field-label">{t('Nom')}</span>
           <input
             className="field-input"
             value={node.name || ''}
@@ -54,23 +54,23 @@ export function ZipEditor({ node, onUpdate, onDelete }) {
           />
         </div>
         <div className="field-row">
-          <span className="field-label">Fichier</span>
+          <span className="field-label">{t("Fichier")}</span>
           <span style={{ fontSize: 12, color: 'var(--text-secondary)', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
             {filename || t('Aucun fichier')}
           </span>
           <Button size="sm" onClick={handlePick}>
-            {filename ? 'Remplacer' : 'Choisir'}
+            {filename ? t("Remplacer") : t("Choisir")}
           </Button>
         </div>
       </div>
 
       <div className="info-box warn">
-        Ce pack sera inclus tel quel dans l'export final, sans modifications audio.
+        {t("Ce pack sera inclus tel quel dans l'export final, sans modifications audio.")}
       </div>
 
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
         <Button variant="danger-outline" onClick={onDelete}>
-          Supprimer cette archive
+          {t("Supprimer cette archive")}
         </Button>
       </div>
     </>

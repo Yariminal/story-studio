@@ -24,7 +24,8 @@ export const RESOLUTION_GESTURE = 'gesture';
 export const RESOLUTION_FORM = 'form';
 export const RESOLUTION_REVEAL = 'reveal';
 
-const BLOCKING_COPY = Object.freeze({
+function BLOCKING_COPY() {
+  return Object.freeze({
   STAGE_ID_EMPTY: [t('Erreur de structure'), t("Cet Écran n’a pas d’identifiant.")],
   DUPLICATE_STAGE_ID: [t('Erreur de structure'), t('Plusieurs Écrans utilisent le même identifiant.')],
   ACTION_ID_EMPTY: [t('Erreur de structure'), t("Cette liste de choix n’a pas d’identifiant.")],
@@ -48,13 +49,14 @@ const BLOCKING_COPY = Object.freeze({
   // générateur par menus : la Lunii s'y bloque ou y montre un faux menu racine.
   HOME_LOOPS_TO_SELF: [t('Navigation bloquante'), t('Le bouton Accueil ramène cet Écran sur lui-même.')],
   OK_LOOPS_TO_SELF: [t('Navigation bloquante'), t('Le bouton OK ramène cet Écran sur lui-même.')],
-  OK_WITHOUT_USABLE_DESTINATION: [t('Navigation bloquante'), 'OK ou la fin automatique est actif sans destination utilisable.'],
+  OK_WITHOUT_USABLE_DESTINATION: [t('Navigation bloquante'), t("OK ou la fin automatique est actif sans destination utilisable.")],
   NO_USABLE_EXIT: [t('Navigation bloquante'), t('Cet Écran accessible ne permet aucune sortie, même par la molette.')],
   ENTRY_STAGE_AS_OPTION: [t('Navigation bloquante'), t('Un choix de cette liste mène à l’Écran d’entrée.')],
 });
+}
 
 function blockingCopy(row) {
-  return BLOCKING_COPY[row.code]
+  return BLOCKING_COPY()[row.code]
     ?? [row.source === 'decode' ? t('Erreur de document') : t('Erreur de structure'),
       row.source === 'decode'
         ? t('Le document contient une donnée invalide.')
@@ -73,7 +75,7 @@ function affectedNodeLabel(nodePath, index) {
   if (!label) return null;
   const kind = entry.kind === STAGE_KIND ? t('Écran')
     : entry.kind === ACTION_KIND ? t('Liste de choix') : t('Nœud');
-  return `${kind} « ${label} »`;
+  return t("{kind} « {label} »", { kind: kind, label: label });
 }
 
 // La liste utilisateur ne reprend que les portes qui bloquent réellement la
@@ -96,7 +98,7 @@ export function buildAdvancedBlockingIssues({
       // Le chemin de secours sert à guider la réparation d'une erreur du
       // document ; il ne désigne pas un nœud fautif.
       nodeLabel: affectedNodeLabel(diagnostic?.nodePath, index),
-      // L'absence dt('Écran d')entrée concerne le document entier. On conduit
+      // L'absence d'Écran d'entrée concerne le document entier. On conduit
       // tout de même l'auteur vers un Écran existant pour qu'il puisse agir.
       nodePath: diagnostic?.nodePath ?? fallbackNodePath(row, index),
       diagnostic,
@@ -125,8 +127,8 @@ export function buildAdvancedBlockingIssues({
       category: t('Média manquant'),
       nodeLabel: affectedNodeLabel(nodePath, index),
       message: label
-        ? `Ajoutez le fichier ${field} de « ${label} ».`
-        : `Ajoutez le fichier ${field} utilisé par le pack.`,
+        ? t("Ajoutez le fichier {field} de « {label} ».", { field: field, label: label })
+        : t("Ajoutez le fichier {field} utilisé par le pack.", { field: field }),
       nodePath,
       diagnostic: null,
     });
@@ -134,7 +136,8 @@ export function buildAdvancedBlockingIssues({
   return issues;
 }
 
-const POSITION_DISPOSITIONS = Object.freeze({
+function POSITION_DISPOSITIONS() {
+  return Object.freeze({
   'scale-position-to-short-range': {
     disposition: 'scale-to-short-range',
     label: t('Mettre à l’échelle dans [-32768, 32767]'),
@@ -148,8 +151,10 @@ const POSITION_DISPOSITIONS = Object.freeze({
     label: t('Préserver la valeur brute et accepter la perte d’affichage STUdio'),
   },
 });
+}
 
-const OPAQUE_DISPOSITIONS = Object.freeze({
+function OPAQUE_DISPOSITIONS() {
+  return Object.freeze({
   'preserve-opaque-untested': {
     disposition: 'preserve-untested',
     label: t('Préserver la valeur, dimension UNTESTED'),
@@ -163,6 +168,7 @@ const OPAQUE_DISPOSITIONS = Object.freeze({
     label: t('Promouvoir après preuve'),
   },
 });
+}
 
 function nodeRefOf(index, nodePath) {
   const entry = nodePath ? index?.byPath.get(nodePath) : null;
@@ -219,7 +225,7 @@ export function resolutionsForDiagnostic({ diagnostic, view, index }) {
     }
   }
   for (const resolution of diagnostic.resolutions ?? []) {
-    const position = POSITION_DISPOSITIONS[resolution];
+    const position = POSITION_DISPOSITIONS()[resolution];
     if (position) {
       const node = nodeRefOf(index, diagnostic.nodePath);
       if (!node) continue;
@@ -232,7 +238,7 @@ export function resolutionsForDiagnostic({ diagnostic, view, index }) {
       continue;
     }
 
-    const opaque = OPAQUE_DISPOSITIONS[resolution];
+    const opaque = OPAQUE_DISPOSITIONS()[resolution];
     if (opaque) {
       const members = opaqueMemberOf(view, diagnostic.path);
       for (const member of members) {
@@ -254,7 +260,7 @@ export function resolutionsForDiagnostic({ diagnostic, view, index }) {
       offered.push({
         id: resolution,
         nature: RESOLUTION_GESTURE,
-        label: `Aplatir le groupe « ${group.groupId} » (perte définitive de ses marqueurs)`,
+        label: t("Aplatir le groupe « {groupId} » (perte définitive de ses marqueurs)", { groupId: group.groupId }),
         destructive: true,
         gesture: advancedGestures.flattenKnownGroup(group.groupId),
       });
@@ -320,7 +326,7 @@ export function resolutionsForDiagnostic({ diagnostic, view, index }) {
         ? {
           id: resolution,
           nature: RESOLUTION_GESTURE,
-          label: 'En faire une fin',
+          label: t("En faire une fin"),
           gesture: advancedGestures.setStageControls(entry.node.uuid, {
             ok: presence.value(false),
             autoplay: presence.value(false),

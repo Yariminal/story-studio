@@ -24,10 +24,12 @@ import { releaseTauriListener } from '../../utils/tauriListener';
 import './YoutubeImportFunnel.css';
 
 import { t } from '../../i18n/index.js';
-const STEPS = [
-  { key: 'url', label: 'Adresse' },
+function STEPS() {
+  return [
+  { key: 'url', label: t("Adresse") },
   { key: 'videos', label: t('Vidéos') },
 ];
+}
 const LANGUAGE_STEP = { key: 'language', label: 'Audio' };
 
 // Garde-fou de sélection : au-delà, on avertit (ton friendly, non bloquant).
@@ -93,7 +95,7 @@ export function YoutubeImportFunnel({ onClose, onImport, mode = 'home', toLibrar
   const listingBusyRef = useRef(false);
 
   const busy = phase === 'loading' || phase === 'analyzing' || phase === 'importing';
-  const steps = audioLanguageOptions.length > 1 ? [...STEPS, LANGUAGE_STEP] : STEPS;
+  const steps = audioLanguageOptions.length > 1 ? [...STEPS(), LANGUAGE_STEP] : STEPS();
 
   // Progression de provisionnement/téléchargement émise par le backend.
   useEffect(() => {
@@ -304,7 +306,9 @@ export function YoutubeImportFunnel({ onClose, onImport, mode = 'home', toLibrar
   const primaryLabel = step === 0
     ? t('Charger les vidéos')
     : (selected.size > 0
-      ? `Importer ${selected.size} vidéo${selected.size > 1 ? 's' : ''}`
+      ? (selected.size > 1
+        ? t('Importer {count} vidéos', { count: selected.size })
+        : t('Importer {count} vidéo', { count: selected.size }))
       : t('Importer'));
 
   const subtitle = mode === 'editor'
@@ -336,7 +340,7 @@ export function YoutubeImportFunnel({ onClose, onImport, mode = 'home', toLibrar
         <FunnelFooter
           onBack={() => setStep((current) => Math.max(0, current - 1))}
           backDisabled={step === 0}
-          stepLabel={`Étape ${step + 1} / ${steps.length}`}
+          stepLabel={t('Étape {current} / {count}', { current: step + 1, count: steps.length })}
           onPrimary={step === 0 ? handleLoadList : (step === 1 ? handlePrepareImport : handleImport)}
           primaryLabel={primaryLabel}
           primaryDisabled={primaryDisabled}
@@ -347,18 +351,13 @@ export function YoutubeImportFunnel({ onClose, onImport, mode = 'home', toLibrar
         <div className="funnel-step-content youtube-funnel-step youtube-funnel-cgu">
           <FunnelSectionHeader
             icon={<Info />}
-            title="Avant de commencer"
+            title={t("Avant de commencer")}
             description={t("Une dernière chose, une seule fois.")}
           />
-          <p className="youtube-funnel-cgu-text">
-            Cette fonction télécharge l'audio de vidéos YouTube pour un <strong>usage personnel
-            uniquement</strong>. Tu restes responsable du respect des conditions d'utilisation de
-            YouTube et des droits d'auteur des contenus que tu importes.
+          <p className="youtube-funnel-cgu-text"> {t("Cette fonction télécharge l'audio de vidéos YouTube pour un")} <strong>usage personnel
+            uniquement</strong>{t(". Tu restes responsable du respect des conditions d'utilisation de YouTube et des droits d'auteur des contenus que tu importes.")}
           </p>
-          <p className="youtube-funnel-hint">
-            Au premier usage, Story Studio télécharge automatiquement l'outil yt-dlp (et le garde
-            à jour) pour récupérer l'audio.
-          </p>
+          <p className="youtube-funnel-hint"> {t("Au premier usage, Story Studio télécharge automatiquement l'outil yt-dlp (et le garde à jour) pour récupérer l'audio.")} </p>
           <div className="youtube-funnel-cgu-actions">
             <button type="button" className="funnel-btn funnel-btn-primary" onClick={handleAcceptCgu}>
               J'ai compris, continuer
@@ -377,7 +376,7 @@ export function YoutubeImportFunnel({ onClose, onImport, mode = 'home', toLibrar
         />
       ) : phase === 'importing' ? (
         <FunnelGenerationState
-          title="Import depuis YouTube…"
+          title={t("Import depuis YouTube…")}
           hint={progress?.phase
             ? (progress.name ? `${progress.name} — ${progress.phase}` : progress.phase)
             : (logMessage || t("Les histoires arrivent dans l'éditeur."))}
@@ -391,14 +390,14 @@ export function YoutubeImportFunnel({ onClose, onImport, mode = 'home', toLibrar
           meta={importError}
         >
           <button type="button" className="funnel-btn funnel-btn-primary" onClick={onClose}>
-            Fermer
+            {t("Fermer")}
           </button>
         </FunnelDoneState>
       ) : step === 0 ? (
         <div className="funnel-step-content youtube-funnel-step">
           <FunnelSectionHeader
             icon={<Youtube />}
-            title="Adresse YouTube"
+            title={t("Adresse YouTube")}
             description={t("Colle l'URL d'une vidéo, d'une playlist ou d'une chaîne.")}
           />
           <form className="youtube-funnel-form" onSubmit={handleLoadList}>
@@ -415,8 +414,7 @@ export function YoutubeImportFunnel({ onClose, onImport, mode = 'home', toLibrar
               />
             </label>
           </form>
-          <p className="youtube-funnel-hint">
-            Tu pourras filtrer et sélectionner les vidéos avant {toLibrary
+          <p className="youtube-funnel-hint"> {t("Tu pourras filtrer et sélectionner les vidéos avant")} {toLibrary
               ? t("de retrouver leurs médias dans la bibliothèque.")
               : t("qu'elles soient ajoutées dans l'arbre.")}
           </p>
@@ -443,31 +441,27 @@ export function YoutubeImportFunnel({ onClose, onImport, mode = 'home', toLibrar
               <Search />
               <input
                 type="text"
-                placeholder="Filtrer cette page…"
+                placeholder={t('Filtrer cette page…')}
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
               />
               </label>
             <div className="youtube-funnel-bulk">
-              <button type="button" className="youtube-funnel-seg" onClick={selectAllVisible}>
-                Tout séléctionner
-              </button>
-              <button type="button" className="youtube-funnel-seg" onClick={clearSelection} disabled={selected.size === 0}>
-                Tout désélectionner
-              </button>
+              <button type="button" className="youtube-funnel-seg" onClick={selectAllVisible}> {t("Tout séléctionner")} </button>
+              <button type="button" className="youtube-funnel-seg" onClick={clearSelection} disabled={selected.size === 0}> {t("Tout désélectionner")} </button>
             </div>
           </div>
           {overCap && (
             <div className="youtube-funnel-notice" role="status">
               <Info />
-              <span>{selected.size} vidéos sélectionnées : un pack plus léger reste plus agréable à parcourir.</span>
+              <span>{selected.size} {t("vidéos sélectionnées : un pack plus léger reste plus agréable à parcourir.")}</span>
             </div>
           )}
           <div className="youtube-funnel-list">
             {visibleVideos.length === 0 ? (
               <div className="youtube-funnel-empty">
                 <Search />
-                <span>Aucune vidéo ne correspond à ce filtre.</span>
+                <span>{t('Aucune vidéo ne correspond à ce filtre.')}</span>
               </div>
             ) : (
               visibleVideos.map((video) => {
@@ -500,7 +494,7 @@ export function YoutubeImportFunnel({ onClose, onImport, mode = 'home', toLibrar
               disabled={currentPage <= 1 || busy}
             >
               <ChevronLeft />
-              <span>Précédente</span>
+              <span>{t('Précédente')}</span>
             </button>
             <span className="youtube-funnel-page-label">Page {currentPage}</span>
             <button
@@ -509,7 +503,7 @@ export function YoutubeImportFunnel({ onClose, onImport, mode = 'home', toLibrar
               onClick={() => loadPage(currentPage + 1)}
               disabled={!list?.hasNext || busy}
             >
-              <span>Suivante</span>
+              <span>{t("Suivante")}</span>
               <ChevronRight />
             </button>
           </nav>
@@ -532,8 +526,8 @@ export function YoutubeImportFunnel({ onClose, onImport, mode = 'home', toLibrar
                 onChange={() => setAudioLanguage('')}
               />
               <span>
-                <strong>Piste par défaut de YouTube</strong>
-                <small>Conserve le comportement normal de l’import.</small>
+                <strong>{t('Piste par défaut de YouTube')}</strong>
+                <small>{t('Conserve le comportement normal de l’import.')}</small>
               </span>
             </label>
             {audioLanguageOptions.map((language) => (
@@ -555,11 +549,7 @@ export function YoutubeImportFunnel({ onClose, onImport, mode = 'home', toLibrar
               </label>
             ))}
           </div>
-          <p className="youtube-funnel-hint">
-            Ce choix s’applique aux vidéos qui proposent cette langue. Si une piste manque ou
-            change avant le téléchargement, Story Studio utilise automatiquement la piste YouTube
-            par défaut pour cette vidéo.
-          </p>
+          <p className="youtube-funnel-hint"> {t("Ce choix s’applique aux vidéos qui proposent cette langue. Si une piste manque ou change avant le téléchargement, Story Studio utilise automatiquement la piste YouTube par défaut pour cette vidéo.")} </p>
         </div>
       )}
     </FunnelShell>

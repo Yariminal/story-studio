@@ -199,7 +199,7 @@ export default function GraphSearchPanel({
   }, [focus, effectiveWindow]);
 
   const scopeLabels = [
-    [SEARCH_SCOPES.ALL, 'Tout', false],
+    [SEARCH_SCOPES.ALL, t("Tout"), false],
     [SEARCH_SCOPES.STAGES, t('Écrans'), false],
     [SEARCH_SCOPES.ACTIONS, t('Listes de choix'), false],
   ];
@@ -271,10 +271,24 @@ export default function GraphSearchPanel({
           combien de nœuds elle trouve. Ce qui reste à afficher est dit par
           le bouton de fin de liste, pas répété ici. */}
       {counts
-        ? `${counts.stages} Écran${counts.stages === 1 ? '' : 's'} · ${counts.actions} liste${counts.actions === 1 ? '' : 's'} de choix · ${counts.edges} lien${counts.edges === 1 ? '' : 's'}`
-        : `${found.total} résultat${found.total === 1 ? '' : 's'}`}
+        ? t('{stages} · {actions} · {edges}', {
+          stages: counts.stages === 1
+            ? t('{count} Écran', { count: counts.stages })
+            : t('{count} Écrans', { count: counts.stages }),
+          actions: counts.actions === 1
+            ? t('{count} liste de choix', { count: counts.actions })
+            : t('{count} listes de choix', { count: counts.actions }),
+          edges: counts.edges === 1
+            ? t('{count} lien', { count: counts.edges })
+            : t('{count} liens', { count: counts.edges }),
+        })
+        : (found.total === 1
+          ? t('{count} résultat', { count: found.total })
+          : t('{count} résultats', { count: found.total }))}
       {(query || scope !== SEARCH_SCOPES.ALL || selectedColors.size > 0)
-        && ` · ${found.total} trouvé${found.total === 1 ? '' : 's'}`}
+        && (found.total === 1
+          ? t(' · {count} trouvé', { count: found.total })
+          : t(' · {count} trouvés', { count: found.total }))}
     </p>
   );
 
@@ -299,7 +313,7 @@ export default function GraphSearchPanel({
               ))}
               onClearSearch={clearSearch}
             >
-              <div className="advanced-search__scopes" role="group" aria-label="Filtrer">
+              <div className="advanced-search__scopes" role="group" aria-label={t("Filtrer")}>
                 {scopeLabels.map(([value, label, warning]) => (
                   <button
                     key={value}
@@ -330,9 +344,7 @@ export default function GraphSearchPanel({
           onKeyDown={onKeyDown}
         >
           {visible.length === 0 && (
-            <li className="advanced-search__empty" role="presentation">
-              Aucun nœud ne correspond à cette recherche.
-            </li>
+            <li className="advanced-search__empty" role="presentation"> {t("Aucun nœud ne correspond à cette recherche.")} </li>
           )}
           {visible.map((result) => (
             <li
@@ -379,7 +391,7 @@ export default function GraphSearchPanel({
               <span className="advanced-search__identity">
                 <span className="advanced-search__name">
                   {result.label.label}
-                  {result.label.isFallback && <em className="advanced-search__fallback"> (sans nom)</em>}
+                  {result.label.isFallback && <em className="advanced-search__fallback"> {t('(sans nom)')}</em>}
                 </span>
                 <span className="advanced-search__identifier">
                   {result.kind === 'stage' ? t('Écran') : t('Liste de choix')} · {nodeIdentifier(result)}
@@ -403,8 +415,7 @@ export default function GraphSearchPanel({
             className="advanced-search__more"
             onClick={() => setWindowSize((size) => size + PAGE_SIZE)}
           >
-            Afficher {Math.min(PAGE_SIZE, found.total - visible.length)} nœuds de plus
-            <span> · {found.total - visible.length} restants</span>
+            {t("Afficher")} {Math.min(PAGE_SIZE, found.total - visible.length)} {t("nœuds de plus")} <span> · {found.total - visible.length} restants</span>
           </button>
         )}
       </section>

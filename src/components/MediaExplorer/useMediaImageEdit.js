@@ -5,7 +5,9 @@ import { pathKey } from '../../utils/fileUtils';
 import { logger } from '../../utils/logger';
 
 import { t } from '../../i18n/index.js';
-const SUCCESS_MESSAGE = t('Image modifiée créée dans Médias');
+function SUCCESS_MESSAGE() {
+  return t('Image modifiée créée dans Médias');
+}
 
 export function useMediaImageEdit({
   workspaceDir,
@@ -93,7 +95,7 @@ export function useMediaImageEdit({
       onAddMediaTag?.(path, tag);
     }
     onCreated?.(path);
-    setNotice(SUCCESS_MESSAGE);
+    setNotice(SUCCESS_MESSAGE());
   }
 
   return {

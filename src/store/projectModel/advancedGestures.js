@@ -46,17 +46,17 @@ function fail(message) {
 }
 
 function requireText(value, label) {
-  if (typeof value !== 'string' || value.length === 0) fail(`${label} doit être une chaîne non vide.`);
+  if (typeof value !== 'string' || value.length === 0) fail(t("{label} doit être une chaîne non vide.", { label: label }));
   return value;
 }
 
 function requireRank(value, label) {
-  if (!Number.isInteger(value) || value < 0) fail(`${label} doit être un rang entier positif ou nul.`);
+  if (!Number.isInteger(value) || value < 0) fail(t("{label} doit être un rang entier positif ou nul.", { label: label }));
   return value;
 }
 
 function requireOneOf(value, allowed, label) {
-  if (!allowed.includes(value)) fail(`${label} doit être l'un de : ${allowed.join(', ')}.`);
+  if (!allowed.includes(value)) fail(t("{label} doit être l'un de : {value}.", { label: label, value: allowed.join(', ') }));
   return value;
 }
 

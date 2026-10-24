@@ -10,13 +10,15 @@ import { WORK_NATURE } from '../../store/production/renderQueueWork.js';
 import './RenderQueuePanel.css';
 
 import { t } from '../../i18n/index.js';
-const STATUS_LABEL = {
+function STATUS_LABEL() {
+  return {
   pending: 'En attente',
   running: t('Génération…'),
   done: t('Terminé'),
   error: 'Erreur',
   canceled: t('Annulé'),
 };
+}
 const PANEL_DEFAULT_HEIGHT = 340;
 const PANEL_MIN_HEIGHT = 120;
 const PANEL_BOTTOM_OFFSET = 33;
@@ -56,8 +58,10 @@ function JobCard({ job, expanded, onToggle, onRemove, onCancel, advanced = null 
   ].join('\n');
   const hasWarnings = job.status === 'done' && warnings.length > 0;
   const statusLabel = hasWarnings
-    ? `Terminé · ${warnings.length} avertissement${warnings.length > 1 ? 's' : ''}`
-    : STATUS_LABEL[job.status];
+    ? (warnings.length > 1
+      ? t('Terminé · {count} avertissements', { count: warnings.length })
+      : t('Terminé · {count} avertissement', { count: warnings.length }))
+    : STATUS_LABEL()[job.status];
 
   async function handleCopyLogs() {
     try {
@@ -104,7 +108,7 @@ function JobCard({ job, expanded, onToggle, onRemove, onCancel, advanced = null 
               title={job.status === 'pending' ? t('Annuler ce rendu') : t('Annuler la génération en cours')}
               disabled={job.cancelRequested}
               onClick={(e) => { e.stopPropagation(); onCancel?.(job.id); }}
-            >Annuler</Button>
+            >{t('Annuler')}</Button>
           )}
           {(job.status === 'done' || job.status === 'error' || job.status === 'canceled') && (
             <Button
@@ -139,17 +143,17 @@ function JobCard({ job, expanded, onToggle, onRemove, onCancel, advanced = null 
             ) : null}
           />
           {job.logs.length === 0 && job.status === 'pending' && (
-            <div className="rq-log-empty">En attente de démarrage…</div>
+            <div className="rq-log-empty">{t('En attente de démarrage…')}</div>
           )}
           <div className="rq-job-actions">
             {job.logs.length > 0 && (
               <Button size="sm" onClick={handleCopyLogs}>
-                {copyStatus === 'copied' ? t('Copié ✓') : copyStatus === 'error' ? 'Erreur' : t('Copier logs')}
+                {copyStatus === 'copied' ? t('Copié ✓') : copyStatus === 'error' ? t("Erreur") : t('Copier logs')}
               </Button>
             )}
             {(job.status === 'done' || job.status === 'error' || job.status === 'canceled') && (
               <Button size="sm" onClick={handleOpenFolder}>
-                {openFolderError ? 'Erreur' : t('Ouvrir dossier')}
+                {openFolderError ? t("Erreur") : t('Ouvrir dossier')}
               </Button>
             )}
             {job.status === 'done' && job.resultPath && (
@@ -237,19 +241,19 @@ export function RenderQueuePanel({
           className="rq-panel-resize-handle"
           role="separator"
           aria-orientation="horizontal"
-          aria-label="Redimensionner la file de rendu"
-          title="Redimensionner"
+          aria-label={t('Redimensionner la file de rendu')}
+          title={t("Redimensionner")}
           onPointerDown={handleResizeStart}
         />
       )}
       <div className="rq-panel-header">
         <span className="rq-panel-title">
-          File de rendu
-          {activeCount > 0 && <span className="rq-panel-count">{activeCount} en cours</span>}
+          {t('File de rendu')}
+          {activeCount > 0 && <span className="rq-panel-count">{t('{count} en cours', { count: activeCount })}</span>}
         </span>
         <div className="rq-panel-header-actions">
           {doneCount > 0 && (
-            <Button size="sm" onClick={onClearDone}>Vider terminés</Button>
+            <Button size="sm" onClick={onClearDone}>{t('Vider terminés')}</Button>
           )}
           {/* En embedded, la fermeture est assurée par la croix du bottom panel
               (bottom-workspace-close) — pas de doublon ici, comme SDQueuePanel. */}
@@ -261,7 +265,7 @@ export function RenderQueuePanel({
 
       <div className="rq-panel-body">
         {jobs.length === 0 ? (
-          <div className="rq-empty">Aucun rendu en file d'attente.</div>
+          <div className="rq-empty">{t("Aucun rendu en file d'attente.")}</div>
         ) : (
           jobs.map(job => (
             <JobCard

@@ -8,6 +8,12 @@ public version; this file stays as the concise project history.
 
 ---
 
+## [Unreleased]
+
+### Changed
+
+- Switching the interface language now updates menus, popups, and dialogs as well as the main window. French remains the default.
+
 ## [0.9.9] - 2026-10-03
 
 Story Studio v0.9.9 introduces the Graph Editor for branching stories and quizzes,

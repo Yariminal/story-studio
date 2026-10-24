@@ -23,7 +23,7 @@ import { mapProjectMediaPaths } from '../store/projectMediaPaths';
 import { walkProjectMediaReferences } from '../store/projectModel/index.js';
 import { pathKey } from '../utils/fileUtils';
 
-import { t } from '../i18n/index.js';
+import { t, getLocale } from '../i18n/index.js';
 function relocateHistoryMedia(store, replacementEntries) {
   const replacements = new Map(replacementEntries.filter(([from, to]) => from && to));
   if (replacements.size === 0) return;
@@ -254,7 +254,7 @@ export function useSaveProgress({
       logger.error('save:error', e);
       showErrorDialog?.({
         title: t('Enregistrement impossible'),
-        message: `Le projet n'a pas pu être enregistré : ${e?.message ?? e}`,
+        message: t("Le projet n'a pas pu être enregistré : {value}", { value: e?.message ?? e }),
       });
       setSaveProgress(null);
       setSaveToast('error');
@@ -275,7 +275,7 @@ export function useSaveProgress({
     setSaveToast,
     showErrorDialog,
     onProjectSaved,
-  ]);
+  , getLocale()]);
 
   const handleSaveProjectAs = useCallback(async () => {
     let progressStarted = false;
@@ -462,7 +462,7 @@ export function useSaveProgress({
       setSaveToast('error');
       showErrorDialog?.({
         title: t('Enregistrement impossible'),
-        message: `Le projet n'a pas pu être enregistré : ${e?.message ?? e}`,
+        message: t("Le projet n'a pas pu être enregistré : {value}", { value: e?.message ?? e }),
       });
       setTimeout(() => setSaveToast(null), 3000);
       return null;
@@ -479,7 +479,7 @@ export function useSaveProgress({
     setSaveToast,
     showErrorDialog,
     triageSessionMedia,
-  ]);
+  , getLocale()]);
 
   const handleSave = useCallback(() => (
     store.savePath ? handleSaveProject() : handleSaveProjectAs()

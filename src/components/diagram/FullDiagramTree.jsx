@@ -371,14 +371,14 @@ export function CompleteDiagramTree({
       const localStep = nodeLabelById.get(localNodeId) ?? t('message ou scénario de fin');
       const targetId = exitEdge?.displayTo ?? exitEdge?.to;
       const target = nodeLabelById.get(targetId) ?? targetId;
-      return `À la fin de « ${source} » → « ${localStep} » → « ${target} »`;
+      return t("À la fin de « {source} » → « {localStep} » → « {target} »", { source: source, localStep: localStep, target: target });
     }
     const incomingEndEdge = pathEdges.find((pathEdge) => pathEdge.to === END_NODE_ID);
     if (edge.from === END_NODE_ID && incomingEndEdge) {
       const source = nodeLabelById.get(incomingEndEdge.from) ?? incomingEndEdge.from;
       const targetId = edge.displayTo ?? edge.to;
       const target = nodeLabelById.get(targetId) ?? targetId;
-      return `À la fin de « ${source} » → message de fin → « ${target} »`;
+      return t("À la fin de « {source} » → message de fin → « {target} »", { source: source, target: target });
     }
     const from = nodeLabelById.get(edge.from) ?? edge.from;
     const targetId = edge.displayTo ?? edge.to;
@@ -386,8 +386,8 @@ export function CompleteDiagramTree({
     if (edge.to === END_NODE_ID) {
       const finalTarget = edge.endNodeTargetId ? (nodeLabelById.get(edge.endNodeTargetId) ?? edge.endNodeTargetId) : null;
       return finalTarget
-        ? `À la fin de « ${from} » → message de fin → « ${finalTarget} »`
-        : `À la fin de « ${from} » → message de fin`;
+        ? t("À la fin de « {from} » → message de fin → « {finalTarget} »", { from: from, finalTarget: finalTarget })
+        : t("À la fin de « {from} » → message de fin", { from: from });
     }
     const kindLabel = edge.kind === 'home'
       ? t('Retour Home')
@@ -395,23 +395,23 @@ export function CompleteDiagramTree({
         ? t('Séquence de fin')
         : edge.kind === 'reference'
           ? 'Lien'
-          : 'Retour';
-    if (edge.kind === 'home') return `Bouton Home pendant « ${from} » → « ${to} »`;
+          : t("Retour");
+    if (edge.kind === 'home') return t("Bouton Home pendant « {from} » → « {to} »", { from: from, to: to });
     if (edge.kind === 'after-end' || edge.kind === 'sequence') {
       const prefix = edge.source === 'prompt-chain'
-        ? `Parcours de ${edge.chainStoryIds?.length ?? 0} histoires, après le message de fin`
+        ? t("Parcours de {value} histoires, après le message de fin", { value: edge.chainStoryIds?.length ?? 0 })
         : edge.to === END_NODE_ID ? t('Après la lecture → message de fin') : t('Après la séquence ou le message de fin');
-      return `${prefix} : « ${from} » → « ${to} »`;
+      return t("{prefix} : « {from} » → « {to} »", { prefix: prefix, from: from, to: to });
     }
-    if (edge.kind === 'reference') return `Lien vers un nœud existant : « ${from} » → « ${to} »`;
-    return edge.label ? `${edge.label} : ${from} → ${to}` : `${kindLabel} : « ${from} » → « ${to} »`;
+    if (edge.kind === 'reference') return t("Lien vers un nœud existant : « {from} » → « {to} »", { from: from, to: to });
+    return edge.label ? `${edge.label} : ${from} → ${to}` : t("{kindLabel} : « {from} » → « {to} »", { kindLabel: kindLabel, from: from, to: to });
   }
   function updateNavigationTooltip(event, edge) {
     const node = containerRef.current;
     if (!node) return;
     const rect = node.getBoundingClientRect();
     setNavigationTooltip({
-      text: `${describeNavigationEdge(edge)}. Clique pour ${pinnedNavigationEdgeId === edgeKey(edge) ? t('désépingler') : t('épingler')} ce trajet.`,
+      text: t("{value}. Clique pour {value2} ce trajet.", { value: describeNavigationEdge(edge), value2: pinnedNavigationEdgeId === edgeKey(edge) ? t('désépingler') : t('épingler') }),
       left: event.clientX - rect.left + 12,
       top: event.clientY - rect.top + 12,
     });
@@ -838,7 +838,7 @@ export function CompleteDiagramTree({
                   event.stopPropagation();
                   handleOpenLocalEnd(node.storyId);
                 }}
-                title={`Ouvrir les réglages : ${node.label}`}
+                title={t("Ouvrir les réglages : {label}", { label: node.label })}
               >
                 <span className="fd-local-end-node-icon">
                   <NodeIcon
@@ -874,9 +874,7 @@ export function CompleteDiagramTree({
           </div>
         ) : null}
         {showHint ? (
-          <div className="fd-diagram-hint">
-            Clique un nœud pour ouvrir ses réglages à gauche
-          </div>
+          <div className="fd-diagram-hint"> {t("Clique un nœud pour ouvrir ses réglages à gauche")} </div>
         ) : null}
       </div>
 

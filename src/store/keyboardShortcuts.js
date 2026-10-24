@@ -26,16 +26,18 @@ const SHORTCUT_CONTEXTS = Object.freeze({
 
 const BOTH_EDITORS = Object.freeze([SHORTCUT_CONTEXTS.LIBRE, SHORTCUT_CONTEXTS.GRAPH]);
 
-export const SHORTCUT_SCOPES = [
+export function SHORTCUT_SCOPES() {
+  return [
   { id: 'general',     label: t('Général'),                  contexts: BOTH_EDITORS, description: t('Actifs dans les deux éditeurs, par menus et graphe.') },
-  { id: 'selection',   label: t('Sélection'),                contexts: BOTH_EDITORS, description: 'Agissent sur la sélection, dans l\'arbre, le diagramme ou le graphe.' },
-  { id: 'libre',       label: t('Éditeur par menus'),        contexts: [SHORTCUT_CONTEXTS.LIBRE], description: 'Actifs seulement dans l\'éditeur par menus.' },
-  { id: 'graph',       label: t('Éditeur graphe'),           contexts: [SHORTCUT_CONTEXTS.GRAPH], description: 'Actifs seulement dans l\'éditeur graphe.' },
+  { id: 'selection',   label: t('Sélection'),                contexts: BOTH_EDITORS, description: t("Agissent sur la sélection, dans l'arbre, le diagramme ou le graphe.") },
+  { id: 'libre',       label: t('Éditeur par menus'),        contexts: [SHORTCUT_CONTEXTS.LIBRE], description: t("Actifs seulement dans l'éditeur par menus.") },
+  { id: 'graph',       label: t('Éditeur graphe'),           contexts: [SHORTCUT_CONTEXTS.GRAPH], description: t("Actifs seulement dans l'éditeur graphe.") },
   { id: 'mediaPanel',  label: t('Panneau Médias'),           contexts: BOTH_EDITORS, description: t('Actifs quand le panneau Médias est ouvert.') },
-  { id: 'audioEditor', label: t('Éditeur audio'),            contexts: [SHORTCUT_CONTEXTS.AUDIO_EDITOR], description: 'Actifs uniquement dans la fenêtre d\'édition audio.' },
-  { id: 'imageEditor', label: 'Éditeur d\'image',         contexts: [SHORTCUT_CONTEXTS.IMAGE_EDITOR], description: 'Actifs uniquement dans la fenêtre d\'édition d\'image.' },
-  { id: 'a11y',        label: t('Navigation standard'),      contexts: [], description: 'Raccourcis ARIA universels. Non modifiables pour préserver l\'accessibilité.' },
+  { id: 'audioEditor', label: t('Éditeur audio'),            contexts: [SHORTCUT_CONTEXTS.AUDIO_EDITOR], description: t("Actifs uniquement dans la fenêtre d'édition audio.") },
+  { id: 'imageEditor', label: t("Éditeur d'image"),         contexts: [SHORTCUT_CONTEXTS.IMAGE_EDITOR], description: t("Actifs uniquement dans la fenêtre d'édition d'image.") },
+  { id: 'a11y',        label: t('Navigation standard'),      contexts: [], description: t("Raccourcis ARIA universels. Non modifiables pour préserver l'accessibilité.") },
 ];
+}
 
 // Définition d'un raccourci.
 // - id : identifiant interne, sert de clé de stockage
@@ -46,7 +48,8 @@ export const SHORTCUT_SCOPES = [
 // - aliases : combinaisons équivalentes acceptées en plus du raccourci principal,
 //   tant que le raccourci principal est celui par défaut
 // - description : sous-titre court (optionnel)
-export const SHORTCUT_DEFINITIONS = [
+export function SHORTCUT_DEFINITIONS() {
+  return [
   // ── Général ────────────────────────────────────────────────────────────────
   { id: 'newProject',       scope: 'general', label: t('Retour à l’accueil'),                  defaultShortcut: { ctrl: true, key: 'n', code: 'KeyN' } },
   { id: 'openProject',      scope: 'general', label: t('Ouvrir un projet'),                   defaultShortcut: { ctrl: true, key: 'o', code: 'KeyO' } },
@@ -72,15 +75,15 @@ export const SHORTCUT_DEFINITIONS = [
   // ── Sélection (arbre, diagramme, graphe) ─────────────────────────────────
   { id: 'selectionCopy',      scope: 'selection', label: t('Copier la sélection'),     defaultShortcut: { ctrl: true, key: 'c', code: 'KeyC' } },
   { id: 'selectionCut',       scope: 'selection', label: t('Couper la sélection'),     defaultShortcut: { ctrl: true, key: 'x', code: 'KeyX' } },
-  { id: 'selectionPaste',     scope: 'selection', label: 'Coller',                  defaultShortcut: { ctrl: true, key: 'v', code: 'KeyV' } },
+  { id: 'selectionPaste',     scope: 'selection', label: t("Coller"),                  defaultShortcut: { ctrl: true, key: 'v', code: 'KeyV' } },
   { id: 'selectionDuplicate', scope: 'selection', label: t('Dupliquer la sélection'),  defaultShortcut: { ctrl: true, key: 'd', code: 'KeyD' } },
   { id: 'selectionDelete',    scope: 'selection', label: t('Supprimer la sélection'),  defaultShortcut: { key: 'Delete', code: 'Delete' }, aliases: [{ key: 'Backspace', code: 'Backspace' }] },
-  { id: 'selectionRename',    scope: 'selection', label: 'Renommer',                defaultShortcut: { key: 'F2', code: 'F2' } },
+  { id: 'selectionRename',    scope: 'selection', label: t("Renommer"),                defaultShortcut: { key: 'F2', code: 'F2' } },
 
   // ── Éditeur par menus ─────────────────────────────────────────────────────
   { id: 'importStories',    scope: 'libre', label: t('Importer des histoires'),              defaultShortcut: { ctrl: true, key: 'i', code: 'KeyI' } },
   { id: 'addFolder',        scope: 'libre', label: t('Ajouter un dossier'),                  defaultShortcut: { ctrl: true, shift: true, key: 'n', code: 'KeyN' } },
-  { id: 'toggleTree',       scope: 'libre', label: 'Afficher/masquer l\'arbre',           defaultShortcut: { ctrl: true, key: '1', code: 'Digit1' }, aliases: [{ ctrl: true, key: '1', code: 'Numpad1' }] },
+  { id: 'toggleTree',       scope: 'libre', label: t("Afficher/masquer l'arbre"),           defaultShortcut: { ctrl: true, key: '1', code: 'Digit1' }, aliases: [{ ctrl: true, key: '1', code: 'Numpad1' }] },
   { id: 'toggleSettings',   scope: 'libre', label: t('Afficher/masquer les réglages'),       defaultShortcut: { ctrl: true, key: '2', code: 'Digit2' }, aliases: [{ ctrl: true, key: '2', code: 'Numpad2' }] },
   { id: 'toggleDiagram',    scope: 'libre', label: t('Afficher/masquer le diagramme'),       defaultShortcut: { ctrl: true, key: '3', code: 'Digit3' }, aliases: [{ ctrl: true, key: '3', code: 'Numpad3' }] },
 
@@ -88,7 +91,7 @@ export const SHORTCUT_DEFINITIONS = [
   // `+` demande Maj sur un clavier AZERTY, pas sur un QWERTY où la touche porte
   // `=` : les variantes couvrent les deux, et le pavé numérique.
   {
-    id: 'graphZoomIn', scope: 'graph', label: 'Agrandir',
+    id: 'graphZoomIn', scope: 'graph', label: t("Agrandir"),
     defaultShortcut: { key: '+', code: 'NumpadAdd' },
     aliases: [{ shift: true, key: '+', code: 'Equal' }, { key: '=', code: 'Equal' }],
   },
@@ -121,25 +124,25 @@ export const SHORTCUT_DEFINITIONS = [
   { id: 'audioShuttleBack',   scope: 'audioEditor', label: t('Lecture arrière (jog/shuttle)'),   defaultShortcut: { key: 'j', code: 'KeyJ' } },
   { id: 'audioShuttleStop',   scope: 'audioEditor', label: t('Pause (jog/shuttle)'),             defaultShortcut: { key: 'k', code: 'KeyK' } },
   { id: 'audioShuttleFwd',    scope: 'audioEditor', label: t('Lecture avant (jog/shuttle)'),     defaultShortcut: { key: 'l', code: 'KeyL' } },
-  { id: 'audioNudgeBack',     scope: 'audioEditor', label: 'Reculer de 50 ms (avec preview)', defaultShortcut: { key: 'ArrowLeft', code: 'ArrowLeft' } },
-  { id: 'audioNudgeFwd',      scope: 'audioEditor', label: 'Avancer de 50 ms (avec preview)', defaultShortcut: { key: 'ArrowRight', code: 'ArrowRight' } },
+  { id: 'audioNudgeBack',     scope: 'audioEditor', label: t("Reculer de 50 ms (avec preview)"), defaultShortcut: { key: 'ArrowLeft', code: 'ArrowLeft' } },
+  { id: 'audioNudgeFwd',      scope: 'audioEditor', label: t("Avancer de 50 ms (avec preview)"), defaultShortcut: { key: 'ArrowRight', code: 'ArrowRight' } },
   { id: 'audioGoStart',       scope: 'audioEditor', label: t('Aller au début'),                  defaultShortcut: { key: 'Home', code: 'Home' } },
   { id: 'audioGoEnd',         scope: 'audioEditor', label: t('Aller à la fin'),                  defaultShortcut: { key: 'End', code: 'End' } },
-  { id: 'audioMarkIn',        scope: 'audioEditor', label: 'Marquer le point d\'entrée',      defaultShortcut: { key: 'i', code: 'KeyI' } },
-  { id: 'audioMarkOut',       scope: 'audioEditor', label: 'Marquer le point de sortie',      defaultShortcut: { key: 'o', code: 'KeyO' } },
-  { id: 'audioClearIn',       scope: 'audioEditor', label: 'Effacer le point d\'entrée',      defaultShortcut: { ctrl: true, key: 'i', code: 'KeyI' } },
-  { id: 'audioClearOut',      scope: 'audioEditor', label: 'Effacer le point de sortie',      defaultShortcut: { ctrl: true, key: 'o', code: 'KeyO' } },
-  { id: 'audioPreviewIn',     scope: 'audioEditor', label: 'Aller au point d\'entrée',        defaultShortcut: { shift: true, key: 'i', code: 'KeyI' } },
-  { id: 'audioPreviewOut',    scope: 'audioEditor', label: 'Aller au point de sortie',        defaultShortcut: { shift: true, key: 'o', code: 'KeyO' } },
+  { id: 'audioMarkIn',        scope: 'audioEditor', label: t("Marquer le point d'entrée"),      defaultShortcut: { key: 'i', code: 'KeyI' } },
+  { id: 'audioMarkOut',       scope: 'audioEditor', label: t("Marquer le point de sortie"),      defaultShortcut: { key: 'o', code: 'KeyO' } },
+  { id: 'audioClearIn',       scope: 'audioEditor', label: t("Effacer le point d'entrée"),      defaultShortcut: { ctrl: true, key: 'i', code: 'KeyI' } },
+  { id: 'audioClearOut',      scope: 'audioEditor', label: t("Effacer le point de sortie"),      defaultShortcut: { ctrl: true, key: 'o', code: 'KeyO' } },
+  { id: 'audioPreviewIn',     scope: 'audioEditor', label: t("Aller au point d'entrée"),        defaultShortcut: { shift: true, key: 'i', code: 'KeyI' } },
+  { id: 'audioPreviewOut',    scope: 'audioEditor', label: t("Aller au point de sortie"),        defaultShortcut: { shift: true, key: 'o', code: 'KeyO' } },
   { id: 'audioKeepSelection', scope: 'audioEditor', label: t('Garder la sélection'),             defaultShortcut: { ctrl: true, key: 'k', code: 'KeyK' } },
   { id: 'audioCutSelection',  scope: 'audioEditor', label: t('Supprimer la sélection'),          defaultShortcut: { ctrl: true, key: 'x', code: 'KeyX' } },
   { id: 'audioUndo',          scope: 'audioEditor', label: t('Annuler la modification'),          defaultShortcut: { ctrl: true, key: 'z', code: 'KeyZ' } },
-  { id: 'audioZoomIn',        scope: 'audioEditor', label: 'Zoomer autour du curseur',         defaultShortcut: { ctrl: true, key: '+', code: 'Equal' }, aliases: [{ ctrl: true, key: '=', code: 'Equal' }, { ctrl: true, key: '+', code: 'NumpadAdd' }] },
+  { id: 'audioZoomIn',        scope: 'audioEditor', label: t("Zoomer autour du curseur"),         defaultShortcut: { ctrl: true, key: '+', code: 'Equal' }, aliases: [{ ctrl: true, key: '=', code: 'Equal' }, { ctrl: true, key: '+', code: 'NumpadAdd' }] },
   { id: 'audioZoomOut',       scope: 'audioEditor', label: t('Dézoomer autour du curseur'),       defaultShortcut: { ctrl: true, key: '-', code: 'Minus' }, aliases: [{ ctrl: true, key: '-', code: 'NumpadSubtract' }] },
-  { id: 'audioClose',         scope: 'audioEditor', label: 'Fermer l\'éditeur audio',          defaultShortcut: { key: 'Escape', code: 'Escape' }, readOnly: true, readOnlyReason: t('Convention universelle pour fermer une modale.') },
+  { id: 'audioClose',         scope: 'audioEditor', label: t("Fermer l'éditeur audio"),          defaultShortcut: { key: 'Escape', code: 'Escape' }, readOnly: true, readOnlyReason: t('Convention universelle pour fermer une modale.') },
 
   // ── Éditeur d'image ───────────────────────────────────────────────────────
-  { id: 'imageClose', scope: 'imageEditor', label: 'Fermer l\'éditeur d\'image', defaultShortcut: { key: 'Escape', code: 'Escape' }, readOnly: true, readOnlyReason: t('Convention universelle pour fermer une modale.') },
+  { id: 'imageClose', scope: 'imageEditor', label: t("Fermer l'éditeur d'image"), defaultShortcut: { key: 'Escape', code: 'Escape' }, readOnly: true, readOnlyReason: t('Convention universelle pour fermer une modale.') },
 
   // ── Navigation standard (a11y, lecture seule) ─────────────────────────────
   { id: 'a11yNextItem',     scope: 'a11y', label: t('Élément suivant (arbre, listbox, menu)'),    defaultShortcut: { key: 'ArrowDown', code: 'ArrowDown' }, readOnly: true, readOnlyReason: t('Standard ARIA — non modifiable.') },
@@ -151,8 +154,9 @@ export const SHORTCUT_DEFINITIONS = [
   { id: 'a11yMultiSelect',  scope: 'a11y', label: t('Étendre la sélection (arbre, diagramme)'),    defaultShortcut: { shift: true, key: 'ArrowDown', code: 'ArrowDown' }, readOnly: true, readOnlyReason: t('Standard ARIA — non modifiable.') },
   { id: 'a11yToggleSelect', scope: 'a11y', label: t('Ajouter à la sélection (arbre, diagramme)'),  defaultShortcut: { ctrl: true, key: 'Click', code: 'Click' }, readOnly: true, readOnlyReason: t('Convention système — non modifiable.') },
 ];
+}
 
-const EDITABLE_DEFINITIONS = SHORTCUT_DEFINITIONS.filter((d) => !d.readOnly);
+const EDITABLE_DEFINITIONS = SHORTCUT_DEFINITIONS().filter((d) => !d.readOnly);
 
 export const DEFAULT_SHORTCUTS = Object.fromEntries(
   EDITABLE_DEFINITIONS.map((definition) => [definition.id, normalizeShortcut(definition.defaultShortcut)]),
@@ -220,7 +224,7 @@ function keyLabelFromCode(code, key) {
   if (code === 'Delete') return 'Suppr';
   if (code === 'Backspace') return '⌫';
   if (code === 'Click') return 'Clic';
-  if (code === 'Drag') return 'Glisser';
+  if (code === 'Drag') return t("Glisser");
   if (code && code.startsWith('F') && /^F\d+$/.test(code)) return code;
   if (key) return key.length === 1 ? key.toUpperCase() : key;
   return code || '';
@@ -245,7 +249,7 @@ export function withShortcut(text, shortcutLabel) {
 
 export function getShortcutLabelMap(shortcuts) {
   return Object.fromEntries(
-    SHORTCUT_DEFINITIONS.map((definition) => [
+    SHORTCUT_DEFINITIONS().map((definition) => [
       definition.id,
       formatShortcut(shortcuts?.[definition.id] ?? definition.defaultShortcut),
     ]),
@@ -306,7 +310,7 @@ function migratePanelToggleShortcuts(shortcuts) {
   //    par findShortcutAction tant que la combinaison est le défaut.
   if (!normalizeStoredShortcut(next.toggleTree)) {
     next.toggleTree = normalizeShortcut(
-      SHORTCUT_DEFINITIONS.find((definition) => definition.id === 'toggleTree').defaultShortcut,
+      SHORTCUT_DEFINITIONS().find((definition) => definition.id === 'toggleTree').defaultShortcut,
     );
     changed = true;
   }
@@ -337,7 +341,7 @@ function migratePanelToggleShortcuts(shortcuts) {
   for (const { legacyId, targetId, legacyDefaults } of mappings) {
     // Une nouvelle clé valide, même personnalisée, est la source de vérité.
     if (normalizeStoredShortcut(next[targetId])) continue;
-    const definition = SHORTCUT_DEFINITIONS.find((item) => item.id === targetId);
+    const definition = SHORTCUT_DEFINITIONS().find((item) => item.id === targetId);
     const fallback = normalizeShortcut(definition.defaultShortcut);
     const legacy = legacyValues[legacyId];
     const isLegacyCustomization = !!legacy
@@ -371,7 +375,7 @@ function migrateSelectionShortcuts(shortcuts) {
   const next = { ...shortcuts };
   let changed = false;
   for (const { targetId, legacyIds } of SELECTION_MIGRATIONS) {
-    const definition = SHORTCUT_DEFINITIONS.find((item) => item.id === targetId);
+    const definition = SHORTCUT_DEFINITIONS().find((item) => item.id === targetId);
     const customized = legacyIds
       .map((legacyId) => normalizeStoredShortcut(next[legacyId]))
       .find((legacy) => legacy && !shortcutEquals(legacy, definition.defaultShortcut));
@@ -392,7 +396,7 @@ function migrateSelectionShortcuts(shortcuts) {
 
 // Les contextes où une portée est active.
 function scopeContexts(scopeId) {
-  return SHORTCUT_SCOPES.find((scope) => scope.id === scopeId)?.contexts ?? [];
+  return SHORTCUT_SCOPES().find((scope) => scope.id === scopeId)?.contexts ?? [];
 }
 
 // Deux portées peuvent-elles être actives au même moment ? C'est la seule
@@ -411,7 +415,7 @@ function effectiveShortcut(shortcuts, definition) {
 // Une commande active en même temps que `actionId` répond-elle déjà à cette
 // touche, par son raccourci ou par l'une de ses variantes ?
 function hasActiveShortcutConflict(shortcuts, actionId, shortcut, definitions = EDITABLE_DEFINITIONS) {
-  const target = SHORTCUT_DEFINITIONS.find((definition) => definition.id === actionId);
+  const target = SHORTCUT_DEFINITIONS().find((definition) => definition.id === actionId);
   if (!target) return false;
   return definitions.some((definition) => {
     if (definition.id === actionId || !scopesOverlap(definition.scope, target.scope)) return false;
@@ -536,7 +540,7 @@ export function getCurrentShortcuts() {
 // tableau ; sans lui, toutes les portées sont parcourues.
 export function findShortcutAction(event, shortcuts, scope = null) {
   const scopes = scope === null ? null : [].concat(scope);
-  for (const definition of SHORTCUT_DEFINITIONS) {
+  for (const definition of SHORTCUT_DEFINITIONS()) {
     if (definition.readOnly) continue;
     if (scopes && !scopes.includes(definition.scope)) continue;
     const shortcut = shortcuts?.[definition.id] ?? definition.defaultShortcut;

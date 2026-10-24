@@ -47,10 +47,12 @@ export function actionDestinations(index, path) {
     });
 }
 
-const STATE_TEXT = {
+function STATE_TEXT() {
+  return {
   null: t('choix vide — il ne mène à aucun Écran'),
   dangling: t('Écran manquant — l’Écran désigné n’existe pas dans le document'),
 };
+}
 
 export function ListenFromActionDialog({ inspected, index, onCancel, onListen }) {
   const destinations = useMemo(() => actionDestinations(index, inspected.path), [index, inspected.path]);
@@ -61,7 +63,7 @@ export function ListenFromActionDialog({ inspected, index, onCancel, onListen })
 
   return (
     <AdvancedDialog
-      title={`Simuler depuis « ${inspected.label.label} »`}
+      title={t("Simuler depuis « {label} »", { label: inspected.label.label })}
       description={
         ready.length === 0
           ? t('Cette liste de choix ne mène à aucun Écran exploitable : il n’y a pas de point de départ à simuler.')
@@ -69,7 +71,7 @@ export function ListenFromActionDialog({ inspected, index, onCancel, onListen })
       }
       onCancel={onCancel}
       onConfirm={chosen ? () => onListen(chosen) : null}
-      confirmLabel="Simuler"
+      confirmLabel={t("Simuler")}
       confirmDisabled={!chosen}
     >
       <ol className="advanced-listen-choices">
@@ -87,13 +89,13 @@ export function ListenFromActionDialog({ inspected, index, onCancel, onListen })
                 <span className="advanced-listen-choice__rank">occurrence {one.ordinal + 1}</span>
                 <span className="advanced-listen-choice__target">
                   {one.label}
-                  {one.isFallback && <em> (sans nom)</em>}
+                  {one.isFallback && <em> {t('(sans nom)')}</em>}
                 </span>
               </label>
             ) : (
               <>
                 <span className="advanced-listen-choice__rank">occurrence {one.ordinal + 1}</span>
-                <span className="advanced-listen-choice__reason">{STATE_TEXT[one.state]}</span>
+                <span className="advanced-listen-choice__reason">{STATE_TEXT()[one.state]}</span>
               </>
             )}
           </li>
@@ -101,7 +103,7 @@ export function ListenFromActionDialog({ inspected, index, onCancel, onListen })
         {destinations.length === 0 && (
           <li className="advanced-listen-choice is-null">
             <span className="advanced-listen-choice__reason">
-              Cette liste de choix ne propose aucun choix.
+              {t("Cette liste de choix ne propose aucun choix.")}
             </span>
           </li>
         )}

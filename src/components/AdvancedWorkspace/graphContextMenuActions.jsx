@@ -59,7 +59,7 @@ export function buildGraphContextActions({
   if (isStage && onSimulateFrom) {
     actions.push({
       icon: <Play />,
-      label: 'Simuler depuis ici',
+      label: t("Simuler depuis ici"),
       fn: () => onSimulateFrom(inspected.path),
     });
   }
@@ -72,7 +72,7 @@ export function buildGraphContextActions({
       .filter((one) => one.state === 'ready');
     actions.push({
       icon: <Play />,
-      label: 'Simuler depuis ici',
+      label: t("Simuler depuis ici"),
       fn: () => onListenFromAction(inspected.path),
       disabledReason: ready.length === 0
         ? t('Aucun de ses choix ne mène à un Écran exploitable.')
@@ -83,7 +83,7 @@ export function buildGraphContextActions({
   if (onViewConnections) {
     actions.push({
       icon: <Network />,
-      label: 'Voir les connexions',
+      label: t("Voir les connexions"),
       fn: () => onViewConnections(inspected.path),
     });
   }
@@ -95,7 +95,7 @@ export function buildGraphContextActions({
   const targets = selectedPaths.includes(inspected.path) && selectedPaths.length > 1
     ? selectedPaths
     : [inspected.path];
-  const several = targets.length > 1 ? ` (${targets.length} éléments)` : '';
+  const several = targets.length > 1 ? t(" ({length} éléments)", { length: targets.length }) : '';
 
   // Les mêmes trois dessins que l'arbre, pour les mêmes trois gestes : le clic
   // droit du graphe n'a pas à réapprendre un vocabulaire que l'auteur connaît.
@@ -105,7 +105,7 @@ export function buildGraphContextActions({
   if (onDuplicate) {
     actions.push({
       icon: <SquareStack />,
-      label: `Dupliquer${several}`,
+      label: t("Dupliquer{several}", { several: several }),
       fn: () => onDuplicate(targets),
       shortcut: shortcutLabels.selectionDuplicate ?? null,
       disabledReason: editingDisabled
@@ -118,7 +118,7 @@ export function buildGraphContextActions({
   if (onCopy) {
     actions.push({
       icon: <Copy />,
-      label: `Copier${several}`,
+      label: t("Copier{several}", { several: several }),
       fn: () => onCopy(targets),
       shortcut: shortcutLabels.selectionCopy ?? null,
     });
@@ -135,7 +135,7 @@ export function buildGraphContextActions({
     });
     actions.push({
       icon: <Scissors />,
-      label: `Couper${several}`,
+      label: t("Couper{several}", { several: several }),
       fn: () => onCut(targets),
       shortcut: shortcutLabels.selectionCut ?? null,
       disabledReason: entry
@@ -232,7 +232,7 @@ export function buildGraphSurfaceActions({
     actions.push('sep');
     actions.push({
       icon: <ClipboardPaste />,
-      label: count > 1 ? `Coller ici (${count} éléments)` : t('Coller ici'),
+      label: count > 1 ? t("Coller ici ({count} éléments)", { count: count }) : t('Coller ici'),
       shortcut: shortcutLabels.selectionPaste ?? null,
       disabledReason: blocked,
       fn: () => onPaste(graphPoint),

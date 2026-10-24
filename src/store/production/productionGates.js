@@ -24,28 +24,33 @@ export const GATE_OUTCOME = Object.freeze({
 
 // Les libellés de verdict, selon que la porte décide ou observe. « Aurait
 // refusé » n'a de sens que pour une porte qui n'a rien refusé.
-const OUTCOME_LABELS = Object.freeze({
+function OUTCOME_LABELS() {
+  return Object.freeze({
   [GATE_OUTCOME.PASSED]: { blocking: 'Franchie', observing: t('Rien à signaler') },
   [GATE_OUTCOME.WOULD_REFUSE]: { blocking: t('Refusée'), observing: t('Aurait refusé') },
   [GATE_OUTCOME.NOT_OBSERVED]: { blocking: t('Non évaluée'), observing: t('Non observée') },
 });
+}
 
-export const OBSERVATION_NOTICE =
-  t("Ces contrôles sont en observation : aucun n'empêche la production.");
+export function OBSERVATION_NOTICE() {
+  return t("Ces contrôles sont en observation : aucun n'empêche la production.");
+}
 
 // Les trois portes de la chaîne avancée, dans l'ordre où elle les exécute.
 // Un succès de cette chaîne les a toutes franchies — elle ne peut pas publier
 // autrement, ses étapes 2, 3 et 12 précèdent son unique point de publication.
 // Les nommer n'invente donc aucun contrôle ; les taire ferait lire « la chaîne
 // avancée ne contrôle rien ».
-const ADVANCED_GATES = Object.freeze([
+function ADVANCED_GATES() {
+  return Object.freeze([
   Object.freeze({ gate: 'readiness', label: "Readiness d'export" }),
   Object.freeze({ gate: 'pack-identity', label: t('Identité du pack') }),
   Object.freeze({ gate: 'archive-review', label: t("Relecture de l'archive") }),
 ]);
+}
 
 function outcomeLabel(outcome, blocking) {
-  const labels = OUTCOME_LABELS[outcome];
+  const labels = OUTCOME_LABELS()[outcome];
   if (!labels) return outcome;
   return blocking ? labels.blocking : labels.observing;
 }
@@ -98,7 +103,7 @@ export function freeProductionGates(observations) {
 export function advancedProductionGates(succeeded) {
   if (!succeeded) return Object.freeze([]);
   return Object.freeze(
-    ADVANCED_GATES.map(({ gate, label }) =>
+    ADVANCED_GATES().map(({ gate, label }) =>
       normalizeGate({
         gate,
         label,

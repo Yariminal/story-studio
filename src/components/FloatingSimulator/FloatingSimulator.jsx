@@ -61,7 +61,7 @@ function EmbeddedSimulator({
 
   if (!source) {
     if (documentStatus === 'loading') {
-      return <SimulatorNotice onClose={onClose}>Préparation de l’écoute…</SimulatorNotice>;
+      return <SimulatorNotice onClose={onClose}>{t('Préparation de l’écoute…')}</SimulatorNotice>;
     }
     if (documentStatus === 'failed') {
       return (

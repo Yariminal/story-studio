@@ -10,7 +10,9 @@ function holdReason(item) {
   const labels = [...new Set((item.usages ?? []).map((usage) => usage.label).filter(Boolean))];
   if (labels.length > 0) return labels.slice(0, 3).join(', ');
   if (item.usageKnown === false) return t('usages non calculés');
-  if (item.projectUsedCount > 0) return `${item.projectUsedCount} usage${item.projectUsedCount > 1 ? 's' : ''}`;
+  if (item.projectUsedCount > 0) return item.projectUsedCount > 1
+    ? t('{count} usages', { count: item.projectUsedCount })
+    : t('{count} usage', { count: item.projectUsedCount });
   return t('média lié au document');
 }
 
@@ -38,7 +40,7 @@ export function MediaDeleteDialog({
         <div className="gen-header">
           <span className="gen-title">
             {usedCount > 0
-              ? (usedCount === 1 ? t('Média encore utilisé') : `${usedCount} médias encore utilisés`)
+              ? (usedCount === 1 ? t('Média encore utilisé') : t("{usedCount} médias encore utilisés", { usedCount: usedCount }))
               : (deleteDisk ? t('Supprimer définitivement') : t('Retirer de la médiathèque'))}
           </span>
         </div>
@@ -47,7 +49,7 @@ export function MediaDeleteDialog({
             <div style={{ fontSize: 12, color: 'var(--warning-text)', lineHeight: 1.5 }}>
               {usedCount === 1
                 ? t('Ce média ne peut pas être retiré de la médiathèque car il est encore utilisé dans le projet. Retirez d’abord ses affectations depuis les réglages concernés.')
-                : `${usedCount} médias ne peuvent pas être retirés de la médiathèque car ils sont encore utilisés dans le projet. Retirez d’abord leurs affectations depuis les réglages concernés.`}
+                : t("{usedCount} médias ne peuvent pas être retirés de la médiathèque car ils sont encore utilisés dans le projet. Retirez d’abord leurs affectations depuis les réglages concernés.", { usedCount: usedCount })}
               <ul style={{ margin: '8px 0 0', paddingLeft: 18 }}>
                 {usedItems.slice(0, 5).map((item) => (
                   <li key={item.id}>
@@ -62,32 +64,30 @@ export function MediaDeleteDialog({
               <label className="media-delete-option" onClick={() => onDeleteDiskChange(false)}>
                 <input type="radio" readOnly checked={!deleteDisk} />
                 <span>
-                  <strong>Retirer de la médiathèque</strong><br />
-                  <small>Le fichier reste sur le disque.</small>
+                  <strong>{t('Retirer de la médiathèque')}</strong><br />
+                  <small>{t('Le fichier reste sur le disque.')}</small>
                 </span>
               </label>
               {canDeleteFromDisk ? (
                 <label className="media-delete-option" onClick={() => onDeleteDiskChange(true)}>
                   <input type="radio" readOnly checked={deleteDisk} />
                   <span>
-                    <strong>Supprimer définitivement du disque</strong><br />
-                    <small>Cette action est irréversible.</small>
+                    <strong>{t('Supprimer définitivement du disque')}</strong><br />
+                    <small>{t('Cette action est irréversible.')}</small>
                   </span>
                 </label>
               ) : (
-                <div className="info-box">
-                  La suppression disque est disponible uniquement pour les médias placés dans les dossiers gérés par Story Studio. Les fichiers externes peuvent seulement être retirés de la médiathèque.
-                </div>
+                <div className="info-box"> {t("La suppression disque est disponible uniquement pour les médias placés dans les dossiers gérés par Story Studio. Les fichiers externes peuvent seulement être retirés de la médiathèque.")} </div>
               )}
             </>
           )}
         </div>
         <div className="gen-footer">
           {usedCount > 0 ? (
-            <Button type="button" onClick={onCancel}>Fermer</Button>
+            <Button type="button" onClick={onCancel}>{t('Fermer')}</Button>
           ) : (
             <>
-              <Button type="button" onClick={onCancel}>Annuler</Button>
+              <Button type="button" onClick={onCancel}>{t('Annuler')}</Button>
               <Button type="button" variant="danger" onClick={onConfirm}>{actionLabel}</Button>
             </>
           )}

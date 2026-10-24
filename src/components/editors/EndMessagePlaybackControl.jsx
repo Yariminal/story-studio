@@ -6,13 +6,17 @@ function playbackSummaryText(summary) {
     return t('Le réglage s’appliquera aux histoires du pack.');
   }
   if (summary.mode === 'mixed') {
-    const stays = summary.stays ? ` · ${summary.stays} restent sur le message` : '';
-    return `${summary.waitingOk} histoires attendent un appui sur OK · ${summary.autoPlay} continuent automatiquement${stays}`;
+    const stays = summary.stays ? t(" · {stays} restent sur le message", { stays: summary.stays }) : '';
+    return t("{waitingOk} histoires attendent un appui sur OK · {autoPlay} continuent automatiquement{stays}", { waitingOk: summary.waitingOk, autoPlay: summary.autoPlay, stays: stays });
   }
   if (summary.mode === 'wait') {
-    return `${summary.total} histoire${summary.total > 1 ? 's attendent' : ' attend'} un appui sur OK.`;
+    return summary.total > 1
+      ? t('{count} histoires attendent un appui sur OK.', { count: summary.total })
+      : t('{count} histoire attend un appui sur OK.', { count: summary.total });
   }
-  return `${summary.total} histoire${summary.total > 1 ? 's continuent' : ' continue'} automatiquement.`;
+  return summary.total > 1
+    ? t('{count} histoires continuent automatiquement.', { count: summary.total })
+    : t('{count} histoire continue automatiquement.', { count: summary.total });
 }
 
 function playbackExplanationText(mode) {
@@ -51,15 +55,13 @@ export function EndMessagePlaybackControl({ summary, onChange }) {
           type="button"
           className={`end-message-playback-label${summary.mode === 'wait' ? ' is-active' : ''}`}
           onClick={() => onChange?.(false)}
-        >
-          Après appui sur OK
-        </button>
+        > {t("Après appui sur OK")} </button>
       </div>
       <div className="end-message-playback-explanation">
         {playbackExplanationText(summary.mode)}
       </div>
       <div className={`end-message-playback-summary${mixed ? ' is-mixed' : ''}`}>
-        {mixed ? <strong>Réglage mixte importé</strong> : null}
+        {mixed ? <strong>{t('Réglage mixte importé')}</strong> : null}
         <span>{playbackSummaryText(summary)}</span>
       </div>
     </div>

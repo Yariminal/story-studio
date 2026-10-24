@@ -132,7 +132,7 @@ export function useTreeNavigationBadges({
         key: `end-node-return:${returnNavigation.targetId || 'contextual'}:${returnName}`,
         kind: isNightMode ? 'end-night' : 'end-node',
         label: isNightMode ? '☾' : '■',
-        title: `À la fin du message de fin${nightSuffix} → « ${returnName} »`,
+        title: t("À la fin du message de fin{nightSuffix} → « {returnName} »", { nightSuffix: nightSuffix, returnName: returnName }),
       });
     }
 
@@ -144,7 +144,7 @@ export function useTreeNavigationBadges({
         key: `end-node-home:${homeNavigation.targetId}:${homeName}`,
         kind: homeNavigation.isNightMode ? 'end-night-home' : 'end-node-home',
         label: '⌂',
-        title: `Appuie sur le bouton Accueil du message de fin${nightSuffix} → « ${homeName} »`,
+        title: t("Appuie sur le bouton Accueil du message de fin{nightSuffix} → « {homeName} »", { nightSuffix: nightSuffix, homeName: homeName }),
       });
     }
 

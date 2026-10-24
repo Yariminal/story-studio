@@ -79,7 +79,7 @@ export function DiagnosticsPanel({
             );
           })}
           {issues.length === 0 && (
-            <li className="advanced-diagnostics__empty">Le pack peut être généré.</li>
+            <li className="advanced-diagnostics__empty">{t('Le pack peut être généré.')}</li>
           )}
       </ul>
     </section>
@@ -121,9 +121,7 @@ export function AdvancedIssuesPanel({ context, onRequestClose }) {
       />
 
       {context.working && (
-        <p className="advanced-export__running" role="status">
-          Fabrication en cours : l'édition est suspendue, la vue reste navigable.
-        </p>
+        <p className="advanced-export__running" role="status"> {t("Fabrication en cours : l'édition est suspendue, la vue reste navigable.")} </p>
       )}
 
       {refusal && !refusalAlreadyExplained && (

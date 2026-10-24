@@ -418,7 +418,7 @@ export function useWorkSession({
       logger.error('session:recover-error', error);
       showErrorDialog({
         title: t('Reprise impossible'),
-        message: `Impossible de reprendre cette session : ${error}`,
+        message: t("Impossible de reprendre cette session : {error}", { error: error }),
       });
     }
   }

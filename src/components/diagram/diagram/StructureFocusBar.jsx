@@ -19,7 +19,7 @@ export function StructureFocusBar({ focus, pinned, onClear }) {
           ×
         </button>
       ) : (
-        <span className="fd-structure-focus-hint">Cliquer pour épingler</span>
+        <span className="fd-structure-focus-hint">{t('Cliquer pour épingler')}</span>
       )}
     </div>
   );

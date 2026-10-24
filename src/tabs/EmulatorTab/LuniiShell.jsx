@@ -70,7 +70,7 @@ export function LuniiShell({
       )}
       {playbackControls?.visible && (
         <div className="lunii-playback-bar">
-          <Tooltip text="Reculer de 10 secondes">
+          <Tooltip text={t("Reculer de 10 secondes")}>
             <button
               className="lunii-playback-jump"
               type="button"
@@ -91,7 +91,7 @@ export function LuniiShell({
             disabled={playbackControls.duration <= 0}
           />
           <span className="lunii-playback-time">{formatPlaybackTime(playbackControls.duration)}</span>
-          <Tooltip text="Avancer de 10 secondes">
+          <Tooltip text={t("Avancer de 10 secondes")}>
             <button
               className="lunii-playback-jump"
               type="button"
@@ -122,7 +122,7 @@ export function LuniiShell({
           <button
             type="button"
             className="lunii-btn-round"
-            aria-label="Accueil"
+            aria-label={t("Accueil")}
             onClick={onHome}
             disabled={homeDisabled}
           >
@@ -131,7 +131,7 @@ export function LuniiShell({
           <button
             type="button"
             className="lunii-btn-round"
-            aria-label={paused ? 'Reprendre' : 'Pause'}
+            aria-label={paused ? 'Reprendre' : t("Pause")}
             onClick={onPause}
             disabled={pauseDisabled}
           >

@@ -28,6 +28,7 @@ import {
 import './EditorPanel.css';
 
 import { t } from '../../i18n/index.js';
+import { useLocale } from '../../i18n/LocaleContext.jsx';
 // ─── Navigation helpers (used for computed props only) ────────────────────────
 
 function resolveNavigationTargetId(target, currentMenuId = null) {
@@ -41,16 +42,16 @@ function resolveNavigationTargetId(target, currentMenuId = null) {
 }
 
 function targetNameById(allMenus, allStories, targetId, fallback = t('destination introuvable')) {
-  if (targetId === 'root') return NAV_ROOT_LABEL;
+  if (targetId === 'root') return NAV_ROOT_LABEL();
   if (targetId === NAV_TARGET_NEXT_STORY) return t('Histoire suivante');
   if (!targetId) return fallback;
   if (isStoryNavigationTarget(targetId)) {
     const storyId = decodeNavigationStoryId(targetId);
     const storyName = allStories.find((s) => s.id === storyId)?.name || fallback;
     return isStoryHomeStepNavigationTarget(targetId)
-      ? `Retour de fin — ${storyName}`
+      ? t("Retour de fin — {storyName}", { storyName: storyName })
       : isStoryPlayNavigationTarget(targetId)
-      ? `Lecture directe — ${storyName}`
+      ? t("Lecture directe — {storyName}", { storyName: storyName })
       : `Titre — ${storyName}`;
   }
   return allMenus.find((menu) => menu.id === targetId)?.name || fallback;
@@ -61,11 +62,11 @@ function buildInheritedReturnLabel(parentMenu, allMenus, allStories, autoNextEff
   if (autoNextEffective) return t('Lecture de l’histoire suivante');
   const inheritedTargetId = parentMenu.returnAfterPlay ?? null;
   if (!inheritedTargetId || isCurrentMenuNavigationTarget(inheritedTargetId)) {
-    return `Revient à ${parentMenu.name || t('ce dossier')}`;
+    return t("Revient à {value}", { value: parentMenu.name || t('ce dossier') });
   }
-  if (isRootNavigationTarget(inheritedTargetId)) return `Revient à ${NAV_ROOT_LABEL}`;
+  if (isRootNavigationTarget(inheritedTargetId)) return t("Revient à {value}", { value: NAV_ROOT_LABEL() });
   const name = targetNameById(allMenus, allStories, resolveNavigationTargetId(inheritedTargetId, parentMenu.id));
-  return `Revient à ${name}`;
+  return t("Revient à {name}", { name: name });
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -81,6 +82,7 @@ export const StoryEditor = memo(function StoryEditor({
   afterPlayFocus = null,
   onAfterPlayFocusConsumed,
 }) {
+  useLocale();
   const { onExtractAudioEmbeddedImage } = useProjectContext();
 
   const autoNext = project?.globalOptions?.autoNext ?? false;
@@ -124,12 +126,12 @@ export const StoryEditor = memo(function StoryEditor({
       {/* Card : L'histoire (nom intégré) */}
       <div className="card">
         <div className="card-title-row">
-          <div className="card-title">L'histoire</div>
-          <div className="card-copy card-copy--inline">Nom, image et audios — comment cette histoire apparaît dans le menu et ce qui est joué.</div>
+          <div className="card-title">{t("L'histoire")}</div>
+          <div className="card-copy card-copy--inline">{t('Nom, image et audios — comment cette histoire apparaît dans le menu et ce qui est joué.')}</div>
         </div>
 
         <div className="field-row" style={{ marginBottom: 0 }}>
-          <span className="field-label">Nom</span>
+          <span className="field-label">{t('Nom')}</span>
           <input
             className="field-input"
             value={node.name || ''}
@@ -142,8 +144,8 @@ export const StoryEditor = memo(function StoryEditor({
         <div className="media-split">
           <div className="media-split-left">
             <div className="media-col-header">
-              Image
-              <span className="media-col-subtitle">Image affichée dans le menu de sélection</span>
+              {t("Image")}
+              <span className="media-col-subtitle">{t('Image affichée dans le menu de sélection')}</span>
             </div>
             <ImageField
               fieldId={`${node.id}:itemImage`}
@@ -164,7 +166,7 @@ export const StoryEditor = memo(function StoryEditor({
           <div className="media-split-right">
             <div className="media-col-header">
               Son
-              <span className="media-col-subtitle">Audio de sélection puis lecture de l'histoire</span>
+              <span className="media-col-subtitle">{t("Audio de sélection puis lecture de l'histoire")}</span>
             </div>
             <div className="media-col-stack">
               <AudioField
@@ -229,10 +231,8 @@ export const StoryEditor = memo(function StoryEditor({
           >
             <Trash2 className="card-danger-icon" />
           </button>
-          <span className="card-danger-title">Supprimer cette histoire</span>
-          <p className="card-danger-desc">
-            L'histoire et ses transitions sont retirées du pack. Ses fichiers restent dans la médiathèque, sans être supprimés du disque.
-          </p>
+          <span className="card-danger-title">{t('Supprimer cette histoire')}</span>
+          <p className="card-danger-desc"> {t("L'histoire et ses transitions sont retirées du pack. Ses fichiers restent dans la médiathèque, sans être supprimés du disque.")} </p>
         </div>
       </div>
 

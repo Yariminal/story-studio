@@ -59,8 +59,8 @@ import {
 // Qui commence sur ce choix : « départ de Stage 2 », ou le nombre d'Écrans
 // au-delà de deux.
 function startsText(names) {
-  if (names.length <= 2) return `départ de ${names.join(' et ')}`;
-  return `départ de ${names.length} Écrans`;
+  if (names.length <= 2) return t("départ de {value}", { value: names.join(' et ') });
+  return t("départ de {length} Écrans", { length: names.length });
 }
 
 // Une ligne de choix dit aussi ce qui s'y passe : les Écrans qui ouvrent la
@@ -81,7 +81,7 @@ function DestinationRow({
       <button
         type="button"
         className="advanced-options__lead advanced-options__handle"
-        aria-label={`Déplacer le choix ${rank + 1}`}
+        aria-label={t("Déplacer le choix {value}", { value: rank + 1 })}
         disabled={disabled}
         {...attributes}
         {...listeners}
@@ -90,7 +90,7 @@ function DestinationRow({
       </button>
       <span className="advanced-options__rank advanced-options__position">{positionText(rank, count)}</span>
       {option.target.presence === 'null' ? (
-        <em className="advanced-options__target advanced-field__absent">Écran à choisir</em>
+        <em className="advanced-options__target advanced-field__absent">{t('Écran à choisir')}</em>
       ) : (
         <span className="advanced-options__target advanced-choice__target">
           <NodeThumbnail path={stagePath} thumbnails={thumbnails} />
@@ -100,18 +100,16 @@ function DestinationRow({
               <span className="advanced-choice__note">{startsText(starts)}</span>
             </Tooltip>
           )}
-          {wheelOff && <span className="advanced-choice__note is-warning">molette désactivée</span>}
+          {wheelOff && <span className="advanced-choice__note is-warning">{t('molette désactivée')}</span>}
           {isEntry && (
-            <span className="advanced-choice__note is-warning">
-              l’Écran d’entrée ne peut pas être un choix : changez cet Écran
-            </span>
+            <span className="advanced-choice__note is-warning"> {t("l’Écran d’entrée ne peut pas être un choix : changez cet Écran")} </span>
           )}
         </span>
       )}
       <button
         type="button"
         className="advanced-options__more"
-        aria-label={`Gestes du choix ${rank + 1}`}
+        aria-label={t("Gestes du choix {value}", { value: rank + 1 })}
         aria-haspopup="menu"
         disabled={disabled}
         onClick={(event) => {
@@ -163,10 +161,10 @@ function WireForm({ initialSlot, index, action, disabled, onGesture, onClose }) 
         disabled={disabled}
         onChange={(event) => setSlot(event.target.value)}
       >
-        <option value="ok">Sa suite du parcours (OK ou fin du son)</option>
-        <option value="home">Son bouton Accueil</option>
+        <option value="ok">{t('Sa suite du parcours (OK ou fin du son)')}</option>
+        <option value="home">{t('Son bouton Accueil')}</option>
       </select>
-      <label htmlFor={id}>Écran</label>
+      <label htmlFor={id}>{t('Écran')}</label>
       <NodePicker
         id={id}
         index={index}
@@ -184,38 +182,44 @@ function WireForm({ initialSlot, index, action, disabled, onGesture, onClose }) 
         disabled={disabled}
       />
       <div className="advanced-field__actions">
-        <Button size="sm" onClick={onClose}>Annuler</Button>
+        <Button size="sm" onClick={onClose}>{t('Annuler')}</Button>
         <Button size="sm" variant="primary" disabled={disabled || !stagePath} onClick={apply}>
-          Relier
+          {t("Relier")}
         </Button>
       </div>
     </div>
   );
 }
 
-const ORDER_HELP = t('La molette parcourt les choix dans cet ordre, en boucle. Chaque Écran qui ouvre la liste choisit seulement le choix sur lequel on commence.');
+function ORDER_HELP() {
+  return t('La molette parcourt les choix dans cet ordre, en boucle. Chaque Écran qui ouvre la liste choisit seulement le choix sur lequel on commence.');
+}
 
-const ecrans = (count) => (count === 0 ? t('aucun Écran') : `${count} Écran${count > 1 ? 's' : ''}`);
+const ecrans = (count) => (count === 0
+  ? t('aucun Écran')
+  : count > 1
+    ? t('{count} Écrans', { count })
+    : t('{count} Écran', { count }));
 
 // Le choix sur lequel un groupe d'Écrans ouvre la liste : « commencent sur
 // 2/3 » puis l'Écran de ce choix, avec sa vignette et son lien. L'encadré
 // parle déjà de cette liste : la phrase ne la renomme pas.
 function ArrivalTarget({ landing, total, thumbnails, onFocusPath }) {
-  const lead = <span className="advanced-options__verb">commencent sur</span>;
+  const lead = <span className="advanced-options__verb">{t('commencent sur')}</span>;
   if (landing.random) {
     return (
       <>
         {lead}
-        <span className="advanced-options__random"><Dices aria-hidden="true" />un choix au hasard</span>
+        <span className="advanced-options__random"><Dices aria-hidden="true" />{t('un choix au hasard')}</span>
       </>
     );
   }
-  if (landing.unknown) return <>{lead}<em className="advanced-field__absent">un choix illisible</em></>;
+  if (landing.unknown) return <>{lead}<em className="advanced-field__absent">{t('un choix illisible')}</em></>;
   const position = (
     <span className="advanced-options__rank advanced-options__position">{positionText(landing.rank, total)}</span>
   );
-  if (landing.missing) return <>{lead}{position}<em className="advanced-field__absent">choix absent</em></>;
-  if (!landing.stagePath) return <>{lead}{position}<em className="advanced-field__absent">Écran à choisir</em></>;
+  if (landing.missing) return <>{lead}{position}<em className="advanced-field__absent">{t('choix absent')}</em></>;
+  if (!landing.stagePath) return <>{lead}{position}<em className="advanced-field__absent">{t('Écran à choisir')}</em></>;
   return (
     <>
       {lead}
@@ -268,7 +272,7 @@ function HomeGroup({ group, total, thumbnails, onFocusPath }) {
           type="button"
           className="advanced-options__lead advanced-options__toggle"
           aria-expanded={open}
-          aria-label={open ? 'Replier ce groupe' : t('Déplier ce groupe')}
+          aria-label={open ? t("Replier ce groupe") : t('Déplier ce groupe')}
           onClick={() => setOpen((value) => !value)}
         >
           {open ? <ChevronDown /> : <ChevronRight />}
@@ -279,7 +283,7 @@ function HomeGroup({ group, total, thumbnails, onFocusPath }) {
         {total === 1 && !group.landing.random && !group.landing.unknown && !group.landing.missing ? (
           <span className="advanced-options__target">
             <button type="button" className="advanced-link" onClick={() => setOpen((value) => !value)}>
-              {open ? 'Masquer' : 'Voir'} les {ecrans(group.rows.length)}
+              {open ? t("Masquer") : t("Voir")} les {ecrans(group.rows.length)}
             </button>
           </span>
         ) : (
@@ -437,12 +441,12 @@ export function ActionEditor({
     { label: t('Insérer avant…'), fn: () => { closeForms(); setInsertAt(rank); } },
     'sep',
     {
-      label: 'Monter',
+      label: t("Monter"),
       fn: () => move(rank, rank - 1),
       disabledReason: rank === 0 ? t('Déjà le premier choix.') : undefined,
     },
     {
-      label: 'Descendre',
+      label: t("Descendre"),
       fn: () => move(rank, rank + 1),
       disabledReason: rank === options.length - 1 ? t('Déjà le dernier choix.') : undefined,
     },
@@ -455,7 +459,7 @@ export function ActionEditor({
     <div className="advanced-editor">
       <section className="card advanced-editor__identity-card">
       <header className="advanced-editor__header">
-        <span className="advanced-editor__kind advanced-editor__kind--action">Liste de choix</span>
+        <span className="advanced-editor__kind advanced-editor__kind--action">{t('Liste de choix')}</span>
         {/* Le repli d'une liste se dit déjà : « Liste sans nom ». */}
         <h2 className="advanced-editor__title">
           {inspected.label.isFallback
@@ -477,7 +481,7 @@ export function ActionEditor({
       </header>
 
       <div className="field-row advanced-editor__name-row">
-        <span className="field-label">Nom</span>
+        <span className="field-label">{t('Nom')}</span>
         <div className="advanced-editor__name-control">
           <NodeNameEditor
             kind="action"
@@ -495,10 +499,8 @@ export function ActionEditor({
           ouvre la liste. Les choix ne sont pas répétés plus bas. */}
       <section className="card advanced-editor__section">
         <div className="card-title-row">
-          <div className="card-title">Ordre des choix <span className="advanced-count">{options.length}</span></div>
-          <div className="card-copy card-copy--inline">
-            Ordre commun à tous les accès à cette liste.
-            {' '}<HelpHint text={ORDER_HELP} />
+          <div className="card-title">{t('Ordre des choix')} <span className="advanced-count">{options.length}</span></div>
+          <div className="card-copy card-copy--inline"> {t("Ordre commun à tous les accès à cette liste.")} {' '}<HelpHint text={ORDER_HELP()} />
           </div>
         </div>
         <DndContext
@@ -538,14 +540,14 @@ export function ActionEditor({
 
         <div className="advanced-field__actions">
           <Button size="sm" disabled={disabled} onClick={() => { closeForms(); setInsertAt(options.length); }}>
-            <Plus /> Ajouter un choix
+            <Plus /> {t("Ajouter un choix")}
           </Button>
         </div>
 
         {insertAt !== null && (
           <div className="advanced-field__form">
-            <p className="advanced-field__note">Nouveau choix en position {insertAt + 1}.</p>
-            <label htmlFor="advanced-insert-target">Écran visé</label>
+            <p className="advanced-field__note">{t("Nouveau choix en position")} {insertAt + 1}.</p>
+            <label htmlFor="advanced-insert-target">{t('Écran visé')}</label>
             <NodePicker
               id="advanced-insert-target"
               forChoice
@@ -557,21 +559,16 @@ export function ActionEditor({
               emptyLabel={t("— aucun Écran —")}
             />
             <div className="advanced-field__actions">
-              <Button size="sm" onClick={closeForms}>Annuler</Button>
-              <Button size="sm" variant="primary" disabled={disabled} onClick={applyInsert}>
-                Insérer
-              </Button>
+              <Button size="sm" onClick={closeForms}>{t('Annuler')}</Button>
+              <Button size="sm" variant="primary" disabled={disabled} onClick={applyInsert}> {t("Insérer")} </Button>
             </div>
           </div>
         )}
 
         {retargeting !== null && (
           <div className="advanced-field__form">
-            <p className="advanced-field__note">
-              Nouvel Écran pour le choix {retargeting + 1}. Sa position ne change pas : aucune sélection
-              entrante n'a à être maintenue.
-            </p>
-            <label htmlFor="advanced-retarget-target">Écran visé</label>
+            <p className="advanced-field__note"> {t("Nouvel Écran pour le choix")} {retargeting + 1}{t(". Sa position ne change pas : aucune sélection entrante n'a à être maintenue.")} </p>
+            <label htmlFor="advanced-retarget-target">{t('Écran visé')}</label>
             <NodePicker
               id="advanced-retarget-target"
               forChoice
@@ -583,10 +580,8 @@ export function ActionEditor({
               emptyLabel={t("— aucun Écran —")}
             />
             <div className="advanced-field__actions">
-              <Button size="sm" onClick={closeForms}>Annuler</Button>
-              <Button size="sm" variant="primary" disabled={disabled} onClick={applyRetarget}>
-                Changer l’Écran
-              </Button>
+              <Button size="sm" onClick={closeForms}>{t('Annuler')}</Button>
+              <Button size="sm" variant="primary" disabled={disabled} onClick={applyRetarget}> {t("Changer l’Écran")} </Button>
             </div>
           </div>
         )}
@@ -597,10 +592,10 @@ export function ActionEditor({
           les Écrans qui arrivent sur un même choix sont groupés. */}
       <section className="card advanced-editor__section">
         <div className="advanced-editor__section-heading advanced-editor__section-heading--list">
-          <div className="card-title">Comment on arrive sur cette liste</div>
+          <div className="card-title">{t('Comment on arrive sur cette liste')}</div>
           {onViewConnections && (
             <button type="button" className="advanced-link" onClick={() => onViewConnections(inspected.path)}>
-              Voir dans le graphe
+              {t("Voir dans le graphe")}
             </button>
           )}
         </div>
@@ -608,13 +603,13 @@ export function ActionEditor({
         {/* Seuls les accès qui existent sont montrés, comme dans le panneau
             d'un Écran : une sortie sans Écran n'a pas de ligne. */}
         {provenance.ok.length + provenance.home.total === 0 && (
-          <p className="advanced-field__warning">Aucun Écran n’ouvre cette liste.</p>
+          <p className="advanced-field__warning">{t('Aucun Écran n’ouvre cette liste.')}</p>
         )}
 
         {provenance.ok.length > 0 && (
           <>
             <div className="advanced-options__subhead">
-              {OPENER_SLOT_LABELS.ok} {ecrans(provenance.ok.length)}
+              {OPENER_SLOT_LABELS().ok} {ecrans(provenance.ok.length)}
             </div>
             <ol className="advanced-options">
               {provenance.ok.map((row) => (
@@ -636,7 +631,7 @@ export function ActionEditor({
 
         {provenance.home.total > 0 && (
           <div className="advanced-options__subhead">
-            {OPENER_SLOT_LABELS.home} {ecrans(provenance.home.total)}
+            {OPENER_SLOT_LABELS().home} {ecrans(provenance.home.total)}
           </div>
         )}
         {provenance.home.total > 0 && (
@@ -667,8 +662,7 @@ export function ActionEditor({
 
         <div className="advanced-field__actions">
           <Button size="sm" disabled={disabled} onClick={() => { closeForms(); setWiring('ok'); }}>
-            <Plus /> Relier un Écran
-          </Button>
+            <Plus /> {t("Relier un Écran")} </Button>
         </div>
         {wiring && (
           <WireForm
@@ -683,7 +677,7 @@ export function ActionEditor({
       </section>
 
       <details className="advanced-editor__technical">
-        <summary>Informations techniques</summary>
+        <summary>{t('Informations techniques')}</summary>
       <section className="advanced-editor__section">
         <h3>Disposition</h3>
         <dl className="advanced-editor__identity">
@@ -708,11 +702,8 @@ export function ActionEditor({
           >
             <Trash2 className="card-danger-icon" />
           </button>
-          <span className="card-danger-title">Supprimer cette liste de choix</span>
-          <p className="card-danger-desc">
-            La liste est retirée du pack. Les Écrans qu’elle proposait restent dans le graphe ; ceux qui
-            l’ouvraient perdent cette transition.
-          </p>
+          <span className="card-danger-title">{t('Supprimer cette liste de choix')}</span>
+          <p className="card-danger-desc"> {t("La liste est retirée du pack. Les Écrans qu’elle proposait restent dans le graphe ; ceux qui l’ouvraient perdent cette transition.")} </p>
         </div>
       </div>
 

@@ -11,6 +11,8 @@ import {
   ArrowRight, CornerUpLeft, Diamond, House, ListTree, Moon, Square, UnfoldVertical,
 } from '../icons/LucideLocal';
 import { getTreeGuideStyleVars, getTreeIndent, resolveHoverGuide } from './treeGuides';
+import { t } from '../../i18n/index.js';
+import { useLocale } from '../../i18n/LocaleContext.jsx';
 import './TreePanel.css';
 import './TreeGuides.css';
 
@@ -49,7 +51,7 @@ function TreeInlineNameInput({ value, onChange, onCommit, onCancel }) {
       ref={inputRef}
       className="tree-inline-name-input"
       value={value}
-      aria-label="Renommer"
+      aria-label={t('Renommer')}
       onChange={(event) => onChange(event.target.value)}
       onBlur={() => {
         if (!cancelledRef.current) onCommit();
@@ -111,6 +113,7 @@ function TreeNodeInner({
   dropTarget,
   suppressSortAnimation,
 }) {
+  useLocale();
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
     useSortable({ id, disabled: !sortable || renaming });
   const { setNodeRef: setDropRef } = useDroppable({
@@ -206,7 +209,7 @@ function TreeNodeInner({
       title={showForbiddenDepth
         ? MENU_DEPTH_LIMIT_REACHED_MESSAGE
         : showForbiddenCycle
-          ? MENU_CYCLE_MESSAGE
+          ? MENU_CYCLE_MESSAGE()
           : undefined}
       data-tree-node-id={id}
       {...(type === 'story' || type === 'menu' || type === 'root'
@@ -276,7 +279,7 @@ function TreeNodeInner({
         )}
         {type === 'zip' && <span className="badge-zip">ZIP</span>}
         {type === 'menu' && level > 6 ? (
-          <span className="badge-depth" title={`Dossier niveau ${level}`}>N{level}</span>
+          <span className="badge-depth" title={t('Dossier niveau {level}', { level })}>N{level}</span>
         ) : null}
         {hasToggle && !expanded && childCount > 0 && (
           <span className="badge-count">{childCount}</span>

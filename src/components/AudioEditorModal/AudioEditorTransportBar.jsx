@@ -30,7 +30,7 @@ export function AudioEditorTransportBar({
   return (
     <div className="audio-tb-row audio-editor-controls-row">
       <div className="audio-editor-fade-slot is-left">
-        <Tooltip text={fadeInSec > 0 ? `Fondu entrée ${formatTime(Math.min(fadeInSec, fadeMax))}` : t('Ajouter un fondu en entrée')}>
+        <Tooltip text={fadeInSec > 0 ? t("Fondu entrée {value}", { value: formatTime(Math.min(fadeInSec, fadeMax)) }) : t('Ajouter un fondu en entrée')}>
           <Button
             variant="icon"
             className={`audio-tb-btn audio-editor-fade-chip${fadeInSec > 0 ? ' is-active' : ''}`}
@@ -60,10 +60,10 @@ export function AudioEditorTransportBar({
         <Tooltip text="Stop">
           <Button variant="icon" className="audio-tb-btn" onClick={onStop} disabled={isLoading}><Square /></Button>
         </Tooltip>
-        <Tooltip text="Reculer de 5s">
+        <Tooltip text={t("Reculer de 5s")}>
           <Button variant="icon" className="audio-tb-btn" onClick={onSkipBack} disabled={isLoading}><SkipBack /></Button>
         </Tooltip>
-        <Tooltip text="Avancer de 5s">
+        <Tooltip text={t("Avancer de 5s")}>
           <Button variant="icon" className="audio-tb-btn" onClick={onSkipForward} disabled={isLoading}><SkipForward /></Button>
         </Tooltip>
 
@@ -72,7 +72,7 @@ export function AudioEditorTransportBar({
         <Tooltip text={t("Aller au point d'entrée (Shift+I)")}>
           <Button variant="icon" className="audio-tb-btn audio-tb-btn-text" onClick={onGoToTrimStart} disabled={isLoading}>|▶</Button>
         </Tooltip>
-        <Tooltip text="Aller au point de sortie (Shift+O)">
+        <Tooltip text={t("Aller au point de sortie (Shift+O)")}>
           <Button variant="icon" className="audio-tb-btn audio-tb-btn-text" onClick={onGoToTrimEnd} disabled={isLoading}>▶|</Button>
         </Tooltip>
 

@@ -13,7 +13,8 @@ import { useEscapeKey } from '../../hooks/useEscapeKey';
 import './TreeDisplayPopover.css';
 
 import { t } from '../../i18n/index.js';
-const OPTIONS = [
+function OPTIONS() {
+  return [
   {
     key: 'badges',
     label: t('Badges de navigation'),
@@ -21,10 +22,11 @@ const OPTIONS = [
   },
   {
     key: 'guides',
-    label: 'Rails de guidage',
+    label: t("Rails de guidage"),
     help: t("Affiche les lignes d'indentation et de branche active dans l'arbre."),
   },
 ];
+}
 
 export function TreeDisplayPopover({
   open,
@@ -131,12 +133,12 @@ export function TreeDisplayPopover({
             : { left: -9999, top: -9999, visibility: 'hidden' }}
         >
           <div className="tree-display-head">
-            <span className="tree-display-title">Affichage</span>
-            <span className="tree-display-subtitle">Options visibles dans la structure.</span>
+            <span className="tree-display-title">{t("Affichage")}</span>
+            <span className="tree-display-subtitle">{t('Options visibles dans la structure.')}</span>
           </div>
 
           <div className="tree-display-section">
-            {OPTIONS.map(({ key, label, help }) => (
+            {OPTIONS().map(({ key, label, help }) => (
               <Tooltip key={key} text={help} wrap className="tree-display-row-tip">
                 <div className="tree-display-row">
                   <span className="tree-display-label">{label}</span>

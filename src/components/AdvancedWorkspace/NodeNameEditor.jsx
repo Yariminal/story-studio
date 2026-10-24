@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { advancedGestures, graphNode, presence } from '../../store/projectModel/advancedGestures.js';
+import { t } from '../../i18n/index.js';
 
 // Champ commun aux Écrans et Actions. Il reprend les interactions du renommage
 // inline du Libre : Entrée valide, Échap annule, le flou valide, et une valeur
@@ -41,7 +42,7 @@ export function NodeNameEditor({
       ref={inputRef}
       className="field-input advanced-field__name-input"
       value={draft}
-      aria-label="Nom"
+      aria-label={t('Nom')}
       disabled={disabled || node.uniqueId !== true}
       onChange={(event) => setDraft(event.target.value)}
       onBlur={commit}

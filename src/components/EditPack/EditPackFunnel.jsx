@@ -153,7 +153,7 @@ export function EditPackFunnel({
     // celle de l'archive ouverte.
     setBundle(null);
     setSelectedChildId(null);
-    setBusy({ title: t('Vérification du pack…'), hint: 'Un instant.' });
+    setBusy({ title: t('Vérification du pack…'), hint: t("Un instant.") });
     setPhase('busy');
     const packLabel = basename(path);
     const isFolder = kind === 'folder' || (kind === 'auto' && !ARCHIVE_RE.test(path));
@@ -286,7 +286,7 @@ export function EditPackFunnel({
     const operation = operationLifecycleRef.current;
     const token = operation.begin();
     if (token === null) return;
-    setBusy({ title: t('Préparation du simulateur…'), hint: 'Un instant.' });
+    setBusy({ title: t('Préparation du simulateur…'), hint: t("Un instant.") });
     setPhase('busy');
     try {
       if (!operation.claimCompletion(token)) return;
@@ -341,10 +341,10 @@ export function EditPackFunnel({
             onFiles={handleDrop}
           >
             <FunnelToolButton icon={<Package />} accent="neutral" onClick={handleBrowseFile}>
-              Importer zip/7z
+              {t("Importer zip/7z")}
             </FunnelToolButton>
             <FunnelToolButton icon={<FolderOpen />} accent="neutral" onClick={handleBrowseFolder}>
-              Importer un dossier
+              {t("Importer un dossier")}
             </FunnelToolButton>
           </FunnelDropZone>
           <ImportErrorNotice error={error} />
@@ -357,7 +357,7 @@ export function EditPackFunnel({
             icon={<TriangleAlert />}
             title={t("Pack non éditable")}
             description={pending?.advancedError
-              ? t("Ce pack nt('a pu être ouvert ni dans l')Éditeur par menus ni dans l'Éditeur graphe. La simulation reste disponible en lecture seule.")
+              ? t("Ce pack n'a pu être ouvert ni dans l'Éditeur par menus ni dans l'Éditeur graphe. La simulation reste disponible en lecture seule.")
               : t("Ce pack n'est pas éditable avec Story Studio. Tu peux quand même le simuler (lecture seule).")}
           />
           <ImportErrorNotice error={pending?.advancedError} context="graph" />
@@ -365,14 +365,14 @@ export function EditPackFunnel({
           <ImportErrorNotice error={error} />
           <div className="funnel-dropzone-actions" style={{ justifyContent: 'flex-start' }}>
             <FunnelToolButton icon={<Eye />} accent="neutral" onClick={handleSimulate}>
-              Simuler le pack
+              {t("Simuler le pack")}
             </FunnelToolButton>
             <FunnelToolButton
               icon={<Undo2 />}
               accent="neutral"
               onClick={backFromVerdict}
             >
-              Choisir un autre pack
+              {t("Choisir un autre pack")}
             </FunnelToolButton>
           </div>
         </div>
@@ -394,7 +394,7 @@ export function EditPackFunnel({
               accent="neutral"
               onClick={backFromVerdict}
             >
-              Choisir un autre pack
+              {t("Choisir un autre pack")}
             </FunnelToolButton>
           </div>
         </div>

@@ -16,7 +16,9 @@ import {
 import { CircleX, FolderOpen, Link2, Music, Play } from '../../icons/LucideLocal';
 
 import { t } from '../../../i18n/index.js';
-export const NAV_ROOT_LABEL = t('Menu racine');
+export function NAV_ROOT_LABEL() {
+  return t('Menu racine');
+}
 
 export function generatedTargetIdToSelectValue(targetId) {
   if (!targetId || isRootNavigationTarget(targetId)) return '';
@@ -87,7 +89,7 @@ function buildNavigationTargetOptions({
     for (const story of selectableStories) {
       options.push({
         value: encodeStoryPlayNavigationTarget(story.id),
-        label: `Lecture directe - ${story.name || '(sans nom)'}`,
+        label: t("Lecture directe - {value}", { value: story.name || '(sans nom)' }),
         kind: 'story_play',
       });
     }
@@ -95,7 +97,7 @@ function buildNavigationTargetOptions({
   for (const story of allStories.filter((s) => s.id !== currentStoryId && s.hasAfterPlaybackHomeStep)) {
     options.push({
       value: encodeStoryHomeStepNavigationTarget(story.id),
-      label: `Retour de fin - ${story.name || '(sans nom)'}`,
+      label: t("Retour de fin - {value}", { value: story.name || '(sans nom)' }),
       kind: 'story_home_step',
     });
   }
@@ -120,13 +122,15 @@ function isMissingNavigationValue(value, allMenus, allStories) {
   return !allMenus.some((menu) => menu.id === menuId);
 }
 
-export const CONTROL_DEFS = [
+export function CONTROL_DEFS() {
+  return [
   { key: 'autoplay', label: t('Lecture automatique'), def: true },
   { key: 'ok',       label: 'Bouton OK',            def: true },
   { key: 'home',     label: t('Bouton Accueil'),        def: true },
   { key: 'pause',    label: t('Bouton pause'),          def: false },
-  { key: 'wheel',    label: 'Molette',               def: false },
+  { key: 'wheel',    label: t("Molette"),               def: false },
 ];
+}
 
 export const SEQUENCE_CONTROL_DEFAULTS = {
   autoplay: true,
@@ -140,7 +144,7 @@ export function normalizeSequenceStep(step = {}, index = 0) {
   const controls = step.controlSettings ?? {};
   return {
     id: step.id || crypto.randomUUID(),
-    name: step.name || `Étape ${index + 1}`,
+    name: step.name || t("Étape {value}", { value: index + 1 }),
     audio: step.audio ?? null,
     image: step.image ?? null,
     controlSettings: { ...SEQUENCE_CONTROL_DEFAULTS, ...controls },
@@ -183,16 +187,16 @@ export function getNavigationSelectHint({
   if (isRootNavigationTarget(normalized)) {
     const def = project?.rootEntries?.[0];
     if (!def) return t('Aucune entrée dans le pack');
-    return `${def.name || '(sans nom)'} (premier élément du pack)`;
+    return t("{value} (premier élément du pack)", { value: def.name || '(sans nom)' });
   }
   if (isNextStoryNavigationTarget(normalized)) {
-    if (!entry) return 'Histoire suivante selon l\'histoire source';
+    if (!entry) return t("Histoire suivante selon l'histoire source");
     const siblings = parentMenu ? (parentMenu.children ?? []) : (project?.rootEntries ?? []);
     const idx = siblings.findIndex((s) => s.id === entry.id);
     const next = idx >= 0 ? siblings.slice(idx + 1).find((s) => s.type === 'story') : null;
     if (next) return next.name || '(sans nom)';
     // Fallback Rust : si pas d'histoire suivante, retour vers le parent
-    return parentMenu ? `${parentMenu.name || '(sans nom)'} (parent)` : NAV_ROOT_LABEL;
+    return parentMenu ? `${parentMenu.name || '(sans nom)'} (parent)` : NAV_ROOT_LABEL();
   }
   // Explicite — la valeur affichée dans le select est déjà la destination
   return null;

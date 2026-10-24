@@ -7,20 +7,23 @@ import { t } from '../i18n/index.js';
 import { isAdvancedProject } from '../store/projectWorkState.js';
 import { nextGraphCopyPath } from '../store/graphCopy.js';
 
-export const GRAPH_COPY_TITLE = t('Continuer dans l’éditeur graphe');
+export function GRAPH_COPY_TITLE() {
+  return t('Continuer dans l’éditeur graphe');
+}
 
 function fileLabel(path) {
   return String(path ?? '').split(/[\\/]/).pop();
 }
 
 function graphCopyWarning(copyPath) {
-  return `Story Studio va créer une copie de ton projet pour l’éditeur graphe : « ${fileLabel(copyPath)} », `
+  return t("Story Studio va créer une copie de ton projet pour l’éditeur graphe : « {value} », ", { value: fileLabel(copyPath) })
     + t('à côté de l’original. Ton projet reste tel quel. ')
     + t('La copie graphe ne pourra pas forcément revenir dans l’éditeur d’origine.');
 }
 
-export const SAVE_ORIGINAL_FIRST =
-  t('Enregistre d’abord ton projet : la copie graphe sera créée à côté de lui.');
+export function SAVE_ORIGINAL_FIRST() {
+  return t('Enregistre d’abord ton projet : la copie graphe sera créée à côté de lui.');
+}
 
 /**
  * @param {Object} deps
@@ -39,7 +42,7 @@ export const SAVE_ORIGINAL_FIRST =
 export function createGraphCopyFlow(deps) {
   async function confirmCopy(copyPath) {
     const choice = await deps.choose({
-      title: GRAPH_COPY_TITLE,
+      title: GRAPH_COPY_TITLE(),
       message: graphCopyWarning(copyPath),
       variant: 'info',
       cancelValue: null,
@@ -58,8 +61,8 @@ export function createGraphCopyFlow(deps) {
     const current = deps.currentSavePath();
     if (current) return current;
     const choice = await deps.choose({
-      title: GRAPH_COPY_TITLE,
-      message: SAVE_ORIGINAL_FIRST,
+      title: GRAPH_COPY_TITLE(),
+      message: SAVE_ORIGINAL_FIRST(),
       variant: 'info',
       cancelValue: null,
       actions: [
@@ -84,9 +87,9 @@ export function createGraphCopyFlow(deps) {
     } catch (error) {
       const detail = String(error?.message ?? error);
       deps.showError({
-        title: GRAPH_COPY_TITLE,
+        title: GRAPH_COPY_TITLE(),
         message: written
-          ? `La copie a été créée (${fileLabel(copyPath)}), mais elle n’a pas pu s’ouvrir :\n${detail}`
+          ? t("La copie a été créée ({value}), mais elle n’a pas pu s’ouvrir :\n{detail}", { value: fileLabel(copyPath), detail: detail })
           : detail,
       });
       return false;

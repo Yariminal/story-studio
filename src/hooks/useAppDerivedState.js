@@ -16,7 +16,7 @@ import { getShortcutLabelMap } from '../store/keyboardShortcuts';
 import { getProjectFilePrefix } from '../utils/projectPrefix';
 import { END_NODE_ID } from '../components/diagram/flowDiagramLayout';
 
-import { t } from '../i18n/index.js';
+import { getLocale, t } from '../i18n/index.js';
 // Modèle de lecture du shell : sélection courante, validation, libellé de
 // statut, dirty state, capacités toolbar, labels de
 // raccourcis et dossier d'export modal. Déplacement pur du bloc qui vivait dans
@@ -99,25 +99,25 @@ export function useAppDerivedState({
 
   const selectedStatusName = useMemo(() => {
     if (!hasTree) return null;
-    if (store.selectedId === END_NODE_ID) return store.project.endNodeName || 'Message de fin';
+    if (store.selectedId === END_NODE_ID) return store.project.endNodeName || t('Message de fin');
     if (store.selectedId === 'root') {
       return projectType === 'simple'
         ? (store.project.projectName || t('Mon histoire'))
         : (store.project.rootName || store.project.projectName || t('Menu racine'));
     }
     const entry = projectIndex.entryById.get(store.selectedId);
-    return entry?.name || '(sans nom)';
-  }, [hasTree, projectIndex, projectType, store.project, store.selectedId]);
+    return entry?.name || t('(sans nom)');
+  }, [hasTree, projectIndex, projectType, store.project, store.selectedId, getLocale()]);
   const activePanelsLabel = [
-    workspaceViewState.showTree && 'arbre',
+    workspaceViewState.showTree && t('arbre'),
     workspaceViewState.showSettings && t('réglages'),
-    workspaceViewState.showDiagram && 'diagramme',
+    workspaceViewState.showDiagram && t('diagramme'),
   ].filter(Boolean).join(' + ');
   const statusText = isAdvanced
     ? t('Éditeur graphe — navigation du pack éditée directement')
     : !hasTree
       ? t('Choisis un type de projet')
-      : `Sélection : ${selectedStatusName} — panneaux : ${activePanelsLabel}`;
+      : t('Sélection : {name} — panneaux : {panels}', { name: selectedStatusName, panels: activePanelsLabel });
   const projectDirty = hasUnsavedWork({
     project: store.project,
     mediaLibraryPaths,

@@ -34,7 +34,7 @@ export function useXttsVoiceOptions({ xttsSettings, onUpdateXttsSettings }) {
 
   async function testXtts() {
     setXttsProbe({ state: 'loading', message: t('Connexion à XTTS en cours…') });
-    setXttsLogs([`Test XTTS depuis ${xttsSettings.serverUrl}`]);
+    setXttsLogs([t("Test XTTS depuis {serverUrl}", { serverUrl: xttsSettings.serverUrl })]);
     try {
       const status = await invoke('xtts_get_status', { settings: xttsSettings });
       const voices = status.voices || [];
@@ -50,7 +50,7 @@ export function useXttsVoiceOptions({ xttsSettings, onUpdateXttsSettings }) {
       const voiceNames = voices.length > 0 ? ` • ${voices.join(', ')}` : '';
       setXttsProbe({
         state: 'ok',
-        message: `Serveur prêt • ${modelLabel} • ${deviceLabel} • ${voicesLabel}${voiceNames}`,
+        message: t("Serveur prêt • {modelLabel} • {deviceLabel} • {voicesLabel}{voiceNames}", { modelLabel: modelLabel, deviceLabel: deviceLabel, voicesLabel: voicesLabel, voiceNames: voiceNames }),
       });
     } catch (e) {
       setXttsProbe({ state: 'error', message: String(e) });

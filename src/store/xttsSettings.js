@@ -6,17 +6,19 @@ import { t } from '../i18n/index.js';
 export const PIPER_DEFAULT_VOICE = 'fr_FR-siwis-medium';
 export const PIPER_DEFAULT_LANGUAGE = 'fr_FR';
 
-export const PIPER_LANGUAGE_OPTIONS = [
+export function PIPER_LANGUAGE_OPTIONS() {
+  return [
   { value: 'fr_FR', label: t('Français'), defaultVoice: PIPER_DEFAULT_VOICE },
   { value: 'en_GB', label: 'English UK', defaultVoice: 'en_GB-jenny_dioco-medium' },
   { value: 'en_US', label: 'English US', defaultVoice: 'en_US-kristin-medium' },
   { value: 'it_IT', label: 'Italiano', defaultVoice: 'it_IT-serena-medium' },
 ];
+}
 
 export function piperDefaultVoiceForLanguage(voices, language) {
   const catalogDefault = voices.find((voice) => voice.language === language && voice.isDefault);
   if (catalogDefault) return catalogDefault.id;
-  const configuredDefault = PIPER_LANGUAGE_OPTIONS.find((option) => option.value === language)?.defaultVoice;
+  const configuredDefault = PIPER_LANGUAGE_OPTIONS().find((option) => option.value === language)?.defaultVoice;
   return configuredDefault || PIPER_DEFAULT_VOICE;
 }
 
@@ -59,7 +61,7 @@ export function loadXttsSettings() {
       ...DEFAULT_XTTS_SETTINGS,
       ...withoutLegacyPiperSettings(JSON.parse(raw)),
     };
-    const piperLanguage = PIPER_LANGUAGE_OPTIONS.some(({ value }) => value === parsed.piperLanguage)
+    const piperLanguage = PIPER_LANGUAGE_OPTIONS().some(({ value }) => value === parsed.piperLanguage)
       ? parsed.piperLanguage
       : PIPER_DEFAULT_LANGUAGE;
     return {

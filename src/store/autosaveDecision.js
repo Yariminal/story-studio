@@ -125,7 +125,7 @@ export function isProjectWorthAutosaving(project, mediaLibraryPaths = [], totalM
   if (!hasProjectTree(project)) return false;
   // Un nom saisi est déjà un contenu utilisateur (en mode simple, le champ
   // « Nom de l'histoire » écrit projectName, pas le nom de l'entrée story).
-  if (String(project.projectName ?? 't(').trim() || String(project.packMetadata?.title ?? ')').trim()) return true;
+  if (String(project.projectName ?? '').trim() || String(project.packMetadata?.title ?? '').trim()) return true;
   if (hasPath(project.rootAudio) || hasPath(project.rootImage) || hasPath(project.thumbnailImage) || hasPath(project.nightModeAudio)) return true;
   let meaningfulCount = 0;
   visitProjectEntries(project, (entry) => {

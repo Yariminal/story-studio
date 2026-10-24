@@ -59,12 +59,14 @@ const GenerateVoiceModal = lazy(() => import('../GenerateVoiceModal/GenerateVoic
 const PackNameModal = lazy(() => import('../layout/PackNameModal')
   .then((module) => ({ default: module.PackNameModal })));
 
-const STEPS = [
-  { key: 'packs', label: 'Packs' },
-  { key: 'audio', label: 'Audio' },
-  { key: 'image', label: 'Image' },
+function STEPS() {
+  return [
+  { key: 'packs', label: t("Packs") },
+  { key: 'audio', label: t("Audio") },
+  { key: 'image', label: t("Image") },
   { key: 'metadata', label: t('Métadonnées') },
 ];
+}
 
 function formatBytes(bytes) {
   if (!bytes || bytes <= 0) return '';
@@ -174,7 +176,7 @@ export function AggregatePacksFunnel({ onClose }) {
             sizeBytes,
           });
         } catch (packError) {
-          setError(`Pack ignoré : ${basename(path) || path}\n${packError}`);
+          setError(t("Pack ignoré : {value}\n{packError}", { value: basename(path) || path, packError: packError }));
         }
       }
       if (nextPacks.length) setPacks((current) => [...current, ...nextPacks]);
@@ -262,7 +264,7 @@ export function AggregatePacksFunnel({ onClose }) {
   }
 
   function handlePrimary() {
-    if (step < STEPS.length - 1) {
+    if (step < STEPS().length - 1) {
       if (canGoTo(step + 1)) setStep(step + 1);
       return;
     }
@@ -359,7 +361,7 @@ export function AggregatePacksFunnel({ onClose }) {
     } catch (generationError) {
       window.clearInterval(timer);
       unlisten?.();
-      setError(`La génération a échoué : ${generationError?.message ?? generationError}`);
+      setError(t("La génération a échoué : {value}", { value: generationError?.message ?? generationError }));
       setPhase('collect');
       if (sessionDirRef.current) {
         await invoke('cleanup_session_workspace', { path: sessionDirRef.current }).catch(() => {});
@@ -391,7 +393,7 @@ export function AggregatePacksFunnel({ onClose }) {
     { label: t('Agrégation des packs'), status: progress >= 0.28 ? 'done' : 'active' },
     { label: t('Harmonisation du volume'), status: progress < 0.28 ? 'todo' : progress >= 0.55 ? 'done' : 'active' },
     { label: t('Encodage des images 320x240'), status: progress < 0.55 ? 'todo' : progress >= 0.8 ? 'done' : 'active' },
-    { label: 'Construction du ZIP', status: progress < 0.8 ? 'todo' : progress >= 1 ? 'done' : 'active' },
+    { label: t("Construction du ZIP"), status: progress < 0.8 ? 'todo' : progress >= 1 ? 'done' : 'active' },
   ];
 
   return (
@@ -405,20 +407,20 @@ export function AggregatePacksFunnel({ onClose }) {
       ariaLabel={t("Agréger des packs")}
       stepper={(
         <FunnelStepper
-          steps={STEPS}
+          steps={STEPS()}
           current={step}
           onStepClick={(index) => { if (canGoTo(index)) setStep(index); }}
           disabled={phase !== 'collect'}
         />
       )}
-      footer={phase === 'collect' && step === STEPS.length - 1 ? null : (
+      footer={phase === 'collect' && step === STEPS().length - 1 ? null : (
         <FunnelFooter
           onBack={() => setStep((current) => Math.max(0, current - 1))}
           backDisabled={step === 0}
-          stepLabel={`Étape ${step + 1} / ${STEPS.length}`}
+          stepLabel={t('Étape {current} / {count}', { current: step + 1, count: STEPS().length })}
           onPrimary={handlePrimary}
-          primaryLabel={step === STEPS.length - 1 ? t('Générer le pack') : 'Continuer'}
-          primaryIcon={step === STEPS.length - 1 ? <Package /> : null}
+          primaryLabel={step === STEPS().length - 1 ? t('Générer le pack') : t("Continuer")}
+          primaryIcon={step === STEPS().length - 1 ? <Package /> : null}
           primaryDisabled={primaryDisabled}
         />
       )}
@@ -438,26 +440,29 @@ export function AggregatePacksFunnel({ onClose }) {
           fileName={result?.fileName}
           meta={[
             formatBytes(result?.sizeBytes),
-            `${result?.storyCount ?? totalStories} histoire${(result?.storyCount ?? totalStories) > 1 ? 's' : ''}`,
-            `${result?.packCount ?? packs.length} packs agrégés`,
+            ((result?.storyCount ?? totalStories) > 1
+              ? t('{count} histoires', { count: result?.storyCount ?? totalStories })
+              : t('{count} histoire', { count: result?.storyCount ?? totalStories })),
+            t("{value} packs agrégés", { value: result?.packCount ?? packs.length }),
           ].filter(Boolean).join(' · ')}
           notice={result?.warnings?.length ? (
             <div>
-              <strong>
-                Pack généré avec {result.warnings.length} avertissement{result.warnings.length > 1 ? 's' : ''} audio.
+              <strong> {result.warnings.length > 1
+                ? t('Pack généré avec {count} avertissements audio.', { count: result.warnings.length })
+                : t('Pack généré avec {count} avertissement audio.', { count: result.warnings.length })}
               </strong>
               {result.warnings.map((warning, index) => (
                 <div key={`${warning.code || 'audio'}-${warning.role || index}`}>{warning.message}</div>
               ))}
-              <small>Le ZIP est utilisable ; vérifie de préférence ces passages sur la Lunii.</small>
+              <small>{t('Le ZIP est utilisable ; vérifie de préférence ces passages sur la Lunii.')}</small>
             </div>
           ) : null}
         >
           <FunnelToolButton icon={<FolderOpen />} accent="neutral" onClick={() => outputDir && openPath(outputDir)}>
-            Ouvrir le dossier
+            {t("Ouvrir le dossier")}
           </FunnelToolButton>
           <button type="button" className="funnel-btn funnel-btn-primary" onClick={handleClose}>
-            <span>Terminer</span>
+            <span>{t("Terminer")}</span>
             <House />
           </button>
         </FunnelDoneState>
@@ -478,7 +483,7 @@ export function AggregatePacksFunnel({ onClose }) {
             disabled={loadingPacks}
           >
             <FunnelToolButton icon={<FolderOpen />} accent="neutral" onClick={handleBrowsePacks} disabled={loadingPacks}>
-              Parcourir…
+              {t("Parcourir…")}
             </FunnelToolButton>
           </FunnelDropZone>
 
@@ -491,13 +496,15 @@ export function AggregatePacksFunnel({ onClose }) {
                   <span className="aggregate-pack-copy">
                     <span className="aggregate-pack-name" title={pack.fileName}>{pack.fileName}</span>
                     <span className="aggregate-pack-meta">
-                      {[formatBytes(pack.sizeBytes), `${pack.storyCount} scène${pack.storyCount > 1 ? 's' : ''}`].filter(Boolean).join(' · ')}
+                      {[formatBytes(pack.sizeBytes), pack.storyCount > 1
+                        ? t('{count} scènes', { count: pack.storyCount })
+                        : t('{count} scène', { count: pack.storyCount })].filter(Boolean).join(' · ')}
                     </span>
                   </span>
-                  <button type="button" className="aggregate-icon-btn" onClick={() => movePack(index, -1)} disabled={index === 0} aria-label="Monter">
+                  <button type="button" className="aggregate-icon-btn" onClick={() => movePack(index, -1)} disabled={index === 0} aria-label={t("Monter")}>
                     <MoveUp />
                   </button>
-                  <button type="button" className="aggregate-icon-btn" onClick={() => movePack(index, 1)} disabled={index === packs.length - 1} aria-label="Descendre">
+                  <button type="button" className="aggregate-icon-btn" onClick={() => movePack(index, 1)} disabled={index === packs.length - 1} aria-label={t("Descendre")}>
                     <MoveDown />
                   </button>
                   <button type="button" className="aggregate-icon-btn" onClick={() => removePack(pack.id)} aria-label={t("Retirer")}>
@@ -506,12 +513,18 @@ export function AggregatePacksFunnel({ onClose }) {
                 </div>
               ))}
               <div className="aggregate-pack-list-foot">
-                <span>{packs.length} pack{packs.length > 1 ? 's' : 't('} · {totalStories} scène{totalStories > 1 ? ')s' : ''}</span>
+                <span>{packs.length > 1
+                  ? t('{count} packs', { count: packs.length })
+                  : t('{count} pack', { count: packs.length })}
+                  {' · '}
+                  {totalStories > 1
+                    ? t('{count} scènes', { count: totalStories })
+                    : t('{count} scène', { count: totalStories })}</span>
                 <span>{formatBytes(totalSize)}</span>
               </div>
             </div>
           )}
-          {loadingPacks && <div className="aggregate-inline-note">Lecture des métadonnées…</div>}
+          {loadingPacks && <div className="aggregate-inline-note">{t('Lecture des métadonnées…')}</div>}
           {error && <div className="funnel-error" role="alert">{error}</div>}
         </div>
       )}
@@ -542,23 +555,19 @@ export function AggregatePacksFunnel({ onClose }) {
           </div>
           <div className="aggregate-tool-grid">
             <FunnelToolButton icon={<FolderOpen />} accent="neutral" block onClick={handlePickAudio}>
-              Choisir un audio
+              {t("Choisir un audio")}
             </FunnelToolButton>
             <FunnelToolButton icon={<Mic />} accent="violet" variant="solid" block onClick={handleRecordAudio}>
-              Enregistrer au micro
+              {t("Enregistrer au micro")}
             </FunnelToolButton>
             {ttsAvailable && (
-              <FunnelToolButton icon={<Speech />} accent="violet" variant="solid" block onClick={handleGenerateVoice}>
-                Générer une voix
-              </FunnelToolButton>
+              <FunnelToolButton icon={<Speech />} accent="violet" variant="solid" block onClick={handleGenerateVoice}> {t("Générer une voix")} </FunnelToolButton>
             )}
             <FunnelToolButton icon={<Scissors />} accent="neutral" block onClick={async () => {
               if (!rootAudio) return;
               await ensureSessionDir();
               setAudioEditorOpen(true);
-            }} disabled={!rootAudio}>
-              Édition audio
-            </FunnelToolButton>
+            }} disabled={!rootAudio}> {t("Édition audio")} </FunnelToolButton>
           </div>
         </div>
       )}
@@ -575,13 +584,15 @@ export function AggregatePacksFunnel({ onClose }) {
               {imageUrl ? <img src={imageUrl} alt="" /> : (
                 <div className="aggregate-image-placeholder">
                   <strong>{metadata.title || t('Mes histoires du soir')}</strong>
-                  <span>{packs.length} pack{packs.length > 1 ? 's' : 't('} agrégé{packs.length > 1 ? ')s' : ''}</span>
+                  <span>{packs.length > 1
+                    ? t('{count} packs agrégés', { count: packs.length })
+                    : t('{count} pack agrégé', { count: packs.length })}</span>
                 </div>
               )}
             </div>
             <div className="aggregate-image-actions">
               <FunnelToolButton icon={<FolderOpen />} accent="neutral" onClick={handlePickImage}>
-                Choisir une image
+                {t("Choisir une image")}
               </FunnelToolButton>
               <FunnelToolButton
                 icon={<Sparkles />}
@@ -592,19 +603,17 @@ export function AggregatePacksFunnel({ onClose }) {
                     await ensureSessionDir();
                     setTextImageOpen(true);
                   } catch (sessionError) {
-                    setError(`Impossible de préparer la session : ${sessionError?.message ?? sessionError}`);
+                    setError(t("Impossible de préparer la session : {value}", { value: sessionError?.message ?? sessionError }));
                   }
                 }}
-              >
-                Générer une image-titre
-              </FunnelToolButton>
+              > {t("Générer une image-titre")} </FunnelToolButton>
               <FunnelToolButton icon={<Crop />} accent="violet" variant="outline" onClick={async () => {
                 await ensureSessionDir();
                 setImageEditorOpen(true);
               }} disabled={!rootImage}>
                 Retouche image
               </FunnelToolButton>
-              <div className="aggregate-inline-note">320 × 240 · recadrage automatique à la génération.</div>
+              <div className="aggregate-inline-note">{t('320 × 240 · recadrage automatique à la génération.')}</div>
             </div>
           </div>
         </div>
@@ -616,7 +625,7 @@ export function AggregatePacksFunnel({ onClose }) {
             icon={<Package />}
             title={t("Métadonnées")}
             description={t("Panneau PackNameModal pré-rempli, cohérent avec Modifier un pack.")}
-            trailing={<span className="funnel-badge">Pré-rempli</span>}
+            trailing={<span className="funnel-badge">{t('Pré-rempli')}</span>}
           />
           <Suspense fallback={null}>
             <PackNameModal

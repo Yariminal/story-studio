@@ -24,6 +24,7 @@ import { useRevealHistory } from './useRevealHistory.js';
 import GraphInspector from './GraphInspector.jsx';
 import GraphSearchPanel from './GraphSearchPanel.jsx';
 import './AdvancedGraphCanvas.css';
+import { t } from '../../i18n/index.js';
 
 export default function AdvancedGraphCanvas({
   payload,
@@ -57,7 +58,7 @@ export default function AdvancedGraphCanvas({
   if (view.status === 'failed') {
     return (
       <div className="advanced-canvas advanced-canvas--error" role="alert">
-        <h2>Lecture impossible</h2>
+        <h2>{t('Lecture impossible')}</h2>
         {/* Les refus du codec ressortent tels quels, avec leur code et leur
             chemin : ils ne sont pas réécrits en codes de vue. */}
         <p><code>{view.error?.code ?? 'ERREUR'}</code> {view.error?.path}</p>

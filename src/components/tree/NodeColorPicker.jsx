@@ -21,7 +21,7 @@ export function NodeColorPicker({
             className={`ctx-color-dot${currentColor === color ? ' is-active' : ''}`}
             style={{ backgroundColor: color }}
             title={color}
-            aria-label={`Choisir la couleur ${color}`}
+            aria-label={t("Choisir la couleur {color}", { color: color })}
             aria-pressed={currentColor === color}
             disabled={disabled}
             onClick={() => onChange(color)}

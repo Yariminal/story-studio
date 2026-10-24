@@ -63,7 +63,7 @@ export function useProjectLifecycle({
       logger.error('session:start-error', error);
       showErrorDialog({
         title: t('Nouveau projet'),
-        message: `Impossible de préparer le dossier de travail : ${error}`,
+        message: t("Impossible de préparer le dossier de travail : {error}", { error: error }),
       });
     }
   }

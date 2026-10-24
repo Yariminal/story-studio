@@ -1,4 +1,5 @@
 import { lazy } from 'react';
+import { t } from '../i18n/index.js';
 import { MediaTransferProvider } from '../store/MediaTransferContext';
 import { ProjectContext } from '../store/ProjectContext';
 import { ProjectActionsContext } from '../store/ProjectActionsContext';
@@ -189,7 +190,7 @@ export function AppShell({
             className="rq-bottombar-btn"
             onClick={bottomBar.onOpenMedia}
           >
-            Médias
+            {t('Médias')}
             <span>({bottomBar.mediaLibraryCount})</span>
           </button>
         )}
@@ -199,7 +200,7 @@ export function AppShell({
             onClick={bottomBar.onOpenRenderQueue}
           >
             {bottomBar.renderQueueActiveCount > 0 && <span className="rq-spinner" />}
-            File de rendu
+            {t('File de rendu')}
             {bottomBar.renderQueueActiveCount > 0 && <span className="bottom-status-pill">{bottomBar.renderQueueActiveCount}</span>}
             {bottomBar.renderQueueActiveCount === 0 && bottomBar.renderQueueHasResults && <span className="bottom-status-pill is-done">✓</span>}
           </button>
@@ -210,7 +211,7 @@ export function AppShell({
             onClick={bottomBar.onOpenAiQueue}
           >
             {bottomBar.aiQueueActiveCount > 0 && <span className="rq-spinner" />}
-            File IA
+            {t('File IA')}
             {bottomBar.aiQueueActiveCount > 0 && <span className="bottom-status-pill">{bottomBar.aiQueueActiveCount}</span>}
             {bottomBar.aiQueueActiveCount === 0 && bottomBar.aiQueueHasResults && <span className="bottom-status-pill is-done">✓</span>}
           </button>

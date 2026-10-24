@@ -329,15 +329,15 @@ function* walkRootReferences(project) {
 function* walkNativeGraphReferences(graph, labelPrefix) {
   for (const stage of graph?.document?.stageNodes ?? []) {
     const stageName = stage?.name || stage?.uuid || 'stage';
-    if (stage.audio) yield { obj: stage, key: 'audio', path: stage.audio, label: `Audio ${labelPrefix}: ${stageName}`, scope: 'native-graph' };
-    if (stage.image) yield { obj: stage, key: 'image', path: stage.image, label: `Image ${labelPrefix}: ${stageName}`, scope: 'native-graph' };
+    if (stage.audio) yield { obj: stage, key: 'audio', path: stage.audio, label: t("Audio {labelPrefix}: {stageName}", { labelPrefix: labelPrefix, stageName: stageName }), scope: 'native-graph' };
+    if (stage.image) yield { obj: stage, key: 'image', path: stage.image, label: t("Image {labelPrefix}: {stageName}", { labelPrefix: labelPrefix, stageName: stageName }), scope: 'native-graph' };
   }
 }
 
 function* walkMenuReferences(menu) {
   const name = menu.name || 'sans nom';
-  if (menu.audio) yield { obj: menu, key: 'audio', path: menu.audio, label: `Audio menu: ${name}`, scope: 'menu' };
-  if (menu.image) yield { obj: menu, key: 'image', path: menu.image, label: `Image menu: ${name}`, scope: 'menu' };
+  if (menu.audio) yield { obj: menu, key: 'audio', path: menu.audio, label: t("Audio menu: {name}", { name: name }), scope: 'menu' };
+  if (menu.image) yield { obj: menu, key: 'image', path: menu.image, label: t("Image menu: {name}", { name: name }), scope: 'menu' };
 }
 
 function* walkZipReferences(zip) {
@@ -347,17 +347,17 @@ function* walkZipReferences(zip) {
 
 function* walkStoryReferences(story) {
   const name = story.name || 'sans nom';
-  if (story.audio) yield { obj: story, key: 'audio', path: story.audio, label: `Audio histoire: ${name}`, scope: 'story' };
+  if (story.audio) yield { obj: story, key: 'audio', path: story.audio, label: t("Audio histoire: {name}", { name: name }), scope: 'story' };
   if (story.itemAudio) yield { obj: story, key: 'itemAudio', path: story.itemAudio, label: `Titre audio: ${name}`, scope: 'story' };
-  if (story.itemImage) yield { obj: story, key: 'itemImage', path: story.itemImage, label: `Image histoire: ${name}`, scope: 'story' };
-  if (story.afterPlaybackPromptAudio) yield { obj: story, key: 'afterPlaybackPromptAudio', path: story.afterPlaybackPromptAudio, label: `Audio fin histoire: ${name}`, scope: 'story' };
+  if (story.itemImage) yield { obj: story, key: 'itemImage', path: story.itemImage, label: t("Image histoire: {name}", { name: name }), scope: 'story' };
+  if (story.afterPlaybackPromptAudio) yield { obj: story, key: 'afterPlaybackPromptAudio', path: story.afterPlaybackPromptAudio, label: t("Audio fin histoire: {name}", { name: name }), scope: 'story' };
   for (const [index, step] of (story.afterPlaybackSequence ?? []).entries()) {
-    if (step?.audio) yield { obj: step, key: 'audio', path: step.audio, label: `Audio fin histoire ${index + 1}: ${name}`, scope: 'story-sequence' };
-    if (step?.image) yield { obj: step, key: 'image', path: step.image, label: `Image fin histoire ${index + 1}: ${name}`, scope: 'story-sequence' };
+    if (step?.audio) yield { obj: step, key: 'audio', path: step.audio, label: t("Audio fin histoire {value}: {name}", { value: index + 1, name: name }), scope: 'story-sequence' };
+    if (step?.image) yield { obj: step, key: 'image', path: step.image, label: t("Image fin histoire {value}: {name}", { value: index + 1, name: name }), scope: 'story-sequence' };
   }
   const homeStep = story.afterPlaybackHomeStep;
   if (homeStep) {
-    if (homeStep.audio) yield { obj: homeStep, key: 'audio', path: homeStep.audio, label: `Audio fin histoire home: ${name}`, scope: 'story-home' };
-    if (homeStep.image) yield { obj: homeStep, key: 'image', path: homeStep.image, label: `Image fin histoire home: ${name}`, scope: 'story-home' };
+    if (homeStep.audio) yield { obj: homeStep, key: 'audio', path: homeStep.audio, label: t("Audio fin histoire home: {name}", { name: name }), scope: 'story-home' };
+    if (homeStep.image) yield { obj: homeStep, key: 'image', path: homeStep.image, label: t("Image fin histoire home: {name}", { name: name }), scope: 'story-home' };
   }
 }

@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 import { fmtSize, fmtHz } from '../../hooks/useMediaMetadata';
 import { stripWindowsLongPathPrefix } from '../../utils/fileUtils';
 
@@ -33,10 +34,10 @@ export function waveHeights(name, bars = 18) {
 }
 
 export function kindLabel(kind) {
-  if (kind === 'image') return 'Image';
+  if (kind === 'image') return t("Image");
   if (kind === 'audio') return 'Son';
   if (kind === 'archive') return 'Archive';
-  return 'Fichier';
+  return t("Fichier");
 }
 
 export function getMetaDisplay(item, m, duration) {

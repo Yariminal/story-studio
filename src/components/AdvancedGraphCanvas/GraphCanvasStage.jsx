@@ -36,9 +36,9 @@ import {
 
 const NOTICE_TEXT = {
   'viewport-rejected': () => t('Caméra mémorisée inutilisable : vue recadrée.'),
-  'anchors-ignored': (notice) => `${notice.count} ancrage(s) mémorisé(s) ne désignent plus rien : ignorés, non supprimés.`,
+  'anchors-ignored': (notice) => t("{count} ancrage(s) mémorisé(s) ne désignent plus rien : ignorés, non supprimés.", { count: notice.count }),
   'cache-unreadable': () => t('Vue précédente illisible : vue reconstruite.'),
-  'cache-failure': (notice) => `Mémorisation de la vue indisponible${notice.disarmed ? t(' (désarmée pour la session)') : ''}.`,
+  'cache-failure': (notice) => t("Mémorisation de la vue indisponible{value}.", { value: notice.disarmed ? t(' (désarmée pour la session)') : '' }),
 };
 
 // L'étiquette d'un lien survolé : « départ → arrivée · sortie ». Un trait droit
@@ -671,7 +671,7 @@ export default function GraphCanvasStage({
         overviewOpen={overviewOpen}
         onToggleOverview={onToggleOverview}
       />
-      {view.status === 'loading' && <p className="advanced-canvas__status">Lecture du graphe…</p>}
+      {view.status === 'loading' && <p className="advanced-canvas__status">{t('Lecture du graphe…')}</p>}
       {engineError && (
         <p className="advanced-canvas__status" role="alert">
           Moteur d'affichage indisponible : {String(engineError.message ?? engineError)}
@@ -680,9 +680,7 @@ export default function GraphCanvasStage({
       {clampNotice && (
         // La butée est **visible** : l'auteur doit voir que le nœud a cessé
         // de suivre le pointeur, et pourquoi.
-        <p className="advanced-canvas__status advanced-canvas__status--warning" role="status">
-          Position bornée au domaine sûr [-32768, 32767]
-          {clampNotice.axes.x && ' en X'}
+        <p className="advanced-canvas__status advanced-canvas__status--warning" role="status"> {t("Position bornée au domaine sûr [-32768, 32767]")} {clampNotice.axes.x && ' en X'}
           {clampNotice.axes.y && ' en Y'}.
         </p>
       )}

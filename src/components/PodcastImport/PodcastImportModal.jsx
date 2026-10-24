@@ -103,7 +103,7 @@ export function PodcastImportModal({ onImport, onClose, toLibrary = false }) {
           <>
             <header className="podcast-head">
               <span className="podcast-head-icon"><Rss /></span>
-              <span className="podcast-head-title">Importer un podcast</span>
+              <span className="podcast-head-title">{t('Importer un podcast')}</span>
               <span className="podcast-spacer" />
               <button type="button" className="podcast-icon-btn" aria-label={t("Fermer")} onClick={onClose} disabled={loading}>
                 <X />
@@ -112,7 +112,7 @@ export function PodcastImportModal({ onImport, onClose, toLibrary = false }) {
 
             <div className="podcast-body">
               <form onSubmit={handleLoadFeed}>
-                <label className="podcast-field-label" htmlFor="podcast-url-input">Adresse du flux RSS</label>
+                <label className="podcast-field-label" htmlFor="podcast-url-input">{t('Adresse du flux RSS')}</label>
                 <label className="podcast-search">
                   <Rss />
                   <input
@@ -126,16 +126,14 @@ export function PodcastImportModal({ onImport, onClose, toLibrary = false }) {
                   />
                 </label>
               </form>
-              <p className="podcast-hint">
-                Colle l'URL du flux RSS du podcast. Tu pourras choisir les épisodes à télécharger
-                {toLibrary ? t(' avant de les retrouver dans Médias.') : t(" avant qu'ils ne deviennent des histoires.")}
+              <p className="podcast-hint"> {t("Colle l'URL du flux RSS du podcast. Tu pourras choisir les épisodes à télécharger")} {toLibrary ? t(' avant de les retrouver dans Médias.') : t(" avant qu'ils ne deviennent des histoires.")}
               </p>
               {error && <div className="podcast-error" role="alert">{error}</div>}
             </div>
 
             <footer className="podcast-foot">
               <button type="button" className="podcast-btn podcast-btn-ghost" onClick={onClose} disabled={loading}>
-                Annuler
+                {t("Annuler")}
               </button>
               <span className="podcast-spacer" />
               <button
@@ -155,7 +153,7 @@ export function PodcastImportModal({ onImport, onClose, toLibrary = false }) {
               <span className="podcast-head-icon"><Rss /></span>
               <span className="podcast-head-title" title={feed?.title}>{feed?.title || 'Podcast'}</span>
               <span className="podcast-head-count">
-                {episodes.length} épisode{episodes.length > 1 ? 's' : ''}
+                {episodes.length} {t("épisode")}{episodes.length > 1 ? 's' : ''}
               </span>
               <span className="podcast-spacer" />
               <button type="button" className="podcast-icon-btn" aria-label={t("Fermer")} onClick={onClose}>
@@ -175,10 +173,8 @@ export function PodcastImportModal({ onImport, onClose, toLibrary = false }) {
                   />
                 </label>
                 <div className="podcast-bulk">
-                  <button type="button" className="podcast-seg" onClick={selectAllVisible}>Tout sélectionner</button>
-                  <button type="button" className="podcast-seg" onClick={clearSelection} disabled={selected.size === 0}>
-                    Tout désélectionner
-                  </button>
+                  <button type="button" className="podcast-seg" onClick={selectAllVisible}>{t('Tout sélectionner')}</button>
+                  <button type="button" className="podcast-seg" onClick={clearSelection} disabled={selected.size === 0}> {t("Tout désélectionner")} </button>
                 </div>
               </div>
             </div>
@@ -187,7 +183,7 @@ export function PodcastImportModal({ onImport, onClose, toLibrary = false }) {
               {visibleEpisodes.length === 0 ? (
                 <div className="podcast-empty">
                   <Search />
-                  <span>Aucun épisode ne correspond à ce filtre.</span>
+                  <span>{t('Aucun épisode ne correspond à ce filtre.')}</span>
                 </div>
               ) : (
                 visibleEpisodes.map((ep) => {
@@ -214,10 +210,12 @@ export function PodcastImportModal({ onImport, onClose, toLibrary = false }) {
 
             <footer className="podcast-foot">
               <button type="button" className="podcast-btn podcast-btn-ghost" onClick={() => setPhase('url')}>
-                Retour
+                {t("Retour")}
               </button>
               <span className="podcast-spacer" />
-              <span className="podcast-foot-status"><b>{selected.size}</b> sélectionné{selected.size > 1 ? 's' : ''}</span>
+              <span className="podcast-foot-status"><b>{selected.size > 1
+                ? t('{count} sélectionnés', { count: selected.size })
+                : t('{count} sélectionné', { count: selected.size })}</b></span>
               <button
                 type="button"
                 className="podcast-btn podcast-btn-primary"
@@ -225,7 +223,9 @@ export function PodcastImportModal({ onImport, onClose, toLibrary = false }) {
                 disabled={selected.size === 0}
               >
                 {selected.size > 0
-                  ? `Importer ${selected.size} épisode${selected.size > 1 ? 's' : ''}`
+                  ? (selected.size > 1
+                    ? t('Importer {count} épisodes', { count: selected.size })
+                    : t('Importer {count} épisode', { count: selected.size }))
                   : t('Importer')}
               </button>
             </footer>

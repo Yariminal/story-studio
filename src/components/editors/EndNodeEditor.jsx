@@ -52,19 +52,17 @@ export function EndNodeEditor({
     <>
       <div className="card">
         <div className="card-title-row">
-          <div className="card-title">Message de fin</div>
-          <div className="card-copy card-copy--inline">
-            Audio joué après chaque histoire, avant la destination finale.
-          </div>
+          <div className="card-title">{t('Message de fin')}</div>
+          <div className="card-copy card-copy--inline"> {t("Audio joué après chaque histoire, avant la destination finale.")} </div>
         </div>
 
         <div className="field-row">
-          <span className="field-label">Nom</span>
+          <span className="field-label">{t('Nom')}</span>
           <input
             className="field-input"
             value={endNodeName}
             onChange={(event) => onUpdateEndNodeName?.(event.target.value)}
-            placeholder="Message de fin"
+            placeholder={t('Message de fin')}
           />
         </div>
 
@@ -79,9 +77,7 @@ export function EndNodeEditor({
         />
 
         {!hasAudio && (
-          <div className="info-box warn">
-            Audio requis pour la génération.
-          </div>
+          <div className="info-box warn"> {t("Audio requis pour la génération.")} </div>
         )}
         {localStories.length > 0 && (
           <div className="end-node-local-list">
@@ -92,7 +88,7 @@ export function EndNodeEditor({
                   Examiner {item.entry.name || t('cette histoire')}
                 </button>
                 <button type="button" className="link-button" onClick={() => onAttachStory?.(item.entry.id)}>
-                  Rattacher au message du pack
+                  {t("Rattacher au message du pack")}
                 </button>
               </div>
             ))}
@@ -102,14 +98,14 @@ export function EndNodeEditor({
 
       <div className="card">
         <div className="card-title-row">
-          <div className="card-title">Pendant la lecture</div>
+          <div className="card-title">{t('Pendant la lecture')}</div>
         </div>
         <div className="editor-setting-stack">
           <div className="editor-setting-row end-node-setting-row">
             <div className="editor-setting-copy end-node-setting-copy">
-              <div className="editor-setting-title">Bouton Accueil</div>
+              <div className="editor-setting-title">{t('Bouton Accueil')}</div>
               <div className="editor-setting-desc">
-                Destination si l'enfant appuie sur Accueil pendant le message de fin.
+                {t("Destination si l'enfant appuie sur Accueil pendant le message de fin.")}
               </div>
             </div>
             <div className="editor-setting-control">
@@ -130,15 +126,13 @@ export function EndNodeEditor({
 
       <div className="card">
         <div className="card-title-row">
-          <div className="card-title">Après la lecture</div>
+          <div className="card-title">{t('Après la lecture')}</div>
         </div>
         <div className="editor-setting-stack">
           <div className="editor-setting-row end-node-setting-row end-node-playback-row">
             <div className="editor-setting-copy">
-              <div className="editor-setting-title">Quand passer à la suite ?</div>
-              <div className="editor-setting-desc">
-                Le retour vers la destination configurée ci-dessous s’effectue dès la fin du message ou après un appui sur OK.
-              </div>
+              <div className="editor-setting-title">{t('Quand passer à la suite ?')}</div>
+              <div className="editor-setting-desc"> {t("Le retour vers la destination configurée ci-dessous s’effectue dès la fin du message ou après un appui sur OK.")} </div>
             </div>
             <EndMessagePlaybackControl
               summary={playbackSummary}
@@ -147,7 +141,7 @@ export function EndNodeEditor({
           </div>
           <div className="editor-setting-row end-node-setting-row">
             <div className="editor-setting-copy end-node-setting-copy">
-              <div className="editor-setting-title">Retour après le message</div>
+              <div className="editor-setting-title">{t('Retour après le message')}</div>
               <div className="editor-setting-desc">
                 {nightModeReturn
                   ? t('Cette destination remplace les réglages individuels des histoires.')
@@ -171,13 +165,13 @@ export function EndNodeEditor({
 
       <div className="card">
         <div className="card-title-row">
-          <div className="card-title">Réglage du message de fin</div>
+          <div className="card-title">{t('Réglage du message de fin')}</div>
         </div>
         <div className="editor-setting-stack">
           <div className="editor-setting-row is-toggle-row end-node-setting-row end-node-toggle-row">
             <Toggle on={nightModeActive} onChange={onUpdateNightMode} />
             <div className="editor-setting-copy end-node-setting-copy">
-              <div className="editor-setting-title">Activer le mode nuit</div>
+              <div className="editor-setting-title">{t('Activer le mode nuit')}</div>
             </div>
           </div>
         </div>
@@ -193,10 +187,8 @@ export function EndNodeEditor({
           >
             <Trash2 className="card-danger-icon" />
           </button>
-          <span className="card-danger-title">Supprimer le message de fin</span>
-          <p className="card-danger-desc">
-            Retire le message de fin du pack. Les histoires ne joueront plus de message commun à leur conclusion. Désactive aussi le mode nuit.
-          </p>
+          <span className="card-danger-title">{t('Supprimer le message de fin')}</span>
+          <p className="card-danger-desc"> {t("Retire le message de fin du pack. Les histoires ne joueront plus de message commun à leur conclusion. Désactive aussi le mode nuit.")} </p>
         </div>
       </div>
     </>

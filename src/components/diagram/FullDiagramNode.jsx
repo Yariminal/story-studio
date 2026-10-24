@@ -107,8 +107,8 @@ export function FullDiagramNode({
     ? isForbiddenDepth
       ? MENU_DEPTH_LIMIT_REACHED_MESSAGE
       : isForbiddenCycle
-        ? MENU_CYCLE_MESSAGE
-        : (isRoot ? 'Deplacer a la racine' : 'Deplacer ici')
+        ? MENU_CYCLE_MESSAGE()
+        : (isRoot ? t("Deplacer a la racine") : 'Deplacer ici')
     : null;
 
   function handleClick(e) {
@@ -173,7 +173,7 @@ export function FullDiagramNode({
         </Tooltip>
       ) : null}
       <div className="fd-complete-node-actions">
-        <Tooltip text="Simuler depuis ce point">
+        <Tooltip text={t("Simuler depuis ce point")}>
           <button
             type="button"
             className="fd-complete-node-action fd-complete-node-action--preview"

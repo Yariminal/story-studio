@@ -2,19 +2,21 @@ import { useRef, useState } from 'react';
 import { KEYS, read, write } from '../../store/persistentSettings';
 
 import { t } from '../../i18n/index.js';
-export const QUEUE_COLUMNS = [
+export function QUEUE_COLUMNS() {
+  return [
   { id: 'type', label: 'Type', defaultWidth: 76, minWidth: 62, grow: 0.2 },
-  { id: 'name', label: 'Nom', defaultWidth: 220, minWidth: 130, grow: 1.3 },
-  { id: 'target', label: 'Destination', defaultWidth: 190, minWidth: 92, grow: 1 },
+  { id: 'name', label: t("Nom"), defaultWidth: 220, minWidth: 130, grow: 1.3 },
+  { id: 'target', label: t("Destination"), defaultWidth: 190, minWidth: 92, grow: 1 },
   { id: 'result', label: t('Résultat'), defaultWidth: 300, minWidth: 130, grow: 1.6 },
   { id: 'status', label: 'Statut', defaultWidth: 96, minWidth: 82, grow: 0.25 },
   { id: 'usage', label: 'Usage', defaultWidth: 100, minWidth: 76, grow: 0.25 },
   { id: 'date', label: 'Date', defaultWidth: 92, minWidth: 72, grow: 0.2 },
   { id: 'actions', label: '', defaultWidth: 58, minWidth: 48, grow: 0 },
 ];
+}
 
-const RESIZABLE_COLUMNS = QUEUE_COLUMNS.filter((col) => col.id !== 'actions');
-const DEFAULT_COL_WIDTHS = Object.fromEntries(QUEUE_COLUMNS.map((col) => [col.id, col.defaultWidth]));
+const RESIZABLE_COLUMNS = QUEUE_COLUMNS().filter((col) => col.id !== 'actions');
+const DEFAULT_COL_WIDTHS = Object.fromEntries(QUEUE_COLUMNS().map((col) => [col.id, col.defaultWidth]));
 const GRID_GAP = 8;
 const GRID_OUTER_PADDING = 44;
 
@@ -27,19 +29,19 @@ function loadQueueColWidths() {
   const saved = read(KEYS.AI_QUEUE_COL_WIDTHS, { parse: JSON.parse });
   if (!saved || Array.isArray(saved)) return { ...DEFAULT_COL_WIDTHS };
   const next = { ...DEFAULT_COL_WIDTHS };
-  for (const col of QUEUE_COLUMNS) {
+  for (const col of QUEUE_COLUMNS()) {
     if (saved[col.id] != null) next[col.id] = clampWidth(col, saved[col.id]);
   }
   return next;
 }
 
 function fitWidthsToContainer(widths, containerWidth) {
-  const next = Object.fromEntries(QUEUE_COLUMNS.map((col) => [col.id, clampWidth(col, widths[col.id])]));
+  const next = Object.fromEntries(QUEUE_COLUMNS().map((col) => [col.id, clampWidth(col, widths[col.id])]));
   const contentWidth = Math.max(0, (containerWidth || 0) - GRID_OUTER_PADDING);
   if (!contentWidth) return next;
 
-  const gapTotal = GRID_GAP * (QUEUE_COLUMNS.length - 1);
-  const widthTotal = () => QUEUE_COLUMNS.reduce((sum, col) => sum + next[col.id], gapTotal);
+  const gapTotal = GRID_GAP * (QUEUE_COLUMNS().length - 1);
+  const widthTotal = () => QUEUE_COLUMNS().reduce((sum, col) => sum + next[col.id], gapTotal);
   let delta = contentWidth - widthTotal();
 
   if (delta > 0) {
@@ -70,13 +72,13 @@ function fitWidthsToContainer(widths, containerWidth) {
 
 export function resolveQueueGrid(widths, containerWidth) {
   const fitted = fitWidthsToContainer(widths, containerWidth);
-  const gridWidth = QUEUE_COLUMNS.reduce(
+  const gridWidth = QUEUE_COLUMNS().reduce(
     (sum, col) => sum + Math.round(fitted[col.id]),
-    GRID_GAP * (QUEUE_COLUMNS.length - 1),
+    GRID_GAP * (QUEUE_COLUMNS().length - 1),
   );
 
   return {
-    grid: QUEUE_COLUMNS.map((col) => `${Math.round(fitted[col.id])}px`).join(' '),
+    grid: QUEUE_COLUMNS().map((col) => `${Math.round(fitted[col.id])}px`).join(' '),
     minWidth: `${gridWidth + GRID_OUTER_PADDING}px`,
     widths: fitted,
   };

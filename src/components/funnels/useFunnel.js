@@ -4,8 +4,8 @@ import {
   nextStepIndex,
   prevStepIndex,
   isLastStep as isLastStepAt,
-  stepCounterLabel,
 } from './funnelNavigation.js';
+import { t, getLocale } from '../../i18n/index.js';
 
 /**
  * Machine à états partagée des funnels.
@@ -64,7 +64,12 @@ export function useFunnel({ stepCount, family = 'editor', initialStep = 0, onSte
     stepCount,
     isLastStep: lastStep,
     isFirstStep: stepIndex === 0,
-    stepLabel: stepCounterLabel(stepIndex, stepCount),
+    stepLabel: stepCount <= 0
+      ? ''
+      : t('Étape {current} / {count}', {
+        current: clampStepIndex(stepIndex, stepCount) + 1,
+        count: stepCount,
+      }),
     // Le châssis (stepper + pied) n'est visible que pendant la collecte.
     showChrome: phase === 'collect',
     goToStep,
@@ -76,5 +81,6 @@ export function useFunnel({ stepCount, family = 'editor', initialStep = 0, onSte
   }), [
     family, phase, stepIndex, stepCount, lastStep,
     goToStep, goNext, goBack, startProcessing, complete, reset,
+    getLocale(),
   ]);
 }

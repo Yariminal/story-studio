@@ -247,7 +247,7 @@ export function Toolbar({
             <ToolbarButton
               id="project-menu"
               title={t("Actions du projet")}
-              label="Projet"
+              label={t('Projet')}
               onClick={openPopover}
               active={projectMenuOpen}
               trailing={<span className="chrome-project-caret" aria-hidden="true">▾</span>}
@@ -394,7 +394,7 @@ export function Toolbar({
             {successToast ? (
               <div className="validation-success-toast" role="status" aria-live="polite">
                 <CircleCheck width={13} height={13} aria-hidden="true" />
-                <span>Aucun élément à corriger</span>
+                <span>{t('Aucun élément à corriger')}</span>
               </div>
             ) : null}
             <Tooltip text={commandTitle(generate)}>

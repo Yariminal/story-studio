@@ -9,6 +9,7 @@
 // C'est ce qu'elle doit démontrer : **aucun chemin de l'éditeur avancé n'écrit
 // dans `editorState` ni ne le fait entrer dans l'historique**.
 
+import { t } from '../../i18n/index.js';
 import { buildGraphIndex } from './graphViewModel.js';
 import { applyCachedView } from './graphSelection.js';
 import { createViewCacheWriter } from './viewCacheCadence.js';
@@ -216,7 +217,7 @@ export function createAdvancedViewSession({
     },
 
     noteViewEvent(event, patch = {}) {
-      if (!VIEW_EVENT_VALUES.has(event)) throw new Error(`Événement de vue inconnu : ${event}`);
+      if (!VIEW_EVENT_VALUES.has(event)) throw new Error(t("Événement de vue inconnu : {event}", { event: event }));
       ticket = advanceTicket(ticket, event);
       if (Object.hasOwn(patch, 'viewport')) viewport = patch.viewport ? { ...patch.viewport } : null;
       if (Object.hasOwn(patch, 'selection')) storedSelection = {

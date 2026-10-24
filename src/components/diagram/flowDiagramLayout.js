@@ -103,7 +103,9 @@ function collectNavigationTransitions(entries, parentMenu = null, transitions = 
             localEnd: {
               kind: 'sequence',
               stepCount: sequence.length,
-              label: `Scénario de fin · ${sequence.length} étape${sequence.length > 1 ? 's' : ''}`,
+              label: sequence.length > 1
+                ? t('Scénario de fin · {count} étapes', { count: sequence.length })
+                : t('Scénario de fin · {count} étape', { count: sequence.length }),
             },
           });
         }

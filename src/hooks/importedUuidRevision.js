@@ -17,7 +17,7 @@ export async function askImportedUuidRevision(draft, showChoiceDialog) {
     variant: 'info',
     cancelValue: 'keep',
     actions: [
-      { value: 'keep', label: "Garder l'UUID d'origine", kind: 'ghost' },
+      { value: 'keep', label: t("Garder l'UUID d'origine"), kind: 'ghost' },
       { value: 'renew', label: t('Générer un nouvel UUID'), kind: 'primary', autoFocus: true },
     ],
   });

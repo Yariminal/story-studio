@@ -102,9 +102,9 @@ export function buildDiagramContextActions({
 
   if (nodeType === 'menu' || nodeType === 'story' || nodeType === 'zip') {
     actions.push('sep');
-    actions.push({ icon: '⧉', label: 'Dupliquer', fn: () => onDuplicate?.(nodeId), shortcut: shortcutLabels.selectionDuplicate ?? null });
-    actions.push({ icon: <Copy />, label: 'Copier', fn: () => handleCopy(nodeId), shortcut: shortcutLabels.selectionCopy ?? null });
-    actions.push({ icon: <Scissors />, label: 'Couper', fn: () => handleCut(nodeId), shortcut: shortcutLabels.selectionCut ?? null });
+    actions.push({ icon: '⧉', label: t("Dupliquer"), fn: () => onDuplicate?.(nodeId), shortcut: shortcutLabels.selectionDuplicate ?? null });
+    actions.push({ icon: <Copy />, label: t("Copier"), fn: () => handleCopy(nodeId), shortcut: shortcutLabels.selectionCopy ?? null });
+    actions.push({ icon: <Scissors />, label: t("Couper"), fn: () => handleCut(nodeId), shortcut: shortcutLabels.selectionCut ?? null });
   }
 
   if (clipboardRef.current?.entries?.length) {
@@ -136,8 +136,8 @@ export function buildDiagramContextActions({
     actions.push({
       icon: <Music />,
       label: audioClip?.mode === 'cut'
-        ? (audioCount > 1 ? `Déplacer ${audioCount} sons ici` : t("Déplacer l'audio ici"))
-        : (audioCount > 1 ? `Coller ${audioCount} sons ici` : t("Coller l'audio ici")),
+        ? (audioCount > 1 ? t("Déplacer {audioCount} sons ici", { audioCount: audioCount }) : t("Déplacer l'audio ici"))
+        : (audioCount > 1 ? t("Coller {audioCount} sons ici", { audioCount: audioCount }) : t("Coller l'audio ici")),
       fn: () => handlePasteMedia(nodeId, nodeType, 'audio'),
     });
   }
@@ -176,7 +176,7 @@ export function buildDiagramContextActions({
         icon: <Music />,
         label: replacementEligibility.valid
           ? t('Assembler et remplacer les histoires…')
-          : `Assembler ${audioContext.stories.length} audios…`,
+          : t("Assembler {length} audios…", { length: audioContext.stories.length }),
         fn: () => {
           closeContextMenu();
           onOpenMediaAudioTool({
@@ -202,7 +202,7 @@ export function buildDiagramContextActions({
         : () => onDeleteItem?.(nodeId);
     actions.push({
       icon: <Trash2 />,
-      label: selectedForDelete.length > 1 ? `Supprimer ${selectedForDelete.length} éléments` : t('Supprimer'),
+      label: selectedForDelete.length > 1 ? t("Supprimer {length} éléments", { length: selectedForDelete.length }) : t('Supprimer'),
       shortcut: shortcutLabels.selectionDelete ?? null,
       fn: deleteFn,
       danger: true,
@@ -240,7 +240,7 @@ export function buildDiagramContextActions({
     };
 
     const headerLabel = isMultiTarget
-      ? `Couleur (${colorTargetIds.length + (includesRoot ? 1 : 0)} éléments)`
+      ? t("Couleur ({value} éléments)", { value: colorTargetIds.length + (includesRoot ? 1 : 0) })
       : 'Couleur';
 
     actions.push('sep');

@@ -1,3 +1,4 @@
+import { t } from '../../i18n/index.js';
 import { ChevronLeft, ChevronRight } from '../icons/LucideLocal';
 
 /**
@@ -35,9 +36,7 @@ export function FunnelFooter({
         onClick={onBack}
         disabled={backDisabled}
       >
-        <ChevronLeft strokeWidth={2.2} />
-        Précédent
-      </button>
+        <ChevronLeft strokeWidth={2.2} /> {t("Précédent")} </button>
 
       <span className="funnel-foot-label">{stepLabel}</span>
 

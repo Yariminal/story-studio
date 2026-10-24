@@ -78,7 +78,7 @@ function PopoverAudioPlayer({ path, name }) {
 
   return (
     <div className="mp-audio-player">
-      <div className="mp-waveform" onClick={handleWaveClick} title="Cliquer pour chercher">
+      <div className="mp-waveform" onClick={handleWaveClick} title={t('Cliquer pour chercher')}>
         {heights.map((h, i) => (
           <span
             key={i}
@@ -89,7 +89,7 @@ function PopoverAudioPlayer({ path, name }) {
         <div className="mp-waveform-progress" style={{ width: `${progress * 100}%` }} />
       </div>
       <div className="mp-transport">
-        <button className="mp-play-btn" type="button" onClick={toggle} title={playing ? 'Pause' : 'Lire'}>
+        <button className="mp-play-btn" type="button" onClick={toggle} title={playing ? t("Pause") : 'Lire'}>
           {playing ? '⏸' : '▶'}
         </button>
         <span className="mp-timer">{fmt(current)} / {duration != null ? fmt(duration) : '--:--'}</span>
@@ -117,7 +117,7 @@ function TagEditor({ path, itemTags, allProjectTags, onAddMediaTag, onRemoveMedi
               type="button"
               className="mp-tag-remove"
               onClick={() => onRemoveMediaTag(path, tag)}
-              title={`Retirer le tag "${tag}"`}
+              title={t("Retirer le tag \"{tag}\"", { tag: tag })}
             >×</button>
           </span>
         ))}
@@ -128,7 +128,7 @@ function TagEditor({ path, itemTags, allProjectTags, onAddMediaTag, onRemoveMedi
             className="mp-tag-available"
             style={{ borderColor: tagStyle(tag).background, color: tagStyle(tag).background }}
             onClick={() => onAddMediaTag(path, tag)}
-            title={`Ajouter le tag "${tag}"`}
+            title={t("Ajouter le tag \"{tag}\"", { tag: tag })}
           >
             + {tag}
           </button>
@@ -228,7 +228,7 @@ export function MediaPopover({
               }}
             >
               <FilePen width={14} height={14} strokeWidth={2} absoluteStrokeWidth />
-              Modifier l’image…
+              {t("Modifier l’image…")}
             </Button>
           ) : null}
         </>
@@ -241,9 +241,9 @@ export function MediaPopover({
             <Button
               className="mp-action-btn mp-action-btn--goto"
               onClick={handleGoTo}
-              title={`Ouvrir les réglages de « ${usageTarget.label} »`}
+              title={t("Ouvrir les réglages de « {label} »", { label: usageTarget.label })}
             >
-              Voir l’utilisation dans le projet
+              {t("Voir l’utilisation dans le projet")}
             </Button>
           ) : null}
           {onSplit ? (
@@ -254,9 +254,7 @@ export function MediaPopover({
                 onSplit(item);
               }}
             >
-              <Scissors width={14} height={14} strokeWidth={2} absoluteStrokeWidth />
-              Découper un audio
-            </Button>
+              <Scissors width={14} height={14} strokeWidth={2} absoluteStrokeWidth /> {t("Découper un audio")} </Button>
           ) : null}
         </>
       )}

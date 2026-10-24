@@ -14,6 +14,7 @@
 // point : quand le projet est fermé, la ligne reste consultable et seuls les
 // gestes qui demandent un canvas disparaissent.
 
+import { t } from '../../i18n/index.js';
 import { Button } from '../common/Button';
 import { ExportRefusalReport } from '../AdvancedWorkspace/ExportReport.jsx';
 import { EXPORT_REFUSAL } from '../../store/advancedExport/exportOutcome.js';
@@ -31,7 +32,7 @@ export function AdvancedJobReport({
     return (
       <div className="production-report__actions">
         <Button size="sm" variant="primary" onClick={() => onReview(job.result)}>
-          Simuler le pack produit
+          {t("Simuler le pack produit")}
         </Button>
       </div>
     );

@@ -284,13 +284,15 @@ export function advancedPackRecap(view) {
 export const METADATA_SAVE_CLOSED = 'closed';
 export const METADATA_SAVE_KEPT = 'kept';
 
-const SAVE_NOTICES = Object.freeze({
+function SAVE_NOTICES() {
+  return Object.freeze({
   held: t("Un export est en cours. La saisie est conservée ; clique de nouveau sur « Appliquer » une fois l'export terminé."),
   busy: t('Un geste est déjà en cours. Réessaie dans un instant ; la saisie est conservée.'),
   queued: t('Un geste est déjà en cours. Réessaie dans un instant ; la saisie est conservée.'),
   stale: t("Le projet a changé pendant l'application. Vérifie les valeurs avant de réessayer."),
   refused: t("La modification a été refusée et rien n'a été écrit. La saisie est conservée."),
 });
+}
 
 /**
  * Traduit l'issue d'un geste de métadonnées en décision de fiche.
@@ -304,7 +306,7 @@ export function metadataSaveDecision(outcome) {
   }
   return {
     result: METADATA_SAVE_KEPT,
-    notice: SAVE_NOTICES[outcome.status]
+    notice: SAVE_NOTICES()[outcome.status]
       ?? t("La modification n'a pas été appliquée. La saisie est conservée."),
   };
 }

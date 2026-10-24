@@ -14,7 +14,7 @@ import {
 import { isTauriRuntime } from '../../utils/tauriRuntime';
 import { releaseTauriListener } from '../../utils/tauriListener';
 
-import { t } from '../../i18n/index.js';
+import { t, getLocale } from '../../i18n/index.js';
 const EXPORTS = {
   report: {
     extension: 'html',
@@ -113,7 +113,7 @@ export function useCommunityPackChecker() {
       setStatus('idle');
       return null;
     }
-  }, [appendLiveLog]);
+  }, [appendLiveLog, getLocale()]);
 
   const pickPack = useCallback(async () => {
     const selected = await open({
@@ -123,7 +123,7 @@ export function useCommunityPackChecker() {
     if (selected) {
       await analyzePath(Array.isArray(selected) ? selected[0] : selected);
     }
-  }, [analyzePath]);
+  }, [analyzePath, getLocale()]);
 
   const fixPack = useCallback(async (metadataPatch = null, options = {}) => {
     if (!zipPath) return null;
@@ -139,7 +139,7 @@ export function useCommunityPackChecker() {
         metadataPatch,
         correctionSelection: options.correctionSelection || null,
       });
-      appendLiveLog(`ZIP corrigé créé : ${result.fixedZipPath}`);
+      appendLiveLog(t("ZIP corrigé créé : {fixedZipPath}", { fixedZipPath: result.fixedZipPath }));
       appendLiveLog(t('Réanalyse automatique du ZIP corrigé...'));
       // La réanalyse réinitialise fixedResult (via analyzePath) : on positionne
       // donc le résultat APRÈS, pour que la bannière « ZIP corrigé » persiste.
@@ -148,7 +148,7 @@ export function useCommunityPackChecker() {
         label: t('Analyse du ZIP corrigé...'),
       });
       if (correctedReport) {
-        const correctionLine = `[OK] Correction appliquée : ${result.automaticCorrectionsApplied ?? 0} automatique(s), ${result.optionalAudioSilencesFixed ?? 0} suggestion(s) facultative(s) sélectionnée(s).`;
+        const correctionLine = t("[OK] Correction appliquée : {value} automatique(s), {value2} suggestion(s) facultative(s) sélectionnée(s).", { value: result.automaticCorrectionsApplied ?? 0, value2: result.optionalAudioSilencesFixed ?? 0 });
         setReport({
           ...correctedReport,
           technicalLog: [...(correctedReport.technicalLog || []), correctionLine],
@@ -165,7 +165,7 @@ export function useCommunityPackChecker() {
       setStatus('idle');
       return null;
     }
-  }, [analyzePath, appendLiveLog, zipPath]);
+  }, [analyzePath, appendLiveLog, zipPath, getLocale()]);
 
   const exportReport = useCallback(async (kind) => {
     if (!report || !EXPORTS[kind]) return;
@@ -178,7 +178,7 @@ export function useCommunityPackChecker() {
     if (!target) return;
     try {
       await writeTextFile(target, config.content(report));
-      setExportNotice(`${config.label} exporté.`);
+      setExportNotice(t("{label} exporté.", { label: config.label }));
     } catch (err) {
       setError(`Export impossible : ${err}`);
     }
@@ -192,14 +192,14 @@ export function useCommunityPackChecker() {
     } catch {
       setError(t('Impossible de copier le journal.'));
     }
-  }, [report]);
+  }, [report, getLocale()]);
 
   const openFixedLocation = useCallback(async () => {
     if (!fixedResult?.fixedZipPath) return;
     try {
       await openPath(fixedResult.fixedZipPath);
     } catch (err) {
-      setError(`Impossible d'ouvrir le ZIP corrigé : ${err}`);
+      setError(t("Impossible d'ouvrir le ZIP corrigé : {err}", { err: err }));
     }
   }, [fixedResult]);
 

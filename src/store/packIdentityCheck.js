@@ -14,6 +14,6 @@ export async function packIdentityRefusal(value, invoke) {
   } catch (error) {
     const reason = String(error?.message ?? error ?? '').trim()
       || t("L'UUID du pack n'a pas pu être vérifié.");
-    return `${reason} En saisir un autre, ou en générer un nouveau.`;
+    return t("{reason} En saisir un autre, ou en générer un nouveau.", { reason: reason });
   }
 }

@@ -10,7 +10,7 @@ export function MediaToolResultBanner({
   const createdCount = result.createdPaths?.length ?? 0;
   const defaultMessage = createdCount === 1
     ? t('Le fichier créé est sélectionné dans Médias.')
-    : `${createdCount} fichiers créés sont sélectionnés dans Médias.`;
+    : t("{createdCount} fichiers créés sont sélectionnés dans Médias.", { createdCount: createdCount });
 
   return (
     <div className="media-tool-result" role="status" aria-live="polite">
@@ -25,7 +25,7 @@ export function MediaToolResultBanner({
         <strong>{result.projectApplied ? t('Projet mis à jour') : t('Fichiers créés dans Médias')}</strong>
         <span>{result.message || defaultMessage}</span>
         {unavailableReason ? (
-          <small>{unavailableReason}{result.projectApplied ? '' : ' Les fichiers créés restent disponibles dans Médias.'}</small>
+          <small>{unavailableReason}{result.projectApplied ? '' : t(" Les fichiers créés restent disponibles dans Médias.")}</small>
         ) : null}
       </div>
     </div>

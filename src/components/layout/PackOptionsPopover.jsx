@@ -21,15 +21,15 @@ function silenceModePresentation(leadingSeconds, trailingSeconds) {
   const leadingLabel = formatPackAudioEdgeSilence(leadingSeconds);
   const trailingLabel = formatPackAudioEdgeSilence(trailingSeconds);
   const durationSummary = leadingSeconds === trailingSeconds
-    ? `${leadingLabel} au début et à la fin`
-    : `${leadingLabel} au début · ${trailingLabel} à la fin`;
+    ? t('{duration} au début et à la fin', { duration: leadingLabel })
+    : t('{leading} au début · {trailing} à la fin', { leading: leadingLabel, trailing: trailingLabel });
 
   return {
     durationSummary,
     options: [
-      ['normalize', 'Ajuster', t('Mesurer et ajuster les silences de début et de fin'), `Recommandé : mesure les silences et les ramène à exactement ${leadingLabel} au début et ${trailingLabel} à la fin (coupe si trop long, complète si trop court).`],
-      ['add', t('Ajouter'), `Ajouter ${leadingLabel} au début et ${trailingLabel} à la fin`, `Ajoute ${leadingLabel} au début et ${trailingLabel} à la fin sans mesurer l'existant — le silence déjà présent s'additionne.`],
-      ['off', 'Ne rien faire', t('Ne pas modifier les silences de début et de fin'), t('Ne touche pas aux silences de début et de fin.')],
+      ['normalize', t('Ajuster'), t('Mesurer et ajuster les silences de début et de fin'), t('Recommandé : mesure les silences et les ramène à exactement {leading} au début et {trailing} à la fin (coupe si trop long, complète si trop court).', { leading: leadingLabel, trailing: trailingLabel })],
+      ['add', t('Ajouter'), t('Ajouter {leading} au début et {trailing} à la fin', { leading: leadingLabel, trailing: trailingLabel }), t("Ajoute {leading} au début et {trailing} à la fin sans mesurer l'existant — le silence déjà présent s'additionne.", { leading: leadingLabel, trailing: trailingLabel })],
+      ['off', t('Ne rien faire'), t('Ne pas modifier les silences de début et de fin'), t('Ne touche pas aux silences de début et de fin.')],
     ],
   };
 }
@@ -115,11 +115,11 @@ export function PackOptionsPopover({
           <div className="pack-options-hover-bridge" aria-hidden="true" />
           <div className="pack-options-popover" role="dialog" aria-label={t("Options du pack")}>
             <div className="pack-options-well">
-              <div className="pack-options-well-title">Traitement audio du pack</div>
-              <Tooltip text={HARMONIZE_LOUDNESS_HELP} wrap className="pack-options-row-tip">
+              <div className="pack-options-well-title">{t('Traitement audio du pack')}</div>
+              <Tooltip text={t(HARMONIZE_LOUDNESS_HELP)} wrap className="pack-options-row-tip">
                 <div className="pack-options-control-row">
                   <span className="pack-options-control-copy">
-                    <span className="pack-options-control-title">Harmoniser le volume</span>
+                    <span className="pack-options-control-title">{t('Harmoniser le volume')}</span>
                   </span>
                   <span className="pack-options-control-end">
                     <Toggle
@@ -132,7 +132,7 @@ export function PackOptionsPopover({
               </Tooltip>
               <div className="pack-options-control-row pack-options-control-row--stack">
                 <span className="pack-options-control-copy">
-                  <span className="pack-options-control-title">Silence début / fin</span>
+                  <span className="pack-options-control-title">{t('Silence début / fin')}</span>
                   <span className="pack-options-silence-duration">{silenceDurationSummary}</span>
                 </span>
                 <div className="pack-options-segmented" role="group" aria-label={t("Mode de silence début et fin")}>
@@ -157,7 +157,7 @@ export function PackOptionsPopover({
                 <>
                   <div className="pack-options-well-sep" />
 
-                  <div className="pack-options-well-title">Lecture <span>· global</span></div>
+                  <div className="pack-options-well-title">{t('Lecture')} <span>· {t('global')}</span></div>
                   <Tooltip
                     text={t("Enchaîne automatiquement les histoires et ignore les messages, scénarios et retours de fin tant que l'option est active.")}
                     wrap
@@ -165,9 +165,9 @@ export function PackOptionsPopover({
                   >
                     <div className="pack-options-control-row">
                       <span className="pack-options-control-copy">
-                        <span className="pack-options-control-title">Auto-next</span>
+                        <span className="pack-options-control-title">{t('Auto-next')}</span>
                         <span className="pack-options-control-hint">
-                          Enchaîne la lecture des nœuds
+                          {t('Enchaîne la lecture des nœuds')}
                         </span>
                       </span>
                       <span className="pack-options-control-end">
@@ -195,8 +195,8 @@ export function PackOptionsPopover({
                     <Wrench strokeWidth={2} absoluteStrokeWidth />
                   </span>
                   <span className="pack-options-gateway-copy">
-                    <span className="pack-options-gateway-title">Préférences de l’application</span>
-                    <span className="pack-options-gateway-subtitle">Thème, dossiers de travail, audio, raccourcis.</span>
+                    <span className="pack-options-gateway-title">{t('Préférences de l’application')}</span>
+                    <span className="pack-options-gateway-subtitle">{t('Thème, dossiers de travail, audio, raccourcis.')}</span>
                   </span>
                   <span className="pack-options-gateway-end">
                     {preferencesShortcut ? <span className="pack-options-shortcut">{preferencesShortcut}</span> : null}

@@ -32,53 +32,53 @@ export function ProjectsMediaSection({
 
   return (
     <section id="projects-media" className={className} ref={sectionRef}>
-      <div className="opts-card-title">Gestion des projets et médias</div>
+      <div className="opts-card-title">{t('Gestion des projets et médias')}</div>
       <div className="opts-row">
         <div className="opts-row-info">
-          <div className="opts-row-label">Utiliser un workspace pour les nouveaux projets</div>
+          <div className="opts-row-label">{t('Utiliser un workspace pour les nouveaux projets')}</div>
           <div className="opts-row-sub">
-            Désactivé par défaut : les nouveaux projets commencent dans une session temporaire ; au premier enregistrement, leurs médias rejoignent l’emplacement de travail.
+            {t('Désactivé par défaut : les nouveaux projets commencent dans une session temporaire ; au premier enregistrement, leurs médias rejoignent l’emplacement de travail.')}
           </div>
         </div>
         <Toggle on={!!useWorkspaceForNewProjects} onChange={onUseWorkspaceForNewProjectsChange} />
       </div>
       <div className="opts-row">
         <div className="opts-row-info">
-          <div className="opts-row-label">Emplacement de travail</div>
+          <div className="opts-row-label">{t('Emplacement de travail')}</div>
           <div className="opts-row-sub">
-            Emplacement de référence pour les projets enregistrés et les médias gérés.
+            {t('Emplacement de référence pour les projets enregistrés et les médias gérés.')}
           </div>
           <div className="opts-path-value" title={displayedWorkspaceDir || ''}>
             {displayedWorkspaceDir || t('Workspace en cours de résolution...')}
           </div>
         </div>
         <Button onClick={onPickWorkspaceDir}>
-          Choisir
+          {t('Choisir')}
         </Button>
       </div>
       <div className="opts-row">
         <div className="opts-row-info">
-          <div className="opts-row-label">Copier les fichiers importés dans l’emplacement de travail</div>
+          <div className="opts-row-label">{t('Copier les fichiers importés dans l’emplacement de travail')}</div>
           <div className="opts-row-sub">
-            Copie chaque fichier importé (ZIP, 7z, audio, image) dans <strong>Workspace/fichiers-importes/</strong>.
+            {t('Copie chaque fichier importé (ZIP, 7z, audio, image) dans')} <strong>Workspace/fichiers-importes/</strong>.
           </div>
         </div>
         <Toggle on={copyFilesEnabled} onChange={(v) => onCopyFilesChange?.(v)} />
       </div>
       <div className="opts-row">
         <div className="opts-row-info">
-          <div className="opts-row-label">Consolider le projet</div>
+          <div className="opts-row-label">{t('Consolider le projet')}</div>
           <div className="opts-row-sub">
-            Copie le `.mbah` et tous les médias référencés dans un dossier cible, sans supprimer les originaux.
+            {t('Copie le `.mbah` et tous les médias référencés dans un dossier cible, sans supprimer les originaux.')}
           </div>
         </div>
         <Button onClick={handleConsolidate} disabled={consolidating || !project?.projectType}>
-          {consolidating ? 'Consolidation...' : 'Consolider'}
+          {consolidating ? t('Consolidation...') : t('Consolider')}
         </Button>
       </div>
       {consolidationResult && (
         <div className={`info-box info-box--spaced ${consolidationResult.errors?.length ? 'warn' : ''}`}>
-          Projet consolidé : {formatFrenchCount(
+          {t('Projet consolidé :')} {formatFrenchCount(
             consolidationResult.copiedCount,
             t('média copié'),
             t('médias copiés'),

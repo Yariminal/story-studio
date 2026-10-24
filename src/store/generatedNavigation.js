@@ -101,7 +101,7 @@ export function getDefaultPackEntryDestination(project) {
 export function getPackStartReturnLabel(project) {
   const destination = getDefaultPackEntryDestination(project);
   return destination?.name
-    ? `Retour vers « ${destination.name} »`
+    ? t("Retour vers « {name} »", { name: destination.name })
     : t('Retour à la couverture du pack');
 }
 
@@ -123,8 +123,8 @@ export function getGeneratedNavigationTargetName(targetId, projectIndex, fallbac
   if (isStoryNavigationTarget(targetId)) {
     const storyId = decodeNavigationStoryId(targetId);
     const name = projectIndex?.entryById?.get(storyId)?.name || fallback;
-    if (isStoryHomeStepNavigationTarget(targetId)) return `Retour de fin - ${name}`;
-    if (isStoryPlayNavigationTarget(targetId)) return `Lecture directe - ${name}`;
+    if (isStoryHomeStepNavigationTarget(targetId)) return t("Retour de fin - {name}", { name: name });
+    if (isStoryPlayNavigationTarget(targetId)) return t("Lecture directe - {name}", { name: name });
     return name;
   }
   return projectIndex?.entryById?.get(targetId)?.name || fallback;

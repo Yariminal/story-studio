@@ -1,4 +1,4 @@
-import { t } from '../../i18n/index.js';
+import { t, getLocale } from '../../i18n/index.js';
 // Le rangement du graphe : un seul état pour le bouton et pour le clavier.
 //
 // Il vivait dans le bouton de la colonne. Le raccourci ne pouvait donc ni
@@ -15,7 +15,9 @@ import { useCallback, useMemo, useRef, useState } from 'react';
 
 import { NO_FOLD, parcoursLayout } from '../../store/advancedGraphView/graphParcoursLayout.js';
 
-export const ARRANGEMENT_REFUSED = t('Le rangement a été refusé : rien n’a été modifié.');
+export function ARRANGEMENT_REFUSED() {
+  return t('Le rangement a été refusé : rien n’a été modifié.');
+}
 
 export function useGraphArrangement({ index, applyLayout, disabled = false }) {
   const [busy, setBusy] = useState(false);
@@ -36,13 +38,13 @@ export function useGraphArrangement({ index, applyLayout, disabled = false }) {
       const accepted = await applyLayout(entries);
       // Un refus laisse le document intact. Le canvas n'a rien à restaurer —
       // il n'a rien peint — mais le dire vaut mieux qu'une commande sans effet.
-      if (!accepted) setFailure(ARRANGEMENT_REFUSED);
+      if (!accepted) setFailure(ARRANGEMENT_REFUSED());
       return accepted === true;
     } finally {
       running.current = false;
       setBusy(false);
     }
-  }, [applyLayout, disabled, index]);
+  }, [applyLayout, disabled, index, getLocale()]);
 
   const unavailable = disabled || !index || !applyLayout;
   return useMemo(() => ({

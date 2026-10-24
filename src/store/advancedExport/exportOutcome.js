@@ -44,7 +44,8 @@ export const PREPARATION_REFUSAL = Object.freeze({
   STANDARD_SERIALIZATION: 'standard-serialization',
 });
 
-const REFUSAL_TITLES = Object.freeze({
+function REFUSAL_TITLES() {
+  return Object.freeze({
   [EXPORT_REFUSAL.PAYLOAD_DECODE]: 'Document illisible',
   [EXPORT_REFUSAL.PREPARATION]: t('Préparation refusée'),
   [EXPORT_REFUSAL.MEDIA_UNAVAILABLE]: t('Médias indisponibles'),
@@ -55,16 +56,20 @@ const REFUSAL_TITLES = Object.freeze({
   [EXPORT_REFUSAL.UNTYPED]: 'Export interrompu',
   [EXPORT_REFUSAL.REQUEST]: t('Export impossible'),
 });
+}
 
-const PREPARATION_TITLES = Object.freeze({
+function PREPARATION_TITLES() {
+  return Object.freeze({
   [PREPARATION_REFUSAL.GRAPH_INTEGRITY]: t('Intégrité du graphe'),
   [PREPARATION_REFUSAL.AUTHORING_ACTION_REQUIRED]: t("Décision d'auteur requise"),
   [PREPARATION_REFUSAL.PACK_IDENTITY]: t('Identité du pack'),
   [PREPARATION_REFUSAL.READINESS_BLOCKED]: t("Qualification d'export bloquée"),
   [PREPARATION_REFUSAL.STANDARD_SERIALIZATION]: t('Sérialisation du document'),
 });
+}
 
-const MEDIA_CAUSE_LABELS = Object.freeze({
+function MEDIA_CAUSE_LABELS() {
+  return Object.freeze({
   'binding-absent': t('aucune liaison enregistrée pour cette référence'),
   'path-null': t('liaison sans chemin : le fichier doit être choisi par référence'),
   'not-found': t('fichier introuvable au chemin enregistré'),
@@ -79,13 +84,16 @@ const MEDIA_CAUSE_LABELS = Object.freeze({
   'tool-interrupted': t("l'outil de conversion a été interrompu"),
   'processing-failed': t('la conversion a échoué'),
 });
+}
 
-const TRANSFORMATION_LABELS = Object.freeze({
+function TRANSFORMATION_LABELS() {
+  return Object.freeze({
   verbatim: t('copié tel quel'),
   renamed: t('renommé pour le paquet'),
   reencoded: t('ré-encodé pour le paquet'),
   resized: t('redimensionné pour le paquet'),
 });
+}
 
 const MEDIA_FIELD_LABELS = Object.freeze({ image: 'image', audio: 'audio' });
 
@@ -107,7 +115,7 @@ export function classifyExportRefusal(error) {
     return {
       kind: EXPORT_REFUSAL.UNTYPED,
       preparationKind: null,
-      title: REFUSAL_TITLES[EXPORT_REFUSAL.UNTYPED],
+      title: REFUSAL_TITLES()[EXPORT_REFUSAL.UNTYPED],
       // Un refus non typé n'est pas rangé dans `export-cancelled` : l'auteur
       // doit voir qu'il n'a pas reçu de diagnostic contractuel.
       message: typeof error === 'string' ? error : String(error?.message ?? error),
@@ -131,8 +139,8 @@ export function classifyExportRefusal(error) {
     kind,
     preparationKind,
     title: preparationKind
-      ? `${REFUSAL_TITLES[kind] ?? kind} — ${PREPARATION_TITLES[preparationKind] ?? preparationKind}`
-      : (REFUSAL_TITLES[kind] ?? kind),
+      ? `${REFUSAL_TITLES()[kind] ?? kind} — ${PREPARATION_TITLES()[preparationKind] ?? preparationKind}`
+      : (REFUSAL_TITLES()[kind] ?? kind),
     message: kind === EXPORT_REFUSAL.OUTPUT_WRITE
       ? String(error.message ?? '')
       : String(error.error?.message ?? error.message ?? ''),
@@ -171,7 +179,7 @@ export function groupUnavailableMedia(entries) {
       stageIds: [...asList(entry?.stageIds)],
       lastKnownPath: entry?.lastKnownPath ?? null,
       cause: entry?.cause ?? null,
-      causeLabel: MEDIA_CAUSE_LABELS[entry?.cause] ?? entry?.cause ?? 'cause inconnue',
+      causeLabel: MEDIA_CAUSE_LABELS()[entry?.cause] ?? entry?.cause ?? 'cause inconnue',
       detail: entry?.detail ?? '',
       byReferenceOnly: repairByReferenceOnly(entry),
     });
@@ -220,7 +228,7 @@ export function summarizeExportSuccess(result) {
       .map(([transformation, count]) => ({
         transformation,
         count,
-        label: TRANSFORMATION_LABELS[transformation] ?? transformation,
+        label: TRANSFORMATION_LABELS()[transformation] ?? transformation,
       }))
       .sort((left, right) => left.transformation.localeCompare(right.transformation)),
     // Une conversion a eu lieu dès qu'une ligne n'est pas `verbatim`. C'est ce

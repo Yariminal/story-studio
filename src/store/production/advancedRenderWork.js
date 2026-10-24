@@ -140,7 +140,7 @@ export async function prepareAdvancedWork({
     return {
       outcome: ADVANCED_WORK.REFUSED,
       refusal: localRefusal({
-        message: `La préparation du document a échoué : ${String(error?.message ?? error)}`,
+        message: t("La préparation du document a échoué : {value}", { value: String(error?.message ?? error) }),
       }),
     };
   }

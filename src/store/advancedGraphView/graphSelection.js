@@ -44,7 +44,7 @@ export function resolveFocus(index, stored, entry) {
   const resolved = resolveSelection(index, stored);
   const survivor = resolved.stages[0] ?? resolved.actions[0] ?? null;
   if (survivor) return survivor;
-  // Lt('Écran d')entrée n'est un repli que s'il est unique : sur un document
+  // L'Écran d'entrée n'est un repli que s'il est unique : sur un document
   // ambigu, choisir l'un des candidats serait décider à la place de l'auteur.
   if (entry?.status === 'unique' && entry.stagePath && index.byPath.has(entry.stagePath)) {
     return entry.stagePath;

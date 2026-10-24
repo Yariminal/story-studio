@@ -6,9 +6,11 @@ import { advancedGestures } from '../projectModel/advancedGestures.js';
 // des constructions déjà présentes dans un document.
 export const DERIVED_CONSTRUCTION_CREATION_ENABLED = false;
 
-export const CONSTRUCTION_LABELS = Object.freeze({
+export function CONSTRUCTION_LABELS() {
+  return Object.freeze({
   scene: t('Scène'), choice: 'Choix', sequence: t('Séquence'), random: 'Tirage au sort',
 });
+}
 // Les réglages de départ d'une construction, par rôle d'Écran. HOME est
 // allumé dans les deux, comme sur la quasi-totalité des Écrans d'un pack réel :
 // sans lui, l'enfant ne peut plus revenir en arrière.
@@ -30,11 +32,11 @@ function stageUuid(index, path) {
 
 export function buildConstructionGesture(index, draft) {
   const { kind, name, items, controls, optionControls, question, sourcePath, trigger, destinationPath } = draft;
-  if (!Object.hasOwn(CONSTRUCTION_LABELS, kind)) throw new TypeError('Construction inconnue.');
+  if (!Object.hasOwn(CONSTRUCTION_LABELS(), kind)) throw new TypeError('Construction inconnue.');
   if (kind !== 'sequence' && !name.trim()) throw new TypeError(t('Donnez un nom à la construction.'));
   const rows = kind === 'scene' ? [] : items;
   const minimum = kind === 'sequence' ? 1 : 2;
-  if (kind !== 'scene' && rows.length < minimum) throw new TypeError(`Ajoutez au moins ${minimum} éléments.`);
+  if (kind !== 'scene' && rows.length < minimum) throw new TypeError(t("Ajoutez au moins {minimum} éléments.", { minimum: minimum }));
   for (const row of rows) {
     if (!row.name.trim() && !(kind === 'random' && row.targetPath)) {
       throw new TypeError(t('Nommez chaque nouveau passage ou proposition.'));

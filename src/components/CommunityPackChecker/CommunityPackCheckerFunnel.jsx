@@ -46,7 +46,9 @@ function correctionCount(result) {
   if (!result) return '';
   const parts = [];
   if (result.audioFixed) parts.push(`${result.audioFixed} audio`);
-  if (result.imageFixed) parts.push(`${result.imageFixed} image${result.imageFixed > 1 ? 's' : ''}`);
+  if (result.imageFixed) parts.push(result.imageFixed > 1
+    ? t('{count} images', { count: result.imageFixed })
+    : t('{count} image', { count: result.imageFixed }));
   if (result.metadataFixed) parts.push(t('métadonnées'));
   return parts.length ? parts.join(' · ') : t('Pack corrigé');
 }
@@ -156,7 +158,7 @@ export function CommunityPackCheckerFunnel({ onClose }) {
   const primaryLabel = step === 0
     ? 'Analyser'
     : step === 1
-      ? (canCreateFixedPack ? t('Corriger le pack') : (correctionCounts.optional > 0 ? 'Voir les suggestions' : 'Terminer'))
+      ? (canCreateFixedPack ? t('Corriger le pack') : (correctionCounts.optional > 0 ? t("Voir les suggestions") : t("Terminer")))
       : t('Créer le pack corrigé');
 
   function toggleOptionalSilence(issue) {
@@ -190,7 +192,7 @@ export function CommunityPackCheckerFunnel({ onClose }) {
         <FunnelFooter
           onBack={() => setStep(Math.max(0, step - 1))}
           backDisabled={step === 0}
-          stepLabel={`Étape ${step + 1} / ${STEPS.length}`}
+          stepLabel={t('Étape {current} / {count}', { current: step + 1, count: STEPS.length })}
           onPrimary={handlePrimary}
           primaryLabel={primaryLabel}
           primaryDisabled={busy || (step === 0 && !checker.zipPath) || (step === 2 && !canCreateFixedPack)}
@@ -215,15 +217,15 @@ export function CommunityPackCheckerFunnel({ onClose }) {
         >
           <button type="button" className="funnel-btn" onClick={() => outputDir && openPath(outputDir)}>
             <FolderOpen />
-            Ouvrir le dossier
+            {t("Ouvrir le dossier")}
           </button>
           <button type="button" className="funnel-btn" onClick={() => checker.exportReport('report')}>
             <Download />
-            Exporter le rapport
+            {t("Exporter le rapport")}
           </button>
           <button type="button" className="funnel-btn funnel-btn-primary" onClick={onClose}>
             <House />
-            Terminer
+            {t("Terminer")}
           </button>
         </FunnelDoneState>
       ) : (
@@ -243,7 +245,7 @@ export function CommunityPackCheckerFunnel({ onClose }) {
                 onFiles={(paths) => analyzePath(paths?.[0])}
               >
                 <button type="button" className="funnel-btn" onClick={pickPack} disabled={busy}>
-                  Choisir un pack
+                  {t("Choisir un pack")}
                 </button>
               </FunnelDropZone>
               {checker.zipPath ? (
@@ -297,7 +299,7 @@ export function CommunityPackCheckerFunnel({ onClose }) {
               {error ? <div className="funnel-error" role="alert">{error}</div> : null}
               <div className="pack-checker-inline-actions">
                 <FunnelToolButton icon={<Download />} accent="neutral" onClick={() => checker.exportReport('report')}>
-                  Exporter le rapport
+                  {t("Exporter le rapport")}
                 </FunnelToolButton>
               </div>
               {metadataOpen ? (

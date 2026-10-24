@@ -121,7 +121,7 @@ export function useAppPreferences({
       if (result.errors.length > 0) {
         showErrorDialog({
           title: t('Projet consolidé'),
-          message: `Projet consolidé avec des fichiers manquants :\n\n${result.errors.slice(0, 5).map((error) => `• ${error.path}\n  ${error.error}`).join('\n')}`,
+          message: t("Projet consolidé avec des fichiers manquants :\n\n{value}", { value: result.errors.slice(0, 5).map((error) => `• ${error.path}\n  ${error.error}`).join('\n') }),
           variant: 'warning',
         });
       }
@@ -154,9 +154,14 @@ export function useAppPreferences({
     if (!options?.skipConfirm) {
       const confirmed = await showConfirmDialog({
         title: t('Supprimer le message de fin'),
-        message:
-          `Le message sera retiré de ${globalCount} histoire${globalCount > 1 ? 's' : ''}. `
-          + `${localCount} fin${localCount !== 1 ? 's locales seront' : ' locale sera'} conservée${localCount !== 1 ? 's' : ''}.`,
+        message: [
+          globalCount > 1
+            ? t('Le message sera retiré de {count} histoires.', { count: globalCount })
+            : t('Le message sera retiré de {count} histoire.', { count: globalCount }),
+          localCount !== 1
+            ? t('{count} fins locales seront conservées.', { count: localCount })
+            : t('{count} fin locale sera conservée.', { count: localCount }),
+        ].join(' '),
         variant: 'warning',
         okLabel: t('Supprimer'),
         okKind: 'danger',

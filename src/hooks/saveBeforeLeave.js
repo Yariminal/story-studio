@@ -16,19 +16,21 @@ import { t } from '../i18n/index.js';
 // Deux variantes de question, selon que le projet a déjà un fichier : `savePath`
 // et `projectName` (le nom que montre la barre de titre) sont lus avec le reste
 // de l'état ; `hasUnsavedWork` les ignore.
-const NEVER_SAVED_DIALOG = {
+function NEVER_SAVED_DIALOG() {
+  return {
   title: t('Projet non enregistré'),
   message: t("Ton travail n'est pas enregistré et sera définitivement perdu."),
   discardLabel: t('Quitter sans enregistrer'),
   saveLabel: t('Enregistrer comme projet'),
 };
+}
 
 function leaveDialog(work) {
-  if (!work.savePath) return NEVER_SAVED_DIALOG;
+  if (!work.savePath) return NEVER_SAVED_DIALOG();
   const name = String(work.projectName ?? '').trim() || t('Nouveau projet');
   return {
     title: t('Modifications non enregistrées'),
-    message: `Les modifications de « ${name} » depuis le dernier enregistrement seront perdues.`,
+    message: t("Les modifications de « {name} » depuis le dernier enregistrement seront perdues.", { name: name }),
     discardLabel: t('Ne pas enregistrer'),
     saveLabel: t('Enregistrer'),
   };

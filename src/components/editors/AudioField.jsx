@@ -317,7 +317,7 @@ export function AudioField({
                     ? t('Fichier audio introuvable — cliquer pour en choisir un autre')
                     : (label || t('Cliquer pour importer un fichier audio'))}
                 </span>
-                {!file && required ? <span className="audio-required-badge">Requis</span> : null}
+                {!file && required ? <span className="audio-required-badge">{t('Requis')}</span> : null}
                 {!file && emptyBadge ? <span className="audio-silent-badge">{emptyBadge}</span> : null}
                 <span className="audio-empty-plus">+</span>
               </div>
@@ -354,7 +354,7 @@ export function AudioField({
         ) : (
           <div className="audio-empty-row">
           <div className={`audio-bar ${isPlaying ? 'is-playing' : ''}`}>
-            <Tooltip text={isPlaying ? 'Pause' : t('Écouter')}>
+            <Tooltip text={isPlaying ? t("Pause") : t('Écouter')}>
               <button
                 className="play-btn"
                 onClick={handlePlay}
@@ -406,8 +406,8 @@ export function AudioField({
               </Tooltip>
             )}
             <div className="audio-bar-actions" aria-label={t("Actions audio")}>
-              <Tooltip text="Remplacer par un enregistrement">
-                <Button variant="icon" size="sm" onClick={handleMic} aria-label="Remplacer par un enregistrement">
+              <Tooltip text={t("Remplacer par un enregistrement")}>
+                <Button variant="icon" size="sm" onClick={handleMic} aria-label={t('Remplacer par un enregistrement')}>
                   <Mic className="mic-btn-icon" strokeWidth={2} absoluteStrokeWidth />
                 </Button>
               </Tooltip>
@@ -443,7 +443,7 @@ export function AudioField({
         <div className="modal-overlay">
           <div className="modal-box" onClick={e => e.stopPropagation()} style={{ width: 360 }}>
             <div className="modal-header">
-              <span>Projet non enregistré</span>
+              <span>{t('Projet non enregistré')}</span>
               <Button
                 variant="icon"
                 className="modal-close"
@@ -456,13 +456,11 @@ export function AudioField({
             <div className="audio-notice-body">
               {pendingGeneratedSource === 'tts' ? (
                 <>
-                  L'audio genere sera stocke dans <strong>voix-generees/</strong> a cote du fichier <strong>.mbah</strong>.
-                  Enregistre d'abord le projet pour pouvoir utiliser XTTS.
+                  {t("L'audio genere sera stocke dans")} <strong>voix-generees/</strong> {t('a cote du fichier')} <strong>.mbah</strong>{t(". Enregistre d'abord le projet pour pouvoir utiliser XTTS.")}
                 </>
               ) : (
                 <>
-                  L'audio sera stocke dans <strong>enregistrements/</strong> a cote du fichier <strong>.mbah</strong>.
-                  Enregistre d'abord le projet pour pouvoir enregistrer.
+                  {t("L'audio sera stocke dans")} <strong>enregistrements/</strong> {t('a cote du fichier')} <strong>.mbah</strong>{t(". Enregistre d'abord le projet pour pouvoir enregistrer.")}
                 </>
               )}
             </div>
@@ -471,10 +469,10 @@ export function AudioField({
                 onClick={() => { setShowNoSaveWarning(false); setPendingGeneratedSource(null); }}
                 disabled={savingGeneratedAudio}
               >
-                Annuler
+                {t("Annuler")}
               </Button>
               <Button variant="primary" onClick={handleSaveAndContinue} disabled={savingGeneratedAudio}>
-                {savingGeneratedAudio ? 'Enregistrement…' : t('Enregistrer le projet…')}
+                {savingGeneratedAudio ? t("Enregistrement…") : t('Enregistrer le projet…')}
               </Button>
             </div>
           </div>
@@ -548,14 +546,14 @@ export function AudioField({
             ] : []),
             ...(file ? [
               ...(onPick ? ['sep'] : []),
-              { icon: <Copy />, label: 'Copier', fn: () => audioClipboard.set(file) },
-              { icon: <Scissors />, label: 'Couper', fn: () => audioClipboard.set(file, { mode: 'cut' }) },
-              { icon: <FolderOpen />, label: 'Afficher dans l\'explorateur', fn: () => revealItemInDir(file) },
+              { icon: <Copy />, label: t("Copier"), fn: () => audioClipboard.set(file) },
+              { icon: <Scissors />, label: t("Couper"), fn: () => audioClipboard.set(file, { mode: 'cut' }) },
+              { icon: <FolderOpen />, label: t("Afficher dans l'explorateur"), fn: () => revealItemInDir(file) },
             ] : []),
             ...(audioClipboard.get() && onPick ? [
               {
                 icon: <ClipboardPaste />,
-                label: audioClipboard.getEntry()?.mode === 'cut' ? t('Déplacer ici') : 'Coller',
+                label: audioClipboard.getEntry()?.mode === 'cut' ? t('Déplacer ici') : t("Coller"),
                 fn: pasteClipboardAudio,
               },
             ] : []),

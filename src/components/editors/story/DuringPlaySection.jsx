@@ -12,7 +12,8 @@ import {
 } from '../../../store/storyTitleStage';
 
 import { t } from '../../../i18n/index.js';
-const PLAY_CONTROLS = [
+function PLAY_CONTROLS() {
+  return [
   {
     key: 'pause',
     label: t('Bouton Pause'),
@@ -21,14 +22,17 @@ const PLAY_CONTROLS = [
     def: false,
   },
 ];
+}
 
-const TITLE_CONTROLS = [
-  { key: 'autoplay', label: t("Lancer l'histoire automatiquement"), tip: t("Lt('histoire se lance toute seule à la fin de l')audio de sélection, sans attendre que l'enfant appuie sur OK."), def: false },
+function TITLE_CONTROLS() {
+  return [
+  { key: 'autoplay', label: t("Lancer l'histoire automatiquement"), tip: t("L'histoire se lance toute seule à la fin de l'audio de sélection, sans attendre que l'enfant appuie sur OK."), def: false },
   { key: 'ok',       label: 'Bouton OK',            tip: t("L'enfant peut appuyer sur OK pour lancer l'histoire."),                   def: true },
   { key: 'home',     label: t('Bouton Accueil'),        tip: t("L'enfant peut revenir au menu parent en appuyant sur le bouton Accueil."), def: true },
   { key: 'pause',    label: t('Bouton pause'),          tip: t("L'enfant peut mettre en pause l'audio de sélection."),                    def: false },
-  { key: 'wheel',    label: 'Molette',              tip: t("L'enfant peut tourner la molette pour parcourir les autres histoires."),   def: true },
+  { key: 'wheel',    label: t("Molette"),              tip: t("L'enfant peut tourner la molette pour parcourir les autres histoires."),   def: true },
 ];
+}
 
 // Valeur du sélecteur pour « Accueil sans destination » (`returnOnHomeNone`).
 const HOME_PACK_START_VALUE = '__none__';
@@ -41,7 +45,7 @@ export function DuringPlaySection({ node, project = null, allMenus = [], allStor
   const titleControls = node.titleControlSettings ?? {};
   const navigation = getGeneratedStoryNavigation(node, parentMenu, project, project?.rootEntries ?? []);
   const parentMenuTarget = parentMenu?.id ? encodeMenuNavigationTarget(parentMenu.id) : null;
-  const pauseEnabled = controls.pause ?? PLAY_CONTROLS[0].def;
+  const pauseEnabled = controls.pause ?? PLAY_CONTROLS()[0].def;
   const homeEnabled = controls.home ?? true;
   const silentSelectionEnabled = isExplicitSilentStoryTitle(node);
   const effectiveHomeSelectValue = navigation.storyHome.effectiveTargetId
@@ -59,15 +63,15 @@ export function DuringPlaySection({ node, project = null, allMenus = [], allStor
   return (
     <div className="card during-play-card">
       <div className="card-title-row">
-        <div className="card-title">Pendant l'histoire</div>
+        <div className="card-title">{t("Pendant l'histoire")}</div>
         <div className="card-copy card-copy--inline">
-          Choisis les boutons utilisables pendant la lecture de l'histoire.
+          {t("Choisis les boutons utilisables pendant la lecture de l'histoire.")}
         </div>
       </div>
 
       <div className="during-play-stack">
         <div className="sequence-controls during-play-toggles">
-          {PLAY_CONTROLS.map(({ key, label, onText, offText, def }) => (
+          {PLAY_CONTROLS().map(({ key, label, onText, offText, def }) => (
             <label key={key} className="sequence-control">
               <Toggle
                 on={controls[key] ?? def}
@@ -98,16 +102,16 @@ export function DuringPlaySection({ node, project = null, allMenus = [], allStor
               placement="above"
               style={{ minWidth: 0 }}
             >
-              <span className="during-play-control-title">Bouton Accueil</span>
+              <span className="during-play-control-title">{t('Bouton Accueil')}</span>
             </Tooltip>
             {homeEnabled ? (
               <>
-                <span className="during-play-destination-label">Destination</span>
+                <span className="during-play-destination-label">{t("Destination")}</span>
                 <div className="during-play-home-select">
                   {navigation.storyHome.isEndHomeStep ? (
                     // La réaction Accueil de fin remplace toute destination
                     // choisie ici : le sélecteur n'aurait aucun effet.
-                    <span className="card-copy">Réaction au bouton Accueil (réglée dans « Après la lecture »)</span>
+                    <span className="card-copy">{t('Réaction au bouton Accueil (réglée dans « Après la lecture »)')}</span>
                   ) : (
                     <NavigationTargetSelect
                       value={homeSelectValue}
@@ -141,15 +145,13 @@ export function DuringPlaySection({ node, project = null, allMenus = [], allStor
       >
         <div className="story-advanced-row">
           <div className="story-advanced-copy">
-            <div className="story-advanced-title">Écran de sélection</div>
-            <div className="story-advanced-desc">
-              Boutons actifs pendant l'audio de sélection, avant que l'histoire ne commence.
-            </div>
+            <div className="story-advanced-title">{t('Écran de sélection')}</div>
+            <div className="story-advanced-desc"> {t("Boutons actifs pendant l'audio de sélection, avant que l'histoire ne commence.")} </div>
           </div>
         </div>
         <div className="story-advanced-controls">
           <div className="sequence-controls">
-            {TITLE_CONTROLS.map(({ key, label, tip, def }) => (
+            {TITLE_CONTROLS().map(({ key, label, tip, def }) => (
               <label key={key} className="sequence-control">
                 <Tooltip text={tip} placement="above">
                   <span style={{ flex: 1 }}>{label}</span>
@@ -167,7 +169,7 @@ export function DuringPlaySection({ node, project = null, allMenus = [], allStor
                 text={t("Ne joue aucun audio de sélection avant le lancement de l'histoire.")}
                 placement="above"
               >
-                <span style={{ flex: 1 }}>Écran de sélection silencieux</span>
+                <span style={{ flex: 1 }}>{t('Écran de sélection silencieux')}</span>
               </Tooltip>
               <Toggle
                 on={silentSelectionEnabled}

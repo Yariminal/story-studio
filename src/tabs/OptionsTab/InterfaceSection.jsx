@@ -47,7 +47,7 @@ export function InterfaceSection({
           value={themePreference}
           onChange={(event) => onThemePreferenceChange?.(event.target.value)}
         >
-          {THEME_OPTIONS.map((option) => (
+          {THEME_OPTIONS().map((option) => (
             <option key={option.value} value={option.value}>{t(option.label)}</option>
           ))}
         </select>

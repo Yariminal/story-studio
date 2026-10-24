@@ -245,8 +245,8 @@ export function AppModals({
         />,
       )}
 
-      {saveAsProgress && <SaveProgressModal data={saveAsProgress} title="Enregistrement sous..." doneTitle={t("Copie terminée")} />}
-      {saveProgress && <SaveProgressModal data={saveProgress} title="Enregistrement..." doneTitle={t("Projet enregistré")} />}
+      {saveAsProgress && <SaveProgressModal data={saveAsProgress} title={t("Enregistrement sous...")} doneTitle={t("Copie terminée")} />}
+      {saveProgress && <SaveProgressModal data={saveProgress} title={t("Enregistrement...")} doneTitle={t("Projet enregistré")} />}
       {triageRequest && (
         <SessionMediaTriageModal items={triageRequest.items} onResolve={triageRequest.resolve} />
       )}
@@ -262,9 +262,7 @@ export function AppModals({
       {unpacking && (
         <GenerateProgressModal title={t("Extraction en cours...")}>
           <div className="gen-progress-name">{unpacking.name}</div>
-          <div className="gen-progress-desc">
-            Story Studio analyse le pack et extrait les éléments éditables.
-          </div>
+          <div className="gen-progress-desc"> {t("Story Studio analyse le pack et extrait les éléments éditables.")} </div>
         </GenerateProgressModal>
       )}
 
@@ -273,7 +271,7 @@ export function AppModals({
           <div className="gen-progress-name">{importing.name}</div>
           <div className="gen-progress-desc">{importing.phase}</div>
           <div className="gen-progress-meta">
-            {importing.total > 1 ? `Fichier ${Math.max(importing.index, 1)} sur ${importing.total}` : t('Traitement du fichier importé')}
+            {importing.total > 1 ? t("Fichier {value} sur {total}", { value: Math.max(importing.index, 1), total: importing.total }) : t('Traitement du fichier importé')}
           </div>
         </GenerateProgressModal>
       )}

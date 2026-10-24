@@ -364,7 +364,7 @@ export function WorkspaceView({
     return (
       <div className="screen visible">
         <div className="workspace workspace--advanced">
-          <Suspense fallback={<p className="workspace-advanced-loading">Ouverture de l'Éditeur graphe…</p>}>
+          <Suspense fallback={<p className="workspace-advanced-loading">{t("Ouverture de l'Éditeur graphe…")}</p>}>
             <AdvancedWorkspace {...advanced} project={project} />
           </Suspense>
         </div>
